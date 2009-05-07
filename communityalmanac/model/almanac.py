@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
-from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean
+from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String
 from sqlalchemy.orm import relation
 
 from meta import Base, storage_SRID
