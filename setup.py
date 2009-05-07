@@ -5,6 +5,19 @@ except ImportError:
     use_setuptools()
     from setuptools import setup, find_packages
 
+import sys
+# We monkeypatch setuptools to perform script installs the way distutils does.
+# Calling pkg_resources is too time intensive for a serious command line
+# applications.
+def install_script(self, dist, script_name, script_text, dev_path=None):
+    self.write_script(script_name, script_text, 'b')
+
+if sys.platform != 'win32' and 'setuptools' in sys.modules:
+    # Someone used easy_install to run this.  I really want the correct
+    # script installed.
+    import setuptools.command.easy_install
+    setuptools.command.easy_install.easy_install.install_script = install_script
+
 setup(
     name='communityalmanac',
     version='0.1',
@@ -25,7 +38,7 @@ setup(
     #        ('**.py', 'python', None),
     #        ('templates/**.mako', 'mako', {'input_encoding': 'utf-8'}),
     #        ('public/**', 'ignore', None)]},
-    zip_safe=False,
+    zip_safe=True,
     paster_plugins=['PasteScript', 'Pylons'],
     entry_points="""
     [paste.app_factory]
