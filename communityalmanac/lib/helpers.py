@@ -24,3 +24,23 @@ available to Controllers. This module is available to templates as 'h'.
 """
 # Import helpers as desired, or define your own, ie:
 #from webhelpers.html.tags import checkbox, password
+from communityalmanac.model import Almanac
+from communityalmanac.model import meta
+from routes.util import url_for
+from webhelpers.html.tags import checkbox, password
+
+def name_almanac(candidate):
+    """name the almanac given the candidate name"""
+
+    almanac_query = meta.Session.query(Almanac)
+    almanacs = almanac_query.filter(Almanac.name == candidate).all()
+    if not almanacs:
+        return candidate
+    else:
+        i = 1
+        while True:
+            name = '%s-%s' % (candidate, i)
+            almanac_query = meta.Session.query(Almanac)
+            almanacs = almanac_query.filter(Almanac.name == candidate).all()
+            if not almanacs:
+                return name

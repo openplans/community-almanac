@@ -1,0 +1,51 @@
+form div.selfclear label {
+font-weight: bold;
+float: left;
+width: 10em;
+text-align: right;
+padding: 0 0.5em 0 0;
+margin: 0 0 0 -10.5em;
+}
+
+form div.selfclear {
+clear: both;
+margin: 0.8em 0;
+padding: 0 0 0 10.5em;
+}
+
+input {
+font-size: 1em;
+}
+
+fieldset {
+border: 1px solid #ccccb8;
+margin: 1em 0;
+padding: 0 0.5em 0.5em;
+}
+
+legend {
+padding: 0.2em 0.5em;
+margin: 0 0 0 0.2em;
+border: 1px solid #ccccb8;
+background: #ebebeb;
+font-size: 0.9em;
+}
+
+input.indented-submit {
+margin: 0.5em 0 1em 10.5em;
+}
+
+form .error {
+border: 2px solid #fa4740;
+}
+
+form .error-message {
+font-size: 0.75em;
+color: #ce0700;
+margin: 0.2em 0 0 0;
+}
+
+form .info-message {
+font-size: 0.75em;
+margin: 0.2em 0 0 0;
+}
