@@ -17,20 +17,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
-"""SQLAlchemy Metadata and Session object"""
-from sqlalchemy import MetaData
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
 
-__all__ = ['Session', 'engine', 'metadata']
+from meta import Base
 
-# SQLAlchemy database engine. Updated by model.init_model()
-engine = None
+class Almanac(Base):
+    __tablename__ = 'almanacs'
 
-# SQLAlchemy session manager. Updated by model.init_model()
-Session = scoped_session(sessionmaker())
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
 
-# Global metadata. If you have multiple databases with overlapping table
-# names, you'll need a metadata for each database
-Base = declarative_base()
-metadata = Base.metadata
+    def __init__(self, name, id=None):
+        self.name = name
+        if id is not None:
+            self.id = id
+
+    def __repr__(self):
+        return '<Almanac(id=%d, name=%s)>' % (self.id, self.name)
