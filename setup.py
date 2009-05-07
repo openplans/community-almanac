@@ -53,6 +53,8 @@ setup(
         "SQLAlchemy>=0.5",
         "psycopg2",
         "geopy",
+        "shapely",
+        "pyproj",
     ],
     setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),
