@@ -22,21 +22,27 @@ from sqlalchemy.orm import relation
 
 from meta import Base, storage_SRID
 from sqlgeotypes import POINT
+import meta
 
 class Almanac(Base):
     __tablename__ = 'almanacs'
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode)
+    slug = Column(String, unique=True)
     location = Column(POINT(storage_SRID))
 
-    def __init__(self, name, id=None):
+    def __init__(self, name, slug, id=None):
         self.name = name
         if id is not None:
             self.id = id
 
     def __repr__(self):
         return '<Almanac(id=%d, name=%s)>' % (self.id, self.name)
+
+    @classmethod
+    def get_by_slug(cls, slug):
+        return meta.Session.query(Almanac).filter(Almanac.slug == slug).one()
 
 class Page(Base):
     __tablename__ = 'pages'

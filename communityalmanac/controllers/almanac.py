@@ -1,5 +1,6 @@
 import logging
 
+from communityalmanac.lib.helpers import name_almanac
 from communityalmanac.model import Almanac
 from communityalmanac.model import meta
 from formencode import Invalid
@@ -30,16 +31,13 @@ class AlmanacController(BaseController):
     @validate(schema=AlmanacCreateForm(), form='create')
     def _do_create(self):
         name = self.form_result['name']
-        from communityalmanac.lib.helpers import name_almanac
-        name = name_almanac(name)
-        almanac = Almanac(name)
+        slug = name_almanac(name)
+        almanac = Almanac(name, slug)
 
-        # FIXME should we fire some sort of event here? would be useful for logging purposes
         meta.Session.save(almanac)
         meta.Session.commit()
 
-        # FIXME work out the slug story
-        redirect_to(h.url_for('almanac_view', almanac_slug=name))
+        redirect_to(h.url_for('almanac_view', almanac_slug=slug))
 
     def view(self, almanac_slug):
         return u'Now viewing an almanac with slug: %s' % almanac_slug

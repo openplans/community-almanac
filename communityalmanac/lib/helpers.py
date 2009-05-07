@@ -27,20 +27,22 @@ available to Controllers. This module is available to templates as 'h'.
 from communityalmanac.model import Almanac
 from communityalmanac.model import meta
 from routes.util import url_for
+from sqlalchemy.orm import exc
 from webhelpers.html.tags import checkbox, password
 
 def name_almanac(candidate):
     """name the almanac given the candidate name"""
 
-    almanac_query = meta.Session.query(Almanac)
-    almanacs = almanac_query.filter(Almanac.name == candidate).all()
-    if not almanacs:
+    try:
+        Almanac.get_by_slug(candidate)
+    except exc.NoResultFound:
         return candidate
     else:
         i = 1
         while True:
             name = '%s-%s' % (candidate, i)
-            almanac_query = meta.Session.query(Almanac)
-            almanacs = almanac_query.filter(Almanac.name == candidate).all()
-            if not almanacs:
+            try:
+                Almanac.get_by_slug(name)
+                i += 1
+            except exc.NoResultFound:
                 return name
