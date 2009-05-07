@@ -117,8 +117,29 @@ def main():
         help='The DB url to pass to sqlalchemy. It defaults to '
         '"postgres://almanac:almanac@localhost/almanac"')
 
+    parser.add_option(
+        '-s', '--setup', action='store_true', default=False,
+        help='Run the community almanac setup.  This creates any necessary models.')
+
     args = parser.parse_args()[0]
 
+    config = {
+        'use': 'egg:communityalmanac',
+        'full_stack': 'true',
+        'static_files': 'true',
+
+        'cache_dir': os.path.join(os.getcwd(), 'data'),
+        'beaker.session.key': 'almanac',
+        'beaker.session.secret': 'somesecret',
+
+        'sqlalchemy.url': args.url,
+    }
+
+    if args.setup:
+        conf = type('TempConfig', (object,), dict(global_conf=config, local_conf=config))
+        from communityalmanac.websetup import setup_app
+        setup_app(None, conf, {})
+        sys.exit(0)
     # We're gonna implement magic reload functionality, as seen in paster
     # serve. (Thanks, Ian Bicking, for the code and the explanation of what to
     # do.)
@@ -176,17 +197,6 @@ def main():
         # like this:
         # reloader.watch_file(my_config_file)
 
-    config = {
-        'use': 'egg:communityalmanac',
-        'full_stack': 'true',
-        'static_files': 'true',
-
-        'cache_dir': os.path.join(os.getcwd(), 'data'),
-        'beaker.session.key': 'almanac',
-        'beaker.session.secret': 'somesecret',
-
-        'sqlalchemy.url': args.url,
-    }
     from communityalmanac.config.middleware import make_app
     app = make_app({'debug':(args.debug or args.fragile) and 'true' or 'false'}, **config)
 
