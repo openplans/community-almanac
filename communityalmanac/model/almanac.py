@@ -20,13 +20,15 @@
 from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean
 from sqlalchemy.orm import relation
 
-from meta import Base
+from meta import Base, storage_SRID
+from sqlgeotypes import POINT
 
 class Almanac(Base):
     __tablename__ = 'almanacs'
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode)
+    location = Column(POINT(storage_SRID))
 
     def __init__(self, name, id=None):
         self.name = name

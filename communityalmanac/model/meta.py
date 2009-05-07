@@ -22,7 +22,7 @@ from sqlalchemy import MetaData
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-__all__ = ['Session', 'engine', 'metadata']
+__all__ = ['Session', 'engine', 'metadata', 'storage_SRID']
 
 # SQLAlchemy database engine. Updated by model.init_model()
 engine = None
@@ -34,3 +34,9 @@ Session = scoped_session(sessionmaker())
 # names, you'll need a metadata for each database
 Base = declarative_base()
 metadata = Base.metadata
+
+# 2163 is the SRID for 'US National Atlas Equal Area'.  Since the data in
+# Community Almanac is assumed to be in the U.S. (for now), this is a good
+# choice.  If you are hosting a version of Community Almanac where that is not
+# true, you'll want to changes this value.
+storage_SRID = 2163
