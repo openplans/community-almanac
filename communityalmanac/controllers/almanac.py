@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 
 class AlmanacController(BaseController):
 
-    def index(self):
+    def home(self):
         # Return a rendered template
         #return render('/almanac.mako')
         # or, return a response
