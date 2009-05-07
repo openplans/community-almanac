@@ -1,0 +1,3 @@
+include communityalmanac/config/deployment.ini_tmpl
+recursive-include communityalmanac/public *
+recursive-include communityalmanac/templates *
