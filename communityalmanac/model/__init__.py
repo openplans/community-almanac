@@ -35,4 +35,4 @@ def init_model(engine):
     meta.engine = engine
 
 
-from communityalmanac.model.almanac import Almanac
+from communityalmanac.model.almanac import Almanac, Page, User
