@@ -39,7 +39,9 @@ def make_map():
 
     # CUSTOM ROUTES HERE
 
-    map.connect('/{controller}/{action}')
-    map.connect('/{controller}/{action}/{id}')
+    map.connect('home', '/', controller='almanac', action='home')
+    # FIXME not sure if we should keep this url scheme
+    map.connect('almanac_create', '/+almanac', controller='almanac', action='create')
+    map.connect('almanac_view', '/:almanac_slug', controller='almanac', action='view')
 
     return map
