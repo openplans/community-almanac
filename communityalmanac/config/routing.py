@@ -39,7 +39,6 @@ def make_map():
 
     # CUSTOM ROUTES HERE
 
-    map.connect('/{controller}/{action}')
-    map.connect('/{controller}/{action}/{id}')
+    map.connect('home', '/', controller='almanac', action='index')
 
     return map

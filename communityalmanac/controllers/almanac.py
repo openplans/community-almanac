@@ -13,4 +13,4 @@ class AlmanacController(BaseController):
         # Return a rendered template
         #return render('/almanac.mako')
         # or, return a response
-        return 'Hello World'
+        return render('/home.mako')
