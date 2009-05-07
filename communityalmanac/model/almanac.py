@@ -34,6 +34,7 @@ class Almanac(Base):
 
     def __init__(self, name, slug, id=None):
         self.name = name
+        self.slug = slug
         if id is not None:
             self.id = id
 
