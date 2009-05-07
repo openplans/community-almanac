@@ -1,3 +1,21 @@
+# Community Almanac - A place for your stories.
+# Copyright (C) 2009  Douglas Mayle, Robert Marianski,
+# Andy Cochran, Chris Patterson
+
+# This file is part of Community Almanac.
+
+# Community Almanac is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+
+# Community Almanac is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License
+# along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 try:
     from setuptools import setup, find_packages
 except ImportError:
@@ -21,10 +39,15 @@ if sys.platform != 'win32' and 'setuptools' in sys.modules:
 setup(
     name='communityalmanac',
     version='0.1',
-    description='',
-    author='',
+    description='A place for your stories.',
+    long_description="""\
+    Community Almanac is a way to capture and share the oral history of your
+    town.
+""",
+    author='Douglas Mayle, Robert Marianski, Andy Cochran, Chris Patterson',
     author_email='',
-    url='',
+    license='GNU Affero General Public License v3',
+    url='http://source.openplans.org/hg/communityalmanac',
     install_requires=[
         "Pylons>=0.9.7",
         "SQLAlchemy>=0.5",
@@ -38,7 +61,7 @@ setup(
     #        ('**.py', 'python', None),
     #        ('templates/**.mako', 'mako', {'input_encoding': 'utf-8'}),
     #        ('public/**', 'ignore', None)]},
-    zip_safe=True,
+    zip_safe=False,
     paster_plugins=['PasteScript', 'Pylons'],
     entry_points="""
     [paste.app_factory]
@@ -47,4 +70,16 @@ setup(
     [paste.app_install]
     main = pylons.util:PylonsInstaller
     """,
+    scripts=['scripts/ca'],
+    classifiers=[
+      'Development Status :: 1 - Planning',
+      'Environment :: Web Environment',
+      'Framework :: Pylons',
+      'Intended Audience :: Other Audience',
+      'License :: OSI Approved :: GNU Affero General Public License v3',
+      'Operating System :: OS Independent',
+      'Programming Language :: Python :: 2.5',
+      'Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary',
+      'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
+    ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
 )
