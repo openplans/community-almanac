@@ -57,7 +57,7 @@ class Page(Base):
     user_id = Column(Integer, ForeignKey('users.id'))
     almanac_id = Column(Integer, ForeignKey('almanacs.id'))
     name = Column(Unicode)
-    slug = Column(String, unique=True)
+    slug = Column(String)
     description = Column(Unicode)
     geo_place = Column(Unicode(200))
     geo_lat = Column(Numeric(11,8))
