@@ -30,4 +30,4 @@
   </fieldset>
 </form>
 
-<%def name="title()">Create Almanac</%def>
+<%def name="title()">Create Almanac - Community Almanac</%def>

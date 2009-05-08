@@ -3,7 +3,7 @@ $(document).ready(function() {
   // add the title to the submit button form
   $('#submit-button-form').submit(function() {
       var title = $('#page-title').val();
-      var newinput = $('<input type="hidden" name="title" value="' + title + '" />');
+      var newinput = $('<input type="hidden" name="name" value="' + title + '" />');
       newinput.appendTo($(this));
       return true;
   });

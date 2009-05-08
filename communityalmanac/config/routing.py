@@ -57,7 +57,7 @@ def make_map():
     map.connect('home', '/', controller='almanac', action='home')
     # FIXME not sure if we should keep this url scheme
     map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)
-    map.connect('page_view', '/:almanac_slug/:page_slug', controller='almanac', action='view', _filter=page_expand)
+    map.connect('page_view', '/:almanac_slug/:page_slug', controller='page', action='view', _filter=page_expand)
     map.connect('almanac_create', '/+almanac', controller='almanac', action='create')
     map.connect('almanac_view', '/:almanac_slug', controller='almanac', action='view', _filter=almanac_expand)
     map.connect('page_form_text', '/api/form/:almanac_slug/text', controller='page', action='form_text', _filter=almanac_expand)

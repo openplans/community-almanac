@@ -1,7 +1,7 @@
 <%inherit file="/base.mako" />
 <h2>Create page</h2>
 <form id="page-title-form"  method="post" action="${request.path_url}">
-    <input id="page-title" type="text" name="title" value="Page Name" />
+    <input id="page-title" type="text" name="name" value="Page Name" />
   </form>
   <ul class="page-media-tools">
     <li>${h.link_to('Text', h.url_for('page_form_text', almanac=c.almanac), id='text-tool')}</li>
@@ -18,3 +18,7 @@
     <input type="submit" value="Publish" />
   </form>
 </div>
+
+<%def name="title()">
+Create Page - ${c.almanac.name} - Community Almanac
+</%def>

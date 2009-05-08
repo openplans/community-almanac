@@ -65,7 +65,7 @@ class Page(Base):
 
     pages = relation("Almanac", backref="pages")
 
-    def __init__(self, name, description=None, location=(None, None), id=None):
+    def __init__(self, name, slug, description=None, location=(None, None), id=None):
         self.name = name
         self.slug = slug
         if description is not None:
@@ -81,8 +81,8 @@ class Page(Base):
     @classmethod
     def get_by_slug(cls, almanac, slug):
         query = meta.Session.query(Page)
-        query.filter(Page.almanac_id == almanac.id)
-        query.filter(Page.slug == slug)
+        query = query.filter(Page.almanac_id == almanac.id)
+        query = query.filter(Page.slug == slug)
         return query.one()
 
 

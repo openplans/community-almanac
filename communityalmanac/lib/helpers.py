@@ -51,6 +51,23 @@ def name_almanac(candidate):
             except exc.NoResultFound:
                 return name
 
+def name_page(almanac, candidate):
+    """name the page given the almanac and candidate name"""
+
+    try:
+        Page.get_by_slug(almanac, candidate)
+    except exc.NoResultFound:
+        return candidate
+    else:
+        i = 1
+        while True:
+            name = '%s-%s' % (candidate, i)
+            try:
+                Page.get_by_slug(almanac, name)
+                i += 1
+            except exc.NoResultFound:
+                return name
+
 def get_almanac_by_slug(almanac_slug):
     try:
         return Almanac.get_by_slug(almanac_slug)
