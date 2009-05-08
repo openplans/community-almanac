@@ -46,9 +46,11 @@
     			<div id="nav-top">
     				<span class="prev"><a href="#">&laquo; Previous Page Name</a></span>
     				<span class="next"><a href="#">Next Page Name &raquo;</a></span>
+            % if c.almanac:
     				<div id="backtoc">
-    					<a href="#"><span>&laquo; Almanac Name</span></a>
+              <a href="${h.url_for('almanac_view', almanac=c.almanac)}"><span>&laquo; ${c.almanac.name}</span></a>
     				</div>
+            % endif
     			</div>
     			<div id="right-page">
     				${next.body()}
