@@ -105,9 +105,17 @@ width: 252px;
 height: 162px;
 margin: 25px 10% 0 20px;
 background: url(/img/logo.png) top left no-repeat;
-text-indent: -9999px;
 float: right;
 }
+
+h1#logo a {
+width: 252px;
+height: 162px;
+background: url(/img/logo.png) top left no-repeat;
+text-indent: -9999px;
+display: block;
+}
+
 #welcome {
 font-style: italic; 
 color: #ff6040;
