@@ -28,7 +28,9 @@ from communityalmanac.model import Almanac
 from communityalmanac.model import meta
 from routes.util import url_for
 from sqlalchemy.orm import exc
-from webhelpers.html.tags import checkbox, password
+from webhelpers.html.tags import checkbox
+from webhelpers.html.tags import link_to
+from webhelpers.html.tags import password
 
 def name_almanac(candidate):
     """name the almanac given the candidate name"""

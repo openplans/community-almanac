@@ -25,6 +25,11 @@
     <link rel="stylesheet" type="text/css" href="/style.css" />
   </head>
   <body>
+    <div id="header">
+      <ul>
+        <li>${h.link_to('Home', h.url_for('home'))}</li>
+      </ul>
+    </div>
     ${next.body()}
   </body>
 </html>

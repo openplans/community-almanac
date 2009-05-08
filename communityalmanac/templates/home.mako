@@ -20,3 +20,4 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <h2>Home page</h2>
+<p>Right now, you can ${h.link_to('Add', h.url_for('almanac_create'))} a page</p>
