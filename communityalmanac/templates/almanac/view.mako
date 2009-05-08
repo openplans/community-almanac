@@ -9,8 +9,6 @@
   </ul>
 % endif
 
-<p>${h.link_to('Add', h.url_for('page_create', almanac=c.almanac))} a page</p>
-
 <%def name="title()">
 ${c.almanac.name} - Community Almanac
 </%def>

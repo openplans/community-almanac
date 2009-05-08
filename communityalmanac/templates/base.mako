@@ -58,7 +58,11 @@
 
     			<div id="left-page" class="selfclear">
     				<div id="sidebar-1" class="sidebar">
-    					<h3 id="add-page-bttn"><a href="#">Add a page to this almanac!</a></h3>
+              % if c.almanac:
+              <h3 id="add-page-bttn">
+                ${h.link_to(u'Add a page to this almanac!', h.url_for('page_create', almanac=c.almanac))}
+              </h3>
+              % endif
     					<form action="#" method="get" id="searchform">
     						<input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="Search&hellip;" class="text" name="s" id="s"/>
     						<input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
