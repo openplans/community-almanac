@@ -18,3 +18,9 @@ class PageController(BaseController):
         almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(almanac, page_slug)
         return render('/page/view.mako')
+
+    def form_text(self):
+        return render('/page/form/text.mako')
+
+    def form_map(self):
+        return render('/page/form/map.mako')
