@@ -46,7 +46,12 @@ class PageController(BaseController):
         return render('/page/form/map.mako')
 
     def _do_form_text(self, almanac_slug):
+        body = request.POST.get('body', u'')
+        if not body:
+            abort(400)
         c.almanac = h.get_almanac_by_slug(almanac_slug)
+        media_items = session.setdefault('media', [])
+        session.save()
         return render('/page/item/text.mako')
 
     def _do_form_map(self, almanac_slug):
