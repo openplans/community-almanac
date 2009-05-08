@@ -60,7 +60,7 @@ def make_map():
     map.connect('page_view', '/:almanac_slug/:page_slug', controller='almanac', action='view', _filter=page_expand)
     map.connect('almanac_create', '/+almanac', controller='almanac', action='create')
     map.connect('almanac_view', '/:almanac_slug', controller='almanac', action='view', _filter=almanac_expand)
-    map.connect('page_form_text', '/api/form/text', controller='page', action='form_text')
-    map.connect('page_form_map', '/api/form/map', controller='page', action='form_map')
+    map.connect('page_form_text', '/api/form/:almanac_slug/text', controller='page', action='form_text', _filter=almanac_expand)
+    map.connect('page_form_map', '/api/form/:almanac_slug/map', controller='page', action='form_map', _filter=almanac_expand)
 
     return map

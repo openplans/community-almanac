@@ -4,8 +4,8 @@
     <input id="page-title" type="text" name="title" value="Page Name" />
   </form>
   <ul class="page-media-tools">
-    <li>${h.link_to('Text', h.url_for('page_form_text'), id='text-tool')}</li>
-    <li>${h.link_to('Map', h.url_for('page_form_map'), id='map-tool')}</li>
+    <li>${h.link_to('Text', h.url_for('page_form_text', almanac=c.almanac), id='text-tool')}</li>
+    <li>${h.link_to('Map', h.url_for('page_form_map', almanac=c.almanac), id='map-tool')}</li>
   </ul>
   <div class="session-data">
     <ul>
