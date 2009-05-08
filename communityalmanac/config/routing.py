@@ -26,6 +26,21 @@ refer to the routes manual at http://routes.groovie.org/docs/
 from pylons import config
 from routes import Mapper
 
+def almanac_expand(kw):
+    if 'almanac' in kw:
+        almanac = kw['almanac']
+        kw['almanac_slug'] = almanac.slug
+        del kw['almanac']
+    return kw
+
+def page_expand(kw):
+    kw = almanac_expand(kw)
+    if 'page' in kw:
+        page = kw['page']
+        kw['page_slug'] = page.slug
+        del kw['page']
+    return kw
+
 def make_map():
     """Create, configure and return the routes Mapper"""
     map = Mapper(directory=config['pylons.paths']['controllers'],
@@ -41,7 +56,9 @@ def make_map():
 
     map.connect('home', '/', controller='almanac', action='home')
     # FIXME not sure if we should keep this url scheme
+    map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)
+    map.connect('page_view', '/:almanac_slug/:page_slug', controller='almanac', action='view', _filter=page_expand)
     map.connect('almanac_create', '/+almanac', controller='almanac', action='create')
-    map.connect('almanac_view', '/:almanac_slug', controller='almanac', action='view')
+    map.connect('almanac_view', '/:almanac_slug', controller='almanac', action='view', _filter=almanac_expand)
 
     return map

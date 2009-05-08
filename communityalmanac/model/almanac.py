@@ -45,6 +45,11 @@ class Almanac(Base):
     def get_by_slug(cls, slug):
         return meta.Session.query(Almanac).filter(Almanac.slug == slug).one()
 
+    @classmethod
+    def latest(cls):
+        #FIXME we'll need to store created/modified times
+        return meta.Session.query(Almanac).all()
+
 class Page(Base):
     __tablename__ = 'pages'
 
@@ -52,13 +57,17 @@ class Page(Base):
     user_id = Column(Integer, ForeignKey('users.id'))
     almanac_id = Column(Integer, ForeignKey('almanacs.id'))
     name = Column(Unicode)
+    slug = Column(String, unique=True)
     description = Column(Unicode)
     geo_place = Column(Unicode(200))
     geo_lat = Column(Numeric(11,8))
     geo_lng = Column(Numeric(11,8))
 
+    pages = relation("Almanac", backref="pages")
+
     def __init__(self, name, description=None, location=(None, None), id=None):
         self.name = name
+        self.slug = slug
         if description is not None:
             self.description = description
         if location is not None:
@@ -68,6 +77,14 @@ class Page(Base):
 
     def __repr__(self):
         return '<Page(id=%d, name=%s)>' % (self.id, self.name)
+
+    @classmethod
+    def get_by_slug(cls, almanac, slug):
+        query = meta.Session.query(Page)
+        query.filter(Page.almanac_id == almanac.id)
+        query.filter(Page.slug == slug)
+        return query.one()
+
 
 class User(Base):
 

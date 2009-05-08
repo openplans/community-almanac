@@ -20,4 +20,12 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <h2>Home page</h2>
+% if c.almanacs:
+  <h3>Almanacs</h3>
+  <ul>
+    % for almanac in c.almanacs:
+    <li>${h.link_to(almanac.name, h.url_for('almanac_view', almanac=almanac))}</li>
+    % endfor
+  </ul>
+% endif
 <p>Right now, you can ${h.link_to('Add', h.url_for('almanac_create'))} an almanac</p>

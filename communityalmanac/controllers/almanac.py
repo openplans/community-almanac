@@ -22,13 +22,8 @@ class AlmanacCreateForm(Schema):
 
 class AlmanacController(BaseController):
 
-    def _get_almanac_by_slug(self, slug):
-        try:
-            return Almanac.get_by_slug(slug)
-        except exc.NoResultFound:
-            abort(404)
-
     def home(self):
+        c.almanacs = Almanac.latest()
         return render('/home.mako')
 
     @dispatch_on(POST='_do_create')
@@ -47,5 +42,5 @@ class AlmanacController(BaseController):
         redirect_to(h.url_for('almanac_view', almanac_slug=slug))
 
     def view(self, almanac_slug):
-        c.almanac = self._get_almanac_by_slug(almanac_slug)
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
         return render('/almanac/view.mako')

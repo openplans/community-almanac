@@ -25,7 +25,9 @@ available to Controllers. This module is available to templates as 'h'.
 # Import helpers as desired, or define your own, ie:
 #from webhelpers.html.tags import checkbox, password
 from communityalmanac.model import Almanac
+from communityalmanac.model import Page
 from communityalmanac.model import meta
+from pylons.controllers.util import abort
 from routes.util import url_for
 from sqlalchemy.orm import exc
 from webhelpers.html.tags import checkbox
@@ -48,3 +50,15 @@ def name_almanac(candidate):
                 i += 1
             except exc.NoResultFound:
                 return name
+
+def get_almanac_by_slug(almanac_slug):
+    try:
+        return Almanac.get_by_slug(almanac_slug)
+    except exc.NoResultFound:
+        abort(404)
+
+def get_page_by_slug(almanac, page_slug):
+    try:
+        return Page.get_by_slug(almanac, page_slug)
+    except exc.NoResultFound:
+        abort(404)
