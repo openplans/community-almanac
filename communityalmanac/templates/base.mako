@@ -88,6 +88,8 @@
     		<li><a href="#">Help</a></li>
     	</ul>
     </div>
+    <script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/js/almanac.js"></script>
   </body>
 </html>
 <%def name="title()">Community Almanac</%def>
