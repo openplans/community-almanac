@@ -59,7 +59,7 @@
     					<h3 id="add-page-bttn"><a href="#">Add a page to this almanac!</a></h3>
     					<form action="#" method="get" id="searchform">
     						<input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="Search&hellip;" class="text" name="s" id="s"/>
-    						<input type="image" align="absmiddle" src="img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
+    						<input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
     					</form>
     				</div>
     				<div id="sidebar-2" class="sidebar">
