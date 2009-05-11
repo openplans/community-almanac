@@ -27,15 +27,13 @@
   <li>${h.link_to('Text', h.url_for('page_form_text', almanac=c.almanac), id='text-tool')}</li>
   <li>${h.link_to('Map', h.url_for('page_form_map', almanac=c.almanac), id='map-tool')}</li>
 </ul>
-%if c.media_items:
-  <div class="session-data">
-    <ul>
-      %for media_item in c.media_items:
-        <li>${media_item}</li>
-      %endfor
-    </ul>
-  </div>
-%endif
+<div class="session-data">
+  <ul>
+    %for media_item in c.media_items:
+      <li>${media_item}</li>
+    %endfor
+  </ul>
+</div>
 <div id="form-container">
 </div>
 <form id="submit-button-form" method="post" action="${request.path_url}">
