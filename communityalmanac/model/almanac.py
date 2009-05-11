@@ -21,7 +21,7 @@ from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, S
 from sqlalchemy.orm import relation
 
 from meta import Base, storage_SRID
-#from sqlgeotypes import POINT
+from sqlgeotypes import POINT
 import meta
 
 class Almanac(Base):
@@ -30,7 +30,7 @@ class Almanac(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode)
     slug = Column(String, unique=True)
-    #location = Column(POINT(storage_SRID))
+    location = Column(POINT(storage_SRID))
 
     def __init__(self, name, slug, id=None):
         self.name = name
