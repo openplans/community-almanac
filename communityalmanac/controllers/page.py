@@ -36,7 +36,7 @@ class PageController(BaseController):
     @dispatch_on(POST='_do_create')
     def create(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        media_items = h.get_media_items()
+        media_items = h.get_session_media_items()
         # we render the media items here to keep the template simple
         c.media_items = []
         for media_item in media_items:
@@ -55,11 +55,13 @@ class PageController(BaseController):
         page = Page(name, slug)
         almanac.pages.append(page)
 
-        media_items = h.get_media_items()
+        media_items = h.get_session_media_items()
         page.media.extend(media_items)
 
         meta.Session.save(page)
         meta.Session.commit()
+
+        h.remove_session_media_items()
 
         redirect_to(h.url_for('page_view', almanac=almanac, page=page))
 
@@ -91,7 +93,7 @@ class PageController(BaseController):
         story = Story()
         story.text = body
 
-        media_items = h.get_media_items()
+        media_items = h.get_session_media_items()
         media_items.append(story)
         session.save()
         return render('/page/item/text.mako', extra_vars=dict(story=story))

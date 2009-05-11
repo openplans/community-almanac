@@ -82,6 +82,11 @@ def get_page_by_slug(almanac, page_slug):
     except exc.NoResultFound:
         abort(404)
 
-def get_media_items():
+def get_session_media_items():
     media_items = session.setdefault('media', [])
+    return media_items
+
+def remove_session_media_items():
+    media_items = session.pop('media', [])
+    session.save()
     return media_items
