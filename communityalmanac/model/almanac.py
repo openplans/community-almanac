@@ -21,7 +21,7 @@ from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, S
 from sqlalchemy.orm import relation
 
 from meta import Base, storage_SRID
-#from sqlgeotypes import POINT
+from sqlgeotypes import POINT
 import meta
 
 class Almanac(Base):
@@ -30,7 +30,7 @@ class Almanac(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode)
     slug = Column(String, unique=True)
-    #location = Column(POINT(storage_SRID))
+    location = Column(POINT(storage_SRID))
 
     def __init__(self, name, slug, id=None):
         self.name = name
@@ -84,6 +84,47 @@ class Page(Base):
         query = query.filter(Page.almanac_id == almanac.id)
         query = query.filter(Page.slug == slug)
         return query.one()
+
+
+class Media(Base):
+    __tablename__ = 'medias'
+
+    id = Column(Integer, primary_key=True)
+    page_id = Column(Integer, ForeignKey('pages.id'))
+    text = Column(Unicode)
+    order = Column(Integer)
+    discriminator = Column('type', String(50))
+
+    __mapper_args__ = dict(polymorphic_on=discriminator)
+
+class PDFFile(Media):
+    __tablename__ = 'pdfs'
+    __mapper_args__ = dict(polymorphic_identity='pdf')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    path = Column(Unicode)
+
+class SoundFile(Media):
+    __tablename__ = 'sounds'
+    __mapper_args__ = dict(polymorphic_identity='sound')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    path = Column(Unicode)
+
+class Image(Media):
+    __tablename__ = 'images'
+    __mapper_args__ = dict(polymorphic_identity='image')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    flickr_id = Column(String)
+
+class Story(Media):
+    __tablename__ = 'stories'
+    __mapper_args__ = dict(polymorphic_identity='story')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+
+class Map(Media):
+    __tablename__ = 'maps'
+    __mapper_args__ = dict(polymorphic_identity='map')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    location = Column(POINT(storage_SRID))
 
 
 class User(Base):
