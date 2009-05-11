@@ -19,6 +19,7 @@
 
 from communityalmanac.model import Almanac
 from communityalmanac.model import Page
+from communityalmanac.model import Story
 from communityalmanac.model import meta
 
 def test_almanac_save():
@@ -42,3 +43,19 @@ def test_page_save():
     assert a.id
     assert p.id
     assert p.almanac_id == a.id
+
+def test_media_story_save():
+    a = Almanac(u'almanac three', 'a3')
+    meta.Session.save(a)
+    p = Page(u'page two', 'p2')
+    a.pages.append(p)
+    meta.Session.save(p)
+    meta.Session.commit()
+
+    story = Story()
+    story.text = u'The reign in spain lies mainly on the plain'
+    story.page_id = p.id
+    meta.Session.save(story)
+    meta.Session.commit()
+
+    assert story.id
