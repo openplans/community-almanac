@@ -2,6 +2,6 @@ from communityalmanac.tests import *
 
 class TestAlmanacController(TestController):
 
-    def test_index(self):
-        response = self.app.get(url(controller='almanac', action='index'))
+    def test_home(self):
+        response = self.app.get(url('home'), status=200)
         # Test response...
