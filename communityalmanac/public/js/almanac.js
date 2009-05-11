@@ -72,7 +72,7 @@ function submit_handler(e) {
       formcontainer.empty();
       var newLi = $('<li></li>');
       newLi.appendTo($('.session-data ul'));
-      $('<div>' + data + '</div>').appendTo(newLi).fadeIn('slow');
+      $('<div>' + data + '</div>').appendTo(newLi).hide().fadeIn('slow');
       },
     type: "POST",
     url: url
