@@ -44,7 +44,9 @@ $(document).ready(function() {
           $.get(url, null, function(data) {
             formcontainer.empty();
             formcontainer.show();
-            $(data).appendTo(formcontainer).slideDown('fast');
+            $(data).appendTo(formcontainer).hide().slideDown('fast', function() {
+              $(this).find('input[type=text]').focus();
+            });
             $('form.media-item a.media-cancel').click(function(e) {
               e.preventDefault();
               formcontainer.slideUp('fast').empty();
