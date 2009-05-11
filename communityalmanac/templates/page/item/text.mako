@@ -19,5 +19,5 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <div class="mediacontent text">
-  <p>content of the text item</p>
+  <p>${story.text}</p>
 </div>

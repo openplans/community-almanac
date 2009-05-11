@@ -20,6 +20,15 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <h2>${c.page.name}</h2>
+%if c.media_items:
+  <div class="session-data">
+    <ul>
+      %for media_item in c.media_items:
+        <li>${media_item}</li>
+      %endfor
+    </ul>
+  </div>
+%endif
 
 <%def name="title()">
 ${c.page.name} - ${c.almanac.name} - Community Almanac

@@ -20,6 +20,7 @@
 import logging
 
 from communityalmanac.model import Page
+from communityalmanac.model import Story
 from communityalmanac.model import meta
 from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
@@ -35,6 +36,13 @@ class PageController(BaseController):
     @dispatch_on(POST='_do_create')
     def create(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
+        media_items = h.get_media_items()
+        # we render the media items here to keep the template simple
+        c.media_items = []
+        for media_item in media_items:
+            if isinstance(media_item, Story):
+                rendered_story = render('/page/item/text.mako', extra_vars=dict(story=media_item))
+                c.media_items.append(rendered_story)
         return render('/page/create.mako')
 
     def _do_create(self, almanac_slug):
@@ -42,18 +50,28 @@ class PageController(BaseController):
         name = request.POST.get('name', u'')
         if not name:
             name = u'Unnamed'
+
         slug = h.name_page(almanac, name)
         page = Page(name, slug)
         almanac.pages.append(page)
+
+        media_items = h.get_media_items()
+        page.media.extend(media_items)
+
         meta.Session.save(page)
         meta.Session.commit()
-        # FIXME get the media items from the session
-        # and attach it to the page
+
         redirect_to(h.url_for('page_view', almanac=almanac, page=page))
 
     def view(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
+        media_items = c.page.media
+        c.media_items = []
+        for media_item in media_items:
+            if isinstance(media_item, Story):
+                rendered_story = render('/page/item/text.mako', extra_vars=dict(story=media_item))
+                c.media_items.append(rendered_story)
         return render('/page/view.mako')
 
     @dispatch_on(POST='_do_form_text')
@@ -69,9 +87,14 @@ class PageController(BaseController):
         if not body:
             abort(400)
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        media_items = session.setdefault('media', [])
+
+        story = Story()
+        story.text = body
+
+        media_items = h.get_media_items()
+        media_items.append(story)
         session.save()
-        return render('/page/item/text.mako')
+        return render('/page/item/text.mako', extra_vars=dict(story=story))
 
     def _do_form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)

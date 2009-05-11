@@ -97,6 +97,8 @@ class Media(Base):
 
     __mapper_args__ = dict(polymorphic_on=discriminator)
 
+    media = relation("Page", backref="media")
+
 class PDFFile(Media):
     __tablename__ = 'pdfs'
     __mapper_args__ = dict(polymorphic_identity='pdf')

@@ -28,8 +28,10 @@ from communityalmanac.model import Almanac
 from communityalmanac.model import Page
 from communityalmanac.model import meta
 from pylons.controllers.util import abort
+from pylons import session
 from routes.util import url_for
 from sqlalchemy.orm import exc
+from webhelpers.html import literal
 from webhelpers.html.tags import checkbox
 from webhelpers.html.tags import link_to
 from webhelpers.html.tags import password
@@ -79,3 +81,7 @@ def get_page_by_slug(almanac, page_slug):
         return Page.get_by_slug(almanac, page_slug)
     except exc.NoResultFound:
         abort(404)
+
+def get_media_items():
+    media_items = session.setdefault('media', [])
+    return media_items
