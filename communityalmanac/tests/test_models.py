@@ -28,7 +28,7 @@ def test_almanac_save():
     meta.Session.commit()
     assert a.id, "did not save almanac to database"
     query = meta.Session.query(Almanac)
-    queried = query.one()
+    queried = query.filter(Almanac.slug == 'a1').one()
     assert a.name == queried.name
     assert a.slug == queried.slug
 
