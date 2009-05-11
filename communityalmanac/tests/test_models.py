@@ -18,7 +18,9 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
 from unittest import TestCase
-from communityalmanac import model
+from communityalmanac.model import Almanac
+from communityalmanac.model import Page
+from communityalmanac.model import meta
 
 class TestModel(TestCase):
     """
@@ -26,12 +28,20 @@ class TestModel(TestCase):
     each test (thus making them unit tests).
     """
     def setUp(self):
-        #model.resync()
-        #model.meta.create_all()
-        pass
-    def tearDown(self):
-        #model.meta.drop_all()
-        pass
+        meta.metadata.drop_all(meta.engine)
+        meta.Session.remove()
+        meta.metadata.create_all(meta.engine)
 
     def test_first(self):
-        self.failUnless(True)
+        a = Almanac(u'my first almanac', 'first')
+        meta.Session.save(a)
+        meta.Session.commit()
+
+    def test_second(self):
+        self.failUnless(meta.Session.query(Almanac).first() is None)
+        a = Almanac(u'my first almanac', 'first')
+        p = Page(u'my first page', 'page')
+        p.almanac_id = a.id
+        meta.Session.save(a)
+        meta.Session.save(p)
+        meta.Session.commit()
