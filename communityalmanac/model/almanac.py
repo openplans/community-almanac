@@ -92,6 +92,7 @@ class Media(Base):
     id = Column(Integer, primary_key=True)
     page_id = Column(Integer, ForeignKey('pages.id'))
     text = Column(Unicode)
+    order = Column(Integer)
     discriminator = Column('type', String(50))
 
     __mapper_args__ = dict(polymorphic_on=discriminator)
