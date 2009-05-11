@@ -38,11 +38,7 @@ class PageController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         media_items = h.get_session_media_items()
         # we render the media items here to keep the template simple
-        c.media_items = []
-        for media_item in media_items:
-            if isinstance(media_item, Story):
-                rendered_story = render('/page/item/text.mako', extra_vars=dict(story=media_item))
-                c.media_items.append(rendered_story)
+        c.media_items = h.render_media_items(media_items)
         return render('/page/create.mako')
 
     def _do_create(self, almanac_slug):
@@ -68,12 +64,7 @@ class PageController(BaseController):
     def view(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
-        media_items = c.page.media
-        c.media_items = []
-        for media_item in media_items:
-            if isinstance(media_item, Story):
-                rendered_story = render('/page/item/text.mako', extra_vars=dict(story=media_item))
-                c.media_items.append(rendered_story)
+        c.media_items = h.render_media_items(c.page.media)
         return render('/page/view.mako')
 
     @dispatch_on(POST='_do_form_text')

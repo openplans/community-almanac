@@ -22,10 +22,10 @@
 Consists of functions to typically be used within templates, but also
 available to Controllers. This module is available to templates as 'h'.
 """
-# Import helpers as desired, or define your own, ie:
-#from webhelpers.html.tags import checkbox, password
+from communityalmanac.lib.base import render
 from communityalmanac.model import Almanac
 from communityalmanac.model import Page
+from communityalmanac.model import Story
 from communityalmanac.model import meta
 from pylons.controllers.util import abort
 from pylons import session
@@ -90,3 +90,16 @@ def remove_session_media_items():
     media_items = session.pop('media', [])
     session.save()
     return media_items
+
+def render_media_items(media_items):
+    """return a list of the rendered individual media items
+
+    functions like these tend to balloon, so we should change our strategy if
+    it gets complex"""
+
+    rendered_media_items = []
+    for media_item in media_items:
+        if isinstance(media_item, Story):
+            rendered_story = render('/page/item/text.mako', extra_vars=dict(story=media_item))
+            rendered_media_items.append(rendered_story)
+    return rendered_media_items
