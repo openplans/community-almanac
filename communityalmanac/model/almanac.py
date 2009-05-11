@@ -86,6 +86,46 @@ class Page(Base):
         return query.one()
 
 
+class Media(Base):
+    __tablename__ = 'medias'
+
+    id = Column(Integer, primary_key=True)
+    page_id = Column(Integer, ForeignKey('pages.id'))
+    text = Column(Unicode)
+    discriminator = Column('type', String(50))
+
+    __mapper_args__ = dict(polymorphic_on=discriminator)
+
+class PDFFile(Media):
+    __tablename__ = 'pdfs'
+    __mapper_args__ = dict(polymorphic_identity='pdf')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    path = Column(Unicode)
+
+class SoundFile(Media):
+    __tablename__ = 'sounds'
+    __mapper_args__ = dict(polymorphic_identity='sound')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    path = Column(Unicode)
+
+class Image(Media):
+    __tablename__ = 'images'
+    __mapper_args__ = dict(polymorphic_identity='image')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    flickr_id = Column(String)
+
+class Story(Media):
+    __tablename__ = 'stories'
+    __mapper_args__ = dict(polymorphic_identity='story')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+
+class Map(Media):
+    __tablename__ = 'maps'
+    __mapper_args__ = dict(polymorphic_identity='map')
+    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    location = Column(POINT(storage_SRID))
+
+
 class User(Base):
 
     #define name of table
