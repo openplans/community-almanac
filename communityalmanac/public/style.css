@@ -155,12 +155,13 @@ padding: 20px 0 40px 0;
 text-align: left;
 width: 520px;
 float: right;
-margin: 20px 50% 20px -275px;
+margin: 20px 50% 20px -505px;
 position: relative;
 left: 405px;
 }
 #left-page {
-margin: 20px 0;
+margin: 20px 50% 20px 0;
+padding: 0 200px 0 0;
 }
 .sidebar {
 float: right;
