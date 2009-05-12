@@ -22,17 +22,27 @@
 -->
   <head>
     <title>${self.title()}</title>
-    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Language" content="en-us" />
+    <style type="text/css" media="screen">
+/*<![CDATA[ */
+@import'${h.url_for('/css/reset.css')}';
+@import'${h.url_for('/css/style.css')}';
+@import'${h.url_for('/css/turn.css')}';
+/* ]]> */
+    </style>
+    ${self.extra_head()}
   </head>
   <body>
-    <div id="ill-sky">
-      <div id="ill-clouds">
-        <div id="ill-mountains">
-          <div id="ill-hills">
-            <div id="ill-foreground">
-              <div id="header" class="selfclear">
+    <div id="ill-sky" class="pngfix">
+      <div id="ill-clouds" class="pngfix">
+        <div id="ill-mountains" class="pngfix">
+          <div id="ill-hills" class="pngfix">
+            <div id="ill-foreground" class="pngfix">
+              <div id="header" class="selfclear pngfix">
                 <h1 id="logo">${h.link_to('Community Almanac', h.url_for('home'))}</h1>
-                <p id="welcome">Wecome, <a href="#">Username</a>!</p>
+                <%doc>This needs to be a login link instead if there is not a current session</%doc>
+                <p id="welcome">Welcome, <a href="#">Username</a>!</p>
                 <h3 id="tagline">The heart <span class="amp">&amp;</span> soul of <nobr>the place you live&hellip;</nobr></h3>
               </div>
             </div>
@@ -43,6 +53,7 @@
     <div id="content">
       <div id="wrap-a">
         <div id="wrap-b">
+        <img id="target" src="/img/code.png">
           <div id="nav-top">
             <span class="prev"><a href="#">&laquo; Previous Page Name</a></span>
             <span class="next"><a href="#">Next Page Name &raquo;</a></span>
@@ -75,12 +86,17 @@
     <script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui-1.7.1.custom.min.js"></script>
     <script type="text/javascript" src="/js/almanac.js"></script>
+    <script type="text/javascript" src="/js/jqueryui.js"></script>
+    <script type="text/javascript" src="/js/turn.js"></script>
+    <script type="text/javascript">
+  		$(document).ready(function(){
+  			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png'});
+  		});
+  	</script>
   </body>
 </html>
 <%def name="title()">Community Almanac</%def>
 <%def name="extra_head()">
-</%def>
-<%def name="before_main()">
 </%def>
 <%def name="sidebar()">
 <div id="sidebar-1" class="sidebar">

@@ -1,0 +1,423 @@
+/* Reset? */
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, code,
+del, dfn, em, img, q, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+margin: 0;
+padding: 0;
+border: 0;
+font-weight: inherit;
+font-style: inherit;
+font-size: 100%;
+font-family: inherit;
+vertical-align: baseline;
+}
+
+body { 
+line-height: 1.5; 
+}
+
+/* Tables still need 'cellspacing="0"' in the markup. */
+table { border-collapse: separate; border-spacing: 0; }
+caption, th, td { text-align: left; font-weight: normal; }
+table, td, th { vertical-align: middle; }
+
+/* Remove possible quote marks (") from <q>, <blockquote>. */
+blockquote:before, blockquote:after, q:before, q:after { content: ""; }
+blockquote, q { quotes: "" ""; }
+
+/* Remove annoying border on linked images. */
+a img { border: none; }
+
+h1,h2,h3,h4,h5,h6 { font-weight: normal; margin-bottom: 0.4em; }
+
+h1 { font-size: 2.2em; }
+h2 { font-size: 2.2em; }
+h3 { font-size: 1.8em; }
+h4 { font-size: 1.6em; }
+h5 { font-size: 1.4em; }
+h6 { font-size: 1.4em; }
+
+h1 img, h2 img, h3 img, h4 img, h5 img, h6 img {
+margin: 0;
+}
+
+p           { margin: 0 0 1.5em; }
+p img       { float: left; margin: 1.5em 1.5em 1.5em 0; padding: 0; }
+p img.right { float: right; margin: 1.5em 0 1.5em 1.5em; }
+
+a:focus, 
+a:hover     { color: #000; }
+a           { color: #009; text-decoration: underline; }
+
+blockquote  { margin: 1.5em; color: #666; font-style: italic; }
+strong      { font-weight: bold; }
+em,dfn      { font-style: italic; }
+dfn         { font-weight: bold; }
+sup, sub    { line-height: 0; }
+
+abbr, 
+acronym     { border-bottom: 1px dotted #666; }
+address     { margin: 0 0 1.5em; font-style: italic; }
+del         { color:#666; }
+
+pre,code    { margin: 1.5em 0; white-space: pre; }
+pre,code,tt { font: 1em 'andale mono', 'lucida console', monospace; line-height: 1.5; } 
+
+/* styles proper*/
+
+a { color: #00ace6; }
+a:hover { color: #ff6040; }
+
+body {
+font-family: georgia, serif;
+text-align: center;
+margin: 0;
+padding: 0;
+background: url(/img/brown-noise.jpg) -50% top repeat;
+color: #003459;
+font-size: 87.5%;
+}
+#ill-sky {
+background: url(/img/ill-sky.jpg) center bottom repeat-x;
+}
+#ill-clouds {
+background: url(/img/ill-clouds.png) 30% 7px repeat-x;
+}
+#ill-mountains {
+background: url(/img/ill-mountains.png) 20px bottom no-repeat;
+}
+#ill-hills {
+background: url(/img/ill-hills.png) -20% 162px repeat-x;
+}
+#ill-foreground {
+background: url(/img/ill-foreground-b.png) -50% bottom repeat-x;
+}
+#header {
+height: 230px;
+text-align: left;
+margin: auto;
+}
+h1#logo {
+width: 252px;
+height: 162px;
+margin: 25px 10% 0 20px;
+background: url(/img/logo.png) top left no-repeat;
+float: right;
+}
+
+h1#logo a {
+width: 252px;
+height: 162px;
+background: url(/img/logo.png) top left no-repeat;
+text-indent: -9999px;
+display: block;
+}
+
+#welcome {
+font-style: italic; 
+color: #ff6040;
+padding: 5px 10px;
+margin: 0 0 0 10%;
+background: url(/img/book-tile.png) center top;
+float: left;
+border: 4px solid #d0c9b9;
+border-top: 0;
+}
+#welcome a {
+color: #ff6040;
+}
+#welcome a:hover {
+color: #00ace6;
+}
+h3#tagline {
+margin: 0 0 0 10%;
+padding: 20px 0 0;
+clear: left;
+font-size: 1.9em;
+}
+#content {
+background: url(/img/book-top.png) top center no-repeat;
+min-width: 980px;
+padding: 20px 0 0 0;
+}
+#wrap-a{
+background: url(/img/book-bottom.png) bottom center no-repeat;
+padding: 0 0 20px 0;
+}
+#wrap-b {
+background: url(/img/book-tile.png) center top repeat-y;
+padding: 20px 0 40px 0;
+position: relative;
+}
+#right-page {
+text-align: left;
+width: 520px;
+float: right;
+margin: 20px 50% 20px -150px;
+position: absolute;
+left: 50%;
+top: 0;
+bottom: 0;
+}
+#left-page {
+margin: 20px 50% 20px 0;
+padding: 0 200px 0 0;
+}
+.sidebar {
+float: right;
+text-align: left;
+width: 160px;
+margin: 0 0 20px 20px;
+}
+#nav-top, #nav-bottom {
+clear: both;
+width: 980px;
+margin: auto;
+text-align: right;
+position: relative;
+}
+span.prev {
+font-size: .8em;
+display: block;
+width: 240px;
+float: left;
+text-align: right;
+}
+.next {
+font-size: .8em;
+padding-right: 80px
+}
+#footer {
+clear: both;
+width: 980px;
+text-align: left;
+margin: auto;
+}
+ul#footer-nav {
+float: right;
+list-style: none;
+margin: 20px 20px 40px;
+font-size: .9em;
+}
+ul#footer-nav li {
+float: left;
+margin-left: 1.5em;
+}
+ul#footer-nav a {
+color: #b2b32d;
+text-decoration: none;
+}
+ul#footer-nav a:hover {
+color: #ff6040; 
+}
+
+.selfclear:after {
+content: ".";
+display: block;
+height: 0;
+clear: both;
+visibility: hidden;
+}
+.selfclear {
+display: inline-block; /* IE 7 */
+}
+.selfclear {
+display: block;
+}
+* html .selfclear {
+height: 1px; /* IE < 7 */
+}
+
+.post-head { margin-bottom: 1.5em; }
+.post-head h2 { margin-bottom: 0; line-height: 1em; }
+.post-head h2 a { text-decoration: none; }
+.post-head h2 a:hover { text-decoration: underline; }
+.post-head p.meta { color: #70818c; margin: 0; font-size: 0.9em; }
+
+.comments-head { margin: 40px 0 20px; }
+.comments-head h3 { color: #70818c; }
+.comments-head h3 a.comment-link { font-size: 0.55em; }
+
+.comment { border-bottom: 1px solid #70818c; margin-bottom: 1.5em; }
+.comment p.meta { text-align: right; color: #70818c; margin-bottom: 0.2em; }
+.comment p.meta span { float: left; }
+
+#comment-form .form-row {
+clear: both;
+margin: 0 0 20px 0;
+}
+#comment-form label {
+float: left;
+width: 160px;
+margin: 0 20px 0 0;
+padding: 0;
+text-align: left;
+}
+#comment-form label span.required {
+color: #ff6040;
+}
+#comment-form label span.note {
+display: block;
+font-size: .8em;
+color: #70818c;
+}
+#comment-form input,
+#comment-form textarea {
+background: url(/img/bttn-bg-white.jpg) top left repeat;
+border: 4px solid #d0c9b9;
+width: 312px;
+margin: 0;
+padding: 10px;
+font-family: georgia, serif;
+color: #003459;
+font-size: 1em;
+line-height: 1.5;
+}
+
+#comment-submit,
+#comment-bttn, 
+#add-page-bttn {
+background: url(/img/bttn-bg-green.jpg) top left repeat;
+border: 4px solid #b2b32d;
+font-size: 1.4em;
+line-height: 1em;
+margin: 0 0 20px;
+}
+#comment-submit a, 
+#comment-bttn a, 
+#add-page-bttn a {
+display: block;
+padding: 10px;
+color: #003459;
+text-decoration: none;
+}
+#comment-submit a:hover, 
+#comment-bttn a:hover, 
+#add-page-bttn a:hover {
+color: #ffffff;
+}
+#comment-bttn { 
+margin-right: 180px; 
+}
+#comment-submit { 
+margin-left: 180px; 
+}
+#add-page-bttn a {
+padding: 20px 10px;
+text-align: center;
+}
+
+#backtoc {
+width: 188px;
+height: 80px;
+background: url(/img/bookmark.png) top left no-repeat;
+position: absolute;
+top: -120px;
+left: -23px;
+text-align: left;
+}
+#backtoc a {
+text-decoration: none;
+color: #f1e8da;
+display: block;
+width: 158px;
+padding: 40px 0 0;
+margin: 10px 0 0 24px;
+text-align: center;
+line-height: 1em;
+}
+#backtoc a:hover {
+color: #ffffff;
+text-decoration: underline;
+}
+#backtoc a span {
+display: block;
+width: 158px;
+height: 33px;
+font-size: .95em;
+}
+#searchform {
+background: url(/img/bttn-bg-khaki.jpg) top left repeat;
+border: 4px solid #d0c9b9;
+font-size: 1.4em;
+line-height: 1em;
+padding: 5px 5px;
+}
+input#s {
+background: transparent;
+border: 0;
+width: 118px;
+margin: 0;
+padding: 0;
+font-family: georgia, serif;
+color: #003459;
+font-size: 0.8em;
+line-height: 1em;
+}
+input#searchsubmit {
+}
+
+span.amp {
+font-family: Baskerville,"Goudy Old Style","Palatino","Book Antiqua",serif;
+font-size: 1.2em;
+font-style: italic;
+}
+
+
+/* rob's starting point */
+
+
+form div.selfclear label {
+font-weight: bold;
+float: left;
+width: 10em;
+text-align: right;
+padding: 0 0.5em 0 0;
+margin: 0 0 0 -10.5em;
+}
+
+form div.selfclear {
+clear: both;
+margin: 0.8em 0;
+padding: 0 0 0 10.5em;
+}
+
+input {
+font-size: 1em;
+}
+
+fieldset {
+border: 1px solid #ccccb8;
+margin: 1em 0;
+padding: 0 0.5em 0.5em;
+}
+
+legend {
+padding: 0.2em 0.5em;
+margin: 0 0 0 0.2em;
+border: 1px solid #ccccb8;
+background: #ebebeb;
+font-size: 0.9em;
+}
+
+input.indented-submit {
+margin: 0.5em 0 1em 10.5em;
+}
+
+form .error {
+border: 2px solid #fa4740;
+}
+
+form .error-message {
+font-size: 0.75em;
+color: #ce0700;
+margin: 0.2em 0 0 0;
+}
+
+form .info-message {
+font-size: 0.75em;
+margin: 0.2em 0 0 0;
+}
