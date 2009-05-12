@@ -86,16 +86,31 @@ function submit_handler(e) {
 };
 
 function map_behaviors(formcontainer) {
-  var bounds = new OpenLayers.Bounds(
-    -2.003750834E7,-2.003750834E7,
-    2.003750834E7,2.003750834E7
-  );
+  //var bounds = new OpenLayers.Bounds(
+  //  -2.003750834E7,-2.003750834E7,
+  //  2.003750834E7,2.003750834E7
+  //);
   var map = new OpenLayers.Map('map', {
     projection: new OpenLayers.Projection('EPSG:900913'),
-    maxExtent: bounds
+    displayProjection: new OpenLayers.Projection('EPSG:4326'),
+    //maxExtent: bounds,
+    //controls: [
+    //    new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
+    //    new OpenLayers.Control.PanZoom()
+    //]
     });
-  var streetLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true});
-  map.addLayer(streetLayer);
-  map.zoomToMaxExtent();
+  var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true});
+  // XXX right now we have this dummy layer as a proof of concept
+  var dummyLayer = new OpenLayers.Layer.Markers('dummy');
+  // Center on 349 West 12th St. by default for now
+  var center = new OpenLayers.LonLat(-74.006952, 40.738067);
+  var storyIcon = new OpenLayers.Icon('/js/img/story_marker.png');
+  var dummyMarker = new OpenLayers.Marker(center, storyIcon);
+  dummyLayer.addMarker(dummyMarker);
+  map.addLayers([baseLayer, dummyLayer]);
+  var bounds = new OpenLayers.Bounds();
+  bounds.extend(center);
+  map.zoomToExtent(bounds);
   the_map = map;
+  the_feature = dummyMarker;
 }
