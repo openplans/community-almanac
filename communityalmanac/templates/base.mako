@@ -55,28 +55,8 @@
           <div id="right-page">
             ${next.body()}
           </div><!-- /#right-page -->
-
           <div id="left-page" class="selfclear">
-            <div id="sidebar-1" class="sidebar">
-              % if c.almanac:
-              <h3 id="add-page-bttn">
-                ${h.link_to(u'Add a page to this almanac!', h.url_for('page_create', almanac=c.almanac))}
-              </h3>
-              % endif
-              <form action="#" method="get" id="searchform">
-                <input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="Search&hellip;" class="text" name="s" id="s"/>
-                <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
-              </form>
-            </div>
-            <div id="sidebar-2" class="sidebar">
-              <h4>Sidebar 2</h4>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-            </div>
-            <div id="sidebar-3" class="sidebar">
-              <h4>Sidebar 3</h4>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-            </div>
+            ${self.sidebar()}
           </div><!-- /#left-page -->
           <div id="nav-bottom">
             <span class="prev"><a href="#">&laquo; Previous Page Name</a></span>
@@ -98,3 +78,29 @@
   </body>
 </html>
 <%def name="title()">Community Almanac</%def>
+<%def name="extra_head()">
+</%def>
+<%def name="before_main()">
+</%def>
+<%def name="sidebar()">
+<div id="sidebar-1" class="sidebar">
+  % if c.almanac:
+  <h3 id="add-page-bttn">
+    ${h.link_to(u'Add a page to this almanac!', h.url_for('page_create', almanac=c.almanac))}
+  </h3>
+  % endif
+  <form action="#" method="get" id="searchform">
+    <input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="Search&hellip;" class="text" name="s" id="s"/>
+    <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
+  </form>
+</div>
+<div id="sidebar-2" class="sidebar">
+  <h4>Sidebar 2</h4>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+</div>
+<div id="sidebar-3" class="sidebar">
+  <h4>Sidebar 3</h4>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+</div>
+</%def>
