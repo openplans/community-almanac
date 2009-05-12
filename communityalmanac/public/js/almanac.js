@@ -24,7 +24,8 @@ $(document).ready(function() {
       submitfn: submit_handler
     }, {
       link: $('#map-tool'),
-                submitfn: submit_handler
+      attach_form_behaviors: map_behaviors,
+      submitfn: submit_handler
     }
   ];
 
@@ -33,6 +34,7 @@ $(document).ready(function() {
         var tool = tools[i];
         var link = tool.link;
         var submitfn = tool.submitfn;
+        var attach_form_behaviors = tool.attach_form_behaviors;
 
         // when somebody tries to add a particular media type, fetch the form from
         // the server, and attach the behavior to it
@@ -52,6 +54,10 @@ $(document).ready(function() {
               formcontainer.fadeOut('normal', function() { $(this).empty(); });
             });
             $('form.media-item').submit(submitfn);
+            // attach custom behaviors if needed
+            if (attach_form_behaviors) {
+              attach_form_behaviors($(this));
+            }
           });
         });
       }
@@ -78,3 +84,18 @@ function submit_handler(e) {
     url: url
   });
 };
+
+function map_behaviors(formcontainer) {
+  var bounds = new OpenLayers.Bounds(
+    -2.003750834E7,-2.003750834E7,
+    2.003750834E7,2.003750834E7
+  );
+  var map = new OpenLayers.Map('map', {
+    projection: new OpenLayers.Projection('EPSG:900913'),
+    maxExtent: bounds
+    });
+  var streetLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true});
+  map.addLayer(streetLayer);
+  map.zoomToMaxExtent();
+  the_map = map;
+}

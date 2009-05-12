@@ -18,4 +18,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<p>map form</p>
+<%doc>
+  Map behaviors are attached in almanac.js
+</%doc>
+<div id="map" style="width: 500px; height: 400px"></div>
