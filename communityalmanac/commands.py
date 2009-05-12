@@ -53,7 +53,6 @@ def _server_args(args, nolaunch=False):
         args.debug = False
         if nolaunch:
             args.nolaunch = True
-        return
 
     # We have to much around with the actual arguments to pass down.
     import sys
