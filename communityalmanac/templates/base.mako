@@ -51,9 +51,9 @@
       </div>
     </div>
     <div id="content">
+      <div id="target"></div>
       <div id="wrap-a">
         <div id="wrap-b">
-        <img id="target" src="/img/code.png">
           <div id="nav-top">
             <span class="prev"><a href="#">&laquo; Previous Page Name</a></span>
             <span class="next"><a href="#">Next Page Name &raquo;</a></span>
@@ -90,7 +90,7 @@
     <script type="text/javascript" src="/js/turn.js"></script>
     <script type="text/javascript">
   		$(document).ready(function(){
-  			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png'});
+  			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 135,	startingWidth: 24, startingHeight: 24});
   		});
   	</script>
   </body>

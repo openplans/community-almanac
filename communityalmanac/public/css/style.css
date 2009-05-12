@@ -111,6 +111,8 @@ font-size: 1.9em;
 background: url(/img/book-top.png) top center no-repeat;
 min-width: 980px;
 padding: 20px 0 0 0;
+position: relative;
+overflow: hidden;
 }
 
 #wrap-a{
@@ -121,7 +123,6 @@ padding: 0 0 20px 0;
 #wrap-b {
 background: url(/img/book-tile.png) center top repeat-y;
 padding: 20px 0 40px 0;
-position: relative;
 }
 
 #right-page {

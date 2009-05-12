@@ -21,6 +21,7 @@
 
 #turn_object{
 	position: relative;
+	overflow: hidden;
 }
 
 #turn_wrapper.right #turn_hideme *,
@@ -34,7 +35,8 @@
 	left: auto;
 }
 #turn_wrapper.right #turn_object {
-	right: 0 !important;
+  top: 3px;
+	right: 22px !important;
 	left: auto !important;
 }
 
