@@ -18,6 +18,7 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
 """Setup the communityalmanac application"""
+from __future__ import with_statement
 import logging
 
 from communityalmanac.config.environment import load_environment
@@ -29,5 +30,17 @@ def setup_app(command, conf, vars):
     """Place any commands to setup communityalmanac here"""
     load_environment(conf.global_conf, conf.local_conf)
 
-    # Create the tables if they don't already exist
-    meta.metadata.create_all(bind=meta.engine)
+    if meta.engine.name == 'sqlite':
+        from communityalmanac.lib.spatialite import SQLITE_INIT
+        with open(SQLITE_INIT) as initscript:
+            conn = meta.engine.connect()
+            for line in initscript.readlines():
+                conn.execute(line)
+
+        # Create the tables if they don't already exist
+        meta.metadata.create_all(bind=meta.engine,checkfirst=False)
+    else:
+
+        # Create the tables if they don't already exist
+        meta.metadata.create_all(bind=meta.engine)
+

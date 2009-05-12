@@ -25,7 +25,7 @@ import signal
 from optparse import OptionParser
 
 def launch_and_watch_child(args):
-    if hasattr(os, 'fork'):
+    """if hasattr(os, 'fork'):
         # OS X Spits out ugly warnings if you import the webbrowser module
         # after forking.  Since we're going to fork, I'll preimport webbrowser.
         import webbrowser
@@ -38,8 +38,9 @@ def launch_and_watch_child(args):
 
         # Because of the way waitpid functions, we have to shift right by eight
         # to get the kind of exit code we expect.
-        return exit_code >> 8, child
+        return exit_code >> 8, child"""
 
+    from communityalmanac.lib import spatialite
     from subprocess import Popen
     child = Popen(args)
     exit_code = child.wait()
