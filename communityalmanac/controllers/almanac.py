@@ -29,8 +29,10 @@ from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
+from shapely.geometry import asShape
 from sqlalchemy.orm import exc
 import communityalmanac.lib.helpers as h
+import simplejson
 
 from communityalmanac.lib.base import BaseController, render
 
@@ -54,9 +56,7 @@ class AlmanacController(BaseController):
     def _do_create(self):
         name = self.form_result['name']
         json = self.form_result['almanac_center']
-        import simplejson
         shape = simplejson.loads(json)
-        from shapely.geometry import asShape
         point = asShape(shape)
         slug = name_almanac(name)
         almanac = Almanac(name, slug)
