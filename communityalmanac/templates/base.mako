@@ -53,8 +53,8 @@
     <div id="content">
       <div id="wrap-a">
         <div id="wrap-b">
-        <img id="target" src="/img/code.png">
           <div id="nav-top">
+            <img id="target" src="/img/code.png">
             <span class="prev"><a href="#">&laquo; Previous Page Name</a></span>
             <span class="next"><a href="#">Next Page Name &raquo;</a></span>
             % if c.almanac:
