@@ -99,6 +99,11 @@ def main():
         '-s', '--setup', action='store_true', default=False,
         help='Run the community almanac setup.  This creates any necessary models.')
 
+    parser.add_option(
+        '-m', '--map-key',
+        default='ABQIAAAArBPF8riaRhqOCRInVOpLVhS7l0GBSa1x8uTWSQog_urT4TWq5xQAsIXoWoBjWzF7uvuoy8WT3pGQQA',
+        help='The google maps api key to use')
+
     args = parser.parse_args()[0]
 
     config = {
@@ -111,6 +116,7 @@ def main():
         'beaker.session.secret': 'somesecret',
 
         'sqlalchemy.url': args.url,
+        'map_key': args.map_key,
     }
 
     if args.setup:

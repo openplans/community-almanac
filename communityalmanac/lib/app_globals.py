@@ -18,6 +18,7 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
 """The application's Globals object"""
+from pylons import config
 
 class Globals(object):
 
@@ -32,3 +33,4 @@ class Globals(object):
         'app_globals' variable
 
         """
+        self.map_key = config['map_key']
