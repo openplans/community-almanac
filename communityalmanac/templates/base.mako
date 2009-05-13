@@ -95,6 +95,12 @@
 <%def name="extra_head()"></%def>
 <%def name="bookmark()"></%def>
 <%def name="pagenav()">
+%if self.attr.prev_page_url:
+<span class="prev"><a href="${self.attr.prev_page_url}">&laquo; ${self.attr.prev_page}</a></span>
+%endif
+%if self.attr.next_page_url:
+<span class="next"><a href="${self.attr.next_page_url}">${self.attr.next_page} &raquo;</a></span>
+%endif
 </%def>
 <%def name="sidebar()">
 <div id="sidebar-1" class="sidebar">
@@ -118,3 +124,9 @@
   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 </div>
 </%def>
+<%!
+prev_page_url = ""
+prev_page = "Previous"
+next_page_url = ""
+next_page = "Next"
+%>
