@@ -353,6 +353,46 @@ font-family: Baskerville,"Goudy Old Style","Palatino","Book Antiqua",serif;
 font-size: 1.2em;
 font-style: italic;
 }
+/* edit page */
+
+ul.page-media-items li {
+list-style-type: none;
+border: 4px solid #d0c9b9;
+margin: 0.5em 0 20px;
+background: url(/img/page-contrast-bg.png);
+position: relative;
+min-height: 65px;
+padding: 10px;
+}
+
+ul.page-media-items li .media-tab {
+position: absolute;
+width: 30px;
+height: 51px;
+top: 14px;
+left: -30px;
+background: url(/img/media-drag-bg.png);
+overflow: hidden;
+text-indent: -9999em;
+cursor: pointer;
+display: none;
+}
+
+ul.page-media-items li:hover .media-tab {
+display: block;
+}
+
+ul.page-media-items li .media-edit {
+padding: 4px 20px 4px 0;
+background: url(/img/edit-icon.png) 100% 50% no-repeat;
+}
+
+ul.page-media-items li .media-delete {
+padding: 4px 20px 4px 0;
+background: url(/img/delete-icon.png) 100% 50% no-repeat;
+margin: 0 0 0 9px;
+}
+
 
 /* rob's starting point */
 form div.selfclear label {
