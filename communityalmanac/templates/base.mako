@@ -103,7 +103,7 @@
 %endif
 </%def>
 <%def name="sidebar()">
-<div id="sidebar-1" class="sidebar">
+<div class="sidebar">
   % if c.almanac:
   <h3 id="add-page-bttn">
     ${h.link_to(u'Add a page to this almanac!', h.url_for('page_create', almanac=c.almanac))}
@@ -114,11 +114,11 @@
     <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
   </form>
 </div>
-<div id="sidebar-2" class="sidebar">
+<div class="sidebar">
   <h4>Sidebar 2</h4>
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
 </div>
-<div id="sidebar-3" class="sidebar">
+<div class="sidebar">
   <h4>Sidebar 3</h4>
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
