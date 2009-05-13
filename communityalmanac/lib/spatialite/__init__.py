@@ -1,4 +1,3 @@
-<%doc><!--
 # Community Almanac - A place for your stories.
 # Copyright (C) 2009  Douglas Mayle, Robert Marianski,
 # Andy Cochran, Chris Patterson
@@ -17,8 +16,13 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
---></%doc>
-<%doc>
-  Map behaviors are attached in almanac.js
-</%doc>
-<div id="map" style="width: 500px; height: 400px"></div>
+
+import os
+import sys
+
+if sys.platform == 'darwin':
+    os.environ['DYLD_LIBRARY_PATH'] = os.path.dirname(__file__)
+elif sys.platform != 'win32':
+    os.environ['LD_LIBRARY_PATH'] = os.path.dirname(__file__)
+
+SQLITE_INIT = os.path.join(os.path.dirname(__file__), 'init_spatialite-2.3.sql')

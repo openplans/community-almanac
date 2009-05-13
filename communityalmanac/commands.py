@@ -25,35 +25,13 @@ import signal
 from optparse import OptionParser
 
 def launch_and_watch_child(args):
-    if hasattr(os, 'fork'):
-        # OS X Spits out ugly warnings if you import the webbrowser module
-        # after forking.  Since we're going to fork, I'll preimport webbrowser.
-        import webbrowser
-
-        # Nice and easy...
-        child = os.fork()
-        if child == 0:
-            return None, child
-        childpid, exit_code = os.waitpid(child, 0)
-
-        # Because of the way waitpid functions, we have to shift right by eight
-        # to get the kind of exit code we expect.
-        return exit_code >> 8, child
-
+    from communityalmanac.lib import spatialite
     from subprocess import Popen
     child = Popen(args)
     exit_code = child.wait()
     return exit_code, child.pid
 
 def _server_args(args, nolaunch=False):
-    if hasattr(os, 'fork'):
-        # We care about the in memory arguments
-        args.fragile = True
-        args.debug = False
-        if nolaunch:
-            args.nolaunch = True
-        return
-
     # We have to much around with the actual arguments to pass down.
     import sys
 
@@ -121,6 +99,11 @@ def main():
         '-s', '--setup', action='store_true', default=False,
         help='Run the community almanac setup.  This creates any necessary models.')
 
+    parser.add_option(
+        '-m', '--map-key',
+        default='ABQIAAAArBPF8riaRhqOCRInVOpLVhS7l0GBSa1x8uTWSQog_urT4TWq5xQAsIXoWoBjWzF7uvuoy8WT3pGQQA',
+        help='The google maps api key to use')
+
     args = parser.parse_args()[0]
 
     config = {
@@ -133,6 +116,7 @@ def main():
         'beaker.session.secret': 'somesecret',
 
         'sqlalchemy.url': args.url,
+        'map_key': args.map_key,
     }
 
     if args.setup:

@@ -88,6 +88,9 @@
     <script type="text/javascript" src="/js/almanac.js"></script>
     <script type="text/javascript" src="/js/jqueryui.js"></script>
     <script type="text/javascript" src="/js/turn.js"></script>
+    <script type="text/javascript" src="/js/OpenLayers.js"></script>
+    <script type="text/javascript"
+            src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${g.map_key}"></script>
     <script type="text/javascript">
   		$(document).ready(function(){
   			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 135,	startingWidth: 24, startingHeight: 24});
