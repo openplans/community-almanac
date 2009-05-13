@@ -99,13 +99,13 @@ class Media(Base):
 
     media = relation("Page", backref="media")
 
-class PDFFile(Media):
+class PDF(Media):
     __tablename__ = 'pdfs'
     __mapper_args__ = dict(polymorphic_identity='pdf')
     id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
     path = Column(Unicode)
 
-class SoundFile(Media):
+class Sound(Media):
     __tablename__ = 'sounds'
     __mapper_args__ = dict(polymorphic_identity='sound')
     id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
