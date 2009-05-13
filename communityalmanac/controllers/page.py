@@ -69,11 +69,11 @@ class PageController(BaseController):
 
     @dispatch_on(POST='_do_form_text')
     def form_text(self, almanac_slug):
-        return render('/page/form/text.mako')
+        return render('/media/story/form.mako')
 
     @dispatch_on(POST='_do_form_map')
     def form_map(self, almanac_slug):
-        return render('/page/form/map.mako')
+        return render('/media/map/form.mako')
 
     def _do_form_text(self, almanac_slug):
         body = request.POST.get('body', u'')
@@ -87,8 +87,8 @@ class PageController(BaseController):
         media_items = h.get_session_media_items()
         media_items.append(story)
         session.save()
-        return render('/page/item/text.mako', extra_vars=dict(story=story))
+        return render('/media/story/item.mako', extra_vars=dict(story=story))
 
     def _do_form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        return render('/page/item/map.mako')
+        return render('/media/map/item.mako')
