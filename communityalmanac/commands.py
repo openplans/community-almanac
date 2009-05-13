@@ -25,21 +25,6 @@ import signal
 from optparse import OptionParser
 
 def launch_and_watch_child(args):
-    """if hasattr(os, 'fork'):
-        # OS X Spits out ugly warnings if you import the webbrowser module
-        # after forking.  Since we're going to fork, I'll preimport webbrowser.
-        import webbrowser
-
-        # Nice and easy...
-        child = os.fork()
-        if child == 0:
-            return None, child
-        childpid, exit_code = os.waitpid(child, 0)
-
-        # Because of the way waitpid functions, we have to shift right by eight
-        # to get the kind of exit code we expect.
-        return exit_code >> 8, child"""
-
     from communityalmanac.lib import spatialite
     from subprocess import Popen
     child = Popen(args)
@@ -47,14 +32,6 @@ def launch_and_watch_child(args):
     return exit_code, child.pid
 
 def _server_args(args, nolaunch=False):
-    if hasattr(os, 'fork'):
-        # We care about the in memory arguments
-        args.fragile = True
-        args.debug = False
-        if nolaunch:
-            args.nolaunch = True
-        return
-
     # We have to much around with the actual arguments to pass down.
     import sys
 
