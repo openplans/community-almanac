@@ -33,11 +33,13 @@
 ${c.almanac.name} - Community Almanac
 </%def>
 <%def name="bookmark()">
-<div id="backtoc">
+<div id="backtoc" class="pngfix">
   <a href="${h.url_for('almanac_view', almanac=c.almanac)}"><span>&laquo; ${c.almanac.name}</span></a>
 </div>
 </%def>
-<%def name="pagenav()">
-<span class="prev"><a href="#">&laquo; Previous Page Name</a></span>
-<span class="next"><a href="#">Next Page Name &raquo;</a></span>
-</%def>
+<%!
+prev_page_url = "#"
+prev_page = "Pages 1-10"
+next_page_url = "#"
+next_page = "Pages 21-30"
+%>
