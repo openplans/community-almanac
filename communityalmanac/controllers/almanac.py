@@ -69,4 +69,6 @@ class AlmanacController(BaseController):
 
     def view(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
+        loc = c.almanac.location
+        c.lat, c.lng = loc.x, loc.y
         return render('/almanac/view.mako')
