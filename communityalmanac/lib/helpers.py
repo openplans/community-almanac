@@ -99,7 +99,6 @@ def render_media_items(media_items):
 
     rendered_media_items = []
     for media_item in media_items:
-        if isinstance(media_item, Story):
-            rendered_story = render('/media/story/item.mako', extra_vars=dict(story=media_item))
-            rendered_media_items.append(rendered_story)
+        rendered_story = render('/media/%s/item.mako' % media_item.__class__.__name__, extra_vars=dict(story=media_item))
+        rendered_media_items.append(rendered_story)
     return rendered_media_items
