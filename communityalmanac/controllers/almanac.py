@@ -38,6 +38,7 @@ log = logging.getLogger(__name__)
 
 class AlmanacCreateForm(Schema):
     name = validators.String(not_empty=True)
+    almanac_center = validators.String(not_empty=True)
 
 class AlmanacController(BaseController):
 
@@ -52,8 +53,14 @@ class AlmanacController(BaseController):
     @validate(schema=AlmanacCreateForm(), form='create')
     def _do_create(self):
         name = self.form_result['name']
+        json = self.form_result['almanac_center']
+        import simplejson
+        shape = simplejson.loads(json)
+        from shapely.geometry import asShape
+        point = asShape(shape)
         slug = name_almanac(name)
         almanac = Almanac(name, slug)
+        almanac.location = point
 
         meta.Session.save(almanac)
         meta.Session.commit()
