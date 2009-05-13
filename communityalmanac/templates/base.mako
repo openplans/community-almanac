@@ -54,14 +54,9 @@
       <div id="wrap-a">
         <div id="wrap-b">
           <div id="nav-top">
-            <img id="target" src="/img/code.png">
-            <span class="prev"><a href="#">&laquo; Previous Page Name</a></span>
-            <span class="next"><a href="#">Next Page Name &raquo;</a></span>
-            % if c.almanac:
-            <div id="backtoc">
-              <a href="${h.url_for('almanac_view', almanac=c.almanac)}"><span>&laquo; ${c.almanac.name}</span></a>
-            </div>
-            % endif
+            <div id="target"></div>
+            ${self.pagenav()}
+            ${self.bookmark()}
           </div>
           <div id="right-page">
             ${next.body()}
@@ -70,8 +65,7 @@
             ${self.sidebar()}
           </div><!-- /#left-page -->
           <div id="nav-bottom">
-            <span class="prev"><a href="#">&laquo; Previous Page Name</a></span>
-            <span class="next"><a href="#">Next Page Name &raquo;</a></span>
+            ${self.pagenav()}
           </div>
         </div><!-- /#wrap-b-->
       </div><!-- /#wrap-a -->
@@ -86,20 +80,21 @@
     <script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui-1.7.1.custom.min.js"></script>
     <script type="text/javascript" src="/js/almanac.js"></script>
-    <script type="text/javascript" src="/js/jqueryui.js"></script>
     <script type="text/javascript" src="/js/turn.js"></script>
     <script type="text/javascript" src="/js/OpenLayers.js"></script>
     <script type="text/javascript"
             src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${g.map_key}"></script>
     <script type="text/javascript">
   		$(document).ready(function(){
-  			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png'});
+  			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 135,	startingWidth: 24, startingHeight: 24});
   		});
   	</script>
   </body>
 </html>
 <%def name="title()">Community Almanac</%def>
-<%def name="extra_head()">
+<%def name="extra_head()"></%def>
+<%def name="bookmark()"></%def>
+<%def name="pagenav()">
 </%def>
 <%def name="sidebar()">
 <div id="sidebar-1" class="sidebar">
