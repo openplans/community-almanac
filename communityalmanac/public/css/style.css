@@ -377,12 +377,17 @@ font-style: italic;
 
 ul.page-media-items li {
 list-style-type: none;
+position: relative;
+padding: 0 0 0 30px;
+margin: 0 0 0 -30px;
+}
+
+ul.page-media-items li .media-content {
 border: 4px solid #d0c9b9;
 margin: 0.5em 0 20px;
 background: url(/img/page-contrast-bg.png);
-position: relative;
 min-height: 65px;
-padding: 10px;
+padding: 10px 10px 10px 30px
 }
 
 ul.page-media-items li .media-tab {
@@ -390,7 +395,7 @@ position: absolute;
 width: 30px;
 height: 51px;
 top: 14px;
-left: -30px;
+left: 4px;
 background: url(/img/media-drag-bg.png);
 overflow: hidden;
 text-indent: -9999em;
