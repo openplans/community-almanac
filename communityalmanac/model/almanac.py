@@ -128,6 +128,7 @@ class Map(Media):
     id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
     location = Column(POINT(storage_SRID))
 
+    maps = relation("Page", backref="maps")
 
 class User(Base):
 

@@ -58,6 +58,7 @@ def make_map():
     # FIXME not sure if we should keep this url scheme
     map.connect('session_sort', '/sort', controller='media', action='sort')
     map.connect('almanac_center', '/api/center/:almanac_slug', controller='almanac', action='center', _filter=almanac_expand)
+    map.connect('kml', '/api/kml/:almanac_slug', controller='almanac', action='kml', _filter=almanac_expand)
     map.connect('geocode', '/api/geocode', controller='geocoder', action='geocode')
     map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)
     map.connect('page_view', '/:almanac_slug/:page_slug', controller='page', action='view', _filter=page_expand)
