@@ -23,6 +23,8 @@ from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
 
 from communityalmanac.lib.base import BaseController, render
+from pylons.decorators.rest import dispatch_on
+import communityalmanac.lib.helpers as h
 
 log = logging.getLogger(__name__)
 
@@ -33,3 +35,24 @@ class MediaController(BaseController):
         #return render('/media.mako')
         # or, return a response
         return 'Hello World'
+
+    @dispatch_on(GET='donothing')
+    def sort(self):
+        id = request.params.get('id')
+        index = request.params.get('index')
+        if not id or not index:
+            abort(400)
+        try:
+            index = int(index)
+            id = int(id.split('_')[-1])
+        except ValueError:
+            abort(400)
+        if not h.sort_session_media_items(id, index):
+            abort(400)
+        # The only useful return value is the HTTP response, so we return an
+        # empty body.
+        return ''
+
+    def donothing(self, almanac_slug):
+        abort(400)
+

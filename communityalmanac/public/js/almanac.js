@@ -19,6 +19,17 @@ $(document).ready(function() {
       }
   });
 
+  $('ul.page-media-items').sortable({
+    update: function(event, ui) {
+      ui.item.parent().children().each(function(index) {
+        if (this == ui.item.get(0)) {
+          var content = $(this).children('div.mediacontent').get(0);
+          $.post('/sort', {id: content.id, index: index})
+        }
+      });
+    },
+    handle: 'div.media-tab'
+  });
   var tools = [{
       link: $('#text-tool'),
       submitfn: submit_handler

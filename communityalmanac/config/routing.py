@@ -56,6 +56,7 @@ def make_map():
 
     map.connect('home', '/', controller='almanac', action='home')
     # FIXME not sure if we should keep this url scheme
+    map.connect('session_sort', '/sort', controller='media', action='sort')
     map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)
     map.connect('page_view', '/:almanac_slug/:page_slug', controller='page', action='view', _filter=page_expand)
     map.connect('almanac_create', '/+almanac', controller='almanac', action='create')

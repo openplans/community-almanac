@@ -85,6 +85,7 @@ class PageController(BaseController):
         story.text = body
 
         media_items = h.get_session_media_items()
+        story.order = len(media_items)
         media_items.append(story)
         session.save()
         return render('/media/story/item.mako', extra_vars=dict(story=story))

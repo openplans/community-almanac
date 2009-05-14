@@ -18,6 +18,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<div class="mediacontent map">
+<div class="mediacontent map" id="${id}">
   <p>content of the map item</p>
 </div>

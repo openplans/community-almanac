@@ -86,6 +86,27 @@ def get_session_media_items():
     media_items = session.setdefault('media', [])
     return media_items
 
+def sort_session_media_items(index_move, newsort):
+    media = get_session_media_items()
+
+    if index_move < 0 or index_move >= len(media):
+        return False
+
+    oldsort = media[index_move].order
+    if oldsort > newsort:
+        for item in media:
+            if item.order == oldsort:
+                item.order = newsort
+            elif item.order >= newsort and item.order < oldsort:
+                item.order += 1
+    elif oldsort < newsort:
+        for item in media:
+            if item.order == oldsort:
+                item.order = newsort
+            elif item.order > oldsort and item.sort <= newsort:
+                item.order -= 1
+    return True
+
 def remove_session_media_items():
     media_items = session.pop('media', [])
     session.save()
@@ -97,8 +118,13 @@ def render_media_items(media_items):
     functions like these tend to balloon, so we should change our strategy if
     it gets complex"""
 
+    from operator import itemgetter
     rendered_media_items = []
-    for media_item in media_items:
-        rendered_story = render('/media/%s/item.mako' % media_item.__class__.__name__, extra_vars=dict(story=media_item))
-        rendered_media_items.append(rendered_story)
-    return rendered_media_items
+
+    for index, media_item in enumerate(media_items):
+        rendered_story = render('/media/%s/item.mako' % media_item.__class__.__name__.lower(),
+            extra_vars=dict(story=media_item, id='pagemedia_%d' % (media_item.id or index)))
+        rendered_media_items.append((media_item.order, rendered_story))
+
+    # We return the list sorted based on the media sort orders.
+    return [rendered for sort, rendered in sorted(rendered_media_items, key=itemgetter(0))]
