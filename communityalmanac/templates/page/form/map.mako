@@ -18,7 +18,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<div id="map" style="width: 500px; height: 400px"></div>
+<div>
+  <form class="media-item" method="post" action="${request.path_url}">
+    <fieldset>
+      <legend>Map</legend>
+      <div id="map" style="width: 500px; height: 400px"></div>
+      <input type="hidden" id="feature-geometry" name="feature" />
+      <input type="submit" value="Add" />
+      <a class="media-cancel" href="#">Cancel</a>
+    </fieldset>
+  </form>
+</div>
 <script>
   var featureLayer = new OpenLayers.Layer.Vector('feature');
   var onActivate = function() { featureLayer.destroyFeatures(); };
@@ -34,12 +44,18 @@
     featureLayer, OpenLayers.Handler.Polygon,
     {'displayClass': 'olControlDrawFeaturePolygon',
      'eventListeners': {'activate': onActivate}});
-  var deactivateAll = function() {
+  var deactivateAllEditingControls = function() {
     drawPoint.deactivate();
     drawPath.deactivate();
     drawPolygon.deactivate();
   };
-  featureLayer.events.on({featureadded: deactivateAll});
+  var featureAdded = function(evt) {
+    deactivateAllEditingControls();
+    var formatter = new OpenLayers.Format.GeoJSON();
+    var str = formatter.write(evt.feature.geometry);
+    $('#feature-geometry').val(str);
+  };
+  featureLayer.events.on({featureadded: featureAdded});
   var panelControls = [
    new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
    new OpenLayers.Control.PanZoom(),
