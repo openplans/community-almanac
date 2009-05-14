@@ -23,19 +23,15 @@
 <form id="page-title-form"  method="post" action="${request.path_url}">
   <input id="page-title" type="text" name="name" value="Page Name" />
 </form>
-<ul class="page-media-tools">
-  <li>${h.link_to('Text', h.url_for('media_story', almanac=c.almanac), id='text-tool')}</li>
-  <li>${h.link_to('Map', h.url_for('media_map', almanac=c.almanac), id='map-tool')}</li>
-</ul>
+<div id="form-container">
+</div>
 % if c.media_items:
 <ul class="page-media-items">
   %for media_item in c.media_items:
-    <li><div class="media-tab">drag</div><div class="media-controls"><a href="#">Edit</a><a href="#">Delete</a></div>${media_item}</li>
+    <li><div class="media-tab">drag</div><div class="media-controls"><a class="media-edit" href="#">Edit</a><a class="media-delete" href="#">Delete</a></div>${media_item}</li>
   %endfor
 </ul>
 % endif
-<div id="form-container">
-</div>
 <form id="submit-button-form" method="post" action="${request.path_url}">
   <input type="submit" value="Publish" />
 </form>
@@ -50,5 +46,9 @@ Create Page - ${c.almanac.name} - Community Almanac
     ${h.link_to(u'Publish this page!', h.url_for('page_create', almanac=c.almanac))}
   </h3>
   % endif
+	<ul class="page-media-tools">
+	  <li>${h.link_to('Text', h.url_for('media_story', almanac=c.almanac), id='text-tool')}</li>
+	  <li>${h.link_to('Map', h.url_for('media_map', almanac=c.almanac), id='map-tool')}</li>
+	</ul>
 </div>
 </%def>
