@@ -27,10 +27,13 @@ from formencode import Schema
 from formencode import validators
 from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
+from pylons.decorators import jsonify
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
+from shapely.geometry import asShape
 from sqlalchemy.orm import exc
 import communityalmanac.lib.helpers as h
+import simplejson
 
 from communityalmanac.lib.base import BaseController, render
 
@@ -38,6 +41,7 @@ log = logging.getLogger(__name__)
 
 class AlmanacCreateForm(Schema):
     name = validators.String(not_empty=True)
+    almanac_center = validators.String(not_empty=True)
 
 class AlmanacController(BaseController):
 
@@ -52,8 +56,12 @@ class AlmanacController(BaseController):
     @validate(schema=AlmanacCreateForm(), form='create')
     def _do_create(self):
         name = self.form_result['name']
+        json = self.form_result['almanac_center']
+        shape = simplejson.loads(json)
+        point = asShape(shape)
         slug = name_almanac(name)
         almanac = Almanac(name, slug)
+        almanac.location = point
 
         meta.Session.save(almanac)
         meta.Session.commit()
@@ -62,4 +70,12 @@ class AlmanacController(BaseController):
 
     def view(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
+        loc = c.almanac.location
+        c.lat, c.lng = loc.x, loc.y
         return render('/almanac/view.mako')
+
+    @jsonify
+    def center(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        loc = c.almanac.location
+        return dict(lat=loc.x, lng=loc.y)

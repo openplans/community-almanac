@@ -28,6 +28,7 @@
 /*<![CDATA[ */
 @import'${h.url_for('/css/reset.css')}';
 @import'${h.url_for('/css/style.css')}';
+@import'${h.url_for('/css/openlayers.css')}';
 @import'${h.url_for('/css/turn.css')}';
 /* ]]> */
     </style>
@@ -89,10 +90,12 @@
   			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 135,	startingWidth: 24, startingHeight: 24});
   		});
   	</script>
+    ${self.extra_body()}
   </body>
 </html>
 <%def name="title()">Community Almanac</%def>
 <%def name="extra_head()"></%def>
+<%def name="extra_body()"></%def>
 <%def name="bookmark()"></%def>
 <%def name="pagenav()">
 %if self.attr.prev_page_url:
