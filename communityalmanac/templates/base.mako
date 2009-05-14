@@ -28,6 +28,7 @@
 /*<![CDATA[ */
 @import'${h.url_for('/css/reset.css')}';
 @import'${h.url_for('/css/style.css')}';
+@import'${h.url_for('/css/openlayers.css')}';
 @import'${h.url_for('/css/turn.css')}';
 /* ]]> */
     </style>
