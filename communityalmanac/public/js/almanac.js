@@ -86,34 +86,60 @@ function submit_handler(e) {
 };
 
 function map_behaviors(formcontainer) {
-    // for now, do it in the template itself because it's easier to get the
-    // data for the almanac location
-    return;
-  //var bounds = new OpenLayers.Bounds(
-  //  -2.003750834E7,-2.003750834E7,
-  //  2.003750834E7,2.003750834E7
-  //);
-  var map = new OpenLayers.Map('map', {
+  var featureLayer = new OpenLayers.Layer.Vector('feature');
+  var onActivate = function() { featureLayer.destroyFeatures(); };
+  var drawPoint = new OpenLayers.Control.DrawFeature(
+    featureLayer, OpenLayers.Handler.Point,
+    {'displayClass': 'olControlDrawFeaturePoint',
+     'eventListeners': {'activate': onActivate}});
+  var drawPath = new OpenLayers.Control.DrawFeature(
+    featureLayer, OpenLayers.Handler.Path,
+    {'displayClass': 'olControlDrawFeaturePath',
+     'eventListeners': {'activate': onActivate}});
+  var drawPolygon = new OpenLayers.Control.DrawFeature(
+    featureLayer, OpenLayers.Handler.Polygon,
+    {'displayClass': 'olControlDrawFeaturePolygon',
+     'eventListeners': {'activate': onActivate}});
+  var deactivateAllEditingControls = function() {
+    drawPoint.deactivate();
+    drawPath.deactivate();
+    drawPolygon.deactivate();
+  };
+  var featureAdded = function(evt) {
+    deactivateAllEditingControls();
+    var formatter = new OpenLayers.Format.GeoJSON();
+    var str = formatter.write(evt.feature.geometry);
+    $('#feature-geometry').val(str);
+  };
+  featureLayer.events.on({featureadded: featureAdded});
+  var panelControls = [
+   new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
+   new OpenLayers.Control.PanZoom(),
+   drawPoint,
+   drawPath,
+   drawPolygon
+  ];
+  var toolbar = new OpenLayers.Control.Panel({
+     displayClass: 'olControlEditingToolbar',
+     defaultControl: panelControls[0]
+  });
+  toolbar.addControls(panelControls);
+
+  map = new OpenLayers.Map('map', {
     projection: new OpenLayers.Projection('EPSG:900913'),
     displayProjection: new OpenLayers.Projection('EPSG:4326'),
-    //maxExtent: bounds,
-    //controls: [
-    //    new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
-    //    new OpenLayers.Control.PanZoom()
-    //]
+    maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
     });
   var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true});
-  // XXX right now we have this dummy layer as a proof of concept
-  var dummyLayer = new OpenLayers.Layer.Markers('dummy');
-  // Center on 349 West 12th St. by default for now
-  var center = new OpenLayers.LonLat(-74.006952, 40.738067);
-  var storyIcon = new OpenLayers.Icon('/js/img/story_marker.png');
-  var dummyMarker = new OpenLayers.Marker(center, storyIcon);
-  dummyLayer.addMarker(dummyMarker);
-  map.addLayers([baseLayer, dummyLayer]);
-  var bounds = new OpenLayers.Bounds();
-  bounds.extend(center);
-  map.zoomToExtent(bounds);
-  the_map = map;
-  the_feature = dummyMarker;
+  map.addLayer(baseLayer);
+  map.addControl(toolbar);
+  map.addLayer(featureLayer);
+  var almanac_center_url = $('.almanac-center-url').attr('href');
+  $.getJSON(almanac_center_url, {}, function(data) {
+    var lng = data.lng;
+    var lat = data.lat;
+    var center = new OpenLayers.LonLat(lng, lat);
+    center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+    map.setCenter(center, 12);
+  });
 }

@@ -19,6 +19,7 @@
 
 import logging
 
+from communityalmanac.model import Map
 from communityalmanac.model import Page
 from communityalmanac.model import Story
 from communityalmanac.model import meta
@@ -27,7 +28,9 @@ from pylons.controllers.util import abort, redirect_to
 from pylons.decorators.rest import dispatch_on
 
 from communityalmanac.lib.base import BaseController, render
+from shapely.geometry import asShape
 import communityalmanac.lib.helpers as h
+import simplejson
 
 log = logging.getLogger(__name__)
 
@@ -94,4 +97,15 @@ class PageController(BaseController):
 
     def _do_form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
+        json = request.POST.get('feature')
+        if json is None:
+            abort(400)
+        shape = simplejson.loads(json)
+        location = asShape(shape)
+
+        map = Map()
+        map.location = location
+        meta.Session.save(map)
+        meta.Session.commit()
+
         return render('/page/item/map.mako')

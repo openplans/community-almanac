@@ -27,6 +27,7 @@ from formencode import Schema
 from formencode import validators
 from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
+from pylons.decorators import jsonify
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 from shapely.geometry import asShape
@@ -72,3 +73,9 @@ class AlmanacController(BaseController):
         loc = c.almanac.location
         c.lat, c.lng = loc.x, loc.y
         return render('/almanac/view.mako')
+
+    @jsonify
+    def center(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        loc = c.almanac.location
+        return dict(lat=loc.x, lng=loc.y)
