@@ -20,12 +20,14 @@
 --></%doc>
 <div id="map" style="width: 500px; height: 400px"></div>
 <script>
+  var featureLayer = new OpenLayers.Layer.Vector('features')
   map = new OpenLayers.Map('map', {
     projection: new OpenLayers.Projection('EPSG:900913'),
     displayProjection: new OpenLayers.Projection('EPSG:4326'),
     maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
     controls: [
-      new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
+      //new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
+      new OpenLayers.Control.EditingToolbar(featureLayer, {zoomWheelEnabled: false}),
       new OpenLayers.Control.PanZoom()
       ],
     });
@@ -33,37 +35,6 @@
   map.addLayer(baseLayer);
   var center = new OpenLayers.LonLat(${c.lng}, ${c.lat});
   center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-  var featureLayer = new OpenLayers.Layer.Vector('features')
-  var drawControl = new OpenLayers.Control.Panel();
-  var onActivate = function() {
-    featureLayer.destroyFeatures();
-  }
-  var deactivateAll = function() {
-    pointControl.deactivate();
-    pathControl.deactivate();
-    polygonControl.deactivate();
-  }
-  var pointControl = new OpenLayers.Control.DrawFeature(
-        featureLayer, OpenLayers.Handler.Point,
-        {
-            'displayClass': 'olControlDrawFeaturePoint',
-            eventListeners: {"activate": onActivate}
-        });
-  var pathControl = new OpenLayers.Control.DrawFeature(
-        featureLayer, OpenLayers.Handler.Path,
-        {
-            'displayClass': 'olControlDrawFeaturePath',
-            eventListeners: {"activate": onActivate}
-        });
-  var polygonControl = new OpenLayers.Control.DrawFeature(
-        featureLayer, OpenLayers.Handler.Polygon,
-        {
-            'displayClass': 'olControlDrawFeaturePolygon',
-            eventListeners: {"activate": onActivate}
-        });
-  drawControl.addControls([polygonControl, pathControl, pointControl]);
-  featureLayer.events.on({"featureadded": deactivateAll});
-  map.addControl(drawControl);
   map.addLayer(featureLayer);
   map.setCenter(center, 12);
 </script>
