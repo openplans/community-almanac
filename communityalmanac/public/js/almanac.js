@@ -86,6 +86,9 @@ function submit_handler(e) {
 };
 
 function map_behaviors(formcontainer) {
+    // for now, do it in the template itself because it's easier to get the
+    // data for the almanac location
+    return;
   //var bounds = new OpenLayers.Bounds(
   //  -2.003750834E7,-2.003750834E7,
   //  2.003750834E7,2.003750834E7

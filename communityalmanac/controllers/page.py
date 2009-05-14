@@ -73,6 +73,9 @@ class PageController(BaseController):
 
     @dispatch_on(POST='_do_form_map')
     def form_map(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        loc = c.almanac.location
+        c.lat, c.lng = loc.x, loc.y
         return render('/page/form/map.mako')
 
     def _do_form_text(self, almanac_slug):

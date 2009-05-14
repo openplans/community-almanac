@@ -18,7 +18,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<%doc>
-  Map behaviors are attached in almanac.js
-</%doc>
 <div id="map" style="width: 500px; height: 400px"></div>
+<script>
+  map = new OpenLayers.Map('map', {
+    projection: new OpenLayers.Projection('EPSG:900913'),
+    displayProjection: new OpenLayers.Projection('EPSG:4326'),
+    maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
+    controls: [
+      new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
+      new OpenLayers.Control.PanZoom()
+      ],
+    });
+  var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true});
+  map.addLayer(baseLayer);
+  var center = new OpenLayers.LonLat(${c.lng}, ${c.lat});
+  center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+  map.setCenter(center, 12);
+</script>
