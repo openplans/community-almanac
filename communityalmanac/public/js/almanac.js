@@ -108,7 +108,7 @@ function submit_handler(e) {
     success: function(data, textStatus) {
       formcontainer.empty();
       var newLi = $('<li></li>');
-      newLi.appendTo($('.session-data ul'));
+      newLi.appendTo('ul.page-media-items');
       $('<div>' + data + '</div>').appendTo(newLi).hide().fadeIn('slow');
       },
     type: "POST",

@@ -88,7 +88,7 @@ class PageController(BaseController):
         story.order = len(media_items)
         media_items.append(story)
         session.save()
-        return render('/media/story/item.mako', extra_vars=dict(story=story))
+        return render('/media/story/item.mako', extra_vars=dict(story=story, id='pagemedia_%d' % (len(media_items)-1)))
 
     def _do_form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
