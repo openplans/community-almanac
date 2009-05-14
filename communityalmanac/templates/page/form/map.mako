@@ -62,5 +62,6 @@
     )
   ]);
   map.addLayer(featureLayer);
+  map.addControl(drawControl);
   map.setCenter(center, 12);
 </script>
