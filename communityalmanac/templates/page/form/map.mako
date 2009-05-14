@@ -33,5 +33,34 @@
   map.addLayer(baseLayer);
   var center = new OpenLayers.LonLat(${c.lng}, ${c.lat});
   center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+  var featureLayer = new OpenLayers.Layer.Vector('features')
+  var drawControl = new OpenLayers.Control.Panel();
+  function onActivate() {
+    featureLayer.destroyFeatures();
+  }
+  drawControl.addControls([
+    new OpenLayers.Control.DrawFeature(
+        featureLayer, OpenLayers.Handler.Point,
+        {
+            'displayClass': 'olControlDrawFeaturePoint',
+            eventListeners: {"activate": onActivate}
+        }
+    ),
+    new OpenLayers.Control.DrawFeature(
+        featureLayer, OpenLayers.Handler.Path,
+        {
+            'displayClass': 'olControlDrawFeaturePath',
+            eventListeners: {"activate": onActivate}
+        }
+    ),
+    new OpenLayers.Control.DrawFeature(
+        featureLayer, OpenLayers.Handler.Polygon,
+        {
+            'displayClass': 'olControlDrawFeaturePolygon',
+            eventListeners: {"activate": onActivate}
+        }
+    )
+  ]);
+  map.addLayer(featureLayer);
   map.setCenter(center, 12);
 </script>
