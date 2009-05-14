@@ -35,33 +35,35 @@
   center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
   var featureLayer = new OpenLayers.Layer.Vector('features')
   var drawControl = new OpenLayers.Control.Panel();
-  function onActivate() {
+  var onActivate = function() {
     featureLayer.destroyFeatures();
   }
-  drawControl.addControls([
-    new OpenLayers.Control.DrawFeature(
+  var deactivateAll = function() {
+    pointControl.deactivate();
+    pathControl.deactivate();
+    polygonControl.deactivate();
+  }
+  var pointControl = new OpenLayers.Control.DrawFeature(
         featureLayer, OpenLayers.Handler.Point,
         {
             'displayClass': 'olControlDrawFeaturePoint',
             eventListeners: {"activate": onActivate}
-        }
-    ),
-    new OpenLayers.Control.DrawFeature(
+        });
+  var pathControl = new OpenLayers.Control.DrawFeature(
         featureLayer, OpenLayers.Handler.Path,
         {
             'displayClass': 'olControlDrawFeaturePath',
             eventListeners: {"activate": onActivate}
-        }
-    ),
-    new OpenLayers.Control.DrawFeature(
+        });
+  var polygonControl = new OpenLayers.Control.DrawFeature(
         featureLayer, OpenLayers.Handler.Polygon,
         {
             'displayClass': 'olControlDrawFeaturePolygon',
             eventListeners: {"activate": onActivate}
-        }
-    )
-  ]);
-  map.addLayer(featureLayer);
+        });
+  drawControl.addControls([polygonControl, pathControl, pointControl]);
+  featureLayer.events.on({"featureadded": deactivateAll});
   map.addControl(drawControl);
+  map.addLayer(featureLayer);
   map.setCenter(center, 12);
 </script>
