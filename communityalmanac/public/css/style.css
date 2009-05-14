@@ -387,7 +387,7 @@ border: 4px solid #d0c9b9;
 margin: 0.5em 0 20px;
 background: url(/img/page-contrast-bg.png);
 min-height: 65px;
-padding: 10px 10px 10px 30px
+padding: 10px;
 }
 
 ul.page-media-items li .media-tab {
@@ -418,6 +418,52 @@ background: url(/img/delete-icon.png) 100% 50% no-repeat;
 margin: 0 0 0 9px;
 }
 
+h3#add-content {
+font-size: 1.25em;
+}
+
+ul.page-media-tools li {
+border: 4px solid #d0c9b9;
+margin: 0.5em 0 10px;
+background: url(/img/page-contrast-bg.png);
+list-style-type: none;
+padding: 6px;
+}
+
+ul.page-media-tools li a {
+display: block;
+padding: 0 16px 0 0;
+line-height: 1em;
+}
+
+ul.page-media-tools li a#text-tool {
+background: url(/img/text-icon.png) 100% 50% no-repeat;
+}
+
+ul.page-media-tools li a#image-tool {
+background: url(/img/image-icon.png) 100% 50% no-repeat;
+}
+
+ul.page-media-tools li a#map-tool {
+background: url(/img/map-icon.png) 100% 50% no-repeat;
+}
+
+ul.page-media-tools li a#audio-tool {
+background: url(/img/audio-icon.png) 100% 50% no-repeat;
+}
+
+ul.page-media-tools li a#pdf-tool {
+background: url(/img/pdf-icon.png) 100% 50% no-repeat;
+}
+
+form.media-item textarea {
+display: block;
+border: 0 none transparent;
+background: #fff;
+width: 100%;
+height: 15em;
+margin: 0.5em 0;
+}
 
 /* rob's starting point */
 form div.selfclear label {
@@ -443,13 +489,15 @@ fieldset {
 border: 1px solid #ccccb8;
 margin: 1em 0;
 padding: 0 0.5em 0.5em;
+border: 4px solid #d0c9b9;
+background: url(/img/page-contrast-bg.png);
 }
 
 legend {
 padding: 0.2em 0.5em;
 margin: 0 0 0 0.2em;
-border: 1px solid #ccccb8;
-background: #ebebeb;
+border: 2px solid #d0c9b9;
+background: url(/img/page-contrast-bg.png);
 font-size: 0.9em;
 }
 
