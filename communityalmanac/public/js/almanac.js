@@ -43,7 +43,7 @@ $(document).ready(function() {
     update: function(event, ui) {
       ui.item.parent().children().each(function(index) {
         if (this == ui.item.get(0)) {
-          var content = $(this).children('div.mediacontent').get(0);
+          var content = $(this).find('div.mediacontent').get(0);
           $.post('/sort', {id: content.id, index: index})
         }
       });
