@@ -41,7 +41,7 @@ class PageController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         media_items = h.get_session_media_items()
         # we render the media items here to keep the template simple
-        c.media_items = h.render_media_items(media_items)
+        c.media_items = h.render_media_items(media_items, editable=True)
         return render('/page/create.mako')
 
     def _do_create(self, almanac_slug):
@@ -94,7 +94,7 @@ class PageController(BaseController):
         story.order = len(media_items)
         media_items.append(story)
         session.save()
-        return render('/media/story/item.mako', extra_vars=dict(story=story, id='pagemedia_%d' % (len(media_items)-1)))
+        return render('/media/story/item.mako', extra_vars=dict(editable=True, story=story, id='pagemedia_%d' % (len(media_items)-1)))
 
     def _do_form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)

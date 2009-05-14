@@ -112,7 +112,7 @@ def remove_session_media_items():
     session.save()
     return media_items
 
-def render_media_items(media_items):
+def render_media_items(media_items, editable=False):
     """return a list of the rendered individual media items
 
     functions like these tend to balloon, so we should change our strategy if
@@ -123,7 +123,7 @@ def render_media_items(media_items):
 
     for index, media_item in enumerate(media_items):
         rendered_story = render('/media/%s/item.mako' % media_item.__class__.__name__.lower(),
-            extra_vars=dict(story=media_item, id='pagemedia_%d' % (media_item.id or index)))
+            extra_vars=dict(story=media_item, editable=editable, id='pagemedia_%d' % (media_item.id or index)))
         rendered_media_items.append((media_item.order, rendered_story))
 
     # We return the list sorted based on the media sort orders.

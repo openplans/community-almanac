@@ -18,6 +18,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
+% if editable:
+<div class="media-tab">drag</div>
+<div class="media-content">
+  <div class="media-controls">
+    <a class="media-edit" href="#">Edit</a>
+    <a class="media-delete" href="#">Delete</a>
+  </div>
+  <div class="mediacontent text" id="${id}">
+    <p>${story.text}</p>
+  </div>
+</div>
+% else:
 <div class="mediacontent text" id="${id}">
   <p>${story.text}</p>
 </div>
+%endif

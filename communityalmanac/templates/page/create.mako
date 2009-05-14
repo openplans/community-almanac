@@ -28,7 +28,7 @@
 % if c.media_items:
 <ul class="page-media-items">
   %for media_item in c.media_items:
-    <li><div class="media-tab">drag</div><div class="media-content"><div class="media-controls"><a class="media-edit" href="#">Edit</a><a class="media-delete" href="#">Delete</a></div>${media_item}</div></li>
+    <li>${media_item}</li>
   %endfor
 </ul>
 % endif
