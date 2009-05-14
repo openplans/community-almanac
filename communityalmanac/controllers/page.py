@@ -106,7 +106,9 @@ class PageController(BaseController):
 
         map = Map()
         map.location = location
-        meta.Session.save(map)
-        meta.Session.commit()
+        media_items = h.get_session_media_items()
+        map.order = len(media_items)
+        media_items.append(map)
+        session.save()
 
         return render('/media/map/item.mako')
