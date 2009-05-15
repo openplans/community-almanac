@@ -25,7 +25,7 @@ class TestPageController(TestController):
 
     def create_almanac(self, name, slug):
         a = Almanac(name, slug)
-        meta.Session.save(a)
+        meta.Session.add(a)
         meta.Session.commit()
         return a
 

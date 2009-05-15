@@ -57,7 +57,7 @@ class PageController(BaseController):
         media_items = h.get_session_media_items()
         page.media.extend(media_items)
 
-        meta.Session.save(page)
+        meta.Session.add(page)
         meta.Session.commit()
 
         h.remove_session_media_items()

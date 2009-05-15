@@ -63,7 +63,7 @@ class AlmanacController(BaseController):
         almanac = Almanac(name, slug)
         almanac.location = point
 
-        meta.Session.save(almanac)
+        meta.Session.add(almanac)
         meta.Session.commit()
 
         redirect_to(h.url_for('almanac_view', almanac_slug=slug))
