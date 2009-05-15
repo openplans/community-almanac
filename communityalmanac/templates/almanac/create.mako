@@ -86,7 +86,7 @@
           }
         }
       });
-    var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true});
+    var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true, type: G_PHYSICAL_MAP});
     map.addLayer(baseLayer);
     map.zoomToMaxExtent();
     });

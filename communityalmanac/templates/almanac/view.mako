@@ -56,7 +56,7 @@ next_page = "Pages 21-30"
           new OpenLayers.Control.PanZoom()
           ],
         });
-        var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true});
+        var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true, type: G_PHYSICAL_MAP});
         map.addLayer(baseLayer);
         var center = new OpenLayers.LonLat(${c.lng}, ${c.lat});
         center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());

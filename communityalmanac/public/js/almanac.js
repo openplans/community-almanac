@@ -161,7 +161,7 @@ function map_behaviors(formcontainer) {
     displayProjection: new OpenLayers.Projection('EPSG:4326'),
     maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
     });
-  var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true});
+  var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true, type: G_PHYSICAL_MAP});
   map.addLayer(baseLayer);
   map.addControl(toolbar);
   map.addLayer(featureLayer);
