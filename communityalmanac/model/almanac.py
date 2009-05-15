@@ -17,7 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
-from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String
+from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
+from sqlalchemy.sql.expression import text
 from sqlalchemy.orm import relation
 
 from meta import Base, storage_SRID
@@ -31,6 +32,7 @@ class Almanac(Base):
     name = Column(Unicode)
     slug = Column(String, unique=True)
     location = Column(POINT(storage_SRID))
+    creation = Column(DateTime, server_default=text('current_timestamp'))
 
     def __init__(self, name, slug, id=None):
         self.name = name
@@ -59,9 +61,7 @@ class Page(Base):
     name = Column(Unicode)
     slug = Column(String)
     description = Column(Unicode)
-    geo_place = Column(Unicode(200))
-    geo_lat = Column(Numeric(11,8))
-    geo_lng = Column(Numeric(11,8))
+    creation =  Column(DateTime, server_default=text('current_timestamp'))
 
     pages = relation("Almanac", backref="pages")
 
@@ -84,6 +84,15 @@ class Page(Base):
         query = query.filter(Page.almanac_id == almanac.id)
         query = query.filter(Page.slug == slug)
         return query.one()
+
+
+class Comment(Base):
+    __tablename__ = 'comments'
+
+    id = Column(Integer, primary_key=True)
+    page_id = Column(Integer, ForeignKey('pages.id'))
+    creation = Column(DateTime, server_default=text('current_timestamp'))
+    text = Column(Unicode)
 
 
 class Media(Base):
