@@ -33,6 +33,8 @@ class Geometry(sqlalchemy.types.TypeEngine):
         def process(value):
             if value is None:
                 return None
+            elif ';' in value:
+                return wkb.loads(a2b_hex(value.split(';')[-1]))
             else:
                 return wkb.loads(a2b_hex(value))
         return process
