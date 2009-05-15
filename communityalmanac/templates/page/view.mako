@@ -30,6 +30,8 @@
   </div>
 %endif
 
+${c.comment_form}
+
 <%def name="title()">
 ${c.page.name} - ${c.almanac.name} - Community Almanac
 </%def>

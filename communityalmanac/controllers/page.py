@@ -68,6 +68,7 @@ class PageController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         c.media_items = h.render_media_items(c.page.media)
+        c.comment_form = render('/comment/form.mako')
         return render('/page/view.mako')
 
     @dispatch_on(POST='_do_form_text')

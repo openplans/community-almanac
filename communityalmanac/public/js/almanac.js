@@ -28,6 +28,14 @@ $(document).ready(function() {
       return true;
   });
 
+  // on pages, have the add a comment link unhide the form
+  $("#comment-form").hide();
+  $("#comment-bttn").click(function() {
+      $("#comment-form").slideDown("fast");
+      $(this).slideUp("normal");
+      return false;
+      });
+
   // clicking on page title erases text already there
   $('#page-title').focus(function() {
       if ($(this).val() == "Page Name") {
