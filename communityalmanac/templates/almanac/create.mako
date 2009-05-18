@@ -88,7 +88,6 @@
       eventListeners: {
         "moveend": function(evt) {
             var geometry = map.getExtent().toGeometry();
-            console.log(geometry);
             the_geometry = geometry;
           }
         }
