@@ -9,6 +9,8 @@ from pylons.decorators import jsonify
 
 log = logging.getLogger(__name__)
 
+from geopy import geocoders
+
 class GeocoderController(BaseController):
 
     @jsonify
@@ -16,10 +18,10 @@ class GeocoderController(BaseController):
         location = request.GET.get('location')
         if location is None:
             abort(400)
-        from geopy import geocoders
-        geoc = geocoders.Google(g.map_key)
+        geoc = geocoders.Google(g.map_key, output_format='json')
         try:
-            place, (lat, lng) = geoc.geocode(location)
+            result = geoc.geocode(location)
+            place, (lat, lng) = result
         except ValueError:
             return {}
         else:
