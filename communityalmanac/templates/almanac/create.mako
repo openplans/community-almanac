@@ -19,7 +19,7 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/base.mako" />
-<form method="post" action="${h.url_for('almanac_create')}">
+<form id="almanac-create-form" method="post" action="${h.url_for('almanac_create')}">
   <fieldset>
     <legend>Create Almanac</legend>
     <div class="selfclear">
@@ -49,33 +49,33 @@
 <script type="text/javascript">
   var geocode_url = "${geocode_url}";
   $(document).ready(function() {
-      function _geocode() {
-        var location = $('.find-almanac').prev().val();
-        $.getJSON(geocode_url, {location: location}, function(data) {
-          if (!data) {
-            alert('no geocode - FIXME!');
-          }
-          else {
-            var center = new OpenLayers.LonLat(data.lng, data.lat);
-            center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-            map.setCenter(center, 12);
-            var point_geometry = new OpenLayers.Geometry.Point(data.lat, data.lng);
-            var formatter = new OpenLayers.Format.GeoJSON();
-            var json = formatter.write(point_geometry);
-            $('#almanac-center').val(json);
-          }
-        });
-      }
-      $('.find-almanac').click(function(e) {
-        e.preventDefault();
-        _geocode();
-      });
-      $('.find-almanac').prev().keydown(function(e) {
-        if (e.keyCode == 13) {
-          e.preventDefault();
-          _geocode();
+    function _geocode() {
+      var location = $('#almanac-name').val();
+      $.getJSON(geocode_url, {location: location}, function(data) {
+        if (!data.lat || !data.lng) {
+          alert('no geocode - FIXME!');
+        }
+        else {
+          var center = new OpenLayers.LonLat(data.lng, data.lat);
+          center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+          map.setCenter(center, 12);
+          var point_geometry = new OpenLayers.Geometry.Point(data.lat, data.lng);
+          var formatter = new OpenLayers.Format.GeoJSON();
+          var json = formatter.write(point_geometry);
+          $('#almanac-center').val(json);
         }
       });
+    }
+    var form = $('#almanac-create-form');
+    $('#almanac-name').focus(function() {
+      form[0].onsubmit = function() { _geocode(); return false; };
+    }).blur(function() {
+      form[0].onsubmit = function() { return true; };
+    });
+    $('.find-almanac').click(function() {
+      _geocode();
+      return false;
+    });
     map = new OpenLayers.Map('map', {
       restrict: true,
       projection: new OpenLayers.Projection('EPSG:900913'),
@@ -88,7 +88,6 @@
       eventListeners: {
         "moveend": function(evt) {
             var geometry = map.getExtent().toGeometry();
-            console.log(geometry);
             the_geometry = geometry;
           }
         }

@@ -30,6 +30,57 @@
   </div>
 %endif
 
+<div class="comments-head selfclear">
+  <% n = len(c.page.comments) %>
+  <h3>
+    %if n == 1:
+      1 comment
+    %else:
+      ${len(c.page.comments)} Comments
+    %endif
+  </h3>
+</div>
+
+% for comment in c.page.comments:
+<div class="comment">
+  <p class="meta">
+    <span>
+    %if comment.website:
+      <a href="${comment.website}">${comment.fullname} says:</a>
+    %else:
+      ${comment.fullname} says:
+    %endif
+    </span> ${comment.creation.strftime('%H:%M %B %d, %Y')}
+  </p>
+  <p>${comment.text}</p>
+</div>
+% endfor
+
+<div class="comments-footer">
+  <h3 id="comment-bttn"><a class="comment-link" href="#">Leave a comment…</a></h3>
+  <form action="${h.url_for('page_view', almanac=c.almanac, page=c.page)}" method="post" id="comment-form" style="display: none;">
+    <div class="form-row">
+      <label for="fullname">Full Name <span class="required">* </span></label>
+      <input type="text" class="textType" id="fullname" name="fullname" size="20" value=""/>
+    </div>
+    <div class="form-row">
+      <label for="email">Email <span class="required">* </span><span class="note">(will not be displayed)</span></label>
+      <input type="text" class="textType" id="email" name="email" size="20" value=""/>
+    </div>
+    <div class="form-row">
+      <label for="website">Website</label>
+      <input type="text" class="textType" id="website" name="website" size="20" value=""/>
+    </div>
+    <div class="form-row">
+      <label for="body">Comment <span class="required">* </span></label>
+      <textarea cols="60" name="text" rows="15"></textarea>
+    </div>
+    <div class="form-row">
+      <h3 id="comment-submit"><a class="comment-link" href="${h.url_for('page_view', almanac=c.almanac, page=c.page)}">Add Comment</a></h3>
+    </div>
+  </form>
+</div>
+
 <%def name="title()">
 ${c.page.name} - ${c.almanac.name} - Community Almanac
 </%def>
