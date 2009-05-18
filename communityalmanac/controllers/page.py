@@ -40,7 +40,7 @@ log = logging.getLogger(__name__)
 
 class PageCommentForm(Schema):
     fullname = validators.String(not_empty=True)
-    email = validators.String(not_empty=True)
+    email = validators.Email(not_empty=True)
     website = validators.String()
     text = validators.String(not_empty=True)
 
