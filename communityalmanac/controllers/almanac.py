@@ -46,8 +46,8 @@ class AlmanacCreateForm(Schema):
 class AlmanacController(BaseController):
 
     def home(self):
-        c.almanacs = Almanac.latest()
-        return render('/home.mako')
+        # The home page just displays the create view right now.
+        abort(500)
 
     @dispatch_on(POST='_do_create')
     def create(self):
