@@ -25,6 +25,8 @@ from pylons.controllers import WSGIController
 from pylons.templating import render_mako as render
 
 from communityalmanac.model import meta
+from pylons.controllers.util import redirect_to
+from urlparse import urlunparse
 
 class BaseController(WSGIController):
 
@@ -37,3 +39,14 @@ class BaseController(WSGIController):
             return WSGIController.__call__(self, environ, start_response)
         finally:
             meta.Session.remove()
+
+    def __before__(self, *args, **kwargs):
+        environ = kwargs.get('environ', {})
+        # We only support one key, currently, so we must make sure that the
+        # server is accessed correctly.
+        hostport = environ.get('HTTP_HOST', ':')
+        server = '%s:%s' % (environ.get('SERVER_NAME'), environ.get('SERVER_PORT'))
+
+        if hostport != server:
+            redirect_url = urlunparse(('http', server, environ.get('PATH_INFO'), '', environ.get('QUERY_STRING'), ''))
+            redirect_to(redirect_url)
