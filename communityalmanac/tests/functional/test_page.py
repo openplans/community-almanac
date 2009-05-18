@@ -19,6 +19,7 @@
 
 from communityalmanac.tests import *
 from communityalmanac.model import Almanac
+from communityalmanac.model import Page
 from communityalmanac.model import meta
 
 class TestPageController(TestController):
@@ -29,6 +30,28 @@ class TestPageController(TestController):
         meta.Session.commit()
         return a
 
+    def create_page(self, almanac, name, slug):
+        p = Page(name, slug)
+        almanac.pages.append(p)
+        meta.Session.add(p)
+        meta.Session.commit()
+        return p
+
     def test_create(self):
         almanac = self.create_almanac(u'my almanac for page', 'a4p')
         response = self.app.get(url('page_create', almanac=almanac), status=200)
+
+    def test_comment_create(self):
+        a = self.create_almanac(u'test almanac for testing comment create', 'a4cc')
+        p = self.create_page(a, u'test almanac for testing comment create', 'p4cc')
+        response = self.app.get(url('page_view', almanac=a, page=p), status=200)
+        form = response.forms['comment-form']
+        form.set('fullname', u'johnny blaze')
+        form.set('email', u'johnyblaze@example.com')
+        form.set('website', u'http://example.com/')
+        form.set('text', u'this is the actual comment')
+        response = form.submit()
+        self.assertEqual(302, response.status_int)
+        response = response.follow(status=200)
+        response.mustcontain('1 comment')
+        response.mustcontain(u'johnny blaze')
