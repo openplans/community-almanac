@@ -22,19 +22,19 @@ $(document).ready(function() {
 
   // add the title to the submit button form
   $('#submit-button-form').submit(function() {
-      var title = $('#page-title').val();
-      var newinput = $('<input type="hidden" name="name" value="' + title + '" />');
-      newinput.appendTo($(this));
-      return true;
+    var title = $('#page-title').val();
+    var newinput = $('<input type="hidden" name="name" value="' + title + '" />');
+    newinput.appendTo($(this));
+    return true;
   });
 
   // on pages, have the add a comment link unhide the form
   $("#comment-form").hide();
   $("#comment-bttn").click(function() {
-      $("#comment-form").slideDown("fast");
-      $(this).slideUp("normal");
-      return false;
-      });
+    $("#comment-form").slideDown("fast");
+    $(this).slideUp("normal");
+    return false;
+    });
   // and have the comment link submit the form itself
   $('#comment-submit a.comment-link').click(function() {
     $('#comment-form').submit();
@@ -43,13 +43,13 @@ $(document).ready(function() {
 
   // clicking on page title erases text already there
   $('#page-title').focus(function() {
-      if ($(this).val() == "Page Name") {
-        $(this).val("");
-      }
+    if ($(this).val() == "Page Name") {
+      $(this).val("");
+    }
   }).blur(function() {
-      if ($(this).val() == "") {
-        $(this).val("Page Name");
-      }
+    if ($(this).val() == "") {
+      $(this).val("Page Name");
+    }
   });
 
   $('ul.page-media-items').sortable({
@@ -74,38 +74,38 @@ $(document).ready(function() {
   ];
 
   for (var i = 0; i < tools.length; i++) {
-      var fn = function(i) {
-        var tool = tools[i];
-        var link = tool.link;
-        var submitfn = tool.submitfn;
-        var attach_form_behaviors = tool.attach_form_behaviors;
+    var fn = function(i) {
+      var tool = tools[i];
+      var link = tool.link;
+      var submitfn = tool.submitfn;
+      var attach_form_behaviors = tool.attach_form_behaviors;
 
-        // when somebody tries to add a particular media type, fetch the form from
-        // the server, and attach the behavior to it
-        link.click(function(e) {
-          e.preventDefault();
-          var url = $(this).attr('href');
+      // when somebody tries to add a particular media type, fetch the form from
+      // the server, and attach the behavior to it
+      link.click(function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
 
-          var formcontainer = $('#form-container');
-          $.get(url, null, function(data) {
-            formcontainer.empty();
-            formcontainer.show();
-            $(data).appendTo(formcontainer).hide().fadeIn('fast', function() {
-              $(this).find('textarea').focus();
-            });
-            $('form.media-item a.media-cancel').click(function(e) {
-              e.preventDefault();
-              formcontainer.fadeOut('normal', function() { $(this).empty(); });
-            });
-            $('form.media-item').submit(submitfn);
-            // attach custom behaviors if needed
-            if (attach_form_behaviors) {
-              attach_form_behaviors($(this));
-            }
+        var formcontainer = $('#form-container');
+        $.get(url, null, function(data) {
+          formcontainer.empty();
+          formcontainer.show();
+          $(data).appendTo(formcontainer).hide().fadeIn('fast', function() {
+            $(this).find('textarea').focus();
           });
+          $('form.media-item a.media-cancel').click(function(e) {
+            e.preventDefault();
+            formcontainer.fadeOut('normal', function() { $(this).empty(); });
+          });
+          $('form.media-item').submit(submitfn);
+          // attach custom behaviors if needed
+          if (attach_form_behaviors) {
+            attach_form_behaviors($(this));
+          }
         });
-      }
-      fn(i);
+      });
+    }
+    fn(i);
     }
 });
 
