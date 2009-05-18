@@ -54,7 +54,7 @@ def make_map():
 
     # CUSTOM ROUTES HERE
 
-    map.connect('home', '/', controller='almanac', action='home')
+    map.connect('home', '/', controller='almanac', action='create')
     # FIXME not sure if we should keep this url scheme
     map.connect('session_sort', '/sort', controller='media', action='sort')
     map.connect('almanac_center', '/api/center/:almanac_slug', controller='almanac', action='center', _filter=almanac_expand)
