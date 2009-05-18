@@ -52,7 +52,7 @@
     function _geocode() {
       var location = $('#almanac-name').val();
       $.getJSON(geocode_url, {location: location}, function(data) {
-        if (!data) {
+        if (!data.lat || !data.lng) {
           alert('no geocode - FIXME!');
         }
         else {
