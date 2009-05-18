@@ -35,6 +35,11 @@ $(document).ready(function() {
       $(this).slideUp("normal");
       return false;
       });
+  // and have the comment link submit the form itself
+  $('#comment-submit a.comment-link').click(function() {
+    $('#comment-form').submit();
+    return false;
+  });
 
   // clicking on page title erases text already there
   $('#page-title').focus(function() {
