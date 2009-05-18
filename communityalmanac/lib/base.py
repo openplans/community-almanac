@@ -44,7 +44,7 @@ class BaseController(WSGIController):
         environ = kwargs.get('environ', {})
         # We only support one key, currently, so we must make sure that the
         # server is accessed correctly.
-        hostport = environ.get('HTTP_HOST', ':')
+        hostport = environ.get('HTTP_HOST')
         server = '%s:%s' % (environ.get('SERVER_NAME'), environ.get('SERVER_PORT'))
 
         if hostport != server:
