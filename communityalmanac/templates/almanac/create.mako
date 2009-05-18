@@ -36,7 +36,14 @@
 </form>
 
 <%def name="title()">Create Almanac - Community Almanac</%def>
-
+<%def name="sidebar()">
+<h2>What is a Community Almanac?</h2>
+<p>It's where you and your community share stories about the heart &amp; soul of the place you live.  It's a lasting record of the place you love&emdash;the place you call home.</p>
+<h2 class="userhint">Start by finding your community on the map.</h2>
+<h2>Want to add your own pages?</h1>
+<p>It's free! Just find your community on the map &amp; start contributing to its almanac.</p>
+<p><a href="${h.url_for('tour')}">Learn more!</a></p>
+</%def>
 <%def name="extra_body()">
 <% geocode_url = h.url_for('geocode') %>
 <script type="text/javascript">
