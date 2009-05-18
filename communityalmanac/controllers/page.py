@@ -19,12 +19,16 @@
 
 import logging
 
+from communityalmanac.model import Comment
 from communityalmanac.model import Map
 from communityalmanac.model import Page
 from communityalmanac.model import Story
 from communityalmanac.model import meta
+from formencode import Schema
+from formencode import validators
 from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
+from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 
 from communityalmanac.lib.base import BaseController, render
@@ -33,6 +37,13 @@ import communityalmanac.lib.helpers as h
 import simplejson
 
 log = logging.getLogger(__name__)
+
+class PageCommentForm(Schema):
+    fullname = validators.String(not_empty=True)
+    email = validators.Email(not_empty=True)
+    website = validators.String()
+    text = validators.String(not_empty=True)
+
 
 class PageController(BaseController):
 
@@ -57,18 +68,35 @@ class PageController(BaseController):
         media_items = h.get_session_media_items()
         page.media.extend(media_items)
 
-        meta.Session.save(page)
+        meta.Session.add(page)
         meta.Session.commit()
 
         h.remove_session_media_items()
 
         redirect_to(h.url_for('page_view', almanac=almanac, page=page))
 
+    @dispatch_on(POST='_do_comment')
     def view(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         c.media_items = h.render_media_items(c.page.media)
+        #c.comment_form = render('/comment/form.mako')
         return render('/page/view.mako')
+
+    @validate(schema=PageCommentForm(), form='view')
+    def _do_comment(self, almanac_slug, page_slug):
+        almanac = h.get_almanac_by_slug(almanac_slug)
+        page = h.get_page_by_slug(almanac, page_slug)
+        comment = Comment(fullname=self.form_result['fullname'],
+                          email=self.form_result['email'],
+                          website=self.form_result['website'],
+                          text=self.form_result['text'],
+                          )
+        comment.page_id = page.id
+        meta.Session.add(comment)
+        meta.Session.commit()
+        redirect_to(h.url_for('page_view', almanac=almanac, page=page))
+
 
     @dispatch_on(POST='_do_form_text')
     def form_text(self, almanac_slug):

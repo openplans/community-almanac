@@ -92,7 +92,12 @@ class Comment(Base):
     id = Column(Integer, primary_key=True)
     page_id = Column(Integer, ForeignKey('pages.id'))
     creation = Column(DateTime, server_default=text('current_timestamp'))
+    fullname = Column(Unicode)
+    email = Column(Unicode)
+    website = Column(Unicode)
     text = Column(Unicode)
+
+    comments = relation("Page", backref="comments")
 
 
 class Media(Base):
