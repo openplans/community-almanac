@@ -97,6 +97,8 @@ class Comment(Base):
     website = Column(Unicode)
     text = Column(Unicode)
 
+    comments = relation("Page", backref="comments")
+
 
 class Media(Base):
     __tablename__ = 'medias'
