@@ -60,7 +60,6 @@ def make_map():
     map.connect('almanac_center', '/api/center/:almanac_slug', controller='almanac', action='center', _filter=almanac_expand)
     map.connect('kml', '/api/kml/:almanac_slug', controller='almanac', action='kml', _filter=almanac_expand)
     map.connect('geocode', '/api/geocode', controller='geocoder', action='geocode')
-    map.connect('comment_form', '/:almanac_slug/:page_slug/comment', controller='comment', action='form', _filter=page_expand)
     map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)
     map.connect('page_view', '/:almanac_slug/:page_slug', controller='page', action='view', _filter=page_expand)
     map.connect('almanac_create', '/+almanac', controller='almanac', action='create')
