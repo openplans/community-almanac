@@ -52,6 +52,11 @@ $(document).ready(function() {
     }
   });
 
+  // display media maps
+  $('.page-media-items li').each(function() {
+    map_display_behaviors($(this));
+  });
+
   $('ul.page-media-items').sortable({
     update: function(event, ui) {
       ui.item.parent().children().each(function(index) {
@@ -134,9 +139,9 @@ function submit_handler(e, url, post_behaviorfn) {
   });
 };
 
-function map_display_behaviors(div) {
-  var map_id = div.find('.mediacontent').attr('id');
-  var geometryJson = div.find('.geometry').text();
+function map_display_behaviors(wrapper) {
+  var map_id = wrapper.find('.mediacontent').attr('id');
+  var geometryJson = wrapper.find('.geometry').text();
   var formatter = new OpenLayers.Format.GeoJSON();
   var feature = formatter.read(geometryJson)[0];
   var bounds = feature.geometry.getBounds();
