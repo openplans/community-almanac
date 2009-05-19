@@ -26,7 +26,6 @@
       <input type="hidden" id="feature-geometry" name="feature" />
       <input type="submit" value="Add" />
       <a class="media-cancel" href="#">Cancel</a>
-      <a style="display: none" class="almanac-center-url" href="${h.url_for('almanac_center', almanac=c.almanac)}"></a>
     </fieldset>
   </form>
 </div>

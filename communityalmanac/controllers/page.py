@@ -28,6 +28,7 @@ from formencode import Schema
 from formencode import validators
 from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
+from pylons.decorators import jsonify
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 
@@ -100,15 +101,18 @@ class PageController(BaseController):
 
 
     @dispatch_on(POST='_do_form_text')
+    @jsonify
     def form_text(self, almanac_slug):
-        return render('/media/story/form.mako')
+        return dict(html=render('/media/story/form.mako'))
 
     @dispatch_on(POST='_do_form_map')
+    @jsonify
     def form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         loc = c.almanac.location
-        c.lat, c.lng = loc.x, loc.y
-        return render('/media/map/form.mako')
+        return dict(html=render('/media/map/form.mako'),
+                    lat=loc.x, lng=loc.y,
+                    )
 
     def _do_form_text(self, almanac_slug):
         body = request.POST.get('body', u'')

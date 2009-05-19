@@ -95,20 +95,21 @@ $(document).ready(function() {
         var url = $(this).attr('href');
 
         var formcontainer = $('#form-container');
-        $.get(url, null, function(data) {
+        $.getJSON(url, null, function(data) {
           formcontainer.empty();
           formcontainer.show();
-          $(data).appendTo(formcontainer).hide().fadeIn('fast', function() {
+          var html = data.html;
+          $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
             $(this).find('textarea').focus();
           });
           $('form.media-item a.media-cancel').click(function(e) {
             e.preventDefault();
             formcontainer.fadeOut('normal', function() { $(this).empty(); });
           });
-          $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), post_behaviorfn); });
+          $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), data, post_behaviorfn); });
           // attach custom behaviors if needed
           if (attach_form_behaviors) {
-            attach_form_behaviors($(this));
+            attach_form_behaviors($(this), data);
           }
         });
       });
@@ -117,7 +118,7 @@ $(document).ready(function() {
   }
 });
 
-function submit_handler(e, url, post_behaviorfn) {
+function submit_handler(e, url, jsonobj, post_behaviorfn) {
   e.preventDefault();
   var data = $('form.media-item').serialize();
   var formcontainer = $('#form-container');
@@ -162,7 +163,7 @@ function map_display_behaviors(wrapper) {
   map.zoomToExtent(bounds);
 }
 
-function map_behaviors(formcontainer) {
+function map_behaviors(formcontainer, data) {
   var featureLayer = new OpenLayers.Layer.Vector('feature');
   var onActivate = function() { featureLayer.destroyFeatures(); };
   var drawPoint = new OpenLayers.Control.DrawFeature(
@@ -211,12 +212,9 @@ function map_behaviors(formcontainer) {
   map.addLayer(baseLayer);
   map.addControl(toolbar);
   map.addLayer(featureLayer);
-  var almanac_center_url = $('.almanac-center-url').attr('href');
-  $.getJSON(almanac_center_url, {}, function(data) {
-    var lng = data.lng;
-    var lat = data.lat;
-    var center = new OpenLayers.LonLat(lng, lat);
-    center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-    map.setCenter(center, 12);
-  });
+  var lng = data.lng;
+  var lat = data.lat;
+  var center = new OpenLayers.LonLat(lng, lat);
+  center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+  map.setCenter(center, 12);
 }
