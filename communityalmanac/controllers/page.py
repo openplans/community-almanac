@@ -142,4 +142,8 @@ class PageController(BaseController):
         media_items.append(map)
         session.save()
 
-        return render('/media/map/item.mako', extra_vars=dict(editable=True, map=map, id='pagemedia_%d' % (len(media_items)-1)))
+        return render('/media/map/item.mako', extra_vars=dict(editable=True,
+                                                              map=map,
+                                                              id='pagemedia_%d' % (len(media_items)-1),
+                                                              geometry=json,
+                                                              ))

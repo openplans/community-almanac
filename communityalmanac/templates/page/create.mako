@@ -25,13 +25,13 @@
 </form>
 <div id="form-container">
 </div>
-% if c.media_items:
 <ul class="page-media-items">
-  %for media_item in c.media_items:
-    <li>${media_item}</li>
-  %endfor
+  % if c.media_items:
+    %for media_item in c.media_items:
+      <li>${media_item}</li>
+    %endfor
+  % endif
 </ul>
-% endif
 <form id="submit-button-form" method="post" action="${request.path_url}">
   <input type="submit" value="Publish" />
 </form>
