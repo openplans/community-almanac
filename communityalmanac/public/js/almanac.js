@@ -122,9 +122,7 @@ function submit_handler(e, url, post_behaviorfn) {
     data: data,
     success: function(data, textStatus) {
       formcontainer.empty();
-      var newLi = $('<li></li>');
-      newLi.appendTo('ul.page-media-items');
-      var newDiv = $('<div>' + data + '</div>').appendTo(newLi).hide().fadeIn('slow');
+      var newDiv = $(data).appendTo('ul.page-media-items').wrap('<li></li>').hide().fadeIn('slow');
       if (post_behaviorfn) {
           post_behaviorfn(newDiv);
       }
