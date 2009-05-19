@@ -34,7 +34,11 @@
     </style>
     ${self.extra_head()}
   </head>
-  <body>
+  <body 
+  %if c.is_homepage:
+  class="home"
+  %endif
+  >
     <div id="ill-sky" class="pngfix">
       <div id="ill-clouds" class="pngfix">
         <div id="ill-mountains" class="pngfix">
@@ -51,27 +55,10 @@
         </div>
       </div>
     </div>
-    <div id="content">
-      <div id="wrap-a">
-        <div id="wrap-b">
-          <div id="nav-top">
-            <div id="target"></div>
-            ${self.pagenav()}
-            ${self.bookmark()}
-          </div>
-          <div id="right-page">
-            ${next.body()}
-          </div><!-- /#right-page -->
-          <div id="left-page" class="selfclear">
-            ${self.sidebar()}
-          </div><!-- /#left-page -->
-          <div id="nav-bottom">
-            ${self.pagenav()}
-          </div>
-        </div><!-- /#wrap-b-->
-      </div><!-- /#wrap-a -->
+    <div id="content" class="selfclear">
+      ${self.pagearea()}
     </div><!-- /#content-->
-    <div id="footer">
+    <div id="footer" class="selfclear">
       <ul id="footer-nav">
         <li><a href="#">About</a></li>
         <li><a href="#">Contact</a></li>
@@ -126,6 +113,26 @@
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 </div>
+</%def>
+<%def name="pagearea()">
+<div id="wrap-a">
+  <div id="wrap-b">
+    <div id="nav-top">
+      <div id="target"></div>
+      ${self.pagenav()}
+      ${self.bookmark()}
+    </div>
+    <div id="right-page">
+      ${next.body()}
+    </div><!-- /#right-page -->
+    <div id="left-page" class="selfclear">
+      ${self.sidebar()}
+    </div><!-- /#left-page -->
+    <div id="nav-bottom">
+      ${self.pagenav()}
+    </div>
+  </div><!-- /#wrap-b-->
+</div><!-- /#wrap-a -->
 </%def>
 <%!
 prev_page_url = ""

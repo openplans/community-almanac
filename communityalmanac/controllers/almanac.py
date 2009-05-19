@@ -46,8 +46,9 @@ class AlmanacCreateForm(Schema):
 class AlmanacController(BaseController):
 
     def home(self):
-        # The home page just displays the create view right now.
-        abort(500)
+        c.almanacs = Almanac.latest()
+        c.is_homepage = True
+        return render('/home.mako')
 
     @dispatch_on(POST='_do_create')
     def create(self):
@@ -63,7 +64,7 @@ class AlmanacController(BaseController):
         almanac = Almanac(name, slug)
         almanac.location = point
 
-        meta.Session.add(almanac)
+        meta.Session.save(almanac)
         meta.Session.commit()
 
         redirect_to(h.url_for('almanac_view', almanac_slug=slug))
