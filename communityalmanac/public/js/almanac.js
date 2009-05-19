@@ -52,8 +52,8 @@ $(document).ready(function() {
     }
   });
 
-  // display media maps
-  $('.page-media-items li').each(function() {
+  // display media maps from session and database
+  $('.page-media-items li').add('.session-data li').each(function() {
     map_display_behaviors($(this));
   });
 
@@ -140,8 +140,12 @@ function submit_handler(e, url, post_behaviorfn) {
 };
 
 function map_display_behaviors(wrapper) {
-  var map_id = wrapper.find('.mediacontent').attr('id');
   var geometryJson = wrapper.find('.geometry').text();
+  if (!geometryJson) {
+      // probably not a map element
+      return;
+  }
+  var map_id = wrapper.find('.mediacontent').attr('id');
   var formatter = new OpenLayers.Format.GeoJSON();
   var feature = formatter.read(geometryJson)[0];
   var bounds = feature.geometry.getBounds();
