@@ -81,6 +81,12 @@
   </form>
 </div>
 
+<%def name="extra_body()">
+  <script type="text/javascript">
+    pageMapFeatures = ${c.map_features};
+  </script>
+</%def>
+
 <%def name="title()">
 ${c.page.name} - ${c.almanac.name} - Community Almanac
 </%def>

@@ -30,6 +30,7 @@ from communityalmanac.model import Story
 from communityalmanac.model import meta
 from pylons.controllers.util import abort
 from pylons import session
+from pylons import tmpl_context as c
 from routes.util import url_for
 from sqlalchemy.orm import exc
 from webhelpers.html import literal
@@ -128,21 +129,31 @@ def render_media_items(media_items, editable=False):
     from operator import itemgetter
     rendered_media_items = []
 
+    c.editable = editable
+
     for index, media_item in enumerate(media_items):
+        c.id = 'pagemedia_%s' % (media_item.id or index)
         if isinstance(media_item, Story):
-            rendered_item = render('/media/%s/item.mako' % media_item.__class__.__name__.lower(),
-                                   extra_vars=dict(story=media_item, editable=editable, id='pagemedia_%d' % (media_item.id or index)))
+            c.story = media_item
+            rendered_item = render('/media/story/item.mako')
         elif isinstance(media_item, Map):
-            geometry = media_item.location.__geo_interface__
-            geojson = simplejson.dumps(geometry)
-            rendered_item = render('/media/map/item.mako',
-                                   extra_vars=dict(geometry=geojson,
-                                                   editable=editable,
-                                                   id='pagemedia_%d' % (media_item.id or index),
-                                                   ))
+            rendered_item = render('/media/map/item.mako')
         else:
             rendered_item = u''
         rendered_media_items.append((media_item.order, rendered_item))
 
     # We return the list sorted based on the media sort orders.
     return [rendered for sort, rendered in sorted(rendered_media_items, key=itemgetter(0))]
+
+def map_features_for_media(media_items):
+    """return a list of dicts that contain the features for all map media"""
+    map_features = []
+    for index, media_item in enumerate(media_items):
+        if isinstance(media_item, Map):
+            geometry = media_item.location.__geo_interface__
+            geojson = simplejson.dumps(geometry)
+            map_id = 'pagemedia_%s' % (media_item.id or index)
+            map_features.append(dict(map_id=map_id,
+                                     geometry=geojson,
+                                     ))
+    return map_features

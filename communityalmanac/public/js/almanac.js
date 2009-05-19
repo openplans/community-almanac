@@ -52,10 +52,16 @@ $(document).ready(function() {
     }
   });
 
-  // display media maps from session and database
-  $('.page-media-items li').add('.session-data li').each(function() {
-    map_display_behaviors($(this));
-  });
+  // display media maps from session or database
+  if (window.pageMapFeatures) {
+    for (var i = 0; i < pageMapFeatures.length; i++) {
+      var fn = function(i) {
+        var feature_data = pageMapFeatures[i];
+        map_display_behaviors(feature_data);
+      };
+      fn(i);
+    }
+  }
 
   $('ul.page-media-items').sortable({
     update: function(event, ui) {
@@ -109,7 +115,7 @@ $(document).ready(function() {
           $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), data, post_behaviorfn); });
           // attach custom behaviors if needed
           if (attach_form_behaviors) {
-            attach_form_behaviors($(this), data);
+            attach_form_behaviors(data);
           }
         });
       });
@@ -128,25 +134,23 @@ function submit_handler(e, url, jsonobj, post_behaviorfn) {
     data: data,
     success: function(data, textStatus) {
       formcontainer.empty();
+      var html = data.html;
       var newLi = $('<li></li>');
       newLi.appendTo('ul.page-media-items');
-      var newDiv = $('<div>' + data + '</div>').appendTo(newLi).hide().fadeIn('slow');
+      var newElt = $(html).appendTo(newLi);
       if (post_behaviorfn) {
-          post_behaviorfn(newDiv);
+          post_behaviorfn(data);
       }
       },
     type: "POST",
+    dataType: 'json',
     url: url
   });
 };
 
-function map_display_behaviors(wrapper) {
-  var geometryJson = wrapper.find('.geometry').text();
-  if (!geometryJson) {
-      // probably not a map element
-      return;
-  }
-  var map_id = wrapper.find('.mediacontent').attr('id');
+function map_display_behaviors(data) {
+  var geometryJson = data.geometry;
+  var map_id = data.map_id;
   var formatter = new OpenLayers.Format.GeoJSON();
   var feature = formatter.read(geometryJson)[0];
   var bounds = feature.geometry.getBounds();
@@ -163,7 +167,7 @@ function map_display_behaviors(wrapper) {
   map.zoomToExtent(bounds);
 }
 
-function map_behaviors(formcontainer, data) {
+function map_behaviors(data) {
   var featureLayer = new OpenLayers.Layer.Vector('feature');
   var onActivate = function() { featureLayer.destroyFeatures(); };
   var drawPoint = new OpenLayers.Control.DrawFeature(
