@@ -18,6 +18,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<div style="width: 500px; height: 400px" class="mediacontent map" id="${id}">
-  <div style="display: none" class="geometry">${geometry}</div>
+% if editable:
+<div class="media-tab">drag</div>
+<div class="media-content">
+  <div class="media-controls">
+    <a class="media-edit" href="#">Edit</a>
+    <a class="media-delete" href="#">Delete</a>
+  </div>
+  <div style="width: 500px; height: 400px" class="mediacontent map" id="${id}">
+    <div style="display: none" class="geometry">${geometry}</div>
+  </div>
 </div>
+% else:
+  <div style="width: 500px; height: 400px" class="mediacontent map" id="${id}">
+    <div style="display: none" class="geometry">${geometry}</div>
+  </div>
+%endif
