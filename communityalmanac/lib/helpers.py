@@ -24,6 +24,7 @@ available to Controllers. This module is available to templates as 'h'.
 """
 from communityalmanac.lib.base import render
 from communityalmanac.model import Almanac
+from communityalmanac.model import Map
 from communityalmanac.model import Page
 from communityalmanac.model import Story
 from communityalmanac.model import meta
@@ -35,6 +36,7 @@ from webhelpers.html import literal
 from webhelpers.html.tags import checkbox
 from webhelpers.html.tags import link_to
 from webhelpers.html.tags import password
+import simplejson
 
 def normalize_url_slug(candidate):
     return candidate.replace(', ', '-').replace(' ', '').replace(',', '-')
@@ -127,9 +129,20 @@ def render_media_items(media_items, editable=False):
     rendered_media_items = []
 
     for index, media_item in enumerate(media_items):
-        rendered_story = render('/media/%s/item.mako' % media_item.__class__.__name__.lower(),
-            extra_vars=dict(story=media_item, editable=editable, id='pagemedia_%d' % (media_item.id or index)))
-        rendered_media_items.append((media_item.order, rendered_story))
+        if isinstance(media_item, Story):
+            rendered_item = render('/media/%s/item.mako' % media_item.__class__.__name__.lower(),
+                                   extra_vars=dict(story=media_item, editable=editable, id='pagemedia_%d' % (media_item.id or index)))
+        elif isinstance(media_item, Map):
+            geometry = media_item.location.__geo_interface__
+            geojson = simplejson.dumps(geometry)
+            rendered_item = render('/media/map/item.mako',
+                                   extra_vars=dict(geometry=geojson,
+                                                   editable=editable,
+                                                   id='pagemedia_%d' % (media_item.id or index),
+                                                   ))
+        else:
+            rendered_item = u''
+        rendered_media_items.append((media_item.order, rendered_item))
 
     # We return the list sorted based on the media sort orders.
     return [rendered for sort, rendered in sorted(rendered_media_items, key=itemgetter(0))]
