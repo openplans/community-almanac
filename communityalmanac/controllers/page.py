@@ -32,7 +32,8 @@ from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 
 from communityalmanac.lib.base import BaseController, render
-from shapely.geometry import asShape
+from shapely.geometry.geo import asShape
+from shapely import wkb
 import communityalmanac.lib.helpers as h
 import simplejson
 
@@ -130,7 +131,9 @@ class PageController(BaseController):
         if json is None:
             abort(400)
         shape = simplejson.loads(json)
-        location = asShape(shape)
+        # Stupid asShape returns a PointAdapter instead of a Point.  We round
+        # trip it through wkb to get the correct type.
+        location = wkb.loads(asShape(shape).to_wkb())
 
         map = Map()
         map.location = location
