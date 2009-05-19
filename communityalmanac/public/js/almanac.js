@@ -52,6 +52,11 @@ $(document).ready(function() {
     }
   });
 
+  // display media maps from session and database
+  $('.page-media-items li').add('.session-data li').each(function() {
+    map_display_behaviors($(this));
+  });
+
   $('ul.page-media-items').sortable({
     update: function(event, ui) {
       ui.item.parent().children().each(function(index) {
@@ -65,11 +70,13 @@ $(document).ready(function() {
   });
   var tools = [{
       link: $('#text-tool'),
-      submitfn: submit_handler
+      submitfn: submit_handler,
+      post_behaviorfn: function() { }
     }, {
       link: $('#map-tool'),
       attach_form_behaviors: map_behaviors,
-      submitfn: submit_handler
+      submitfn: submit_handler,
+      post_behaviorfn: map_display_behaviors
     }
   ];
 
@@ -79,6 +86,7 @@ $(document).ready(function() {
       var link = tool.link;
       var submitfn = tool.submitfn;
       var attach_form_behaviors = tool.attach_form_behaviors;
+      var post_behaviorfn = tool.post_behaviorfn;
 
       // when somebody tries to add a particular media type, fetch the form from
       // the server, and attach the behavior to it
@@ -97,7 +105,7 @@ $(document).ready(function() {
             e.preventDefault();
             formcontainer.fadeOut('normal', function() { $(this).empty(); });
           });
-          $('form.media-item').submit(submitfn);
+          $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), post_behaviorfn); });
           // attach custom behaviors if needed
           if (attach_form_behaviors) {
             attach_form_behaviors($(this));
@@ -106,12 +114,11 @@ $(document).ready(function() {
       });
     }
     fn(i);
-    }
+  }
 });
 
-function submit_handler(e) {
+function submit_handler(e, url, post_behaviorfn) {
   e.preventDefault();
-  var url = $(this).attr('action');
   var data = $('form.media-item').serialize();
   var formcontainer = $('#form-container');
 
@@ -120,14 +127,38 @@ function submit_handler(e) {
     data: data,
     success: function(data, textStatus) {
       formcontainer.empty();
-      var newLi = $('<li></li>');
-      newLi.appendTo('ul.page-media-items');
-      $('<div>' + data + '</div>').appendTo(newLi).hide().fadeIn('slow');
+      var newDiv = $(data).appendTo('ul.page-media-items').wrap('<li></li>').hide().fadeIn('slow');
+      if (post_behaviorfn) {
+          post_behaviorfn(newDiv);
+      }
       },
     type: "POST",
     url: url
   });
 };
+
+function map_display_behaviors(wrapper) {
+  var geometryJson = wrapper.find('.geometry').text();
+  if (!geometryJson) {
+      // probably not a map element
+      return;
+  }
+  var map_id = wrapper.find('.mediacontent').attr('id');
+  var formatter = new OpenLayers.Format.GeoJSON();
+  var feature = formatter.read(geometryJson)[0];
+  var bounds = feature.geometry.getBounds();
+  var map = new OpenLayers.Map(map_id, {
+    projection: new OpenLayers.Projection('EPSG:900913'),
+    displayProjection: new OpenLayers.Projection('EPSG:4326'),
+    maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
+    });
+  var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
+  map.addLayer(baseLayer);
+  var featureLayer = new OpenLayers.Layer.Vector('features');
+  featureLayer.addFeatures([feature]);
+  map.addLayer(featureLayer);
+  map.zoomToExtent(bounds);
+}
 
 function map_behaviors(formcontainer) {
   var featureLayer = new OpenLayers.Layer.Vector('feature');
@@ -174,7 +205,7 @@ function map_behaviors(formcontainer) {
     displayProjection: new OpenLayers.Projection('EPSG:4326'),
     maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
     });
-  var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true, type: G_PHYSICAL_MAP});
+  var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
   map.addLayer(baseLayer);
   map.addControl(toolbar);
   map.addLayer(featureLayer);

@@ -30,7 +30,7 @@ from pylons.controllers.util import abort, redirect_to
 from pylons.decorators import jsonify
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
-from shapely.geometry import asShape
+from shapely.geometry.geo import asShape
 from sqlalchemy.orm import exc
 import communityalmanac.lib.helpers as h
 import simplejson

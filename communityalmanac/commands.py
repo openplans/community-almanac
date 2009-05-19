@@ -211,7 +211,10 @@ def main():
     try:
         serve(app, host=args.ip, port=args.port)
     except socket.error, e:
-        safelaunch.cancel()
+        try:
+            safelaunch.cancel()
+        except NameError:
+            pass
         print "Unable to serve on port %d : Error message was: %s" % (args.port, e[1])
 
 if __name__ == '__main__':
