@@ -30,6 +30,17 @@ from routes.middleware import RoutesMiddleware
 
 from communityalmanac.config.environment import load_environment
 
+# All sorts of repoze.who symbols.
+from repoze.who.middleware import PluggableAuthenticationMiddleware
+from repoze.who.interfaces import IIdentifier
+from repoze.who.interfaces import IChallenger
+from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
+from repoze.who.plugins.openid import OpenIdIdentificationPlugin
+
+
+from repoze.who.classifiers import default_request_classifier
+from repoze.who.classifiers import default_challenge_decider
+
 def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
     """Create a Pylons WSGI application and return it
 

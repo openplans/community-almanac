@@ -55,6 +55,8 @@ setup(
         "geopy",
         "shapely",
         "pyproj",
+        "repoze.who>=1.0.13",
+        "repoze.who.plugins.openid",
     ],
     setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),
