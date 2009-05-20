@@ -110,7 +110,7 @@ $(document).ready(function() {
           });
           $('form.media-item a.media-cancel').click(function(e) {
             e.preventDefault();
-            formcontainer.fadeOut('normal', function() { $(this).empty(); });
+            formcontainer.fadeOut('fast', function() { $(this).empty(); });
           });
           $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), data, post_behaviorfn); });
           // attach custom behaviors if needed
@@ -134,7 +134,7 @@ function submit_handler(e, url, jsonobj, post_behaviorfn) {
     data: data,
     success: function(data, textStatus) {
       formcontainer.empty();
-      $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().fadeIn('slow');
+      $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
       if (post_behaviorfn) {
           post_behaviorfn(data);
       }
