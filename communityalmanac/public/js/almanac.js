@@ -108,6 +108,7 @@ $(document).ready(function() {
           $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
             $(this).find('textarea').focus();
           });
+          link.effect('transfer', {to: '#form-container'}, 1000);
           $('form.media-item a.media-cancel').click(function(e) {
             e.preventDefault();
             formcontainer.fadeOut('fast', function() { $(this).empty(); });
