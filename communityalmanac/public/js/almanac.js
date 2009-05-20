@@ -83,6 +83,7 @@ $(document).ready(function() {
         if (this == ui.item.get(0)) {
           var content = $(this).find('div.mediacontent').get(0);
           $.post('/sort', {id: content.id, index: index})
+          $(this).effect('bounce', {times: 2});
         }
       });
     },
