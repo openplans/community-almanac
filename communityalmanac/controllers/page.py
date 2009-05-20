@@ -28,6 +28,7 @@ from formencode import Schema
 from formencode import validators
 from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
+from pylons.decorators import jsonify
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 
@@ -52,8 +53,9 @@ class PageController(BaseController):
     def create(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         media_items = h.get_session_media_items()
-        # we render the media items here to keep the template simple
         c.media_items = h.render_media_items(media_items, editable=True)
+        map_features = h.map_features_for_media(media_items)
+        c.map_features = h.literal(simplejson.dumps(map_features))
         return render('/page/create.mako')
 
     def _do_create(self, almanac_slug):
@@ -81,7 +83,8 @@ class PageController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         c.media_items = h.render_media_items(c.page.media)
-        #c.comment_form = render('/comment/form.mako')
+        map_features = h.map_features_for_media(c.page.media)
+        c.map_features = h.literal(simplejson.dumps(map_features))
         return render('/page/view.mako')
 
     @validate(schema=PageCommentForm(), form='view')
@@ -98,33 +101,40 @@ class PageController(BaseController):
         meta.Session.commit()
         redirect_to(h.url_for('page_view', almanac=almanac, page=page))
 
-
     @dispatch_on(POST='_do_form_text')
+    @jsonify
     def form_text(self, almanac_slug):
-        return render('/media/story/form.mako')
+        return dict(html=render('/media/story/form.mako'))
 
     @dispatch_on(POST='_do_form_map')
+    @jsonify
     def form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         loc = c.almanac.location
-        c.lat, c.lng = loc.x, loc.y
-        return render('/media/map/form.mako')
+        return dict(html=render('/media/map/form.mako'),
+                    lat=loc.x, lng=loc.y,
+                    )
 
+    @jsonify
     def _do_form_text(self, almanac_slug):
         body = request.POST.get('body', u'')
         if not body:
             abort(400)
         c.almanac = h.get_almanac_by_slug(almanac_slug)
 
-        story = Story()
+        c.story = story = Story()
         story.text = body
 
         media_items = h.get_session_media_items()
         story.order = len(media_items)
         media_items.append(story)
         session.save()
-        return render('/media/story/item.mako', extra_vars=dict(editable=True, story=story, id='pagemedia_%d' % (len(media_items)-1)))
 
+        c.editable = True
+        c.id = 'pagemedia_%d' % (len(media_items)-1)
+        return dict(html=render('/media/story/item.mako'))
+
+    @jsonify
     def _do_form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         json = request.POST.get('feature')
@@ -135,15 +145,16 @@ class PageController(BaseController):
         # trip it through wkb to get the correct type.
         location = wkb.loads(asShape(shape).to_wkb())
 
-        map = Map()
+        c.map = map = Map()
         map.location = location
         media_items = h.get_session_media_items()
         map.order = len(media_items)
         media_items.append(map)
         session.save()
 
-        return render('/media/map/item.mako', extra_vars=dict(editable=True,
-                                                              map=map,
-                                                              id='pagemedia_%d' % (len(media_items)-1),
-                                                              geometry=json,
-                                                              ))
+        c.editable = True
+        c.id = 'pagemedia_%d' % (len(media_items)-1)
+        return dict(html=render('/media/map/item.mako'),
+                    map_id=c.id,
+                    geometry=json,
+                    )
