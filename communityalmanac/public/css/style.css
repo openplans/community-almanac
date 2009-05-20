@@ -129,12 +129,14 @@ color: #003459;
 #login {
 color: #ff6040;
 padding: 0.5em 10px;
+height: 10.5em;
 margin: 0;
 position: absolute;
-top: -11.6em;
+line-height: 1em;
+top: -11.8em;
 left: 10%;
 background: url(/img/book-tile.png) center top;
-border: 4px solid #d0c9b9;
+border: 0.3em solid #d0c9b9;
 border-top: 0;
 text-align: right;
 }
@@ -148,6 +150,7 @@ margin: 0.2em 0;
 padding: 0.2em;
 font-family: georgia, serif;
 background: #f9f5ee;
+width: 14em;
 }
 
 #login input#login-submit {
@@ -164,9 +167,10 @@ line-height: 1em;
 bottom: -1.6em;
 left: 10px;
 background: url(/img/book-tile.png) center top;
-border: 4px solid #d0c9b9;
+border: 0.3em solid #d0c9b9;
 border-top: 0;
-margin: 0 0 -4px;
+padding: 0.1em 0 0;
+margin: 0 0 -0.38em;
 }
 
 #login .tab a {
