@@ -52,10 +52,16 @@ $(document).ready(function() {
     }
   });
 
-  // display media maps from session and database
-  $('.page-media-items li').add('.session-data li').each(function() {
-    map_display_behaviors($(this));
-  });
+  // display media maps from session or database
+  if (window.pageMapFeatures) {
+    for (var i = 0; i < pageMapFeatures.length; i++) {
+      var fn = function(i) {
+        var feature_data = pageMapFeatures[i];
+        map_display_behaviors(feature_data);
+      };
+      fn(i);
+    }
+  }
 
   $('ul.page-media-items').sortable({
     update: function(event, ui) {
@@ -95,10 +101,11 @@ $(document).ready(function() {
         var url = $(this).attr('href');
 
         var formcontainer = $('#form-container');
-        $.get(url, null, function(data) {
+        $.getJSON(url, null, function(data) {
           formcontainer.empty();
           formcontainer.show();
-          $(data).appendTo(formcontainer).hide().fadeIn('fast', function() {
+          var html = data.html;
+          $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
             $(this).find('textarea').focus();
           });
           $('form.media-item a.media-cancel').click(function(e) {
@@ -108,7 +115,7 @@ $(document).ready(function() {
           $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), post_behaviorfn); });
           // attach custom behaviors if needed
           if (attach_form_behaviors) {
-            attach_form_behaviors($(this));
+            attach_form_behaviors(data);
           }
         });
       });
@@ -117,7 +124,7 @@ $(document).ready(function() {
   }
 });
 
-function submit_handler(e, url, post_behaviorfn) {
+function submit_handler(e, url, jsonobj, post_behaviorfn) {
   e.preventDefault();
   var data = $('form.media-item').serialize();
   var formcontainer = $('#form-container');
@@ -127,23 +134,24 @@ function submit_handler(e, url, post_behaviorfn) {
     data: data,
     success: function(data, textStatus) {
       formcontainer.empty();
-      var newDiv = $(data).appendTo('ul.page-media-items').wrap('<li></li>').hide().fadeIn('slow');
+      //var newDiv = $(data).appendTo('ul.page-media-items').wrap('<li></li>').hide().fadeIn('slow');
+      var html = data.html;
+      var newLi = $('<li></li>');
+      newLi.appendTo('ul.page-media-items');
+      var newElt = $(html).appendTo(newLi);
       if (post_behaviorfn) {
-          post_behaviorfn(newDiv);
+          post_behaviorfn(data);
       }
       },
     type: "POST",
+    dataType: 'json',
     url: url
   });
 };
 
-function map_display_behaviors(wrapper) {
-  var geometryJson = wrapper.find('.geometry').text();
-  if (!geometryJson) {
-      // probably not a map element
-      return;
-  }
-  var map_id = wrapper.find('.mediacontent').attr('id');
+function map_display_behaviors(data) {
+  var geometryJson = data.geometry;
+  var map_id = data.map_id;
   var formatter = new OpenLayers.Format.GeoJSON();
   var feature = formatter.read(geometryJson)[0];
   var bounds = feature.geometry.getBounds();
@@ -160,7 +168,7 @@ function map_display_behaviors(wrapper) {
   map.zoomToExtent(bounds);
 }
 
-function map_behaviors(formcontainer) {
+function map_behaviors(data) {
   var featureLayer = new OpenLayers.Layer.Vector('feature');
   var onActivate = function() { featureLayer.destroyFeatures(); };
   var drawPoint = new OpenLayers.Control.DrawFeature(
@@ -209,12 +217,9 @@ function map_behaviors(formcontainer) {
   map.addLayer(baseLayer);
   map.addControl(toolbar);
   map.addLayer(featureLayer);
-  var almanac_center_url = $('.almanac-center-url').attr('href');
-  $.getJSON(almanac_center_url, {}, function(data) {
-    var lng = data.lng;
-    var lat = data.lat;
-    var center = new OpenLayers.LonLat(lng, lat);
-    center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-    map.setCenter(center, 12);
-  });
+  var lng = data.lng;
+  var lat = data.lat;
+  var center = new OpenLayers.LonLat(lng, lat);
+  center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+  map.setCenter(center, 12);
 }

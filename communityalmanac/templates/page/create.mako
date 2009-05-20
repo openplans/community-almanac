@@ -36,6 +36,12 @@
   <input type="submit" value="Publish" />
 </form>
 
+<%def name="extra_body()">
+  <script type="text/javascript">
+    pageMapFeatures = ${c.map_features};
+  </script>
+</%def>
+
 <%def name="title()">
 Create Page - ${c.almanac.name} - Community Almanac
 </%def>
