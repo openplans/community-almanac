@@ -42,10 +42,15 @@ $(document).ready(function() {
   });
 
   // click on the sidebar publish button submits the form
-  $('#add-page-bttn a').click(function() {
+  var addPageBtn = $('#add-page-bttn a');
+  // but only on the create page, because the id is reused
+  // for the button style
+  if (addPageBtn.text() == 'Publish this page!') {
+    addPageBtn.click(function() {
       $('#submit-button-form').submit();
       return false;
-  });
+    });
+  }
 
   // clicking on page title erases text already there
   $('#page-title').focus(function() {
