@@ -112,7 +112,7 @@ $(document).ready(function() {
             e.preventDefault();
             formcontainer.fadeOut('normal', function() { $(this).empty(); });
           });
-          $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), post_behaviorfn); });
+          $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), data, post_behaviorfn); });
           // attach custom behaviors if needed
           if (attach_form_behaviors) {
             attach_form_behaviors(data);
@@ -142,12 +142,12 @@ function submit_handler(e, url, jsonobj, post_behaviorfn) {
       if (post_behaviorfn) {
           post_behaviorfn(data);
       }
-      },
+    },
     type: "POST",
     dataType: 'json',
     url: url
   });
-};
+}
 
 function map_display_behaviors(data) {
   var geometryJson = data.geometry;
