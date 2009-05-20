@@ -134,11 +134,7 @@ function submit_handler(e, url, jsonobj, post_behaviorfn) {
     data: data,
     success: function(data, textStatus) {
       formcontainer.empty();
-      //var newDiv = $(data).appendTo('ul.page-media-items').wrap('<li></li>').hide().fadeIn('slow');
-      var html = data.html;
-      var newLi = $('<li></li>');
-      newLi.appendTo('ul.page-media-items');
-      var newElt = $(html).appendTo(newLi);
+      $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().fadeIn('slow');
       if (post_behaviorfn) {
           post_behaviorfn(data);
       }
