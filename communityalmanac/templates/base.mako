@@ -47,7 +47,16 @@
               <div id="header" class="selfclear pngfix">
                 <h1 id="logo">${h.link_to('Community Almanac', h.url_for('home'))}</h1>
                 <%doc>This needs to be a login link instead if there is not a current session</%doc>
-                <p id="welcome">Welcome, <a href="#">Username</a>!</p>
+                %if c.user:
+                <div id="welcome">Welcome, ${c.user.firstName} ${c.user.lastName}! <a href="#">Sign Out</a></div>
+                %else:
+                <div id="login">
+                  <form action="#" method="post">
+                    <input id="username" name="username" type=text" />
+                    <input id="password" name="password" type=password" />
+                    <input id="login-submit" type="submit" value="Log In"/>Not a member yet? <a href="#">Sign Up!</a><br /><a href="#">Forgot your password?</a></form><div class="tab"><a href="#">Login</a></div></div>
+                %endif
+                
                 <h3 id="tagline">The heart <span class="amp">&amp;</span> soul of <nobr>the place you live&hellip;</nobr></h3>
               </div>
             </div>
@@ -75,6 +84,15 @@
     <script type="text/javascript">
   		$(document).ready(function(){
   			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 135,	startingWidth: 24, startingHeight: 24});
+      	$('div#login').hover(
+      	  function () {
+      	    $(this).animate({top: '0'},{queue:false,duration:500});
+      	    $('#username').focus();
+      	  }, 
+      	  function () {
+      	    $(this).animate({top: '-11.6em'},{queue:false,duration:500});	
+      	  }
+      	);
   		});
   	</script>
     ${self.extra_body()}
