@@ -41,6 +41,12 @@ $(document).ready(function() {
     return false;
   });
 
+  // click on the sidebar publish button submits the form
+  $('#add-page-bttn a').click(function() {
+      $('#submit-button-form').submit();
+      return false;
+  });
+
   // clicking on page title erases text already there
   $('#page-title').focus(function() {
     if ($(this).val() == "Page Name") {
