@@ -63,6 +63,9 @@ $(document).ready(function() {
     }
   });
 
+  // page title input on page create should be focused by default
+  $('#page-title').focus();
+
   // display media maps from session or database
   if (window.pageMapFeatures) {
     for (var i = 0; i < pageMapFeatures.length; i++) {
