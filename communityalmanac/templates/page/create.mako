@@ -36,11 +36,20 @@
   <input type="submit" value="Publish" />
 </form>
 
+<%def name="extra_body()">
+  <script type="text/javascript">
+    pageMapFeatures = ${c.map_features};
+  </script>
+</%def>
+
 <%def name="title()">
 Create Page - ${c.almanac.name} - Community Almanac
 </%def>
 <%def name="sidebar()">
 <div class="sidebar">
+  <%doc>
+  This needs to be conditional on edit / create mode. For Edit, it should
+  </%doc>
   % if c.almanac:
   <h3 id="add-page-bttn">
     ${h.link_to(u'Publish this page!', h.url_for('page_create', almanac=c.almanac))}

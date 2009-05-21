@@ -54,7 +54,7 @@ def make_map():
 
     # CUSTOM ROUTES HERE
 
-    map.connect('home', '/', controller='almanac', action='create')
+    map.connect('home', '/', controller='almanac', action='home')
     # FIXME not sure if we should keep this url scheme
     map.connect('login', '/login', controller='users', action='login')
     map.connect('test', '/test', controller='users', action='test')
