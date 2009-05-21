@@ -151,8 +151,244 @@ class User(Base):
 
     #its columns
     id =                 Column(Integer, primary_key=True)
+    username =           Column(Unicode(50), nullable=False)
     email_address =      Column(Unicode(100), nullable=False)
-    password =           Column(Unicode(100), nullable=False)
+    password =           Column(String(100), nullable=False)
     super_user =         Column(Boolean, nullable=False, default=False)
 
     pages = relation("Page", backref="user")
+
+    def authenticate(self, password):
+        return default_password_compare(password, self.password)
+
+def default_password_compare(cleartext_password, stored_password_hash):
+    # Hashing functions work on bytes, not strings, so while unicode passwords
+    # with only ascii characters work, it could blow up.  We'll catch that in
+    # all cases.
+    assert isinstance(cleartext_password, str)
+    assert isinstance(stored_password_hash, str)
+
+    # This functin assumes that stored hashes starting with {scheme} are hashed
+    # passwords, and all other passwords are cleartext.  Because of this
+    # assumption, cleartext passwords that begin with {scheme} will generate
+    # errors for users.  In this case, it is recommended to migrate the
+    # cleartext passwords to bcrypt.
+    scheme = None
+    if stored_password_hash.startswith('{'):
+        # Look for the password scheme.
+        try:
+            endtoken = stored_password_hash.index('}')
+            scheme = stored_password_hash[1:endtoken].upper()
+            stored_password_hash = stored_password_hash[endtoken+1:]
+        except ValueError:
+            scheme = 'CLEAR'
+    else:
+        scheme = 'CLEAR'
+
+    from base64 import urlsafe_b64encode, urlsafe_b64decode
+
+    # The support is getting better and better.  We now support five schemes
+    # for hashing, Salted Blowfish Crypt (bcrypt), Salted SHA256, Salted SHA-1,
+    # standard SHA-1, and cleartext passwords.  The general encoding scheme
+    # follows RFC 2307 standard for storage of encrypted passwords.  The
+    # standard format looks like this: {scheme}encryptedpassword where the
+    # encrypted password is base64 encoded in a url safe way.  In the case of
+    # bcrypt, encrypted password is slightly different, as it is of the form:
+    # {CRYPT}$2a$<2 digit complexity>$<22 bytes salt><31 bytes hash>  The salt
+    # and hash are base64 encoded as in other schemes.
+    # Caveats: SHA256 hashing requires Python 2.5 or pycrypto
+    #          bcrypt hashing requires bcrypt module.
+
+    if scheme == 'CRYPT':
+        try:
+            from bcrypt import bcrypt
+        except ImportError:
+            # We blow up so that Sysadmins can detect the error quicker and get
+            # the problem fixed.
+            raise NotImplementedError("Unable to load bcrypt module for Blowfish hashes")
+        return stored_password_hash == bcrypt.hashpw(cleartext_password, stored_password_hash)
+
+    # The salted SHA hashes work the same.  The only difference is how to find
+    # the suitable hash module.
+    if scheme == 'SSHA256':
+        try:
+            from hashlib import sha256
+        except ImportError:
+            try:
+                from Crypto.Hash.SHA256 import new as sha256
+            except ImportError:
+            # We blow up so that Sysadmins can detect the error quicker and get
+            # the problem fixed.
+                raise NotImplementedError("Unable to load suitable module for SHA256 hashes")
+        try:
+            hash_bytes = urlsafe_b64decode(stored_password_hash)
+        except TypeError:
+            # This will happen if database is using unschemed cleartext
+            # passwords, and the cleartext password is a bad encoding of a
+            # schemed hash
+            raise ValueError("Invalid password hash.")
+        # SHA 256 is 256-bits of output (32 bytes)
+        salt = hash_bytes[32:]
+        hasher = sha256(cleartext_password)
+        hasher.update(salt)
+        return stored_password_hash == urlsafe_b64encode(hasher.digest() + salt)
+
+    if scheme == 'SSHA':
+        try:
+            from hashlib import sha1
+        except ImportError:
+            try:
+                from sha import new as sha1
+            except ImportError:
+                return False
+        try:
+            hash_bytes = urlsafe_b64decode(stored_password_hash)
+        except TypeError:
+            # This will happen if database is using unschemed cleartext
+            # passwords, and the cleartext password is a bad encoding of a
+            # schemed hash
+            raise ValueError("Invalid password hash.")
+        # SHA-1 is 160-bits of output (20 bytes)
+        salt = hash_bytes[20:]
+        hasher = sha1(cleartext_password)
+        hasher.update(salt)
+        return stored_password_hash == urlsafe_b64encode(hasher.digest() + salt)
+
+    if scheme == 'SHA':
+        try:
+            from hashlib import sha1
+        except ImportError:
+            try:
+                from sha import new as sha1
+            except ImportError:
+                # We blow up so that Sysadmins can detect the error quicker and
+                # get the problem fixed.
+                raise NotImplementedError("Unable to find hashing algorithm SHA-1 or stronger.")
+
+        hasher = sha1(cleartext_password)
+        # We need to support the legacy, hex format for existing hashes.
+        # Luckily, we can unambiguously tell the difference, as SHA-1 hashes
+        # always end with '=' (an invalid hex character) when base64 encoded.
+        if stored_password_hash.endswith('='):
+            computed_hash = urlsafe_b64encode(hasher.digest())
+        else:
+            computed_hash = hasher.hexdigest()
+        return stored_password_hash == computed_hash
+
+    if scheme == 'CLEAR':
+        return stored_password_hash == cleartext_password
+    # While we support reading of unsalted SHA-1 and cleartext passwords for
+    # legacy databases support, we won't generate these unsecure formats.
+
+    # Oops, unsupported scheme...
+    # We blow up so that Sysadmins can detect the error quicker and get the
+    # problem fixed.
+    raise NotImplementedError("Unrecognized Hash Scheme: %s" % scheme)
+
+def default_password_hash(cleartext_password, scheme='BESTAVAILABLE'):
+    # Hashing functions work on bytes, not strings, so while unicode passwords
+    # with only ascii characters work, it could blow up.  We'll catch that in
+    # all cases.
+    assert isinstance(cleartext_password, str)
+
+    try:
+        scheme = scheme.upper()
+    except AttributeError:
+        pass
+    from base64 import urlsafe_b64encode
+    from os import urandom
+
+    # The support is getting better and better.  We now support three salted
+    # schemes for hashing, Salted Blowfish Crypt (bcrypt), Salted SHA256,
+    # and Salted SHA-1. While the compare function can ready unsalted SHA-1 and
+    # cleartext passwords, we don't support generating them.  The general
+    # encoding scheme follows RFC 2307 standard for storage of encrypted
+    # passwords.  The standard format looks like this:
+    # {scheme}encryptedpassword where the encrypted password is base64 encoded
+    # in a url safe way.  In the case of bcrypt, encrypted password is slightly
+    # different, as it is of the form:
+    # {CRYPT}$2a$<2 digit complexity>$<22 bytes salt><31 bytes hash>  The salt
+    # and hash are base64 encoded as in other schemes.
+    # Caveats: SHA256 hashing requires Python 2.5 or pycrypto
+    #          bcrypt hashing requires bcrypt module.
+
+    if scheme == 'BESTAVAILABLE':
+        # Since bcrypt is the strongest cryptographically, we'll default to it
+        # if available.
+        try:
+            from bcrypt import bcrypt
+        except ImportError:
+            bcrypt = None
+        if bcrypt:
+            return "{CRYPT}%s" % bcrypt.hashpw(cleartext_password, bcrypt.gensalt())
+
+        # Next up is the SHA family, we'll try SHA256 which is available in
+        # Python >= 2.5 or with the pycrypto module.  Without that, we'll fall
+        # back to SHA-1.
+        try:
+            from hashlib import sha256 as hashalgorithm
+            scheme = 'SSHA256'
+        except ImportError: # Python < 2.5 #pragma NO COVERAGE
+            try:
+                # On Python < 2.5, we pull sha256 from pycrypto if it's installed.
+                from Crypto.Hash.SHA256 import new as hashalgorithm
+                scheme = 'SSHA256'
+            except ImportError:
+                # If we couldn't import sha256 above, we know we can't pull
+                # sha1 from the same module, so we'll try to pull from the
+                # older sha module.
+                try:
+                    from sha import new as hashalgorithm
+                    scheme = 'SSHA'
+                except ImportError:
+                    raise NotImplementedError("Unable to find hashing algorithm SHA-1 or stronger.")
+
+        # The algorithm is the same for the entire SHA family, pretty easy.
+        salt = urandom(4)
+        hasher = hashalgorithm(cleartext_password)
+        hasher.update(salt)
+        return "{%s}%s" % (scheme, urlsafe_b64encode(hasher.digest() + salt))
+
+    # Now that the ugly default case is out of the way, we handle the explicit
+    # cases.
+    if scheme == 'CRYPT':
+        try:
+            from bcrypt import bcrypt
+        except ImportError:
+            raise NotImplementedError("Unable to load bcrypt module for Blowfish hashes")
+        return "{CRYPT}%s" % bcrypt.hashpw(password, bcrypt.gensalt())
+
+    # The salted SHA hashes work the same.  The only difference is how to find
+    # the suitable hash module.
+    if scheme == 'SSHA256':
+        try:
+            from hashlib import sha256
+        except ImportError:
+            try:
+                from Crypto.Hash.SHA256 import new as sha256
+            except ImportError:
+                raise NotImplementedError("Unable to load suitable module for SHA256 hashes")
+        salt = urandom(4)
+        hasher = sha256(cleartext_password)
+        hasher.update(salt)
+        return "{SSHA256}%s" % urlsafe_b64encode(hasher.digest() + salt)
+
+    if scheme == 'SSHA':
+        try:
+            from hashlib import sha1
+        except ImportError:
+            try:
+                from sha import new as sha1
+            except ImportError:
+                raise NotImplementedError("Unable to load suitable module for SHA-1 hashes")
+        salt = urandom(4)
+        hasher = sha1(cleartext_password)
+        hasher.update(salt)
+        return "{SSHA}%s" % urlsafe_b64encode(hasher.digest() + salt)
+
+    # While we support reading of unsalted SHA-1 and cleartext passwords for
+    # legacy databases support, we won't generate these unsecure formats.
+
+    # Oops, unsupported scheme...
+    raise NotImplementedError("Unrecognized Hash Scheme: %s" % scheme)
+
