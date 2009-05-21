@@ -26,6 +26,7 @@ from pylons.templating import render_mako as render
 
 from communityalmanac.model import meta
 from pylons.controllers.util import redirect_to
+from pylons import request, tmpl_context as c
 from urlparse import urlunparse
 
 class BaseController(WSGIController):
@@ -39,3 +40,9 @@ class BaseController(WSGIController):
             return WSGIController.__call__(self, environ, start_response)
         finally:
             meta.Session.remove()
+
+    def __before__(self):
+        identity = request.environ.get('repoze.who.identity')
+        if identity:
+            c.user = identity['user']
+

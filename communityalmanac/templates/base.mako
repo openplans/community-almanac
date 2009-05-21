@@ -48,12 +48,12 @@
                 <h1 id="logo">${h.link_to('Community Almanac', h.url_for('home'))}</h1>
                 <%doc>This needs to be a login link instead if there is not a current session</%doc>
                 %if c.user:
-                <div id="welcome">Welcome, ${c.user.firstName} ${c.user.lastName}! <a href="#">Sign Out</a></div>
+                <div id="welcome">Welcome, ${c.user.username}! <a href="/logout">Sign Out</a></div>
                 %else:
                 <div id="login">
-                  <form action="#" method="post">
-                    <input id="username" name="username" type=text" />
-                    <input id="password" name="password" type=password" />
+                  <form action="/do_login" method="post">
+                    <input id="username" name="login" type=text" />
+                    <input id="password" name="password" type="password" />
                     <input id="login-submit" type="submit" value="Log In"/>Not a member yet? <a href="#">Sign Up!</a><br /><a href="#">Forgot your password?</a></form><div class="tab"><a href="#">Login</a></div></div>
                 %endif
                 
