@@ -50,10 +50,13 @@ class UserController(BaseController):
         meta.Session.save(user)
         meta.Session.commit()
 
+        # This is how we manually log in a user, as per repoze issue 58
+        # http://bugs.repoze.org/issue58
         identity = {'repoze.who.userid': username}
         headers = request.environ['repoze.who.plugins']['auth_tkt'].remember(request.environ, identity)
         for k, v in headers:
             response.headers.add(k, v)
+
         redirect_to(h.url_for('home'))
 
     def test(self):
