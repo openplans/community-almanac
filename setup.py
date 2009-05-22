@@ -55,6 +55,7 @@ setup(
         "geopy",
         "shapely",
         "pyproj",
+        "formalchemy",
         "repoze.who>=1.0.13",
         "repoze.who.plugins.openid",
         "repoze.who.plugins.sa",

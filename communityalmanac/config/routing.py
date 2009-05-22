@@ -25,6 +25,7 @@ refer to the routes manual at http://routes.groovie.org/docs/
 """
 from pylons import config
 from routes import Mapper
+from formalchemy.ext.pylons import maps
 
 def almanac_expand(kw):
     if 'almanac' in kw:
@@ -53,6 +54,7 @@ def make_map():
     map.connect('/error/{action}/{id}', controller='error')
 
     # CUSTOM ROUTES HERE
+    maps.admin_map(map, controller='admin', url='/admin')
 
     map.connect('home', '/', controller='almanac', action='home')
     # FIXME not sure if we should keep this url scheme
@@ -72,5 +74,6 @@ def make_map():
     map.connect('media_pdf', '/api/form/:almanac_slug/pdf', controller='media', action='pdf', _filter=almanac_expand)
     map.connect('media_image', '/api/form/:almanac_slug/image', controller='media', action='image', _filter=almanac_expand)
     map.connect('media_sound', '/api/form/:almanac_slug/sound', controller='media', action='sound', _filter=almanac_expand)
+
 
     return map

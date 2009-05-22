@@ -34,7 +34,7 @@ class Almanac(Base):
     location = Column(POINT(storage_SRID))
     creation = Column(DateTime, server_default=text('current_timestamp'))
 
-    def __init__(self, name, slug, id=None):
+    def __init__(self, name=None, slug=None, id=None):
         self.name = name
         self.slug = slug
         if id is not None:
@@ -65,7 +65,7 @@ class Page(Base):
 
     pages = relation("Almanac", backref="pages")
 
-    def __init__(self, name, slug, description=None, location=(None, None), id=None):
+    def __init__(self, name=None, slug=None, description=None, location=(None, None), id=None):
         self.name = name
         self.slug = slug
         if description is not None:
@@ -162,10 +162,11 @@ class User(Base):
     def authenticate(self, password):
         return default_password_compare(password, self.password)
 
-    def __init__(self, username, email_address, password, id=None):
+    def __init__(self, username=None, email_address=None, password=None, id=None):
         self.username = username
         self.email_address = email_address
-        self.password = default_password_hash(password)
+        if password:
+            self.password = default_password_hash(password)
         self.reset_key = None
         self.super_user = False
         if id is not None:

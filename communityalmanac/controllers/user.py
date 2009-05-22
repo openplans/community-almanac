@@ -24,14 +24,12 @@ class UserRegistrationSchmema(Schema):
 class UserController(BaseController):
 
     def login(self):
-        # Return a rendered template
-        #return render('/users.mako')
-        # or, return a response
         if request.environ.get('repoze.who.identity') == None:
             return render('/user/login.mako')
         redirect_to(h.url_for('home'))
 
     def logout(self):
+        # The logout/forget process is handled by repoze.who.
         redirect_to(h.url_for('home'))
 
     @dispatch_on(POST='_register')
