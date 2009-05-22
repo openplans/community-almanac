@@ -153,6 +153,7 @@ class User(Base):
     id =                 Column(Integer, primary_key=True)
     username =           Column(Unicode(50), nullable=False)
     email_address =      Column(Unicode(100), nullable=False)
+    reset_key =          Column(String(50), nullable=True)
     password =           Column(String(100), nullable=False)
     super_user =         Column(Boolean, nullable=False, default=False)
 
