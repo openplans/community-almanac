@@ -162,6 +162,16 @@ class User(Base):
     def authenticate(self, password):
         return default_password_compare(password, self.password)
 
+    def __init__(self, username, email_address, password, id=None):
+        self.username = username
+        self.email_address = email_address
+        self.password = default_password_hash(password)
+        self.reset_key = None
+        self.super_user = False
+        if id is not None:
+            self.id = id
+
+
 def default_password_compare(cleartext_password, stored_password_hash):
     # Hashing functions work on bytes, not strings, so while unicode passwords
     # with only ascii characters work, it could blow up.  We'll catch that in
