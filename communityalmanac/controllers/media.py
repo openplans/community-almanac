@@ -30,12 +30,6 @@ log = logging.getLogger(__name__)
 
 class MediaController(BaseController):
 
-    def index(self):
-        # Return a rendered template
-        #return render('/media.mako')
-        # or, return a response
-        return 'Hello World'
-
     @dispatch_on(GET='donothing')
     def sort(self):
         id = request.params.get('id')
