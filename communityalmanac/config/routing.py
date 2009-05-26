@@ -60,6 +60,8 @@ def make_map():
     # FIXME not sure if we should keep this url scheme
     map.connect('login', '/login', controller='user', action='login')
     map.connect('user_register', '/signup', controller='user', action='register')
+    map.connect('user_requestreset', '/forgot', controller='user', action='request_reset')
+    map.connect('user_performreset', '/reset/{username}/{key}', controller='user', action='perform_reset')
     map.connect('test', '/test', controller='user', action='test')
     map.connect('session_sort', '/sort', controller='media', action='sort')
     map.connect('almanac_center', '/api/center/:almanac_slug', controller='almanac', action='center', _filter=almanac_expand)

@@ -21,6 +21,8 @@ from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, S
 from sqlalchemy.sql.expression import text
 from sqlalchemy.orm import relation
 
+from uuid import uuid4
+
 from meta import Base, storage_SRID
 from sqlgeotypes import POINT
 import meta
@@ -162,11 +164,18 @@ class User(Base):
     def authenticate(self, password):
         return default_password_compare(password, self.password)
 
+    def generate_key(self):
+        if not self.reset_key:
+            self.reset_key = str(uuid4())
+
+    def set_password(self, password):
+        self.password = default_password_hash(password)
+
     def __init__(self, username=None, email_address=None, password=None, id=None):
         self.username = username
         self.email_address = email_address
         if password:
-            self.password = default_password_hash(password)
+            self.set_password(password)
         self.reset_key = None
         self.super_user = False
         if id is not None:

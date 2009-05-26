@@ -19,16 +19,9 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/base.mako" />
-<h2>Login page</h2>
-<form action="do_login" method="POST">
-<label for="login">Username</label>
-<input type="text" name="login" />
-<label for="password">Password</label>
-<input type="password" name="password" />
-<input type="submit" value="Login" />
-</form>
-<form action="/do_login" method="POST">
-<label for="openid">OpenID URL</label>
-<input type="openid" name="openid" />
-<input type="submit" value="Login with OpenID" />
-</form>
+<%def name="extra_head()">
+<base href="http://0.0.0.0:4000" />
+</%def>
+<p>Hello, USERNAME!</p>
+<p>Someone requested your account details at DOMAIN.  If this was not you, you can safely ignore this email.</p>
+<p>If you need to reset your password, please click on the following link: <a href="something">something</a></p>

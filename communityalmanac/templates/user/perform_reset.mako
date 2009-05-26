@@ -19,16 +19,19 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/base.mako" />
-<h2>Login page</h2>
-<form action="do_login" method="POST">
-<label for="login">Username</label>
-<input type="text" name="login" />
-<label for="password">Password</label>
-<input type="password" name="password" />
-<input type="submit" value="Login" />
+<form id="perform_reset" method="post" action="${url.current()}">
+  <fieldset>
+    <legend>Forgotten username or password</legend>
+    <div class="selfclear">
+      <label for="password">Password Reset (Optional)</label>
+      <input type="password" name="password" id="password" value="${request.POST.get('password', u'')}" />
+    </div>
+    <div class="selfclear">
+      <label for="password_repeat">Retype Password (If Changing Password)</label>
+      <input type="password" name="password_repeat" id="password_repeat" />
+    </div>
+    <input class="indented-submit" type="submit" value="Login" />
+  </fieldset>
 </form>
-<form action="/do_login" method="POST">
-<label for="openid">OpenID URL</label>
-<input type="openid" name="openid" />
-<input type="submit" value="Login with OpenID" />
-</form>
+
+<%def name="title()">Forgotten Username or Password - Community Almanac</%def>
