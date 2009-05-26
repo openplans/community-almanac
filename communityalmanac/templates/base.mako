@@ -52,7 +52,7 @@
                 %else:
                 <div id="login">
                   <form action="/do_login" method="post">
-                    <input id="username" name="login" type=text" />
+                    <input id="username" name="login" type="text" />
                     <input id="password" name="password" type="password" />
                     <input id="login-submit" type="submit" value="Log In"/>Not a member yet? <a href="/signup">Sign Up!</a><br /><a href="#">Forgot your password?</a></form><div class="tab"><a href="#">Login</a></div></div>
                 %endif

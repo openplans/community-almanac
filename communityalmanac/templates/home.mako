@@ -51,7 +51,7 @@
 	  <h3>Almanacs</h3>
 	  <ul id="almanacs">
 	    % for almanac in c.almanacs:
-	    <li><a href="${h.url_for('almanac_view', almanac=almanac)}"<span>${almanac.name}</span></a></li>
+	    <li><a href="${h.url_for('almanac_view', almanac=almanac)}"><span>${almanac.name}</span></a></li>
 	    % endfor
 	  </ul>
 	% endif
