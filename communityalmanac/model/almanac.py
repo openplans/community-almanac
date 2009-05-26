@@ -47,8 +47,8 @@ class Almanac(Base):
     def get_by_slug(cls, slug):
         return meta.Session.query(Almanac).filter(Almanac.slug == slug).one()
 
-    @classmethod
-    def latest(cls):
+    @staticmethod
+    def latest():
         #FIXME we'll need to store created/modified times
         return meta.Session.query(Almanac).all()
 
