@@ -36,6 +36,12 @@ if sys.platform != 'win32' and 'setuptools' in sys.modules:
     import setuptools.command.easy_install
     setuptools.command.easy_install.easy_install.install_script = install_script
 
+# lxml has some problems intalling under OS X, so we force a static install of
+# libxml to make things easier.
+if sys.platform == 'darwin':
+    import os
+    os.environ['STATIC_DEPS'] = 'true'
+
 setup(
     name='communityalmanac',
     version='0.1',
@@ -59,6 +65,7 @@ setup(
         "repoze.who>=1.0.13",
         "repoze.who.plugins.openid",
         "repoze.who.plugins.sa",
+        "lxml>=2.2",
     ],
     setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),
