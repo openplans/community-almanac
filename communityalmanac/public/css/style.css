@@ -687,10 +687,52 @@ color: #ffe1a6;
 }
 
 #recent-activity {
-min-height: 500px;
 background: url(/img/torn-paper.png) repeat-y;
 width: 260px;
 float: right;
+}
+
+#recent-activity h2 {
+color: #ff6040;
+font-size: 1.1em;
+padding: 0.5em;
+}
+
+ul#pages {
+color: #70818c;
+padding: 0 0.5em;
+margin: 0;
+}
+
+ul#pages li {
+margin: 0 0 1em;
+padding: 0;
+list-style-type: none;
+}
+
+ul#pages .page-title,
+ul#pages .page-timestamp,
+ul#pages .page-comments,
+ul#pages .page-almanac {
+float: left;
+white-space: pre-wrap;
+white-space: -moz-pre-wrap;
+word-wrap: break-word;
+padding: 0.2em 0.3em;
+line-height: 1em;
+}
+
+ul#pages a.page-title {
+font-size: 1.1em;
+padding: 0.1em 0.2em;
+color: #00ace6;
+}
+
+ul#pages a.page-comments {
+padding-left: 20px;
+margin-left: 0.3em;
+color: #b2b32d;
+background: url(/img/comments-icon.png) 0 50% no-repeat;
 }
 
 div#shelf {

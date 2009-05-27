@@ -66,7 +66,7 @@
 		<div class="map">
 			<form action="#" method="post">
 				<input id="almanac-name" type="text" value="" name="name"/>
-				<a class="find-almanac" title="Find almanac" href="#">Find almanac</a>
+				<a class="find-almanac" title="Find almanac" href="#">Locate</a>
 			</form>
 			<div id="map">
 			<p>The map will go here. Right now, you can ${h.link_to('Add', h.url_for('almanac_create'))} an almanac</p>
@@ -79,10 +79,15 @@
 	    % for almanac in c.almanacs:
 	    <li><a href="${h.url_for('almanac_view', almanac=almanac)}"><span>${almanac.name}</span></a></li>
 	    % endfor
-	  </ul>
+	  </ul><!-- /#almanacs -->
 	% endif
 	<div id="recent-activity" class="pngfix">
-	stuff
+	  <h2>Recently Updated Pages</h2><!-- should this link to a list of all pages sorted by update time? -->
+	  <ul id="pages">
+	    <li class="selfclear"><a class="page-title" href="#">Title of a page</a> <span class="page-timestamp">June 3, 2009</span> <a class="page-comments" href="#">7 comments</a> <span class="page-almanac">(Madison, WI)</span></li>
+		  <li class="selfclear"><a class="page-title" href="#">Title of a page</a> <span class="page-timestamp">June 3, 2009</span> <a class="page-comments" href="#">7 comments</a> <span class="page-almanac">(Madison, WI)</span></li>
+		  <li class="selfclear"><a class="page-title" href="#">Title of a page</a> <span class="page-timestamp">June 3, 2009</span> <a class="page-comments" href="#">7 comments</a> <span class="page-almanac">(Madison, WI)</span></li>
+	  </ul><!-- /#pages -->
 	</div>
 </div>
 <div id="shelf">
