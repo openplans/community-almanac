@@ -73,14 +73,6 @@
 			</div>
 		</div>
 	</div><!-- /#intro -->
-	% if c.almanacs:
-	  <h3>Almanacs</h3>
-	  <ul id="almanacs">
-	    % for almanac in c.almanacs:
-	    <li><a href="${h.url_for('almanac_view', almanac=almanac)}"><span>${almanac.name}</span></a></li>
-	    % endfor
-	  </ul><!-- /#almanacs -->
-	% endif
 	<div id="recent-activity" class="pngfix">
 	  <h2>Recently Updated Pages</h2><!-- should this link to a list of all pages sorted by update time? -->
 	  <ul id="pages">
@@ -88,7 +80,15 @@
 		  <li class="selfclear"><a class="page-title" href="#">Title of a page</a> <span class="page-timestamp">June 3, 2009</span> <a class="page-comments" href="#">7 comments</a> <span class="page-almanac">(Madison, WI)</span></li>
 		  <li class="selfclear"><a class="page-title" href="#">Title of a page</a> <span class="page-timestamp">June 3, 2009</span> <a class="page-comments" href="#">7 comments</a> <span class="page-almanac">(Madison, WI)</span></li>
 	  </ul><!-- /#pages -->
-	</div>
+	</div><!-- /#recent-activity -->
+	% if c.almanacs:
+	  <h3 id="almanac-frontispiece"><span>23 Recently Updated Almanacs</span></h3>
+	  <ul id="almanacs">
+	    % for almanac in c.almanacs:
+	    <li><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name}</span><span class="almanac-timestamp">June 15, 2009</span></a></li>
+	    % endfor
+	  </ul><!-- /#almanacs -->
+	% endif
 </div>
 <div id="shelf">
 showing recently updated almanacs

@@ -557,6 +557,7 @@ position: relative;
 height: 25em;
 width: 44%;
 float: left;
+overflow: hidden;
 }
 
 body.home #intro .panel {
@@ -649,6 +650,25 @@ color: #003459;
 text-decoration: none;
 }
 
+#almanac-frontispiece {
+background: url(/img/frontispiece-crossbar-bg.png) 0 50% repeat-x;
+padding: 0;
+margin: 0;
+width: 684px;
+font-size: 1.15em;
+float: left;
+color: #ff6040;
+}
+
+#almanac-frontispiece span {
+width: 244px;
+padding: 0 27px;
+margin: 0 auto;
+display: block;
+background: url(/img/frontispiece-almanacs-bg.png) 50% 50% no-repeat;
+text-align: center;
+}
+
 ul#almanacs {
 padding: 0;
 margin: 1em 0 0;
@@ -671,18 +691,31 @@ ul#almanacs li a {
 display: block;
 height: 81px;
 width: 684px;
+text-decoration: none;
 }
 
-ul#almanacs li a span { /* Right now, Opera and IE misrender this element. Refactor to fix and make semi-fluid? */
+ul#almanacs li a span.almanac-name { /* Right now, Opera and IE misrender this element. Refactor to fix and make semi-fluid? */
 position: absolute;
 left: 245px;
 top: 50%;
 margin-top: -0.5em;
 line-height: 1em;
 font-size: 1.2em;
+color: #00ace6;
 }
 
-ul#almanacs li a:hover {
+ul#almanacs li a span.almanac-timestamp { /* Right now, Opera and IE misrender this element. Refactor to fix and make semi-fluid? */
+position: absolute;
+right: 35px;
+top: 50%;
+margin-top: -0.5em;
+line-height: 1.2em;
+font-size: 1em;
+color: #b2b32d;
+}
+
+ul#almanacs li a:hover span.almanac-name,
+ul#almanacs li a:hover span.almanac-timestamp {
 color: #ffe1a6;
 }
 
