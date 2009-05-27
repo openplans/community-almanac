@@ -112,14 +112,20 @@ $(document).ready(function() {
     });
   });
 
-  // behavior when cancelling the edit of a new media item
-  $('#form-container a.media-cancel').live('click', function(e) {
-    e.preventDefault();
+  var _removeMediaItemForm = function() {
+    // Helper function to remove the media form at the top of the page
+    // This will get called when new media items are added or cancelled
     $('#form-container').children().each(function() {
       $(this).fadeOut('slow', function() {
         $(this).remove();
       });
     });
+  };
+
+  // behavior when cancelling the edit of a new media item
+  $('#form-container a.media-cancel').live('click', function(e) {
+    e.preventDefault();
+    _removeMediaItemForm();
   });
 
   // behavior when saving a new media item
@@ -134,11 +140,7 @@ $(document).ready(function() {
       contentType: 'application/x-www-form-urlencoded',
       data: data,
       success: function(data, textStatus) {
-        $('#form-container').children().each(function() {
-          $(this).fadeOut('slow', function() {
-            $(this).remove();
-          });
-        });
+        _removeMediaItemForm;
         $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
         // XXX we'll need a hook here to apply some map behavior to the result
       },
