@@ -22,7 +22,7 @@
   <form class="media-item" method="post" action="${request.path_url}">
     <fieldset>
       <legend>Text</legend>
-      <textarea name="body">${c.text_value}</textarea>
+      <textarea name="body"></textarea>
       <input type="submit" value="Add" />
       <a class="media-cancel" href="#">Cancel</a>
     </fieldset>

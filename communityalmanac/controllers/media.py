@@ -23,6 +23,8 @@ from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
 
 from communityalmanac.lib.base import BaseController, render
+from communityalmanac.model import Story
+from pylons.decorators import jsonify
 from pylons.decorators.rest import dispatch_on
 import communityalmanac.lib.helpers as h
 
@@ -50,3 +52,24 @@ class MediaController(BaseController):
     def donothing(self, almanac_slug):
         abort(400)
 
+    @dispatch_on(POST='_do_form_text')
+    @jsonify
+    def new_form_text(self):
+        return dict(html=render('/media/story/form.mako'))
+
+    @jsonify
+    def _do_form_text(self):
+        body = request.POST.get('body', u'')
+        if not body:
+            abort(400)
+
+        c.story = story = Story()
+        story.text = body
+
+        media_items = h.get_session_media_items()
+        story.order = len(media_items)
+        media_items.append(story)
+        session.save()
+
+        c.editable = True
+        return dict(html=render('/media/story/item.mako'))
