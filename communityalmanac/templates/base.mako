@@ -39,13 +39,13 @@
   class="home"
   %endif
   >
-    <div id="ill-sky" class="pngfix">
-      <div id="ill-clouds" class="pngfix">
-        <div id="ill-mountains" class="pngfix">
-          <div id="ill-hills" class="pngfix">
-            <div id="ill-foreground" class="pngfix">
-              <div id="header" class="selfclear pngfix">
-                <h1 id="logo">${h.link_to('Community Almanac', h.url_for('home'))}</h1>
+    <div id="ill-sky">
+      <div id="ill-clouds">
+        <div id="ill-mountains">
+          <div id="ill-hills">
+            <div id="ill-foreground">
+              <div id="header" class="selfclear">
+                <h1 id="logo" class="pngfix">${h.link_to('Community Almanac', h.url_for('home'))}</h1>
                 <%doc>This needs to be a login link instead if there is not a current session</%doc>
                 %if c.user:
                 <div id="welcome">Welcome, ${c.user.username}! <a href="/logout">Sign Out</a></div>

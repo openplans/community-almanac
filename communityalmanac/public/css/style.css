@@ -66,6 +66,10 @@ background: url(/img/ill-sky.jpg) center bottom repeat-x;
 min-width: 980px;
 }
 
+* html #ill-sky { /* IE6 */
+background: url(/img/ill-header-ie6.jpg) repeat-x;
+}
+
 #ill-clouds {
 background: url(/img/ill-clouds.png) 30% 7px repeat-x;
 }
@@ -80,6 +84,13 @@ background: url(/img/ill-hills.png) -20% 162px repeat-x;
 
 #ill-foreground {
 background: url(/img/ill-foreground-b.png) -50% bottom repeat-x;
+}
+
+* html #ill-clouds,
+* html #ill-mountains,
+* html #ill-hills,
+* html #ill-foreground { /* IE6 */
+background: none transparent no-repeat;
 }
 
 #header {
@@ -340,8 +351,9 @@ line-height: 1.5;
 #comment-submit,
 #comment-bttn, 
 #add-page-bttn {
-background: url(/img/bttn-bg-green.jpg) top left repeat;
-border: 4px solid #b2b32d;
+background: url(/img/bttn-bg-blue.jpg) top left repeat;
+border: 4px solid #069;
+border-width: 0 0 4px;
 font-size: 1.4em;
 line-height: 1em;
 margin: 0 0 20px;
@@ -352,14 +364,14 @@ margin: 0 0 20px;
 #add-page-bttn a {
 display: block;
 padding: 10px;
-color: #003459;
+color: #fff;
 text-decoration: none;
 }
 
 #comment-submit a:hover, 
 #comment-bttn a:hover, 
 #add-page-bttn a:hover {
-color: #ffffff;
+color: #069;
 }
 
 #comment-bttn { 
