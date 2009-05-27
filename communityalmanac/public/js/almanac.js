@@ -89,10 +89,20 @@ $(document).ready(function() {
     },
     handle: 'div.media-tab'
   });
+
+  // add the edit/delete behaviors
+  $('.mediacontent.text').prev().find('a.media-edit').each(function(e) {
+    // the function expects a json object
+    // so we'll construct that here
+    config = {id: $(this).parent().next().attr('id') };
+    addtext_display_behaviors(config);
+    return false;
+  });
+
   var tools = [{
       link: $('#text-tool'),
       submitfn: submit_handler,
-      post_behaviorfn: function() { }
+      post_behaviorfn: addtext_display_behaviors
     }, {
       link: $('#map-tool'),
       attach_form_behaviors: map_behaviors,
@@ -234,4 +244,22 @@ function map_behaviors(data) {
   var center = new OpenLayers.LonLat(lng, lat);
   center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
   map.setCenter(center, 12);
+}
+
+function addtext_display_behaviors(data) {
+  var eltid = data.id;
+  var elt = $('#' + eltid);
+  var mediaContent = elt.parent();
+  the_content = mediaContent;
+  var mediaControls = mediaContent.find('.media-controls');
+  $(mediaControls).find('.media-edit').click(function() {
+    var url = $(this).attr('href');
+    $.getJSON(url, {media_id: eltid}, function(data) {
+      mediaContent.children().each(function() {
+        $(this).css('display', 'none');
+      });
+      $(data.html).appendTo(mediaContent).hide().fadeIn('slow');
+    });
+    return false;
+  });
 }
