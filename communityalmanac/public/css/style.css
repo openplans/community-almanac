@@ -350,13 +350,21 @@ line-height: 1.5;
 
 #comment-submit,
 #comment-bttn, 
-#add-page-bttn {
+#add-page-bttn,
+#submit-button-form input {
 background: url(/img/bttn-bg-blue.jpg) top left repeat;
+font-family: georgia, serif;
+color: #fff;
 border: 4px solid #069;
 border-width: 0 0 4px;
 font-size: 1.4em;
 line-height: 1em;
 margin: 0 0 20px;
+}
+
+#submit-button-form input {
+padding: 5px;
+font-size: 1.1em;
 }
 
 #comment-submit a, 
@@ -508,7 +516,9 @@ padding: 6px;
 ul.page-media-tools li a {
 display: block;
 padding: 0 16px 0 0;
+font-size: 1.25em;
 line-height: 1em;
+text-decoration: none;
 }
 
 ul.page-media-tools li a#text-tool {
@@ -540,6 +550,55 @@ height: 15em;
 margin: 0.5em 0;
 }
 
+#submit-button-form {
+margin: 1em 0;
+}
+
+.mini-page-media-tools {
+border: 4px solid #d0c9b9;
+margin: 0 0.5em 0 0;
+padding: 5px;
+background: url(/img/page-contrast-bg.png);
+float: left;
+}
+
+.mini-page-media-tools h4 {
+float: left;
+font-size: 1.1em;
+line-height: 1em;
+margin: 0 0.5em 0 0;
+vertical-align:middle;
+}
+
+.mini-page-media-tools a {
+width: 16px;
+height: 16px;
+overflow: hidden;
+text-indent: -9999em;
+float: left;
+margin: 0 0.5em 0 0;
+vertical-align:middle;
+}
+
+.mini-page-media-tools a#mini-text-tool {
+background: url(/img/text-icon.png) 100% 50% no-repeat;
+}
+
+.mini-page-media-tools a#mini-image-tool {
+background: url(/img/image-icon.png) 100% 50% no-repeat;
+}
+
+.mini-page-media-tools a#mini-map-tool {
+background: url(/img/map-icon.png) 100% 50% no-repeat;
+}
+
+.mini-page-media-tools a#mini-audio-tool {
+background: url(/img/audio-icon.png) 100% 50% no-repeat;
+}
+
+.mini-page-media-tools a#mini-pdf-tool {
+background: url(/img/pdf-icon.png) 100% 50% no-repeat;
+}
 
 /* homepage */
 body.home {

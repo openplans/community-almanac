@@ -33,13 +33,14 @@
   % endif
 </ul>
 <form id="submit-button-form" method="post" action="${request.path_url}">
-  <ul class="mini-page-media-tools">
-	  <li>${h.link_to('Text', h.url_for('media_story', almanac=c.almanac), id='mini-text-tool')}</li>
-		<li><a id="mini-image-tool" href="#" onclick="alert('not implemented');">Image</a></li>
-	  <li>${h.link_to('Map', h.url_for('media_map', almanac=c.almanac), id='mini-map-tool')}</li>
-		<li><a id="mini-audio-tool" href="#" onclick="alert('not implemented');">Audio File</a></li>
-		<li><a id="mini-pdf-tool" href="#" onclick="alert('not implemented');">PDF</a></li>
-	</ul><input type="submit" value="Publish" />
+  <div class="mini-page-media-tools">
+    <h4>Add:</h4>
+	  ${h.link_to('Text', h.url_for('media_story', almanac=c.almanac), id='mini-text-tool')}
+		<a id="mini-image-tool" href="#" onclick="alert('not implemented');">Image</a>
+	  ${h.link_to('Map', h.url_for('media_map', almanac=c.almanac), id='mini-map-tool')}
+		<a id="mini-audio-tool" href="#" onclick="alert('not implemented');">Audio File</a>
+		<a id="mini-pdf-tool" href="#" onclick="alert('not implemented');">PDF</a>
+	</div><input type="submit" value="Publish" />
 </form>
 
 <%def name="extra_body()">
