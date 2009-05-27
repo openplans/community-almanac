@@ -77,6 +77,7 @@ $(document).ready(function() {
     }
   }
 
+  // add sortable behavior
   $('ul.page-media-items').sortable({
     update: function(event, ui) {
       ui.item.parent().children().each(function(index) {
@@ -90,6 +91,75 @@ $(document).ready(function() {
     handle: 'div.media-tab'
   });
 
+  // behavior when adding a media type
+  $('ul.page-media-tools li a').click(function(e) {
+    e.preventDefault();
+    var link = $(this);
+    var url = link.attr('href');
+
+    var formcontainer = $('#form-container');
+    $.getJSON(url, null, function(data) {
+      formcontainer.empty();
+      formcontainer.show();
+      var html = data.html;
+      $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
+        $(this).find('textarea').focus();
+      });
+      link.effect('transfer', {to: '#form-container'}, 1000);
+      // we'll need a hook to apply behaviors for maps and such
+      // and maybe for the forms
+      // applyNewMediaBehaviors();
+    });
+  });
+
+  // behavior when cancelling the edit of a new media item
+  $('#form-container a.media-cancel').live('click', function(e) {
+    e.preventDefault();
+    $('#form-container').children().each(function() {
+      $(this).fadeOut('slow', function() {
+        $(this).remove();
+      });
+    });
+  });
+
+  // behavior when saving a new media item
+  $('#form-container form input[type=submit]').live('click', function(e) {
+    e.preventDefault();
+    var formcontainer = $('#form-container');
+    var form = $('#form-container form');
+    var url = form.attr('action');
+    var data = form.serialize();
+
+    $.ajax({
+      contentType: 'application/x-www-form-urlencoded',
+      data: data,
+      success: function(data, textStatus) {
+        $('#form-container').children().each(function() {
+          $(this).fadeOut('slow', function() {
+            $(this).remove();
+          });
+        });
+        $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
+        // XXX we'll need a hook here to apply some map behavior to the result
+      },
+      type: "POST",
+      dataType: 'json',
+      url: url
+    });
+  });
+
+  // register live events for the media items
+  $('ul.page-media-items li .media-controls .media-edit').live('click', function(e) {
+    e.preventDefault();
+    $(this).animate({color: 'red'}, 1000).text('edited');
+  });
+
+  $('ul.page-media-items li .media-controls .media-delete').live('click', function(e) {
+    e.preventDefault();
+    $(this).animate({color: 'red'}, 1000).text('deleted');
+  });
+
+  /*
   // add the edit/delete behaviors
   $('.mediacontent.text').prev().find('a.media-edit').each(function(e) {
     // the function expects a json object
@@ -148,6 +218,7 @@ $(document).ready(function() {
     }
     fn(i);
   }
+  */
 });
 
 function submit_handler(e, url, jsonobj, post_behaviorfn) {
