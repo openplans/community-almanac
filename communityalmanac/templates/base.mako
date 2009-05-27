@@ -24,14 +24,10 @@
     <title>${self.title()}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="Content-Language" content="en-us" />
-    <style type="text/css" media="screen">
-/*<![CDATA[ */
-@import'${h.url_for('/css/reset.css')}';
-@import'${h.url_for('/css/style.css')}';
-@import'${h.url_for('/css/openlayers.css')}';
-@import'${h.url_for('/css/turn.css')}';
-/* ]]> */
-    </style>
+    <link type="text/css" rel="stylesheet" href="${h.url_for('/css/reset.css')}" />
+    <link type="text/css" rel="stylesheet" href="${h.url_for('/css/style.css')}" />
+    <link type="text/css" rel="stylesheet" href="${h.url_for('/css/openlayers.css')}" />
+    <link type="text/css" rel="stylesheet" href="${h.url_for('/css/turn.css')}" />
     ${self.extra_head()}
   </head>
   <body 
