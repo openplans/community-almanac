@@ -35,13 +35,13 @@
   class="home"
   %endif
   >
-    <div id="ill-sky" class="pngfix">
-      <div id="ill-clouds" class="pngfix">
-        <div id="ill-mountains" class="pngfix">
-          <div id="ill-hills" class="pngfix">
-            <div id="ill-foreground" class="pngfix">
-              <div id="header" class="selfclear pngfix">
-                <h1 id="logo">${h.link_to('Community Almanac', h.url_for('home'))}</h1>
+    <div id="ill-sky">
+      <div id="ill-clouds">
+        <div id="ill-mountains">
+          <div id="ill-hills">
+            <div id="ill-foreground">
+              <div id="header" class="selfclear">
+                <h1 id="logo" class="pngfix">${h.link_to('Community Almanac', h.url_for('home'))}</h1>
                 <%doc>This needs to be a login link instead if there is not a current session</%doc>
                 %if c.user:
                 <div id="welcome">Welcome, ${c.user.username}! <a href="/logout">Sign Out</a></div>
@@ -53,7 +53,7 @@
                     <input id="login-submit" type="submit" value="Log In"/>Not a member yet? <a href="/signup">Sign Up!</a><br /><a href="#">Forgot your password?</a></form><div class="tab"><a href="#">Login</a></div></div>
                 %endif
                 
-                <h3 id="tagline">The heart <span class="amp">&amp;</span> soul of <nobr>the place you live&hellip;</nobr></h3>
+                <h3 id="tagline">The heart <span class="amp">&#038;</span> soul of <nobr>the place you live&hellip;</nobr></h3>
               </div>
             </div>
           </div>
@@ -74,6 +74,7 @@
     <script type="text/javascript" src="/js/jquery-ui-1.7.1.custom.min.js"></script>
     <script type="text/javascript" src="/js/almanac.js"></script>
     <script type="text/javascript" src="/js/turn.js"></script>
+    <script type="text/javascript" src="/js/jquery.cycle-2.60.min.js"></script>
     <script type="text/javascript" src="/js/OpenLayers.js"></script>
     <script type="text/javascript"
             src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${g.map_key}"></script>
