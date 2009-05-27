@@ -57,7 +57,7 @@
                     <input id="login-submit" type="submit" value="Log In"/>Not a member yet? <a href="/signup">Sign Up!</a><br /><a href="#">Forgot your password?</a></form><div class="tab"><a href="#">Login</a></div></div>
                 %endif
                 
-                <h3 id="tagline">The heart <span class="amp">&amp;</span> soul of <nobr>the place you live&hellip;</nobr></h3>
+                <h3 id="tagline">The heart <span class="amp">&#038;</span> soul of <nobr>the place you live&hellip;</nobr></h3>
               </div>
             </div>
           </div>
@@ -78,6 +78,7 @@
     <script type="text/javascript" src="/js/jquery-ui-1.7.1.custom.min.js"></script>
     <script type="text/javascript" src="/js/almanac.js"></script>
     <script type="text/javascript" src="/js/turn.js"></script>
+    <script type="text/javascript" src="/js/jquery.cycle-2.60.min.js"></script>
     <script type="text/javascript" src="/js/OpenLayers.js"></script>
     <script type="text/javascript"
             src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${g.map_key}"></script>
