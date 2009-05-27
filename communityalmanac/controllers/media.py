@@ -73,3 +73,8 @@ class MediaController(BaseController):
 
         c.editable = True
         return dict(html=render('/media/story/item.mako'))
+
+    def clear_session(self):
+        # XXX debug only
+        session.clear()
+        session.save()

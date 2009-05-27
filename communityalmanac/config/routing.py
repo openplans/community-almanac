@@ -77,5 +77,8 @@ def make_map():
     map.connect('media_image', '/api/form/:almanac_slug/image', controller='media', action='image', _filter=almanac_expand)
     map.connect('media_sound', '/api/form/:almanac_slug/sound', controller='media', action='sound', _filter=almanac_expand)
 
+    # XXX debug only
+    map.connect('clear_session', '/clear/my/session', controller='media', action='clear_session')
+
 
     return map
