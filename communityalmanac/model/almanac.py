@@ -157,14 +157,40 @@ class User(Base):
     __tablename__ = "users"
 
     #its columns
+    comment_fullname =   Column(Unicode(100))
+    comment_website =    Column(Unicode(100))
+    email_address =      Column(Unicode(100))
     id =                 Column(Integer, primary_key=True)
+    discriminator =      Column('type', String(50))
+
+    __mapper_args__ = dict(polymorphic_on=discriminator)
+
+    pages = relation("Page", backref="user")
+
+    def __init__(self, id=None):
+        if id is not None:
+            self.id = id
+
+
+class SiteUser(User):
+    __tablename__ = 'site_users'
+    __mapper_args__ = dict(polymorphic_identity='site_user')
+
+    id =                 Column(Integer, ForeignKey('users.id'), primary_key=True)
     username =           Column(Unicode(50), nullable=False)
-    email_address =      Column(Unicode(100), nullable=False)
     reset_key =          Column(String(50), nullable=True)
     password =           Column(String(100), nullable=False)
     super_user =         Column(Boolean, nullable=False, default=False)
 
-    pages = relation("Page", backref="user")
+    def __init__(self, username=None, email_address=None, password=None, id=None):
+        self.username = username
+        self.email_address = email_address
+        if password:
+            self.set_password(password)
+        self.reset_key = None
+        self.super_user = False
+        if id is not None:
+            self.id = id
 
     def authenticate(self, password):
         return default_password_compare(password, self.password)
@@ -176,15 +202,16 @@ class User(Base):
     def set_password(self, password):
         self.password = default_password_hash(password)
 
-    def __init__(self, username=None, email_address=None, password=None, id=None):
-        self.username = username
-        self.email_address = email_address
-        if password:
-            self.set_password(password)
-        self.reset_key = None
-        self.super_user = False
-        if id is not None:
-            self.id = id
+
+class CommentUser(User):
+    __tablename__ = 'comment_users'
+    __mapper_args__ = dict(polymorphic_identity='comment_user')
+    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+
+class AnonymousUser(User):
+    __tablename__ = 'anonymous_users'
+    __mapper_args__ = dict(polymorphic_identity='anonymous_user')
+    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
 
 
 def default_password_compare(cleartext_password, stored_password_hash):

@@ -12,7 +12,7 @@ from formencode import compound
 
 from communityalmanac.lib.base import BaseController, render
 import communityalmanac.lib.helpers as h
-from communityalmanac.model import User
+from communityalmanac.model import SiteUser
 from communityalmanac.model import meta
 from sqlalchemy import or_, and_
 import mailer
@@ -58,7 +58,7 @@ class UserController(BaseController):
         username = self.form_result['login']
         password = self.form_result['password']
         email_address = self.form_result['email_address']
-        user = User(username, email_address, password)
+        user = SiteUser(username, email_address, password)
 
         meta.Session.save(user)
         meta.Session.commit()
@@ -82,7 +82,7 @@ class UserController(BaseController):
     @validate(schema=RequestResetSchema(), form='request_reset')
     def _request_reset(self):
         login = self.form_result['login']
-        user = meta.Session.query(User).filter(or_(User.username==login, User.email_address==login)).one()
+        user = meta.Session.query(SiteUser).filter(or_(SiteUser.username==login, SiteUser.email_address==login)).one()
         user.generate_key()
         meta.Session.commit()
 
@@ -115,7 +115,7 @@ class UserController(BaseController):
             c.form_errors = error.error_dict or {}
             return render('/user/perform_reset.mako')
         password = form_result['password']
-        user = meta.Session.query(User).filter(and_(User.username==username, User.reset_key==key)).one()
+        user = meta.Session.query(SiteUser).filter(and_(SiteUser.username==username, SiteUser.reset_key==key)).one()
         user.reset_key = None
         if password:
             user.set_password(password)
