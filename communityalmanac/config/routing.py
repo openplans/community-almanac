@@ -79,7 +79,8 @@ def make_map():
     map.connect('almanac_create', '/+almanac', controller='almanac', action='create')
     map.connect('almanac_view', '/:almanac_slug', controller='almanac', action='view', _filter=almanac_expand)
 
-    map.connect('media_story_new', '/media/text/new', controller='media', action='new_form_text')
+    # media item routes
+    map.connect('media_story_new', '/media/text/:almanac_slug/new', controller='media', action='new_form_text', _filter=almanac_expand)
     map.connect('media_story_view', '/media/text/:media_id', controller='media', action='text_view', _filter=media_expand)
     map.connect('media_story_edit', '/media/text/edit/:media_id', controller='media', action='edit_form_text', _filter=media_expand)
     map.connect('media_story_delete', '/media/text/delete/:media_id', controller='media', action='delete_text', conditions=dict(method=['POST']), _filter=media_expand)

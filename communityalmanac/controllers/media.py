@@ -54,7 +54,9 @@ class MediaController(BaseController):
 
     @dispatch_on(POST='_do_new_form_text')
     @jsonify
-    def new_form_text(self):
+    def new_form_text(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        page = c.almanac.new_page(self.ensure_user)
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
