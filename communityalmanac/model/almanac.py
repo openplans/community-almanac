@@ -20,6 +20,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
 from sqlalchemy.sql.expression import text
 from sqlalchemy.orm import relation
+from sqlalchemy.orm import exc
 
 from uuid import uuid4
 
@@ -45,6 +46,16 @@ class Almanac(Base):
     def __repr__(self):
         return '<Almanac(id=%d, name=%s)>' % (self.id, self.name)
 
+    def new_page(self):
+        try:
+            return meta.Session.query(Page).filter(Page.published == False, Page.almanac_id == self.id).one()
+        except exc.NoResultFound:
+            pass
+        page = Page(published=False, almanac_id==self.id)
+        meta.Session.add(page)
+        meta.Session.commit()
+        return page
+
     @classmethod
     def get_by_slug(cls, slug):
         return meta.Session.query(Almanac).filter(Almanac.slug == slug).one()
@@ -63,17 +74,18 @@ class Page(Base):
     name = Column(Unicode)
     slug = Column(String)
     description = Column(Unicode)
+    published = Column(Boolean, nullable=False)
     creation =  Column(DateTime, server_default=text('current_timestamp'))
 
     pages = relation("Almanac", backref="pages")
 
-    def __init__(self, name=None, slug=None, description=None, location=(None, None), id=None):
+    def __init__(self, name=None, slug=None, description=None, almanac_id=None, id=None):
         self.name = name
         self.slug = slug
+        if almanac_id is not None:
+            self.almanac_id = almanac_id
         if description is not None:
             self.description = description
-        if location is not None:
-            self.geo_lat, self.geo_lon = location
         if id is not None:
             self.id = id
 
