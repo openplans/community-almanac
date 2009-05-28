@@ -91,6 +91,12 @@ def get_page_by_slug(almanac, page_slug):
     except exc.NoResultFound:
         abort(404)
 
+def get_media_by_id(media_id):
+    try:
+        return Media.by_id(media_id)
+    except exc.NoResultFound:
+        abort(404)
+
 def get_media_from_session(media_id):
     try:
         media_id = int(media_id)

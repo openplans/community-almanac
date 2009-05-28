@@ -29,7 +29,7 @@
       %endif
       <input type="submit" value="Save" />
       %if c.story:
-      <a class="media-cancel" href="${h.url_for('media_story_view', media_id=c.media_id)}">Cancel</a>
+      <a class="media-cancel" href="${h.url_for('media_story_view', media_id=c.story.id)}">Cancel</a>
       %else:
       <a class="media-cancel" href="#">Cancel</a>
       %endif
