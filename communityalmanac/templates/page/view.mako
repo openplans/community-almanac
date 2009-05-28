@@ -89,7 +89,7 @@
 </%def>
 
 <%def name="title()">
-${c.page.name} - ${c.almanac.name} - Community Almanac
+${c.page.name} - ${c.almanac.name}
 </%def>
 <%def name="bookmark()">
 <div id="backtoc" class="pngfix">

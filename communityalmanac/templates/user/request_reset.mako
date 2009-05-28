@@ -31,4 +31,4 @@
   </fieldset>
 </form>
 
-<%def name="title()">Forgotten Username or Password - Community Almanac</%def>
+<%def name="title()">Forgotten Username or Password</%def>

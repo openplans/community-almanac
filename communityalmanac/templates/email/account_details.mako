@@ -18,19 +18,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-% if c.editable:
-<div class="media-tab">drag</div>
-<div class="media-content">
-  <div class="media-controls">
-    <a class="media-edit" href="${h.url_for('media_story_edit', media_id=c.media_id)}">Edit</a>
-    <a class="media-delete" href="${h.url_for('media_story_delete', media_id=c.media_id)}">Delete</a>
-  </div>
-  <div class="mediacontent text" id="pagemedia_${c.media_id}">
-    <p>${c.story.text}</p>
-  </div>
-</div>
-% else:
-<div class="mediacontent text" id="pagemedia_${c.media_id}">
-  <p>${c.story.text}</p>
-</div>
-%endif
+<%inherit file="/email/base.mako" />
+<h1 style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459; font-weight: normal; font-size: 1.2em;">Hello, ${c.username}!</h1>
+<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">Someone requested your account details for the Community Almanac. If this was not you, you can safely ignore this email.</p>
+<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">If you need to reset your password, please click on the following link: <a href="${h.url_for('user_performreset', username=c.username, key=c.key, qualified=True)}" style="color: #00ace6;">${h.url_for('user_performreset', username=c.username, key=c.key, qualified=True)}</a></p>
+
+<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">Thank you!</p>

@@ -39,7 +39,7 @@ from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
 from repoze.who.plugins.form import RedirectingFormPlugin
 from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin
 from repoze.who.plugins.sa import SQLAlchemyUserMDPlugin
-from communityalmanac.model import User
+from communityalmanac.model import SiteUser
 from communityalmanac.model.meta import Session
 from repoze.who.plugins.openid import OpenIdIdentificationPlugin
 
@@ -102,11 +102,11 @@ def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
             )
 
     formplugin = RedirectingFormPlugin('/login', '/do_login', '/logout', rememberer_name='auth_tkt')
-    sqlauth = SQLAlchemyAuthenticatorPlugin(User, Session)
+    sqlauth = SQLAlchemyAuthenticatorPlugin(SiteUser, Session)
     sqlauth.translations['user_name'] = 'username'
     sqlauth.translations['validate_password'] = 'authenticate'
 
-    sqlmetadata = SQLAlchemyUserMDPlugin(User, Session)
+    sqlmetadata = SQLAlchemyUserMDPlugin(SiteUser, Session)
     sqlmetadata.translations['user_name'] = 'username'
 
     identifiers = [('form', formplugin), ('openid', openid),('auth_tkt',auth_tkt)]

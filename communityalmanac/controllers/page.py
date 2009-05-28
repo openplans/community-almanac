@@ -82,7 +82,8 @@ class PageController(BaseController):
     def view(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
-        c.media_items = h.render_media_items(c.page.media)
+        #XXX check permissions
+        c.media_items = h.render_media_items(c.page.media, editable=True)
         map_features = h.map_features_for_media(c.page.media)
         c.map_features = h.literal(simplejson.dumps(map_features))
         return render('/page/view.mako')
@@ -104,6 +105,16 @@ class PageController(BaseController):
     @dispatch_on(POST='_do_form_text')
     @jsonify
     def form_text(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        media_id_str = request.GET.get('media_id')
+        if media_id_str:
+            media_id = int(media_id_str.split('_')[-1])
+            media_id -= 1
+            media_items = h.get_session_media_items()
+            media_item = media_items[media_id]
+            c.text_value = media_item.text
+        else:
+            c.text_value = u''
         return dict(html=render('/media/story/form.mako'))
 
     @dispatch_on(POST='_do_form_map')
@@ -122,17 +133,29 @@ class PageController(BaseController):
             abort(400)
         c.almanac = h.get_almanac_by_slug(almanac_slug)
 
-        c.story = story = Story()
-        story.text = body
+        media_id = request.POST.get('media_id')
+        if media_id is None:
+            c.story = story = Story()
+            story.text = body
 
-        media_items = h.get_session_media_items()
-        story.order = len(media_items)
-        media_items.append(story)
-        session.save()
+            media_items = h.get_session_media_items()
+            story.order = len(media_items)
+            media_items.append(story)
+            session.save()
+        else:
+            try:
+                media_id = int(media_id)
+            except ValueError:
+                abort(400)
+            query = meta.Session.query(Story)
+            query = query.filter(Story.id == media_id)
+            #XXX error checking?
+            c.story = query.one()
+            c.story.text = body
 
         c.editable = True
-        c.id = 'pagemedia_%d' % (len(media_items)-1)
-        return dict(html=render('/media/story/item.mako'))
+        c.id = 'pagemedia_%d' % (c.story.id or len(media_items)-1)
+        return dict(html=render('/media/story/item.mako'), id=c.id)
 
     @jsonify
     def _do_form_map(self, almanac_slug):

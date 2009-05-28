@@ -22,9 +22,17 @@
   <form class="media-item" method="post" action="${request.path_url}">
     <fieldset>
       <legend>Text</legend>
+      %if c.story:
+      <textarea name="body">${c.story.text}</textarea>
+      %else:
       <textarea name="body"></textarea>
-      <input type="submit" value="Add" />
+      %endif
+      <input type="submit" value="Save" />
+      %if c.story:
+      <a class="media-cancel" href="${h.url_for('media_story_view', media_id=c.media_id)}">Cancel</a>
+      %else:
       <a class="media-cancel" href="#">Cancel</a>
+      %endif
     </fieldset>
   </form>
 </div>
