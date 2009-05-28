@@ -26,6 +26,8 @@ from pylons.controllers import WSGIController
 from pylons.templating import render_mako as render
 from pylons import session
 
+from communityalmanac.model import AnonymousUser
+from communityalmanac.model import User
 from communityalmanac.model import meta
 from pylons.controllers.util import redirect_to
 from pylons import request, tmpl_context as c
