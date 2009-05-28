@@ -44,7 +44,7 @@ class MediaController(BaseController):
             id = int(id.split('_')[-1])
         except ValueError:
             abort(400)
-        if not h.sort_session_media_items(id, index):
+        if not h.sort_media_items(id, index):
             abort(400)
         # The only useful return value is the HTTP response, so we return an
         # empty body.

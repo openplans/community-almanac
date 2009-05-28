@@ -97,20 +97,7 @@ def get_media_by_id(media_id):
     except exc.NoResultFound:
         abort(404)
 
-def get_media_from_session(media_id):
-    try:
-        media_id = int(media_id)
-        media_id -= 1
-        session_media_items = get_session_media_items()
-        return session_media_items[media_id]
-    except (IndexError, ValueError):
-        abort(404)
-
-def get_session_media_items():
-    media_items = session.setdefault('media', [])
-    return media_items
-
-def sort_session_media_items(index_move, newsort):
+def sort_media_items(index_move, newsort):
     media = get_session_media_items()
 
     if index_move < 0 or index_move >= len(media):
@@ -130,11 +117,6 @@ def sort_session_media_items(index_move, newsort):
             elif item.order > oldsort and item.sort <= newsort:
                 item.order -= 1
     return True
-
-def remove_session_media_items():
-    media_items = session.pop('media', [])
-    session.save()
-    return media_items
 
 def render_media_items(media_items, editable=False):
     """return a list of the rendered individual media items
