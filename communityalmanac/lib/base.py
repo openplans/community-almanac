@@ -24,6 +24,7 @@ Provides the BaseController class for subclassing.
 from __future__ import with_statement
 from pylons.controllers import WSGIController
 from pylons.templating import render_mako as render
+from pylons import session
 
 from communityalmanac.model import meta
 from pylons.controllers.util import redirect_to
@@ -48,6 +49,22 @@ class BaseController(WSGIController):
         identity = request.environ.get('repoze.who.identity')
         if identity:
             c.user = identity['user']
+        else:
+            c.user = None
+
+    @property
+    def ensure_user(self):
+        if c.user:
+            return c.user
+        # Check for session user
+        userid = session.setdefault('userid', None)
+        if userid:
+            return meta.Session.query(User).get(userid)
+        user = AnonymousUser()
+        meta.Session.add(user)
+        meta.Session.commit()
+        session['userid'] = user.id
+        session.save()
 
     def _email_strip(self, html, message):
         # Todo, strip extra white space...
