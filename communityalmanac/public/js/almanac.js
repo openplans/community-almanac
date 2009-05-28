@@ -156,10 +156,9 @@ $(document).ready(function() {
     var url = $(this).attr('href');
     var li = $(this).closest('li');
     $.getJSON(url, {}, function(data) {
-      li.replaceWith($('<li></li>').append($(data.html)));
-      li.hide().fadeIn('slow', function() {
-        $(this).find('textarea').focus();
-      });
+      var newli = $('<li></li>').append($(data.html));
+      li.replaceWith(newli);
+      newli.find('textarea').focus();
       // XXX we'll need a hook here to apply some map behavior to the result
     });
   });
@@ -183,8 +182,9 @@ $(document).ready(function() {
       data: data,
       success: function(data, textStatus) {
         $.getJSON(getUrl, {}, function(data) {
-          li.replaceWith($('<li></li>').append($(data.html)));
-          li.hide().fadeIn('slow');
+          var newli = $('<li></li>').append($(data.html));
+          li.replaceWith(newli);
+          newli.hide().fadeIn('slow');
           // XXX we'll need a hook here to apply some map behavior to the result
         });
       },
@@ -200,8 +200,9 @@ $(document).ready(function() {
     var url = $(this).attr('href');
     var li = $(this).closest('li');
     $.getJSON(url, {}, function(data) {
-      li.replaceWith($('<li></li>').append($(data.html)));
-      li.hide().fadeIn('slow');
+      var newli = $('<li></li>').append($(data.html));
+      li.replaceWith(newli);
+      newli.hide().fadeIn('slow');
     });
   });
 
