@@ -219,89 +219,9 @@ $(document).ready(function() {
     });
   });
 
-  /*
-  // add the edit/delete behaviors
-  $('.mediacontent.text').prev().find('a.media-edit').each(function(e) {
-    // the function expects a json object
-    // so we'll construct that here
-    config = {id: $(this).parent().next().attr('id') };
-    addtext_display_behaviors(config);
-    return false;
-  });
-
-  var tools = [{
-      link: $('#text-tool'),
-      submitfn: submit_handler,
-      post_behaviorfn: addtext_display_behaviors
-    }, {
-      link: $('#map-tool'),
-      attach_form_behaviors: map_behaviors,
-      submitfn: submit_handler,
-      post_behaviorfn: map_display_behaviors
-    }
-  ];
-
-  for (var i = 0; i < tools.length; i++) {
-    var fn = function(i) {
-      var tool = tools[i];
-      var link = tool.link;
-      var submitfn = tool.submitfn;
-      var attach_form_behaviors = tool.attach_form_behaviors;
-      var post_behaviorfn = tool.post_behaviorfn;
-
-      // when somebody tries to add a particular media type, fetch the form from
-      // the server, and attach the behavior to it
-      link.click(function(e) {
-        e.preventDefault();
-        var url = $(this).attr('href');
-
-        var formcontainer = $('#form-container');
-        $.getJSON(url, null, function(data) {
-          formcontainer.empty();
-          formcontainer.show();
-          var html = data.html;
-          $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
-            $(this).find('textarea').focus();
-          });
-          link.effect('transfer', {to: '#form-container'}, 1000);
-          $('form.media-item a.media-cancel').click(function(e) {
-            e.preventDefault();
-            formcontainer.fadeOut('fast', function() { $(this).empty(); });
-          });
-          $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), data, post_behaviorfn); });
-          // attach custom behaviors if needed
-          if (attach_form_behaviors) {
-            attach_form_behaviors(data);
-          }
-        });
-      });
-    }
-    fn(i);
-  }
-  */
 });
 
-function submit_handler(e, url, jsonobj, post_behaviorfn) {
-  e.preventDefault();
-  var data = $('form.media-item').serialize();
-  var formcontainer = $('#form-container');
-
-  $.ajax({
-    contentType: 'application/x-www-form-urlencoded',
-    data: data,
-    success: function(data, textStatus) {
-      formcontainer.empty();
-      $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
-      if (post_behaviorfn) {
-          post_behaviorfn(data);
-      }
-    },
-    type: "POST",
-    dataType: 'json',
-    url: url
-  });
-}
-
+/*
 function map_display_behaviors(data) {
   var geometryJson = data.geometry;
   var map_id = data.map_id;
@@ -376,21 +296,4 @@ function map_behaviors(data) {
   center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
   map.setCenter(center, 12);
 }
-
-function addtext_display_behaviors(data) {
-  var eltid = data.id;
-  var elt = $('#' + eltid);
-  var mediaContent = elt.parent();
-  the_content = mediaContent;
-  var mediaControls = mediaContent.find('.media-controls');
-  $(mediaControls).find('.media-edit').click(function() {
-    var url = $(this).attr('href');
-    $.getJSON(url, {media_id: eltid}, function(data) {
-      mediaContent.children().each(function() {
-        $(this).css('display', 'none');
-      });
-      $(data.html).appendTo(mediaContent).hide().fadeIn('slow');
-    });
-    return false;
-  });
-}
+*/
