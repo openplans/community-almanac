@@ -52,13 +52,13 @@ class MediaController(BaseController):
     def donothing(self, almanac_slug):
         abort(400)
 
-    @dispatch_on(POST='_do_form_text')
+    @dispatch_on(POST='_do_new_form_text')
     @jsonify
     def new_form_text(self):
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
-    def _do_form_text(self):
+    def _do_new_form_text(self):
         body = request.POST.get('body', u'')
         if not body:
             abort(400)
