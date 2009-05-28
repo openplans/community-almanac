@@ -21,13 +21,16 @@
 
 Provides the BaseController class for subclassing.
 """
+from __future__ import with_statement
 from pylons.controllers import WSGIController
 from pylons.templating import render_mako as render
 
 from communityalmanac.model import meta
 from pylons.controllers.util import redirect_to
 from pylons import request, tmpl_context as c
-from urlparse import urlunparse
+from os import path
+import re
+STYLE_URL = re.compile(r"""url\("(.*?)"\)|url\('(.*?)'\)|url\((.*?)\)""")
 
 class BaseController(WSGIController):
 
@@ -45,4 +48,88 @@ class BaseController(WSGIController):
         identity = request.environ.get('repoze.who.identity')
         if identity:
             c.user = identity['user']
+
+    def _email_strip(self, html, message):
+        # Todo, strip extra white space...
+        import lxml.html
+        doc = lxml.html.fromstring(html)
+
+        # Remove all POST forms (since you typically can't post from email)
+        for form in doc.cssselect('form'):
+            form.getparent().remove(form)
+
+        # Remove the javascript
+        for script in doc.cssselect('script'):
+            script.getparent().remove(script)
+
+        if not hasattr(self, '_embedded_images'):
+            self._embedded_images = {}
+
+        # Embed images
+        for image in doc.cssselect('img'):
+            location = image.attrib['src']
+            # We pull the static files directory from pylons setup configuration
+            public = request.environ['pylons.pylons'].config['pylons.paths']['static_files']
+            filepath = path.abspath(path.join(public, './%s' % location))
+            filename = path.basename(filepath)
+            if filepath not in self._embedded_images:
+                self._embedded_images[filepath] = filename
+                message.attach(filepath, filename)
+            image.attrib['src'] = 'cid:%s' % filename
+
+        # Fixup background attribute images
+        for element in doc.cssselect('*[background]'):
+            location = element.attrib['background']
+            # We pull the static files directory from pylons setup configuration
+            public = request.environ['pylons.pylons'].config['pylons.paths']['static_files']
+            filepath = path.abspath(path.join(public, './%s' % location))
+            filename = path.basename(filepath)
+            if filepath not in self._embedded_images:
+                self._embedded_images[filepath] = filename
+                message.attach(filepath, filename)
+            element.attrib['background'] = 'cid:%s' % filename
+
+        #embed stylesheets
+        for stylesheet in doc.cssselect('link[rel=stylesheet]'):
+            head = stylesheet.getparent()
+            location = stylesheet.attrib['href']
+            # We pull the static files directory from pylons setup configuration
+            public = request.environ['pylons.pylons'].config['pylons.paths']['static_files']
+            filepath = path.abspath(path.join(public, './%s' % location))
+            try:
+                with open(path.abspath(filepath)) as stylefile:
+                    styledata = stylefile.read()
+            except:
+                continue
+
+            styledata = self._style_fixup(styledata, message)
+            head.remove(stylesheet)
+            head.append(lxml.html.fromstring("""<style type="text/css" media="screen">%s</style>""" % styledata))
+
+        # Fixup embedded styles
+        for element in doc.iter():
+            if 'style' in element.attrib:
+                element.attrib['style'] = self._style_fixup(element.attrib['style'], message)
+
+        # We need to take the text content from the body
+        body = doc.cssselect('body')[0]
+        text_content = body.text_content().encode('utf8')
+        return text_content, lxml.html.tostring(doc).encode('utf8')
+
+    def _style_fixup(self, styledata, message):
+        if not hasattr(self, '_embedded_images'):
+            self._embedded_images = {}
+        def image_embed(matchobj):
+            filepath = path.abspath(path.join(__file__, '../../public', './%s' % (matchobj.group(1) or matchobj.group(2) or matchobj.group(3))))
+            try:
+                with open(path.abspath(filepath)) as stylefile:
+                    pass
+            except:
+                return matchobj.group(0)
+            filename = path.basename(filepath)
+            if filepath not in self._embedded_images:
+                self._embedded_images[filepath] = filename
+                message.attach(filepath, filename)
+            return "url(cid:%s)" % filename
+        return re.sub(STYLE_URL, image_embed, styledata)
 

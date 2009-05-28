@@ -19,8 +19,8 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/email/base.mako" />
-<h1 style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459; font-weight: normal; font-size: 1.2em;">Hello, USERNAME!</h1>
-<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">Someone requested your account details at DOMAIN. If this was not you, you can safely ignore this email.</p>
-<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">If you need to reset your password, please click on the following link: <a href="#" style="color: #00ace6;">domain.something.org/askjdfhajsdfgkjhsagfkj</a></p>
+<h1 style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459; font-weight: normal; font-size: 1.2em;">Hello, ${c.username}!</h1>
+<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">Someone requested your account details for the Community Almanac. If this was not you, you can safely ignore this email.</p>
+<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">If you need to reset your password, please click on the following link: <a href="${h.url_for('user_performreset', username=c.username, key=c.key, qualified=True)}" style="color: #00ace6;">${h.url_for('user_performreset', username=c.username, key=c.key, qualified=True)}</a></p>
 
 <p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">Thank you!</p>
