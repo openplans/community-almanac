@@ -25,12 +25,12 @@
     <a class="media-edit" href="${h.url_for('media_story_edit', media_id=c.media_id)}">Edit</a>
     <a class="media-delete" href="#">Delete</a>
   </div>
-  <div class="mediacontent text" id="${c.id}">
+  <div class="mediacontent text" id="pagemedia_${c.media_id}">
     <p>${c.story.text}</p>
   </div>
 </div>
 % else:
-<div class="mediacontent text" id="${c.id}">
+<div class="mediacontent text" id="pagemedia_${c.media_id}">
   <p>${c.story.text}</p>
 </div>
 %endif

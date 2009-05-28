@@ -91,17 +91,13 @@ def get_page_by_slug(almanac, page_slug):
     except exc.NoResultFound:
         abort(404)
 
-def get_media_by_id(media_id):
+def get_media_from_session(media_id):
     try:
-        return Media.by_id(media_id)
-    except exc.NoResultFound:
-        # try the session too
-        try:
-            media_id = int(media_id)
-            session_media_items = get_session_media_items()
-            return session_media_items[media_id]
-        except (IndexError, ValueError):
-            abort(404)
+        media_id = int(media_id)
+        session_media_items = get_session_media_items()
+        return session_media_items[media_id]
+    except (IndexError, ValueError):
+        abort(404)
 
 def get_session_media_items():
     media_items = session.setdefault('media', [])
@@ -146,7 +142,6 @@ def render_media_items(media_items, editable=False):
 
     for index, media_item in enumerate(media_items):
         c.media_id = media_item.id or index
-        c.id = 'pagemedia_%s' % c.media_id
         if isinstance(media_item, Story):
             c.story = media_item
             rendered_item = render('/media/story/item.mako')

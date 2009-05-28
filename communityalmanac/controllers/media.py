@@ -77,15 +77,19 @@ class MediaController(BaseController):
 
     @jsonify
     def edit_form_text(self, media_id):
-        c.story = h.get_media_by_id(media_id)
-        c.media_id = c.story.id or len(h.get_session_media_items())
+        c.story = h.get_media_from_session(media_id)
+        c.media_id = media_id
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
     def text_view(self, media_id):
         c.editable = True
-        c.story = h.get_media_by_id(media_id)
-        c.media_id = c.story.id or len(h.get_session_media_items())
+        # XXX we'll need a way to figure out if we want to get the item from the
+        # session or the database, maybe through a request variable? or maybe
+        # we'll have separate urls
+        # for now, we'll just assume session
+        c.story = h.get_media_from_session(media_id)
+        c.media_id = media_id
         return dict(html=render('/media/story/item.mako'))
 
     def clear_session(self):
