@@ -90,7 +90,7 @@ class UserController(BaseController):
         c.key = user.reset_key
 
         message = mailer.Message()
-        message.From = "noreply@%s" % "communityalmanac.org"
+        message.From = "Community Alamanc <noreply@%s>" % "communityalmanac.org"
         message.To = user.email_address
         message.Subject = "Community Almanac account details"
         message.Body, message.Html = self._email_strip(render('/email/account_details.mako'), message)
