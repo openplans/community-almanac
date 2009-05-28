@@ -66,6 +66,7 @@ setup(
         "repoze.who.plugins.openid",
         "repoze.who.plugins.sa",
         "lxml>=2.2",
+        "mailer>=0.5",
     ],
     setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),

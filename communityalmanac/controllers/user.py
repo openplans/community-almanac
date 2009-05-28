@@ -94,8 +94,8 @@ class UserController(BaseController):
         message.Subject = "Community Almanac account details"
         message.Body, message.Html = self._email_strip(render('/user/account_email.mako'), message)
         emailc = {}
-        server = mailer.Mailer('mail.openplans.org')
-        #server = mailer.Mailer('localhost:8025')
+        #server = mailer.Mailer('mail.openplans.org')
+        server = mailer.Mailer('localhost:2000')
         server.send(message)
 
         redirect_to(h.url_for('home'))
