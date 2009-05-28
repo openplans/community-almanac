@@ -50,7 +50,7 @@
 </%def>
 
 <%def name="title()">
-Create Page - ${c.almanac.name} - Community Almanac
+Create Page - ${c.almanac.name}
 </%def>
 <%def name="sidebar()">
 <div class="sidebar">

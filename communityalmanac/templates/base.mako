@@ -21,7 +21,7 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 -->
   <head>
-    <title>${self.title()}</title>
+    <title>${self.title()} - Community Almanac</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="Content-Language" content="en-us" />
     <link type="text/css" rel="stylesheet" href="${h.url_for('/css/reset.css')}" />
@@ -50,7 +50,7 @@
                   <form action="/do_login" method="post">
                     <input id="username" name="login" type="text" />
                     <input id="password" name="password" type="password" />
-                    <input id="login-submit" type="submit" value="Log In"/>Not a member yet? <a href="/signup">Sign Up!</a><br /><a href="#">Forgot your password?</a></form><div class="tab"><a href="#">Login</a></div></div>
+                    <input id="login-submit" type="submit" value="Log In"/>Not a member yet? <a href="/signup">Sign Up!</a><br /><a href="/forgot">Forgot your password?</a></form><div class="tab"><a href="#">Login</a></div></div>
                 %endif
                 
                 <h3 id="tagline">The heart <span class="amp">&#038;</span> soul of <nobr>the place you live&hellip;</nobr></h3>
@@ -95,7 +95,7 @@
     ${self.extra_body()}
   </body>
 </html>
-<%def name="title()">Community Almanac</%def>
+<%def name="title()"></%def>
 <%def name="extra_head()"></%def>
 <%def name="extra_body()"></%def>
 <%def name="bookmark()"></%def>

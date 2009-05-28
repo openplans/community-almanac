@@ -43,7 +43,7 @@
   </fieldset>
 </form>
 
-<%def name="title()">User Signup - Community Almanac</%def>
+<%def name="title()">User Signup</%def>
 <%def name="sidebar()">
 <h2>What is a Community Almanac?</h2>
 <p>It's where you and your community share stories about the heart &amp; soul of the place you live.  It's a lasting record of the place you love&emdash;the place you call home.</p>

@@ -31,7 +31,7 @@
 % endif
 
 <%def name="title()">
-${c.almanac.name} - Community Almanac
+${c.almanac.name}
 </%def>
 <%def name="bookmark()">
 <div id="backtoc" class="pngfix">
