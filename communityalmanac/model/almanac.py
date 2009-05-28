@@ -115,6 +115,11 @@ class Media(Base):
 
     media = relation("Page", backref="media")
 
+    @staticmethod
+    def by_id(media_id):
+        return meta.Session.query(Media).filter(Media.id == media_id).one()
+
+
 class PDF(Media):
     __tablename__ = 'pdfs'
     __mapper_args__ = dict(polymorphic_identity='pdf')
