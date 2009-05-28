@@ -82,7 +82,7 @@
 	  </ul><!-- /#pages -->
 	</div><!-- /#recent-activity -->
 	% if c.almanacs:
-	  <h3 id="almanac-frontispiece"><span>23 Recently Updated Almanacs</span></h3>
+	  <h3 id="almanac-frontispiece"><span class="pngfix">23 Recently Updated Almanacs</span></h3>
 	  <ul id="almanacs">
 	    % for almanac in c.almanacs:
 	    <li><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name}</span><span class="almanac-timestamp">June 15, 2009</span></a></li>

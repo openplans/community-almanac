@@ -40,7 +40,7 @@
 	  ${h.link_to('Map', h.url_for('media_map', almanac=c.almanac), id='mini-map-tool')}
 		<a id="mini-audio-tool" href="#" onclick="alert('not implemented');">Audio File</a>
 		<a id="mini-pdf-tool" href="#" onclick="alert('not implemented');">PDF</a>
-	</div><input type="submit" value="Publish" />
+	</div><input type="submit" value="Publish" /><%doc>This button should read "Publish" when creating, and "done" otherwise</%doc>
 </form>
 
 <%def name="extra_body()">
@@ -60,7 +60,7 @@ Create Page - ${c.almanac.name}
   % if c.almanac:
   <h3 id="add-page-bttn">
     ${h.link_to(u'Publish this page!', h.url_for('page_create', almanac=c.almanac))}
-  </h3>
+  </h3><%doc>This should read "Publish this page!" when creating, and "Done Editing" otherwise</%doc>
   % endif
   <h3 id="add-content">Add some content:</h3>
 	<ul class="page-media-tools">
@@ -72,3 +72,8 @@ Create Page - ${c.almanac.name}
 	</ul>
 </div>
 </%def>
+<%!
+next_page_url = "#"
+next_page = "Cancel Adding Page"
+next_page_class = "cancel"
+%>

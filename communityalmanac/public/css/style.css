@@ -57,6 +57,14 @@ color: #003459;
 font-size: 87.5%;
 }
 
+* html {
+width: 980px;
+}
+
+* html body {
+width: 100%;
+}
+
 body.home {
 background: url(/img/brown-noise-dark.png) -50% 0 repeat;
 }
@@ -64,10 +72,6 @@ background: url(/img/brown-noise-dark.png) -50% 0 repeat;
 #ill-sky {
 background: url(/img/ill-sky.jpg) center bottom repeat-x;
 min-width: 980px;
-}
-
-* html #ill-sky { /* IE6 */
-background: url(/img/ill-header-ie6.jpg) repeat-x;
 }
 
 #ill-clouds {
@@ -86,11 +90,12 @@ background: url(/img/ill-hills.png) -20% 162px repeat-x;
 background: url(/img/ill-foreground-b.png) -50% bottom repeat-x;
 }
 
+* html #ill-sky,
 * html #ill-clouds,
 * html #ill-mountains,
 * html #ill-hills,
 * html #ill-foreground { /* IE6 */
-background: none transparent no-repeat;
+background: url(/img/ill-header-ie6.png) repeat-x;
 }
 
 #header {
@@ -103,7 +108,6 @@ h1#logo {
 width: 252px;
 height: 162px;
 margin: 25px 10% 0 20px;
-background: url(/img/logo.png) top left no-repeat;
 float: right;
 }
 
@@ -198,24 +202,37 @@ font-size: 1.9em;
 }
 
 #content {
-background: url(/img/book-top.png) top center no-repeat;
+background: url(/img/book-top.png) 50% 0 no-repeat;
 min-width: 980px;
 padding: 20px 0 0 0;
 position: relative;
+}
+
+* html #content {
+background: url(/img/book-top-ie6.png) 50% 0 no-repeat;
 }
 
 body.home #content {
 background: url(/img/brown-noise.jpg) -50% 0 repeat;
 }
 
-#wrap-a{
-background: url(/img/book-bottom.png) bottom center no-repeat;
+#wrap-a {
+background: url(/img/book-bottom.png) 50% 100% no-repeat;
 padding: 0 0 20px 0;
 }
 
+* html #wrap-a {
+background: url(/img/book-bottom-ie6.png) 50% 100% no-repeat;
+}
+
 #wrap-b {
-background: url(/img/book-tile.png) center top repeat-y;
+background: url(/img/book-tile.png) 50% 0 repeat-y;
 padding: 20px 0 40px 0;
+}
+
+* html #wrap-b {
+background: url(/img/book-tile-ie6.png) 50% 0 repeat-y;
+z-index: 98;
 }
 
 #right-page {
@@ -225,6 +242,10 @@ float: right;
 margin: 20px 50% 20px -505px;
 position: relative;
 left: 405px;
+}
+
+* html #right-page {
+margin-right: 25%;
 }
 
 #left-page {
@@ -247,17 +268,28 @@ text-align: right;
 position: relative;
 }
 
-span.prev {
-font-size: .8em;
+#nav-top span.prev,
+#nav-bottom span.prev {
+font-size: 0.8em;
 display: block;
 width: 240px;
 float: left;
 text-align: right;
 }
 
-.next {
-font-size: .8em;
-padding-right: 80px
+#nav-top span.next,
+#nav-bottom span.next,
+#nav-top span.cancel,
+#nav-bottom span.cancel {
+font-size: 0.8em;
+padding-right: 80px;
+}
+
+#nav-top span.cancel a,
+#nav-bottom span.cancel a {
+text-decoration: none;
+padding-right: 20px;
+background: url(/img/cancel-icon.png) 100% 50% no-repeat;
 }
 
 #footer {
@@ -285,7 +317,7 @@ text-decoration: none;
 }
 
 ul#footer-nav a:hover {
-color: #ff6040; 
+color: #ff6040;
 }
 
 
@@ -331,7 +363,7 @@ color: #ff6040;
 
 #comment-form label span.note {
 display: block;
-font-size: .8em;
+font-size: 0.8em;
 color: #70818c;
 }
 
@@ -349,7 +381,7 @@ line-height: 1.5;
 }
 
 #comment-submit,
-#comment-bttn, 
+#comment-bttn,
 #add-page-bttn,
 #submit-button-form input {
 background: url(/img/bttn-bg-blue.jpg) top left repeat;
@@ -367,8 +399,8 @@ padding: 5px;
 font-size: 1.1em;
 }
 
-#comment-submit a, 
-#comment-bttn a, 
+#comment-submit a,
+#comment-bttn a,
 #add-page-bttn a {
 display: block;
 padding: 10px;
@@ -376,18 +408,25 @@ color: #fff;
 text-decoration: none;
 }
 
-#comment-submit a:hover, 
-#comment-bttn a:hover, 
+#comment-submit:hover,
+#comment-bttn:hover,
+#add-page-bttn:hover,
+#submit-button-form input:hover {
+border-width: 4px 0 0;
+}
+
+#comment-submit a:hover,
+#comment-bttn a:hover,
 #add-page-bttn a:hover {
 color: #069;
 }
 
-#comment-bttn { 
-margin-right: 180px; 
+#comment-bttn {
+margin-right: 180px;
 }
 
-#comment-submit { 
-margin-left: 180px; 
+#comment-submit {
+margin-left: 180px;
 }
 
 #add-page-bttn a {
@@ -403,6 +442,7 @@ position: absolute;
 top: -120px;
 left: -23px;
 text-align: left;
+padding: 40px 0 0;
 }
 
 #backtoc a {
@@ -410,23 +450,18 @@ text-decoration: none;
 color: #f1e8da;
 display: block;
 width: 158px;
-padding: 40px 0 0;
-margin: 10px 0 0 24px;
+margin: 0 0 0 24px;
+padding: 10px 0 0 0;
 text-align: center;
 line-height: 1em;
+font-size: 0.95em;
 }
 
 #backtoc a:hover {
-color: #ffffff;
+color: #fff;
 text-decoration: underline;
 }
 
-#backtoc a span {
-display: block;
-width: 158px;
-height: 33px;
-font-size: .95em;
-}
 
 #searchform {
 background: url(/img/bttn-bg-khaki.jpg) top left repeat;
@@ -600,6 +635,29 @@ background: url(/img/audio-icon.png) 100% 50% no-repeat;
 background: url(/img/pdf-icon.png) 100% 50% no-repeat;
 }
 
+/*view page */
+h2.page-title {
+color: #00ace6;
+}
+
+ul.page-items {
+margin: 1em 0;
+padding: 0;
+}
+
+ul.page-items li {
+margin: 1em 0;
+padding: 0;
+list-style-type: none;
+border-bottom: 1px solid #99b0bf;
+}
+
+div.comment {
+margin: 1em 0;
+padding: 0;
+border-bottom: 1px solid #70818c;
+}
+
 /* homepage */
 body.home {
 min-width: 1065px;
@@ -640,7 +698,7 @@ body.home #intro .panel h3 {
 font-size: 1.7em;
 }
 
-body.home #intro .panel h2, 
+body.home #intro .panel h2,
 body.home #intro .panel h3 {
 color: #ff6040;
 margin: 0;
@@ -677,6 +735,10 @@ width: 50%;
 margin-left: 50%;
 }
 
+* html body.home #intro .map {
+margin-left: 49%;
+}
+
 body.home #intro .map form {
 position: relative;
 background: #d0c9b9; /* webkit broswers are getting input height wrong */
@@ -691,6 +753,7 @@ font-family: georgia, serif;
 border: 4px solid #d0c9b9;
 padding: 0.3em;
 }
+
 body.home #intro .map input:focus {
 outline: none;
 }
@@ -726,6 +789,12 @@ margin: 0 auto;
 display: block;
 background: url(/img/frontispiece-almanacs-bg.png) 50% 50% no-repeat;
 text-align: center;
+}
+
+* html #almanac-frontispiece,
+* html #almanac-frontispiece span {
+height: 35px;
+vertical-align: middle;
 }
 
 ul#almanacs {
