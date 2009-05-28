@@ -22,7 +22,7 @@
 <div class="media-tab">drag</div>
 <div class="media-content">
   <div class="media-controls">
-    <a class="media-edit" href="${h.url_for('media_story', almanac=c.almanac)}">Edit</a>
+    <a class="media-edit" href="${h.url_for('media_story_edit', media_id=c.media_id)}">Edit</a>
     <a class="media-delete" href="#">Delete</a>
   </div>
   <div class="mediacontent text" id="${c.id}">

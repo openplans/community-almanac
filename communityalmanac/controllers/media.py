@@ -72,6 +72,20 @@ class MediaController(BaseController):
         session.save()
 
         c.editable = True
+        c.media_id = c.story.id or len(h.get_session_media_items())
+        return dict(html=render('/media/story/item.mako'))
+
+    @jsonify
+    def edit_form_text(self, media_id):
+        c.story = h.get_media_by_id(media_id)
+        c.media_id = c.story.id or len(h.get_session_media_items())
+        return dict(html=render('/media/story/form.mako'))
+
+    @jsonify
+    def text_view(self, media_id):
+        c.editable = True
+        c.story = h.get_media_by_id(media_id)
+        c.media_id = c.story.id or len(h.get_session_media_items())
         return dict(html=render('/media/story/item.mako'))
 
     def clear_session(self):

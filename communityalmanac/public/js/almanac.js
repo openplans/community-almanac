@@ -140,7 +140,7 @@ $(document).ready(function() {
       contentType: 'application/x-www-form-urlencoded',
       data: data,
       success: function(data, textStatus) {
-        _removeMediaItemForm;
+        _removeMediaItemForm();
         $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
         // XXX we'll need a hook here to apply some map behavior to the result
       },
@@ -153,12 +153,31 @@ $(document).ready(function() {
   // register live events for the media items
   $('ul.page-media-items li .media-controls .media-edit').live('click', function(e) {
     e.preventDefault();
-    $(this).animate({color: 'red'}, 1000).text('edited');
+    var url = $(this).attr('href');
+    var li = $(this).closest('li');
+    $.getJSON(url, {}, function(data) {
+      li.replaceWith($('<li></li>').append($(data.html)));
+      li.hide().fadeIn('slow', function() {
+        $(this).find('textarea').focus();
+      });
+      // XXX we'll need a hook here to apply some map behavior to the result
+    });
   });
 
   $('ul.page-media-items li .media-controls .media-delete').live('click', function(e) {
     e.preventDefault();
     $(this).animate({color: 'red'}, 1000).text('deleted');
+  });
+
+  // media item live cancel
+  $('ul.page-media-items a.media-cancel').live('click', function(e) {
+    e.preventDefault();
+    var url = $(this).attr('href');
+    var li = $(this).closest('li');
+    $.getJSON(url, {}, function(data) {
+      li.replaceWith($('<li></li>').append($(data.html)));
+      li.hide().fadeIn('slow');
+    });
   });
 
   /*

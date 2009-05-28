@@ -25,6 +25,7 @@ available to Controllers. This module is available to templates as 'h'.
 from communityalmanac.lib.base import render
 from communityalmanac.model import Almanac
 from communityalmanac.model import Map
+from communityalmanac.model import Media
 from communityalmanac.model import Page
 from communityalmanac.model import Story
 from communityalmanac.model import meta
@@ -90,6 +91,18 @@ def get_page_by_slug(almanac, page_slug):
     except exc.NoResultFound:
         abort(404)
 
+def get_media_by_id(media_id):
+    try:
+        return Media.by_id(media_id)
+    except exc.NoResultFound:
+        # try the session too
+        try:
+            media_id = int(media_id)
+            session_media_items = get_session_media_items()
+            return session_media_items[media_id]
+        except (IndexError, ValueError):
+            abort(404)
+
 def get_session_media_items():
     media_items = session.setdefault('media', [])
     return media_items
@@ -132,7 +145,8 @@ def render_media_items(media_items, editable=False):
     c.editable = editable
 
     for index, media_item in enumerate(media_items):
-        c.id = 'pagemedia_%s' % (media_item.id or index)
+        c.media_id = media_item.id or index
+        c.id = 'pagemedia_%s' % c.media_id
         if isinstance(media_item, Story):
             c.story = media_item
             rendered_item = render('/media/story/item.mako')
