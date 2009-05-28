@@ -93,10 +93,9 @@ class UserController(BaseController):
         message.From = "noreply@%s" % "communityalmanac.org"
         message.To = user.email_address
         message.Subject = "Community Almanac account details"
-        message.Body, message.Html = self._email_strip(render('/user/account_email.mako'), message)
+        message.Body, message.Html = self._email_strip(render('/email/account_details.mako'), message)
         emailc = {}
         server = mailer.Mailer(config['smtp_server'])
-        #server = mailer.Mailer('localhost:8025')
         server.send(message)
 
         redirect_to(h.url_for('home'))
@@ -114,15 +113,15 @@ class UserController(BaseController):
         for script in doc.cssselect('script'):
             script.getparent().remove(script)
 
-        if not hasattr(self, '__embedded_images'):
-            self.__embedded_images = {}
+        if not hasattr(self, '_embedded_images'):
+            self._embedded_images = {}
         # Embed images
         for image in doc.cssselect('img'):
             location = image.attrib['src']
             filepath = path.abspath(path.join(__file__, '../../public', './%s' % location))
             filename = path.basename(filepath)
-            if filepath not in self.__embedded_images:
-                self.__embedded_images[filepath] = filename
+            if filepath not in self._embedded_images:
+                self._embedded_images[filepath] = filename
                 message.attach(filepath, filename)
             image.attrib['src'] = 'cid:%s' % filename
 
@@ -154,8 +153,8 @@ class UserController(BaseController):
         return text_content, lxml.html.tostring(doc).encode('utf8')
 
     def __style_fixup(self, styledata, message):
-        if not hasattr(self, '__embedded_images'):
-            self.__embedded_images = {}
+        if not hasattr(self, '_embedded_images'):
+            self._embedded_images = {}
         def image_embed(matchobj):
             filepath = path.abspath(path.join(__file__, '../../public', './%s' % (matchobj.group(1) or matchobj.group(2) or matchobj.group(3))))
             try:
@@ -164,8 +163,8 @@ class UserController(BaseController):
             except:
                 return matchobj.group(0)
             filename = path.basename(filepath)
-            if filepath not in self.__embedded_images:
-                self.__embedded_images[filepath] = filename
+            if filepath not in self._embedded_images:
+                self._embedded_images[filepath] = filename
                 message.attach(filepath, filename)
             return "url(cid:%s)" % filename
         return re.sub(STYLE_URL, image_embed, styledata)

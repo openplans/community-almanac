@@ -18,20 +18,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<%inherit file="/base.mako" />
-<form id="perform_reset" method="post" action="${url.current()}">
-  <fieldset>
-    <legend>Forgotten username or password</legend>
-    <div class="selfclear">
-      <label for="password">Password Reset (Optional)</label>
-      <input type="password" name="password" id="password" value="${request.POST.get('password', u'')}" />
-    </div>
-    <div class="selfclear">
-      <label for="password_repeat">Retype Password (If Changing Password)</label>
-      <input type="password" name="password_repeat" id="password_repeat" />
-    </div>
-    <input class="indented-submit" type="submit" value="Login" />
-  </fieldset>
-</form>
+<%inherit file="/email/base.mako" />
+<h1 style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459; font-weight: normal; font-size: 1.2em;">Hello, USERNAME!</h1>
+<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">Someone requested your account details at DOMAIN. If this was not you, you can safely ignore this email.</p>
+<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">If you need to reset your password, please click on the following link: <a href="#" style="color: #00ace6;">domain.something.org/askjdfhajsdfgkjhsagfkj</a></p>
 
-<%def name="title()">Forgotten Username or Password</%def>
+<p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">Thank you!</p>

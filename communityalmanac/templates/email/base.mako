@@ -21,8 +21,6 @@
 -->
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Community Almanac</title>
-  <link rel="stylesheet" type="text/css" href="screen.css">
 </head>
 <body style="background-color: #340f03; background-image: url('brown-noise.jpg'); background-position: top center; background-repeat: repeat-x repeat-y; margin: 0; padding: 0;">
 
@@ -44,11 +42,7 @@
         </tr>
         <tr style="background-color: #fffbf2; background-image: url('/img/paper.jpg'); background-position: top left; background-repeat: no-repeat repeat-y; margin: 0; padding: 0;">
           <td align="left">
-            <h1 style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459; font-weight: normal; font-size: 1.2em;">Hello, USERNAME!</h1>
-            <p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">Someone requested your account details at DOMAIN. If this was not you, you can safely ignore this email.</p>
-            <p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">If you need to reset your password, please click on the following link: <a href="#" style="color: #00ace6;">domain.something.org/askjdfhajsdfgkjhsagfkj</a></p>
-
-            <p style="margin: 0 30px 20px 30px; font-family: georgia, serif; color: #003459;">Thank you!</p>
+            ${next.body()}
             <img src="/img/spacer.gif" width="580" height="40" />
           </td>
         </tr>
