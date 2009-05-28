@@ -108,6 +108,19 @@ class MediaController(BaseController):
         c.media_id = media_id
         return dict(html=render('/media/story/item.mako'))
 
+    @jsonify
+    def delete_text(self, media_id):
+        #XXX hardcoded to use session
+        try:
+            media_id = int(media_id)
+            media_id -= 1
+            media_items = h.get_session_media_items()
+            del media_items[media_id]
+            session.save()
+        except (ValueError, IndexError):
+            abort(400)
+        return {}
+
     def clear_session(self):
         # XXX debug only
         session.clear()

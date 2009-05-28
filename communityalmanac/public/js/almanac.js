@@ -165,7 +165,20 @@ $(document).ready(function() {
 
   $('ul.page-media-items li .media-controls .media-delete').live('click', function(e) {
     e.preventDefault();
-    $(this).animate({color: 'red'}, 1000).text('deleted');
+    var url = $(this).attr('href');
+    var li = $(this).closest('li');
+    $.ajax({
+      contentType: 'application/x-www-form-urlencoded',
+      data: {},
+      success: function(data, textStatus) {
+        li.fadeOut('slow', function() {
+          $(this).remove();
+        });
+      },
+      type: "POST",
+      dataType: 'json',
+      url: url
+    });
   });
 
   // media item live edit

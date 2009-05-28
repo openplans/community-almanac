@@ -80,6 +80,7 @@ def make_map():
     map.connect('media_story_new', '/media/text/new', controller='media', action='new_form_text')
     map.connect('media_story_view', '/media/text/:media_id', controller='media', action='text_view', _filter=media_expand)
     map.connect('media_story_edit', '/media/text/edit/:media_id', controller='media', action='edit_form_text', _filter=media_expand)
+    map.connect('media_story_delete', '/media/text/delete/:media_id', controller='media', action='delete_text', conditions=dict(method=['POST']), _filter=media_expand)
 
     map.connect('media_map', '/api/form/:almanac_slug/map', controller='page', action='form_map', _filter=almanac_expand)
     map.connect('media_pdf', '/api/form/:almanac_slug/pdf', controller='media', action='pdf', _filter=almanac_expand)
