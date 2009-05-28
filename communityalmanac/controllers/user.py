@@ -2,6 +2,7 @@ from __future__ import with_statement
 import logging
 
 from pylons import request, response, session, tmpl_context as c
+from pylons import config
 from pylons.controllers.util import abort, redirect_to
 from pylons.decorators.rest import dispatch_on
 from pylons.decorators import validate
@@ -94,7 +95,7 @@ class UserController(BaseController):
         message.Subject = "Community Almanac account details"
         message.Body, message.Html = self._email_strip(render('/user/account_email.mako'), message)
         emailc = {}
-        server = mailer.Mailer('mail.openplans.org')
+        server = mailer.Mailer(config['smtp_server'])
         #server = mailer.Mailer('localhost:8025')
         server.send(message)
 

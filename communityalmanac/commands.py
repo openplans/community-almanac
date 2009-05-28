@@ -91,6 +91,11 @@ def main():
         'all IPv4 addresses')
 
     parser.add_option(
+        '-e', '--emailserver', default='mail.openplans.org',
+        help='The SMTP server to use for sending emails.  This needs to be an '
+        'open relay.')
+
+    parser.add_option(
         '-u', '--url', default='postgres://almanac:almanac@localhost/almanac',
         help='The DB url to pass to sqlalchemy. It defaults to '
         '"postgres://almanac:almanac@localhost/almanac"')
@@ -115,6 +120,7 @@ def main():
         'beaker.session.key': 'almanac',
         'beaker.session.secret': 'somesecret',
 
+        'smtp_server': args.emailserver,
         'sqlalchemy.url': args.url,
         'map_key': args.map_key,
     }
