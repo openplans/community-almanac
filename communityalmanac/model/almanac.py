@@ -21,6 +21,7 @@ from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, S
 from sqlalchemy.sql.expression import text
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import exc
+from sqlalchemy import and_
 
 from uuid import uuid4
 
@@ -46,12 +47,14 @@ class Almanac(Base):
     def __repr__(self):
         return '<Almanac(id=%d, name=%s)>' % (self.id, self.name)
 
-    def new_page(self, user):
+    def new_page(self, user, **fields):
+        assert('almanac_id' not in fields)
+        assert('user_id' not in fields)
         try:
-            return meta.Session.query(Page).filter(Page.published == False, Page.almanac_id == self.id, Page.user_id == user.id).one()
+            return meta.Session.query(Page).filter(and_(Page.published == False, Page.almanac_id == self.id, Page.user_id == user.id)).one()
         except exc.NoResultFound:
             pass
-        page = Page(published=False, almanac_id=self.id, user_id=user.id)
+        page = Page(published=False, almanac_id=self.id, user_id=user.id, **fields)
         meta.Session.add(page)
         meta.Session.commit()
         return page
@@ -77,11 +80,13 @@ class Page(Base):
     published = Column(Boolean, nullable=False)
     creation =  Column(DateTime, server_default=text('current_timestamp'))
 
-    pages = relation("Almanac", backref="pages")
 
-    def __init__(self, name=None, slug=None, description=None, almanac_id=None, id=None):
+    def __init__(self, name=None, slug=None, description=None, almanac_id=None, user_id=None, id=None, published=False):
         self.name = name
         self.slug = slug
+        self.published = False
+        if user_id is not None:
+            self.user_id = user_id
         if almanac_id is not None:
             self.almanac_id = almanac_id
         if description is not None:
@@ -98,6 +103,7 @@ class Page(Base):
         query = query.filter(Page.almanac_id == almanac.id)
         query = query.filter(Page.slug == slug)
         return query.one()
+Page.pages = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
 
 
 class Comment(Base):

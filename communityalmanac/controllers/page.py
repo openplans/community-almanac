@@ -52,7 +52,8 @@ class PageController(BaseController):
     @dispatch_on(POST='_do_create')
     def create(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        media_items = h.get_session_media_items()
+        page = c.almanac.new_page(self.ensure_user)
+        media_items = page.media
         c.media_items = h.render_media_items(media_items, editable=True)
         map_features = h.map_features_for_media(media_items)
         c.map_features = h.literal(simplejson.dumps(map_features))
@@ -65,16 +66,9 @@ class PageController(BaseController):
             name = u'Unnamed'
 
         slug = h.name_page(almanac, name)
-        page = Page(name, slug)
-        almanac.pages.append(page)
+        page = c.almanac.new_page(self.ensure_user, name=name, slug=slug)
 
-        media_items = h.get_session_media_items()
-        page.media.extend(media_items)
-
-        meta.Session.add(page)
         meta.Session.commit()
-
-        h.remove_session_media_items()
 
         redirect_to(h.url_for('page_view', almanac=almanac, page=page))
 
