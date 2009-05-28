@@ -75,11 +75,27 @@ class MediaController(BaseController):
         c.media_id = c.story.id or len(h.get_session_media_items())
         return dict(html=render('/media/story/item.mako'))
 
+    @dispatch_on(POST='_do_edit_form_text')
     @jsonify
     def edit_form_text(self, media_id):
         c.story = h.get_media_from_session(media_id)
         c.media_id = media_id
         return dict(html=render('/media/story/form.mako'))
+
+    @jsonify
+    def _do_edit_form_text(self, media_id):
+        body = request.POST.get('body', u'')
+        if not body:
+            abort(400)
+
+        #XXX hard coded get from session
+        c.story = h.get_media_from_session(media_id)
+        c.story.text = body
+        session.save()
+
+        c.editable = True
+        c.media_id = media_id
+        return dict(html=render('/media/story/item.mako'))
 
     @jsonify
     def text_view(self, media_id):

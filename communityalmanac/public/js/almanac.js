@@ -169,6 +169,31 @@ $(document).ready(function() {
     $(this).animate({color: 'red'}, 1000).text('deleted');
   });
 
+  // media item live edit
+  $('ul.page-media-items form.media-item input[type=submit]').live('click', function(e) {
+    e.preventDefault();
+    var form = $(this).closest('form.media-item');
+    var postUrl = form.attr('action');
+    var getUrl = $(this).next().attr('href');
+    var data = form.serialize();
+    var li = form.closest('li');
+
+    $.ajax({
+      contentType: 'application/x-www-form-urlencoded',
+      data: data,
+      success: function(data, textStatus) {
+        $.getJSON(getUrl, {}, function(data) {
+          li.replaceWith($('<li></li>').append($(data.html)));
+          li.hide().fadeIn('slow');
+          // XXX we'll need a hook here to apply some map behavior to the result
+        });
+      },
+      type: "POST",
+      dataType: 'json',
+      url: postUrl
+    });
+  });
+
   // media item live cancel
   $('ul.page-media-items a.media-cancel').live('click', function(e) {
     e.preventDefault();

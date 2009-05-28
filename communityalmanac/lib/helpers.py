@@ -94,6 +94,7 @@ def get_page_by_slug(almanac, page_slug):
 def get_media_from_session(media_id):
     try:
         media_id = int(media_id)
+        media_id -= 1
         session_media_items = get_session_media_items()
         return session_media_items[media_id]
     except (IndexError, ValueError):
@@ -141,7 +142,8 @@ def render_media_items(media_items, editable=False):
     c.editable = editable
 
     for index, media_item in enumerate(media_items):
-        c.media_id = media_item.id or index
+        n = index + 1
+        c.media_id = media_item.id or n
         if isinstance(media_item, Story):
             c.story = media_item
             rendered_item = render('/media/story/item.mako')
@@ -158,10 +160,11 @@ def map_features_for_media(media_items):
     """return a list of dicts that contain the features for all map media"""
     map_features = []
     for index, media_item in enumerate(media_items):
+        n = index + 1
         if isinstance(media_item, Map):
             geometry = media_item.location.__geo_interface__
             geojson = simplejson.dumps(geometry)
-            map_id = 'pagemedia_%s' % (media_item.id or index)
+            map_id = 'pagemedia_%s' % (media_item.id or n)
             map_features.append(dict(map_id=map_id,
                                      geometry=geojson,
                                      ))
