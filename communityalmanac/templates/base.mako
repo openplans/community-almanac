@@ -41,7 +41,7 @@
           <div id="ill-hills">
             <div id="ill-foreground">
               <div id="header" class="selfclear">
-                <h1 id="logo" class="pngfix">${h.link_to('Community Almanac', h.url_for('home'))}</h1>
+                <h1 id="logo"><a class="pngfix" href="${h.url_for('home')}">Community Almanac</a></h1>
                 <%doc>This needs to be a login link instead if there is not a current session</%doc>
                 %if c.user:
                 <div id="welcome">Welcome, ${c.user.username}! <a href="/logout">Sign Out</a></div>
@@ -101,10 +101,10 @@
 <%def name="bookmark()"></%def>
 <%def name="pagenav()">
 %if self.attr.prev_page_url:
-<span class="prev"><a href="${self.attr.prev_page_url}">&laquo; ${self.attr.prev_page}</a></span>
+<span class="${self.attr.prev_page_class}"><a href="${self.attr.prev_page_url}"> ${self.attr.prev_page}</a></span>
 %endif
 %if self.attr.next_page_url:
-<span class="next"><a href="${self.attr.next_page_url}">${self.attr.next_page} &raquo;</a></span>
+<span class="${self.attr.next_page_class}"><a href="${self.attr.next_page_url}">${self.attr.next_page}</a></span>
 %endif
 </%def>
 <%def name="sidebar()">
@@ -130,7 +130,7 @@
 </div>
 </%def>
 <%def name="pagearea()">
-<div id="wrap-a">
+<div id="wrap-a" class="selfclear">
   <div id="wrap-b">
     <div id="nav-top">
       <div id="target"></div>
@@ -152,6 +152,8 @@
 <%!
 prev_page_url = ""
 prev_page = "Previous"
+prev_page_class = "prev"
 next_page_url = ""
 next_page = "Next"
+next_page_class = "next"
 %>

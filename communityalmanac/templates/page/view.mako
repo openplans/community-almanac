@@ -19,10 +19,11 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/base.mako" />
-<h2>${c.page.name}</h2>
+<h2 class="page-title">${c.page.name}</h2>
+
 %if c.media_items:
   <div class="session-data">
-    <ul>
+    <ul class="page-items">
       %for media_item in c.media_items:
         <li>${media_item}</li>
       %endfor
@@ -34,7 +35,7 @@
   <% n = len(c.page.comments) %>
   <h3>
     %if n == 1:
-      1 comment
+      1 Comment
     %else:
       ${len(c.page.comments)} Comments
     %endif
@@ -97,7 +98,7 @@ ${c.page.name} - ${c.almanac.name} - Community Almanac
 </%def>
 <%!
 prev_page_url = "#"
-prev_page = "Next Page Name"
+prev_page = "Previous Page Name"
 next_page_url = "#"
-next_page = "Previous Page Name"
+next_page = "Next Page Name"
 %>
