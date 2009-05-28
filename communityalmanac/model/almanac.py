@@ -46,12 +46,12 @@ class Almanac(Base):
     def __repr__(self):
         return '<Almanac(id=%d, name=%s)>' % (self.id, self.name)
 
-    def new_page(self):
+    def new_page(self, user):
         try:
-            return meta.Session.query(Page).filter(Page.published == False, Page.almanac_id == self.id).one()
+            return meta.Session.query(Page).filter(Page.published == False, Page.almanac_id == self.id, Page.user_id == user.id).one()
         except exc.NoResultFound:
             pass
-        page = Page(published=False, almanac_id==self.id)
+        page = Page(published=False, almanac_id=self.id, user_id=user.id)
         meta.Session.add(page)
         meta.Session.commit()
         return page
