@@ -77,6 +77,7 @@ $(document).ready(function() {
     }
   }
 
+  // add sortable behavior
   $('ul.page-media-items').sortable({
     update: function(event, ui) {
       ui.item.parent().children().each(function(index) {
@@ -89,78 +90,138 @@ $(document).ready(function() {
     },
     handle: 'div.media-tab'
   });
-  var tools = [{
-      link: $('#text-tool'),
-      submitfn: submit_handler,
-      post_behaviorfn: function() { }
-    }, {
-      link: $('#map-tool'),
-      attach_form_behaviors: map_behaviors,
-      submitfn: submit_handler,
-      post_behaviorfn: map_display_behaviors
-    }
-  ];
 
-  for (var i = 0; i < tools.length; i++) {
-    var fn = function(i) {
-      var tool = tools[i];
-      var link = tool.link;
-      var submitfn = tool.submitfn;
-      var attach_form_behaviors = tool.attach_form_behaviors;
-      var post_behaviorfn = tool.post_behaviorfn;
+  // behavior when adding a media type
+  $('ul.page-media-tools li a').click(function(e) {
+    e.preventDefault();
+    var link = $(this);
+    var url = link.attr('href');
 
-      // when somebody tries to add a particular media type, fetch the form from
-      // the server, and attach the behavior to it
-      link.click(function(e) {
-        e.preventDefault();
-        var url = $(this).attr('href');
-
-        var formcontainer = $('#form-container');
-        $.getJSON(url, null, function(data) {
-          formcontainer.empty();
-          formcontainer.show();
-          var html = data.html;
-          $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
-            $(this).find('textarea').focus();
-          });
-          link.effect('transfer', {to: '#form-container'}, 1000);
-          $('form.media-item a.media-cancel').click(function(e) {
-            e.preventDefault();
-            formcontainer.fadeOut('fast', function() { $(this).empty(); });
-          });
-          $('form.media-item').submit(function(e) { submitfn(e, $(this).attr('action'), data, post_behaviorfn); });
-          // attach custom behaviors if needed
-          if (attach_form_behaviors) {
-            attach_form_behaviors(data);
-          }
-        });
+    var formcontainer = $('#form-container');
+    $.getJSON(url, null, function(data) {
+      formcontainer.empty();
+      formcontainer.show();
+      var html = data.html;
+      $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
+        $(this).find('textarea').focus();
       });
-    }
-    fn(i);
-  }
+      link.effect('transfer', {to: '#form-container'}, 1000);
+      // we'll need a hook to apply behaviors for maps and such
+      // and maybe for the forms
+      // applyNewMediaBehaviors();
+    });
+  });
+
+  var _removeMediaItemForm = function() {
+    // Helper function to remove the media form at the top of the page
+    // This will get called when new media items are added or cancelled
+    $('#form-container').children().each(function() {
+      $(this).fadeOut('slow', function() {
+        $(this).remove();
+      });
+    });
+  };
+
+  // behavior when cancelling the edit of a new media item
+  $('#form-container a.media-cancel').live('click', function(e) {
+    e.preventDefault();
+    _removeMediaItemForm();
+  });
+
+  // behavior when saving a new media item
+  $('#form-container form input[type=submit]').live('click', function(e) {
+    e.preventDefault();
+    var formcontainer = $('#form-container');
+    var form = $('#form-container form');
+    var url = form.attr('action');
+    var data = form.serialize();
+
+    $.ajax({
+      contentType: 'application/x-www-form-urlencoded',
+      data: data,
+      success: function(data, textStatus) {
+        _removeMediaItemForm();
+        $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
+        // XXX we'll need a hook here to apply some map behavior to the result
+      },
+      type: "POST",
+      dataType: 'json',
+      url: url
+    });
+  });
+
+  // register live events for the media items
+  $('ul.page-media-items li .media-controls .media-edit').live('click', function(e) {
+    e.preventDefault();
+    var url = $(this).attr('href');
+    var li = $(this).closest('li');
+    $.getJSON(url, {}, function(data) {
+      var newli = $('<li></li>').append($(data.html));
+      li.replaceWith(newli);
+      newli.find('textarea').focus();
+      // XXX we'll need a hook here to apply some map behavior to the result
+    });
+  });
+
+  $('ul.page-media-items li .media-controls .media-delete').live('click', function(e) {
+    e.preventDefault();
+    var url = $(this).attr('href');
+    var li = $(this).closest('li');
+    $.ajax({
+      contentType: 'application/x-www-form-urlencoded',
+      data: {},
+      success: function(data, textStatus) {
+        li.fadeOut('slow', function() {
+          $(this).remove();
+        });
+      },
+      type: "POST",
+      dataType: 'json',
+      url: url
+    });
+  });
+
+  // media item live edit
+  $('ul.page-media-items form.media-item input[type=submit]').live('click', function(e) {
+    e.preventDefault();
+    var form = $(this).closest('form.media-item');
+    var postUrl = form.attr('action');
+    var getUrl = $(this).next().attr('href');
+    var data = form.serialize();
+    var li = form.closest('li');
+
+    $.ajax({
+      contentType: 'application/x-www-form-urlencoded',
+      data: data,
+      success: function(data, textStatus) {
+        $.getJSON(getUrl, {}, function(data) {
+          var newli = $('<li></li>').append($(data.html));
+          li.replaceWith(newli);
+          newli.hide().fadeIn('slow');
+          // XXX we'll need a hook here to apply some map behavior to the result
+        });
+      },
+      type: "POST",
+      dataType: 'json',
+      url: postUrl
+    });
+  });
+
+  // media item live cancel
+  $('ul.page-media-items a.media-cancel').live('click', function(e) {
+    e.preventDefault();
+    var url = $(this).attr('href');
+    var li = $(this).closest('li');
+    $.getJSON(url, {}, function(data) {
+      var newli = $('<li></li>').append($(data.html));
+      li.replaceWith(newli);
+      newli.hide().fadeIn('slow');
+    });
+  });
+
 });
 
-function submit_handler(e, url, jsonobj, post_behaviorfn) {
-  e.preventDefault();
-  var data = $('form.media-item').serialize();
-  var formcontainer = $('#form-container');
-
-  $.ajax({
-    contentType: 'application/x-www-form-urlencoded',
-    data: data,
-    success: function(data, textStatus) {
-      formcontainer.empty();
-      $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
-      if (post_behaviorfn) {
-          post_behaviorfn(data);
-      }
-    },
-    type: "POST",
-    dataType: 'json',
-    url: url
-  });
-}
-
+/*
 function map_display_behaviors(data) {
   var geometryJson = data.geometry;
   var map_id = data.map_id;
@@ -235,3 +296,4 @@ function map_behaviors(data) {
   center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
   map.setCenter(center, 12);
 }
+*/

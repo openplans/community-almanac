@@ -42,6 +42,13 @@ def page_expand(kw):
         del kw['page']
     return kw
 
+def media_expand(kw):
+    if 'media' in kw:
+        media = kw['media']
+        kw['media_id'] = media.id
+        del kw['media']
+    return kw
+
 def make_map():
     """Create, configure and return the routes Mapper"""
     map = Mapper(directory=config['pylons.paths']['controllers'],
@@ -71,11 +78,19 @@ def make_map():
     map.connect('page_view', '/:almanac_slug/:page_slug', controller='page', action='view', _filter=page_expand)
     map.connect('almanac_create', '/+almanac', controller='almanac', action='create')
     map.connect('almanac_view', '/:almanac_slug', controller='almanac', action='view', _filter=almanac_expand)
-    map.connect('media_story', '/api/form/:almanac_slug/text', controller='page', action='form_text', _filter=almanac_expand)
+
+    map.connect('media_story_new', '/media/text/new', controller='media', action='new_form_text')
+    map.connect('media_story_view', '/media/text/:media_id', controller='media', action='text_view', _filter=media_expand)
+    map.connect('media_story_edit', '/media/text/edit/:media_id', controller='media', action='edit_form_text', _filter=media_expand)
+    map.connect('media_story_delete', '/media/text/delete/:media_id', controller='media', action='delete_text', conditions=dict(method=['POST']), _filter=media_expand)
+
     map.connect('media_map', '/api/form/:almanac_slug/map', controller='page', action='form_map', _filter=almanac_expand)
     map.connect('media_pdf', '/api/form/:almanac_slug/pdf', controller='media', action='pdf', _filter=almanac_expand)
     map.connect('media_image', '/api/form/:almanac_slug/image', controller='media', action='image', _filter=almanac_expand)
     map.connect('media_sound', '/api/form/:almanac_slug/sound', controller='media', action='sound', _filter=almanac_expand)
+
+    # XXX debug only
+    map.connect('clear_session', '/clear/my/session', controller='media', action='clear_session')
 
 
     return map

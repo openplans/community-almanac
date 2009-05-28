@@ -23,18 +23,14 @@ from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
 
 from communityalmanac.lib.base import BaseController, render
+from communityalmanac.model import Story
+from pylons.decorators import jsonify
 from pylons.decorators.rest import dispatch_on
 import communityalmanac.lib.helpers as h
 
 log = logging.getLogger(__name__)
 
 class MediaController(BaseController):
-
-    def index(self):
-        # Return a rendered template
-        #return render('/media.mako')
-        # or, return a response
-        return 'Hello World'
 
     @dispatch_on(GET='donothing')
     def sort(self):
@@ -56,3 +52,76 @@ class MediaController(BaseController):
     def donothing(self, almanac_slug):
         abort(400)
 
+    @dispatch_on(POST='_do_new_form_text')
+    @jsonify
+    def new_form_text(self):
+        return dict(html=render('/media/story/form.mako'))
+
+    @jsonify
+    def _do_new_form_text(self):
+        body = request.POST.get('body', u'')
+        if not body:
+            abort(400)
+
+        c.story = story = Story()
+        story.text = body
+
+        media_items = h.get_session_media_items()
+        story.order = len(media_items)
+        media_items.append(story)
+        session.save()
+
+        c.editable = True
+        c.media_id = c.story.id or len(h.get_session_media_items())
+        return dict(html=render('/media/story/item.mako'))
+
+    @dispatch_on(POST='_do_edit_form_text')
+    @jsonify
+    def edit_form_text(self, media_id):
+        c.story = h.get_media_from_session(media_id)
+        c.media_id = media_id
+        return dict(html=render('/media/story/form.mako'))
+
+    @jsonify
+    def _do_edit_form_text(self, media_id):
+        body = request.POST.get('body', u'')
+        if not body:
+            abort(400)
+
+        #XXX hard coded get from session
+        c.story = h.get_media_from_session(media_id)
+        c.story.text = body
+        session.save()
+
+        c.editable = True
+        c.media_id = media_id
+        return dict(html=render('/media/story/item.mako'))
+
+    @jsonify
+    def text_view(self, media_id):
+        c.editable = True
+        # XXX we'll need a way to figure out if we want to get the item from the
+        # session or the database, maybe through a request variable? or maybe
+        # we'll have separate urls
+        # for now, we'll just assume session
+        c.story = h.get_media_from_session(media_id)
+        c.media_id = media_id
+        return dict(html=render('/media/story/item.mako'))
+
+    @jsonify
+    def delete_text(self, media_id):
+        #XXX hardcoded to use session
+        try:
+            media_id = int(media_id)
+            media_id -= 1
+            media_items = h.get_session_media_items()
+            del media_items[media_id]
+            session.save()
+        except (ValueError, IndexError):
+            abort(400)
+        return {}
+
+    def clear_session(self):
+        # XXX debug only
+        session.clear()
+        session.save()
