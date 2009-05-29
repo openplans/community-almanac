@@ -119,15 +119,6 @@
     <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
   </form>
 </div>
-<div class="sidebar">
-  <h4>Sidebar 2</h4>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-</div>
-<div class="sidebar">
-  <h4>Sidebar 3</h4>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-</div>
 </%def>
 <%def name="pagearea()">
 <div id="wrap-a" class="selfclear">

@@ -19,13 +19,17 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/base.mako" />
-<h2>${c.almanac.name}</h2>
-<div id="map" style="width: 400px; height: 300px"></div>
+<h2 class="almanac-title pngfix">${c.almanac.name}</h2>
+<div id="map" style="width: 100%; height: 300px; border: 4px solid #d0c9b9;"></div>
 % if c.almanac.pages:
-  <h3>Pages</h3>
-  <ul>
+  <h3 id="frontispiece-pages"><strong>Table of Contents</strong> 3 pages</h3>
+  <ul class="almanac-pages">
     % for page in c.almanac.pages:
-    <li>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))}</li>
+    <li class="selfclear">
+      <div class="almanac-meta">May 30, 2009<br /><a href=#">3 Comments</a></div>
+      <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by User Name</h4>
+      <div class="almanac-excerpt"><p>Vestibulum vulputate commodo mattis. Nam venenatis, dolor ultrices condimentum pulvinar, risus turpis varius nisl, vitae dictum elit odio eget nunc. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum malesuada malesuada sem. Donec venenatis, ipsum non tincidunt rutrum, sem est ultrices enim, in vulputate nibh nisi non turpis. Pellentesque porta luctus leo, ac blandit felis facilisis eu.</p></div>
+    </li>
     % endfor
   </ul>
 % endif
