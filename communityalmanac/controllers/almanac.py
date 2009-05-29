@@ -45,11 +45,6 @@ class AlmanacCreateForm(Schema):
 
 class AlmanacController(BaseController):
 
-    def home(self):
-        c.almanacs = Almanac.latest()
-        c.is_homepage = True
-        return render('/home.mako')
-
     @dispatch_on(POST='_do_create')
     def create(self):
         return render('/almanac/create.mako')

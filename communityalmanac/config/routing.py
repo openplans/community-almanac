@@ -63,7 +63,7 @@ def make_map():
     # CUSTOM ROUTES HERE
     maps.admin_map(map, controller='admin', url='/admin')
 
-    map.connect('home', '/', controller='almanac', action='home')
+    map.connect('home', '/', controller='homesweethome', action='home')
     # FIXME not sure if we should keep this url scheme
     map.connect('login', '/login', controller='user', action='login')
     map.connect('user_register', '/signup', controller='user', action='register')
