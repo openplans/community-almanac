@@ -725,6 +725,12 @@ ul.almanac-pages div.almanac-excerpt {
 margin-right: 110px;
 }
 
+#almanac-pagination {
+position: relative;
+bottom: -80px;
+color: #70818c;
+}
+
 /*view page */
 h2.page-title {
 color: #00ace6;
