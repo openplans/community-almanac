@@ -109,8 +109,3 @@ class MediaController(BaseController):
         story = h.get_media_by_id(media_id)
         meta.Session.delete(story)
         meta.Session.commit()
-
-    def clear_session(self):
-        # XXX debug only
-        session.clear()
-        session.save()

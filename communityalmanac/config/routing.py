@@ -85,8 +85,4 @@ def make_map():
     map.connect('media_story_edit', '/media/text/edit/:media_id', controller='media', action='edit_form_text', _filter=media_expand)
     map.connect('media_story_delete', '/media/text/delete/:media_id', controller='media', action='delete_text', conditions=dict(method=['POST']), _filter=media_expand)
 
-    # XXX debug only
-    map.connect('clear_session', '/clear/my/session', controller='media', action='clear_session')
-
-
     return map
