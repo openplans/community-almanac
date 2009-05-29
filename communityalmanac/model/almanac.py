@@ -121,7 +121,7 @@ class Comment(Base):
 
 
 class Media(Base):
-    __tablename__ = 'medias'
+    __tablename__ = 'media'
 
     id = Column(Integer, primary_key=True)
     page_id = Column(Integer, ForeignKey('pages.id'))
@@ -141,30 +141,30 @@ class Media(Base):
 class PDF(Media):
     __tablename__ = 'pdfs'
     __mapper_args__ = dict(polymorphic_identity='pdf')
-    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     path = Column(Unicode)
 
 class Sound(Media):
     __tablename__ = 'sounds'
     __mapper_args__ = dict(polymorphic_identity='sound')
-    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     path = Column(Unicode)
 
 class Image(Media):
     __tablename__ = 'images'
     __mapper_args__ = dict(polymorphic_identity='image')
-    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     flickr_id = Column(String)
 
 class Story(Media):
     __tablename__ = 'stories'
     __mapper_args__ = dict(polymorphic_identity='story')
-    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
 
 class Map(Media):
     __tablename__ = 'maps'
     __mapper_args__ = dict(polymorphic_identity='map')
-    id = Column(Integer, ForeignKey('medias.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     location = Column(POINT(storage_SRID))
 
     maps = relation("Page", backref="maps")
