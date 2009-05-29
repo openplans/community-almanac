@@ -68,9 +68,8 @@
 				<input id="almanac-name" type="text" value="" name="name"/>
 				<a class="find-almanac" title="Find almanac" href="#">Locate</a>
 			</form>
-			<div id="map">
+      <div style="height: 400px; width: 300px" id="map"></div>
 			<p>The map will go here. Right now, you can ${h.link_to('Add', h.url_for('almanac_create'))} an almanac</p>
-			</div>
 		</div>
 	</div><!-- /#intro -->
 	<div id="recent-activity" class="pngfix">
@@ -110,6 +109,37 @@ $(document).ready(function(){
 	);
 	$('.panel-wrap').cycle({fx: 'fade', speed: 'fast', timeout: 0, next: '.next-panel', prev: '.prev-panel'
 	});
+  var extent = new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400);
+  var geometry = extent.toGeometry();
+  var formatter = new OpenLayers.Format.GeoJSON();
+  var geojson = formatter.write(geometry);
+  var map = new OpenLayers.Map('map', {
+    projection: new OpenLayers.Projection('EPSG:900913'),
+    displayProjection: new OpenLayers.Projection('EPSG:4326'),
+    maxExtent: extent
+    });
+  var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
+  map.addLayer(baseLayer);
+  var almanacLayer = new OpenLayers.Layer.Vector('almanacs');
+  map.addLayer(almanacLayer);
+  $.getJSON("${h.url_for('home_geoms')}", {extent: geojson}, function(data) {
+    var almanac_locations = data.almanac_locations;
+    console.log(almanac_locations);
+    for (var i = 0; i < almanac_locations.length; i++) {
+      var location = almanac_locations[i];
+      var x = location[0];
+      var y = location[1];
+      console.log('1');
+      var marker = new OpenLayers.Marker(new OpenLayers.LonLat(x, y));
+      console.log('2');
+      marker.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+      console.log('3');
+      almanacLayer.addMarker(marker);
+      console.log('4');
+    }
+    map.zoomToExtent(almanacLayer.getDataExtent());
+  });
+  map.zoomToExtent(extent);
 });
 //]]>
   </script>
