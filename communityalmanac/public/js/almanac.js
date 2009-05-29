@@ -71,7 +71,7 @@ $(document).ready(function() {
     for (var i = 0; i < pageMapFeatures.length; i++) {
       var fn = function(i) {
         var feature_data = pageMapFeatures[i];
-        map_display_behaviors(feature_data);
+        applyDisplayFeatureMapBehavior(feature_data);
       };
       fn(i);
     }
@@ -106,9 +106,7 @@ $(document).ready(function() {
         $(this).find('textarea').focus();
       });
       link.effect('transfer', {to: '#form-container'}, 1000);
-      // we'll need a hook to apply behaviors for maps and such
-      // and maybe for the forms
-      // applyNewMediaBehaviors();
+      applyDrawFeatureMapBehavior(data)
     });
   });
 
@@ -142,7 +140,7 @@ $(document).ready(function() {
       success: function(data, textStatus) {
         _removeMediaItemForm();
         $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
-        // XXX we'll need a hook here to apply some map behavior to the result
+        applyDrawFeatureMapBehavior(data);
       },
       type: "POST",
       dataType: 'json',
@@ -159,7 +157,7 @@ $(document).ready(function() {
       var newli = $('<li></li>').append($(data.html));
       li.replaceWith(newli);
       newli.find('textarea').focus();
-      // XXX we'll need a hook here to apply some map behavior to the result
+      applyDrawFeatureMapBehavior(data);
     });
   });
 
@@ -198,7 +196,7 @@ $(document).ready(function() {
           var newli = $('<li></li>').append($(data.html));
           li.replaceWith(newli);
           newli.hide().fadeIn('slow');
-          // XXX we'll need a hook here to apply some map behavior to the result
+          applyDrawFeatureMapBehavior(data);
         });
       },
       type: "POST",
@@ -221,9 +219,11 @@ $(document).ready(function() {
 
 });
 
-/*
-function map_display_behaviors(data) {
+function applyDisplayFeatureMapBehavior(data) {
   var geometryJson = data.geometry;
+  if (!geometryJson) {
+    return;
+  }
   var map_id = data.map_id;
   var formatter = new OpenLayers.Format.GeoJSON();
   var feature = formatter.read(geometryJson)[0];
@@ -241,7 +241,13 @@ function map_display_behaviors(data) {
   map.zoomToExtent(bounds);
 }
 
-function map_behaviors(data) {
+function applyDrawFeatureMapBehavior(data) {
+  var lng = data.lng;
+  var lat = data.lat;
+  if (!lng || !lat) {
+    return;
+  }
+  var center = new OpenLayers.LonLat(lng, lat);
   var featureLayer = new OpenLayers.Layer.Vector('feature');
   var onActivate = function() { featureLayer.destroyFeatures(); };
   var drawPoint = new OpenLayers.Control.DrawFeature(
@@ -290,10 +296,6 @@ function map_behaviors(data) {
   map.addLayer(baseLayer);
   map.addControl(toolbar);
   map.addLayer(featureLayer);
-  var lng = data.lng;
-  var lat = data.lat;
-  var center = new OpenLayers.LonLat(lng, lat);
   center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
   map.setCenter(center, 12);
 }
-*/

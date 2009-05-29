@@ -136,6 +136,7 @@ def render_media_items(media_items, editable=False):
             c.story = media_item
             rendered_item = render('/media/story/item.mako')
         elif isinstance(media_item, Map):
+            c.map = media_item
             rendered_item = render('/media/map/item.mako')
         else:
             rendered_item = u''

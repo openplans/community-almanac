@@ -24,7 +24,7 @@
       <legend>Map</legend>
       <div id="map" style="width: 500px; height: 400px"></div>
       <input type="hidden" id="feature-geometry" name="feature" />
-      <input type="submit" value="Add" />
+      <input type="submit" value="Save" />
       <a class="media-cancel" href="#">Cancel</a>
     </fieldset>
   </form>

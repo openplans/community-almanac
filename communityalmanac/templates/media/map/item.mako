@@ -25,10 +25,10 @@
     <a class="media-edit" href="#">Edit</a>
     <a class="media-delete" href="#">Delete</a>
   </div>
-  <div style="width: 500px; height: 400px" class="mediacontent map" id="${c.id}">
+  <div style="width: 500px; height: 400px" class="mediacontent map" id="pagemedia_${c.map.id}">
   </div>
 </div>
 % else:
-  <div style="width: 500px; height: 400px" class="mediacontent map" id="${c.id}">
+  <div style="width: 500px; height: 400px" class="mediacontent map" id="pagemedia_${c.map.id}">
   </div>
 %endif

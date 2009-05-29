@@ -66,7 +66,7 @@ Create Page - ${c.almanac.name}
 	<ul class="page-media-tools">
 	  <li>${h.link_to('Text', h.url_for('media_story_new', almanac=c.almanac), id='text-tool')}</li>
 		<li><a id="image-tool" href="#" onclick="alert('not implemented');">Image</a></li>
-	  <li>${h.link_to('Map', h.url_for('media_map', almanac=c.almanac), id='map-tool')}</li>
+	  <li>${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='map-tool')}</li>
 		<li><a id="audio-tool" href="#" onclick="alert('not implemented');">Audio File</a></li>
 		<li><a id="pdf-tool" href="#" onclick="alert('not implemented');">PDF</a></li>
 	</ul>
