@@ -106,7 +106,7 @@ $(document).ready(function() {
         $(this).find('textarea').focus();
       });
       link.effect('transfer', {to: '#form-container'}, 1000);
-      applyDrawFeatureMapBehavior(data)
+      applyDrawFeatureMapBehavior(data);
     });
   });
 
@@ -139,8 +139,9 @@ $(document).ready(function() {
       data: data,
       success: function(data, textStatus) {
         _removeMediaItemForm();
-        $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
-        applyDrawFeatureMapBehavior(data);
+        $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000, function() {
+          applyDisplayFeatureMapBehavior(data);
+        });
       },
       type: "POST",
       dataType: 'json',
@@ -196,7 +197,7 @@ $(document).ready(function() {
           var newli = $('<li></li>').append($(data.html));
           li.replaceWith(newli);
           newli.hide().fadeIn('slow');
-          applyDrawFeatureMapBehavior(data);
+          applyDisplayFeatureMapBehavior(data);
         });
       },
       type: "POST",
@@ -214,6 +215,7 @@ $(document).ready(function() {
       var newli = $('<li></li>').append($(data.html));
       li.replaceWith(newli);
       newli.hide().fadeIn('slow');
+      applyDisplayFeatureMapBehavior(data);
     });
   });
 
@@ -242,12 +244,9 @@ function applyDisplayFeatureMapBehavior(data) {
 }
 
 function applyDrawFeatureMapBehavior(data) {
-  var lng = data.lng;
-  var lat = data.lat;
-  if (!lng || !lat) {
+  if (!(data.lng && data.lat) && !data.geometry) {
     return;
   }
-  var center = new OpenLayers.LonLat(lng, lat);
   var featureLayer = new OpenLayers.Layer.Vector('feature');
   var onActivate = function() { featureLayer.destroyFeatures(); };
   var drawPoint = new OpenLayers.Control.DrawFeature(
@@ -287,7 +286,8 @@ function applyDrawFeatureMapBehavior(data) {
   });
   toolbar.addControls(panelControls);
 
-  map = new OpenLayers.Map('map', {
+  var map_id = data.map_id ? data.map_id : 'map';
+  map = new OpenLayers.Map(map_id, {
     projection: new OpenLayers.Projection('EPSG:900913'),
     displayProjection: new OpenLayers.Projection('EPSG:4326'),
     maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
@@ -295,7 +295,23 @@ function applyDrawFeatureMapBehavior(data) {
   var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
   map.addLayer(baseLayer);
   map.addControl(toolbar);
-  map.addLayer(featureLayer);
-  center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-  map.setCenter(center, 12);
+  // if this is an edit on an existing feature, we should displaly that feature too
+  if (data.geometry) {
+    var geometryJson = data.geometry;
+    var formatter = new OpenLayers.Format.GeoJSON();
+    var feature = formatter.read(geometryJson)[0];
+    var bounds = feature.geometry.getBounds();
+    featureLayer.addFeatures([feature]);
+    map.addLayer(featureLayer);
+    map.zoomToExtent(bounds);
+  }
+  // otherwise we center on the almanac
+  else {
+    var lng = data.lng;
+    var lat = data.lat;
+    var center = new OpenLayers.LonLat(lng, lat);
+    map.addLayer(featureLayer);
+    center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+    map.setCenter(center, 12);
+  }
 }

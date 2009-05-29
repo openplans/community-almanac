@@ -22,8 +22,8 @@
 <div class="media-tab">drag</div>
 <div class="media-content">
   <div class="media-controls">
-    <a class="media-edit" href="#">Edit</a>
-    <a class="media-delete" href="#">Delete</a>
+    <a class="media-edit" href="${h.url_for('media_map_edit', media_id=c.map.id)}">Edit</a>
+    <a class="media-delete" href="${h.url_for('media_map_delete', media_id=c.map.id)}">Delete</a>
   </div>
   <div style="width: 500px; height: 400px" class="mediacontent map" id="pagemedia_${c.map.id}">
   </div>

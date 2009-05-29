@@ -145,6 +145,54 @@ class MediaController(BaseController):
 
         c.editable = True
         return dict(html=render('/media/map/item.mako'),
-                    map_id='pagemedia_%d' % map.order,
+                    map_id='pagemedia_%d' % map.id,
                     geometry=json,
                     )
+
+    @dispatch_on(POST='_do_edit_form_map')
+    @jsonify
+    def edit_form_map(self, media_id):
+        c.map = h.get_media_by_id(media_id)
+        geometry = c.map.location.__geo_interface__
+        geojson = simplejson.dumps(geometry)
+        return dict(html=render('/media/map/form.mako'),
+                    map_id='pagemedia_%d' % c.map.id,
+                    geometry=geojson,
+                    )
+
+    @jsonify
+    def _do_edit_form_map(self, media_id):
+        c.map = h.get_media_by_id(media_id)
+        json = request.POST.get('feature')
+        if json is None:
+            abort(400)
+        shape = simplejson.loads(json)
+        # Stupid asShape returns a PointAdapter instead of a Point.  We round
+        # trip it through wkb to get the correct type.
+        location = wkb.loads(asShape(shape).to_wkb())
+
+        c.map.location = location
+        meta.Session.commit()
+
+        c.editable = True
+        return dict(html=render('/media/map/item.mako'),
+                    map_id='pagemedia_%d' % c.map.order,
+                    geometry=json,
+                    )
+
+    @jsonify
+    def map_view(self, media_id):
+        c.editable = True
+        c.map = h.get_media_by_id(media_id)
+        geometry = c.map.location.__geo_interface__
+        geojson = simplejson.dumps(geometry)
+        return dict(html=render('/media/map/item.mako'),
+                    map_id='pagemedia_%d' % c.map.id,
+                    geometry=geojson,
+                    )
+
+    @jsonify
+    def delete_map(self, media_id):
+        map = h.get_media_by_id(media_id)
+        meta.Session.delete(map)
+        meta.Session.commit()
