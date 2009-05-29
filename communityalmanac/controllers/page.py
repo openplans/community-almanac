@@ -49,7 +49,7 @@ class PageCommentForm(Schema):
 
 class PageController(BaseController):
 
-    @dispatch_on(POST='_do_create')
+    @dispatch_on(POST='_do_publish')
     def create(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
@@ -59,7 +59,7 @@ class PageController(BaseController):
         c.map_features = h.literal(simplejson.dumps(map_features))
         return render('/page/create.mako')
 
-    def _do_create(self, almanac_slug):
+    def _do_publish(self, almanac_slug):
         c.almanac = almanac = h.get_almanac_by_slug(almanac_slug)
         name = request.POST.get('name', u'')
         if not name:
@@ -67,6 +67,7 @@ class PageController(BaseController):
 
         slug = h.name_page(almanac, name)
         page = c.almanac.new_page(self.ensure_user, name=name, slug=slug)
+        page.published = True
 
         meta.Session.commit()
 
