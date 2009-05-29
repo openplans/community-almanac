@@ -55,7 +55,6 @@ class Almanac(Base):
         if isinstance(user, FullUser) and userid:
             # Check to see if there is an Anonymous user and suck that page
             # in...
-            import pdb; pdb.set_trace()
             anon_user = meta.Session.query(AnonymousUser).get(userid)
             if anon_user:
                 user.pages += anon_user.pages
