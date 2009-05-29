@@ -198,8 +198,8 @@ class User(Base):
 
 
 class FullUser(User):
-    __tablename__ = 'site_users'
-    __mapper_args__ = dict(polymorphic_identity='site_user')
+    __tablename__ = 'full_users'
+    __mapper_args__ = dict(polymorphic_identity='full_user')
 
     id =                 Column(Integer, ForeignKey('users.id'), primary_key=True)
     username =           Column(Unicode(50), nullable=False)
