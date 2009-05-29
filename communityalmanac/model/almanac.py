@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
+from pylons import session
 from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
 from sqlalchemy.sql.expression import text
 from sqlalchemy.orm import relation
@@ -50,6 +51,19 @@ class Almanac(Base):
     def new_page(self, user, **fields):
         assert('almanac_id' not in fields)
         assert('user_id' not in fields)
+        userid = session.setdefault('userid', None)
+        if isinstance(user, FullUser) and userid:
+            # Check to see if there is an Anonymous user and suck that page
+            # in...
+            import pdb; pdb.set_trace()
+            anon_user = meta.Session.query(AnonymousUser).get(userid)
+            if anon_user:
+                user.pages += anon_user.pages
+                meta.Session.delete(anon_user)
+                meta.Session.commit()
+            # Don't forget to clean up the session
+            session['userid'] = None
+            session.save()
         try:
             page = meta.Session.query(Page).filter(and_(Page.published == False, Page.almanac_id == self.id, Page.user_id == user.id)).one()
             modified = False
@@ -60,6 +74,21 @@ class Almanac(Base):
             if modified:
                 meta.Session.commit()
             return page
+        except exc.MultipleResultsFound:
+            # It's time to combine these pages and chew bubblegum... and I'm
+            # all out of gum...
+            pages = meta.Session.query(Page).filter(and_(Page.published == False, Page.almanac_id == self.id, Page.user_id == user.id))
+            winner = pages[0]
+            name = winner.name
+            for loser in pages[1:]:
+                if loser.name != name:
+                    winner.name += ', %s' % loser.name
+                winner.media += loser.media
+                meta.Session.commit()
+                meta.Session.delete(loser)
+            else:
+                meta.Session.commit()
+            return winner
         except exc.NoResultFound:
             pass
         page = Page(published=False, almanac_id=self.id, user_id=user.id, **fields)
@@ -132,7 +161,7 @@ class Media(Base):
     __tablename__ = 'media'
 
     id = Column(Integer, primary_key=True)
-    page_id = Column(Integer, ForeignKey('pages.id'))
+    page_id = Column(Integer, ForeignKey('pages.id'), nullable=False)
     text = Column(Unicode)
     order = Column(Integer)
     discriminator = Column('type', String(50))
