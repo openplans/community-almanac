@@ -68,7 +68,7 @@
 				<input id="almanac-name" type="text" value="" name="name"/>
 				<a class="find-almanac" title="Find almanac" href="#">Locate</a>
 			</form>
-      <div style="height: 400px; width: 300px" id="map"></div>
+      <div style="height: 350px; width: 500px" id="map"></div>
 			<p>The map will go here. Right now, you can ${h.link_to('Add', h.url_for('almanac_create'))} an almanac</p>
 		</div>
 	</div><!-- /#intro -->
