@@ -23,7 +23,7 @@
 
 %if c.media_items:
   <div class="session-data">
-    <ul class="page-items">
+    <ul class="page-media-items">
       %for media_item in c.media_items:
         <li>${media_item}</li>
       %endfor
