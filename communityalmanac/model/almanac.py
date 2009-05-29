@@ -219,6 +219,10 @@ class SiteUser(User):
             self.id = id
 
     def authenticate(self, password):
+        if False:
+            # Appropriate test for old style passwords that authenticates
+            self.password = default_password_hash(password)
+            meta.Session.commit()
         return default_password_compare(password, self.password)
 
     def generate_key(self):
