@@ -64,6 +64,7 @@ def make_map():
     maps.admin_map(map, controller='admin', url='/admin')
 
     map.connect('home', '/', controller='homesweethome', action='home')
+    map.connect('home_geoms', '/home/geoms', controller='homesweethome', action='almanacs_map')
     # FIXME not sure if we should keep this url scheme
     map.connect('login', '/login', controller='user', action='login')
     map.connect('user_register', '/signup', controller='user', action='register')
