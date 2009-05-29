@@ -51,7 +51,15 @@ class Almanac(Base):
         assert('almanac_id' not in fields)
         assert('user_id' not in fields)
         try:
-            return meta.Session.query(Page).filter(and_(Page.published == False, Page.almanac_id == self.id, Page.user_id == user.id)).one()
+            page = meta.Session.query(Page).filter(and_(Page.published == False, Page.almanac_id == self.id, Page.user_id == user.id)).one()
+            modified = False
+            for field, value in fields.iteritems():
+                if hasattr(page, field) and getattr(page, field) != value:
+                    setattr(page, field, value)
+                    modified = True
+            if modified:
+                meta.Session.commit()
+            return page
         except exc.NoResultFound:
             pass
         page = Page(published=False, almanac_id=self.id, user_id=user.id, **fields)
