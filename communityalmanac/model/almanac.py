@@ -185,7 +185,6 @@ class User(Base):
     #its columns
     comment_fullname =   Column(Unicode(100))
     comment_website =    Column(Unicode(100))
-    email_address =      Column(Unicode(100))
     id =                 Column(Integer, primary_key=True)
     discriminator =      Column('type', String(50))
 
@@ -198,14 +197,16 @@ class User(Base):
             self.id = id
 
 
-class SiteUser(User):
+class FullUser(User):
     __tablename__ = 'site_users'
     __mapper_args__ = dict(polymorphic_identity='site_user')
 
     id =                 Column(Integer, ForeignKey('users.id'), primary_key=True)
     username =           Column(Unicode(50), nullable=False)
+    email_address =      Column(Unicode(100), nullable=True)
     reset_key =          Column(String(50), nullable=True)
-    password =           Column(String(100), nullable=False)
+    password =           Column(String(100), nullable=True)
+    openid =             Column(String(200), nullable=True)
     super_user =         Column(Boolean, nullable=False, default=False)
 
     def __init__(self, username=None, email_address=None, password=None, id=None):
@@ -232,11 +233,6 @@ class SiteUser(User):
     def set_password(self, password):
         self.password = default_password_hash(password)
 
-
-class CommentUser(User):
-    __tablename__ = 'comment_users'
-    __mapper_args__ = dict(polymorphic_identity='comment_user')
-    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
 
 class AnonymousUser(User):
     __tablename__ = 'anonymous_users'
