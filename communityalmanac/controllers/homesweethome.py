@@ -33,7 +33,7 @@ class HomesweethomeController(BaseController):
         # trip it through wkb to get the correct type.
         bbox = wkb.loads(asShape(shape).to_wkb())
 
-        almanacs = meta.Session.query(Almanac.location).filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bbox.to_wkb())), storage_SRID))).limit(10)
-        almanac_locations = [(a.x, a.y) for a in almanacs]
+        almanacs = meta.Session.query(Almanac.location).filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bbox.to_wkb())), storage_SRID))).limit(10).all()
+        almanac_locations = [(a[0].x, a[0].y) for a in almanacs]
 
         return dict(almanac_locations=almanac_locations)
