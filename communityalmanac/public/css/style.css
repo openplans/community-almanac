@@ -334,11 +334,11 @@ color: #ff6040;
 
 .comments-head { margin: 40px 0 20px; }
 
-.comments-head h3 { color: #70818c; }
+.comments-head h3 { color: #70818c;}
 
 .comments-head h3 a.comment-link { font-size: 0.55em; }
 
-.comment { border-bottom: 1px solid #70818c; margin-bottom: 1.5em; }
+.comment { margin-bottom: 1.5em; }
 
 .comment p.meta { text-align: right; color: #70818c; margin-bottom: 0.2em; }
 
@@ -380,7 +380,6 @@ font-size: 1em;
 line-height: 1.5;
 }
 
-#comment-submit,
 #comment-bttn,
 #add-page-bttn,
 #submit-button-form input {
@@ -408,6 +407,12 @@ color: #fff;
 text-decoration: none;
 }
 
+#add-page-bttn a {
+padding: 10px 10px 10px 35px;
+background: url(/img/add-page-icon.png) 10px 50% no-repeat;
+font-size: 0.8em;
+}
+
 #comment-submit:hover,
 #comment-bttn:hover,
 #add-page-bttn:hover,
@@ -425,13 +430,36 @@ color: #069;
 margin-right: 180px;
 }
 
+/* fancy borders */
 #comment-submit {
+font-family: georgia, serif;
+color: #fff;
+font-size: 1.3em;
 margin-left: 180px;
+width: 340px;
+background: url(/img/blue-corners-340-top.png) 0 0 no-repeat;
+padding: 12px 0 0;
+border-width: 0;
+text-transform: uppercase;
 }
 
-#add-page-bttn a {
-padding: 20px 10px;
+#comment-submit:hover {
+background-position: -340px 0;
+}
+
+#comment-submit:hover a {
+background-position: -340px 100%;
+}
+
+#comment-submit a {
+background: url(/img/blue-corners-340-bottom.png) 0 100% no-repeat;
+padding: 0 0 12px;
+}
+
+#comment-submit span {
+display: block;
 text-align: center;
+background: url(/img/bttn-bg-blue.jpg) top left repeat;
 }
 
 #backtoc {
@@ -635,9 +663,82 @@ background: url(/img/audio-icon.png) 100% 50% no-repeat;
 background: url(/img/pdf-icon.png) 100% 50% no-repeat;
 }
 
+/*view almanac */
+h2.almanac-title {
+color: #00ace6;
+min-height: 44px;
+padding: 0 0 0 85px;
+background: url(/img/almanac-title-bg.png) 0 50% no-repeat;
+margin-left: -25px;
+}
+
+h3#frontispiece-pages {
+background: url(/img/frontispiece-pages-bg.png) 50% 50% no-repeat;
+padding: 5px 155px;
+text-align: center;
+font-size: 1em;
+color: #70818c;
+}
+
+* html h3#frontispiece-pages {
+background: url(/img/frontispiece-pages-bg-ie6.png) 50% 50% no-repeat;
+}
+
+h3#frontispiece-pages strong {
+font-size: 1.2em;
+color: #003459;
+}
+
+ul.almanac-pages {
+margin: 1em 0;
+padding: 0;
+}
+
+ul.almanac-pages li {
+margin: 1em 0;
+padding: 0;
+list-style-type: none;
+border-bottom: 1px solid #99b0bf;
+}
+
+ul.almanac-pages li .almanac-meta {
+float: right;
+width: 100px;
+}
+
+ul.almanac-pages h4 {
+font-size: 0.9em;
+color: #70818c;
+margin-right: 110px;
+}
+
+ul.almanac-pages h4 a {
+font-size: 1.5em;
+text-decoration: none;
+}
+
+ul.almanac-pages h4 a:hover {
+text-decoration: underline;
+}
+
+ul.almanac-pages div.almanac-excerpt {
+margin-right: 110px;
+}
+
+#almanac-pagination {
+position: relative;
+bottom: -80px;
+color: #70818c;
+}
+
 /*view page */
 h2.page-title {
 color: #00ace6;
+}
+
+.page-meta {
+color: #70818c;
+
 }
 
 ul.page-items {
@@ -649,7 +750,11 @@ ul.page-items li {
 margin: 1em 0;
 padding: 0;
 list-style-type: none;
-border-bottom: 1px solid #99b0bf;
+border-top: 1px solid #99b0bf;
+}
+
+ul.page-items li:first-child {
+border-top: 0 none transparent;
 }
 
 div.comment {

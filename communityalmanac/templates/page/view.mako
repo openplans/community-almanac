@@ -20,7 +20,13 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <h2 class="page-title">${c.page.name}</h2>
-
+<div class="page-meta">By <a href="#" onclick="alert('Not implemented!');">Andrew Cochran</a> | Created May 24, 2009 | <a href="#comments">
+%if len(c.page.comments) == 1:
+  1 Comment
+%else:
+  ${len(c.page.comments)} Comments
+%endif
+</a></div>
 %if c.media_items:
   <div class="session-data">
     <ul class="page-media-items">
@@ -33,12 +39,13 @@
 
 <div class="comments-head selfclear">
   <% n = len(c.page.comments) %>
-  <h3>
+  <h3 id="comments">
     %if n == 1:
       1 Comment
     %else:
       ${len(c.page.comments)} Comments
     %endif
+    <a class="comment-link" href="#comment">Leave a comment</a>
   </h3>
 </div>
 
@@ -77,7 +84,7 @@
       <textarea cols="60" name="text" rows="15"></textarea>
     </div>
     <div class="form-row">
-      <h3 id="comment-submit"><a class="comment-link" href="${h.url_for('page_view', almanac=c.almanac, page=c.page)}">Add Comment</a></h3>
+      <h3 id="comment-submit"><a class="comment-link" href="${h.url_for('page_view', almanac=c.almanac, page=c.page)}"><span>Leave a Comment</span></a></h3>
     </div>
   </form>
 </div>
