@@ -130,7 +130,8 @@ $(document).ready(function(){
       var y = location[0];
       var lnglat = new OpenLayers.LonLat(x, y);
       lnglat.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-      var marker = new OpenLayers.Marker(lnglat);
+      var icon = new OpenLayers.Icon('/js/img/almanac_marker.png');
+      var marker = new OpenLayers.Marker(lnglat, icon);
       almanacLayer.addMarker(marker);
     }
     map.zoomToExtent(almanacLayer.getDataExtent());
