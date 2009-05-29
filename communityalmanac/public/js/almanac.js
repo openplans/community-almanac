@@ -92,7 +92,7 @@ $(document).ready(function() {
   });
 
   // behavior when adding a media type
-  $('ul.page-media-tools li a').click(function(e) {
+  $('ul.page-media-tools li a').add('.mini-page-media-tools a').click(function(e) {
     e.preventDefault();
     var link = $(this);
     var url = link.attr('href');
