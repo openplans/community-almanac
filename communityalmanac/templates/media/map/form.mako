@@ -22,10 +22,18 @@
   <form class="media-item" method="post" action="${request.path_url}">
     <fieldset>
       <legend>Map</legend>
+      %if c.map:
+      <div id="pagemedia_${c.map.id}" style="width: 500px; height: 400px"></div>
+      %else:
       <div id="map" style="width: 500px; height: 400px"></div>
+      %endif
       <input type="hidden" id="feature-geometry" name="feature" />
-      <input type="submit" value="Add" />
+      <input type="submit" value="Save" />
+      %if c.map:
+      <a class="media-cancel" href="${h.url_for('media_map_view', media_id=c.map.id)}">Cancel</a>
+      %else:
       <a class="media-cancel" href="#">Cancel</a>
+      %endif
     </fieldset>
   </form>
 </div>

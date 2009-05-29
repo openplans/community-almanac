@@ -63,7 +63,7 @@ def make_map():
     # CUSTOM ROUTES HERE
     maps.admin_map(map, controller='admin', url='/admin')
 
-    map.connect('home', '/', controller='almanac', action='home')
+    map.connect('home', '/', controller='homesweethome', action='home')
     # FIXME not sure if we should keep this url scheme
     map.connect('login', '/login', controller='user', action='login')
     map.connect('user_register', '/signup', controller='user', action='register')
@@ -85,8 +85,9 @@ def make_map():
     map.connect('media_story_edit', '/media/text/edit/:media_id', controller='media', action='edit_form_text', _filter=media_expand)
     map.connect('media_story_delete', '/media/text/delete/:media_id', controller='media', action='delete_text', conditions=dict(method=['POST']), _filter=media_expand)
 
-    # XXX debug only
-    map.connect('clear_session', '/clear/my/session', controller='media', action='clear_session')
-
+    map.connect('media_map_new', '/media/map/:almanac_slug/new', controller='media', action='new_form_map', _filter=almanac_expand)
+    map.connect('media_map_view', '/media/map/:media_id', controller='media', action='map_view', _filter=media_expand)
+    map.connect('media_map_edit', '/media/map/edit/:media_id', controller='media', action='edit_form_map', _filter=media_expand)
+    map.connect('media_map_delete', '/media/map/delete/:media_id', controller='media', action='delete_map', conditions=dict(method=['POST']), _filter=media_expand)
 
     return map

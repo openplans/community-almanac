@@ -71,7 +71,7 @@ $(document).ready(function() {
     for (var i = 0; i < pageMapFeatures.length; i++) {
       var fn = function(i) {
         var feature_data = pageMapFeatures[i];
-        map_display_behaviors(feature_data);
+        applyDisplayFeatureMapBehavior(feature_data);
       };
       fn(i);
     }
@@ -92,7 +92,7 @@ $(document).ready(function() {
   });
 
   // behavior when adding a media type
-  $('ul.page-media-tools li a').click(function(e) {
+  $('ul.page-media-tools li a').add('.mini-page-media-tools a').click(function(e) {
     e.preventDefault();
     var link = $(this);
     var url = link.attr('href');
@@ -106,9 +106,7 @@ $(document).ready(function() {
         $(this).find('textarea').focus();
       });
       link.effect('transfer', {to: '#form-container'}, 1000);
-      // we'll need a hook to apply behaviors for maps and such
-      // and maybe for the forms
-      // applyNewMediaBehaviors();
+      applyDrawFeatureMapBehavior(data);
     });
   });
 
@@ -141,8 +139,9 @@ $(document).ready(function() {
       data: data,
       success: function(data, textStatus) {
         _removeMediaItemForm();
-        $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000);
-        // XXX we'll need a hook here to apply some map behavior to the result
+        $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000, function() {
+          applyDisplayFeatureMapBehavior(data);
+        });
       },
       type: "POST",
       dataType: 'json',
@@ -159,7 +158,7 @@ $(document).ready(function() {
       var newli = $('<li></li>').append($(data.html));
       li.replaceWith(newli);
       newli.find('textarea').focus();
-      // XXX we'll need a hook here to apply some map behavior to the result
+      applyDrawFeatureMapBehavior(data);
     });
   });
 
@@ -198,7 +197,7 @@ $(document).ready(function() {
           var newli = $('<li></li>').append($(data.html));
           li.replaceWith(newli);
           newli.hide().fadeIn('slow');
-          // XXX we'll need a hook here to apply some map behavior to the result
+          applyDisplayFeatureMapBehavior(data);
         });
       },
       type: "POST",
@@ -216,14 +215,17 @@ $(document).ready(function() {
       var newli = $('<li></li>').append($(data.html));
       li.replaceWith(newli);
       newli.hide().fadeIn('slow');
+      applyDisplayFeatureMapBehavior(data);
     });
   });
 
 });
 
-/*
-function map_display_behaviors(data) {
+function applyDisplayFeatureMapBehavior(data) {
   var geometryJson = data.geometry;
+  if (!geometryJson) {
+    return;
+  }
   var map_id = data.map_id;
   var formatter = new OpenLayers.Format.GeoJSON();
   var feature = formatter.read(geometryJson)[0];
@@ -241,7 +243,10 @@ function map_display_behaviors(data) {
   map.zoomToExtent(bounds);
 }
 
-function map_behaviors(data) {
+function applyDrawFeatureMapBehavior(data) {
+  if (!(data.lng && data.lat) && !data.geometry) {
+    return;
+  }
   var featureLayer = new OpenLayers.Layer.Vector('feature');
   var onActivate = function() { featureLayer.destroyFeatures(); };
   var drawPoint = new OpenLayers.Control.DrawFeature(
@@ -281,7 +286,8 @@ function map_behaviors(data) {
   });
   toolbar.addControls(panelControls);
 
-  map = new OpenLayers.Map('map', {
+  var map_id = data.map_id ? data.map_id : 'map';
+  map = new OpenLayers.Map(map_id, {
     projection: new OpenLayers.Projection('EPSG:900913'),
     displayProjection: new OpenLayers.Projection('EPSG:4326'),
     maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
@@ -289,11 +295,23 @@ function map_behaviors(data) {
   var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
   map.addLayer(baseLayer);
   map.addControl(toolbar);
-  map.addLayer(featureLayer);
-  var lng = data.lng;
-  var lat = data.lat;
-  var center = new OpenLayers.LonLat(lng, lat);
-  center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-  map.setCenter(center, 12);
+  // if this is an edit on an existing feature, we should displaly that feature too
+  if (data.geometry) {
+    var geometryJson = data.geometry;
+    var formatter = new OpenLayers.Format.GeoJSON();
+    var feature = formatter.read(geometryJson)[0];
+    var bounds = feature.geometry.getBounds();
+    featureLayer.addFeatures([feature]);
+    map.addLayer(featureLayer);
+    map.zoomToExtent(bounds);
+  }
+  // otherwise we center on the almanac
+  else {
+    var lng = data.lng;
+    var lat = data.lat;
+    var center = new OpenLayers.LonLat(lng, lat);
+    map.addLayer(featureLayer);
+    center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+    map.setCenter(center, 12);
+  }
 }
-*/

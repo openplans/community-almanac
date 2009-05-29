@@ -23,11 +23,15 @@ from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
 
 from communityalmanac.lib.base import BaseController, render
+from communityalmanac.model import Map
 from communityalmanac.model import Story
 from communityalmanac.model import meta
 from pylons.decorators import jsonify
 from pylons.decorators.rest import dispatch_on
+from shapely import wkb
+from shapely.geometry.geo import asShape
 import communityalmanac.lib.helpers as h
+import simplejson
 
 log = logging.getLogger(__name__)
 
@@ -110,7 +114,85 @@ class MediaController(BaseController):
         meta.Session.delete(story)
         meta.Session.commit()
 
-    def clear_session(self):
-        # XXX debug only
-        session.clear()
-        session.save()
+    @dispatch_on(POST='_do_new_form_map')
+    @jsonify
+    def new_form_map(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        page = c.almanac.new_page(self.ensure_user)
+        loc = c.almanac.location
+        return dict(html=render('/media/map/form.mako'),
+                    lat=loc.x, lng=loc.y,
+                    )
+
+    @jsonify
+    def _do_new_form_map(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        page = c.almanac.new_page(self.ensure_user)
+        json = request.POST.get('feature')
+        if json is None:
+            abort(400)
+        shape = simplejson.loads(json)
+        # Stupid asShape returns a PointAdapter instead of a Point.  We round
+        # trip it through wkb to get the correct type.
+        location = wkb.loads(asShape(shape).to_wkb())
+
+        c.map = map = Map()
+        map.location = location
+        map.page_id = page.id
+        map.order = len(page.media)
+        meta.Session.add(map)
+        meta.Session.commit()
+
+        c.editable = True
+        return dict(html=render('/media/map/item.mako'),
+                    map_id='pagemedia_%d' % map.id,
+                    geometry=json,
+                    )
+
+    @dispatch_on(POST='_do_edit_form_map')
+    @jsonify
+    def edit_form_map(self, media_id):
+        c.map = h.get_media_by_id(media_id)
+        geometry = c.map.location.__geo_interface__
+        geojson = simplejson.dumps(geometry)
+        return dict(html=render('/media/map/form.mako'),
+                    map_id='pagemedia_%d' % c.map.id,
+                    geometry=geojson,
+                    )
+
+    @jsonify
+    def _do_edit_form_map(self, media_id):
+        c.map = h.get_media_by_id(media_id)
+        json = request.POST.get('feature')
+        if json is None:
+            abort(400)
+        shape = simplejson.loads(json)
+        # Stupid asShape returns a PointAdapter instead of a Point.  We round
+        # trip it through wkb to get the correct type.
+        location = wkb.loads(asShape(shape).to_wkb())
+
+        c.map.location = location
+        meta.Session.commit()
+
+        c.editable = True
+        return dict(html=render('/media/map/item.mako'),
+                    map_id='pagemedia_%d' % c.map.order,
+                    geometry=json,
+                    )
+
+    @jsonify
+    def map_view(self, media_id):
+        c.editable = True
+        c.map = h.get_media_by_id(media_id)
+        geometry = c.map.location.__geo_interface__
+        geojson = simplejson.dumps(geometry)
+        return dict(html=render('/media/map/item.mako'),
+                    map_id='pagemedia_%d' % c.map.id,
+                    geometry=geojson,
+                    )
+
+    @jsonify
+    def delete_map(self, media_id):
+        map = h.get_media_by_id(media_id)
+        meta.Session.delete(map)
+        meta.Session.commit()

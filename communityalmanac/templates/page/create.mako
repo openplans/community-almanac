@@ -35,9 +35,9 @@
 <form id="submit-button-form" method="post" action="${request.path_url}">
   <div class="mini-page-media-tools">
     <h4>Add:</h4>
-	  ${h.link_to('Text', h.url_for('media_story', almanac=c.almanac), id='mini-text-tool')}
+	  ${h.link_to('Text', h.url_for('media_story_new', almanac=c.almanac), id='mini-text-tool')}
 		<a id="mini-image-tool" href="#" onclick="alert('not implemented');">Image</a>
-	  ${h.link_to('Map', h.url_for('media_map', almanac=c.almanac), id='mini-map-tool')}
+	  ${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='mini-map-tool')}
 		<a id="mini-audio-tool" href="#" onclick="alert('not implemented');">Audio File</a>
 		<a id="mini-pdf-tool" href="#" onclick="alert('not implemented');">PDF</a>
 	</div><input type="submit" value="Publish" /><%doc>This button should read "Publish" when creating, and "done" otherwise</%doc>
@@ -66,7 +66,7 @@ Create Page - ${c.almanac.name}
 	<ul class="page-media-tools">
 	  <li>${h.link_to('Text', h.url_for('media_story_new', almanac=c.almanac), id='text-tool')}</li>
 		<li><a id="image-tool" href="#" onclick="alert('not implemented');">Image</a></li>
-	  <li>${h.link_to('Map', h.url_for('media_map', almanac=c.almanac), id='map-tool')}</li>
+	  <li>${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='map-tool')}</li>
 		<li><a id="audio-tool" href="#" onclick="alert('not implemented');">Audio File</a></li>
 		<li><a id="pdf-tool" href="#" onclick="alert('not implemented');">PDF</a></li>
 	</ul>
