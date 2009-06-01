@@ -141,7 +141,8 @@ $(document).ready(function(){
     var geometry = extent.toGeometry();
     var formatter = new OpenLayers.Format.GeoJSON({externalProjection: new OpenLayers.Projection('EPSG:4326'), internalProjection: new OpenLayers.Projection('EPSG:900913')});
     var geojson = formatter.write(geometry);
-    almanacLayer.setUrl("${h.url_for('almanacs_kml')}" + '?extent=' + geojson);
+    //almanacLayer.setUrl("${h.url_for('almanacs_kml')}" + '?extent=' + geojson);
+    console.log('Would have requested: ' + "${h.url_for('almanacs_kml')}" + '?extent=' + geojson);
   };
   map.zoomToExtent(extent);
   map.events.on({'moveend': populateMap});
