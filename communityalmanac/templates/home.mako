@@ -128,9 +128,6 @@ $(document).ready(function(){
     })
   });
   map.addLayer(almanacLayer);
-  almanacLayer.events.register('loadend', almanacLayer, function() {
-    this.map.zoomToExtent(this.getDataExtent());
-  });
   var curExtent = extent;
   var populateMap = function(evt) {
     var extent = map.getExtent();
