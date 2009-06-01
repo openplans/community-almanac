@@ -104,6 +104,18 @@ class Almanac(Base):
         #FIXME we'll need to store created/modified times
         return meta.Session.query(Almanac).all()
 
+    @property
+    def creation_date_string(self):
+        """return the creation date formatted nicely as a string"""
+        return self.creation.strftime('%B %d, %Y')
+
+    @property
+    def updated_date_string(self):
+        """return the updated date formatted nicely as a string"""
+        #XXX this is stubbed out to be the creation date for now
+        #XXX change this to the updated time when we store that
+        return self.creation_date_string
+
 class Page(Base):
     __tablename__ = 'pages'
 

@@ -146,6 +146,24 @@ $(document).ready(function(){
   };
   map.zoomToExtent(extent);
   map.events.on({'moveend': populateMap});
+  var featureSelected = function(feature) {
+    var popup = new OpenLayers.Popup.AnchoredBubble(null, feature.geometry.getBounds().getCenterLonLat(),
+                                                    new OpenLayers.Size(100, 100), feature.attributes.description,
+                                                    {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(1, -12)},
+                                                    true, function() { selectControl.unselect(feature); });
+    feature.popup = popup;
+    map.addPopup(popup);
+  };
+  var featureUnselected = function(feature) {
+    map.removePopup(feature.popup);
+    feature.popup.destroy();
+    feature.popup = null;
+  };
+  var selectControl = new OpenLayers.Control.SelectFeature(almanacLayer, {
+    onSelect: featureSelected, onUnselect: featureUnselected
+  });
+  map.addControl(selectControl);
+  selectControl.activate();
 });
 //]]>
   </script>
