@@ -64,7 +64,7 @@ def make_map():
     maps.admin_map(map, controller='admin', url='/admin')
 
     map.connect('home', '/', controller='homesweethome', action='home')
-    map.connect('home_geoms', '/home/geoms', controller='homesweethome', action='almanacs_map')
+    map.connect('almanacs_kml', '/api/kml/almanacs', controller='homesweethome', action='almanacs_kml')
     # FIXME not sure if we should keep this url scheme
     map.connect('login', '/login', controller='user', action='login')
     map.connect('user_register', '/signup', controller='user', action='register')
@@ -73,7 +73,6 @@ def make_map():
     map.connect('test', '/test', controller='user', action='test')
     map.connect('session_sort', '/sort', controller='media', action='sort')
     map.connect('almanac_center', '/api/center/:almanac_slug', controller='almanac', action='center', _filter=almanac_expand)
-    map.connect('kml', '/api/kml/:almanac_slug', controller='almanac', action='kml', _filter=almanac_expand)
     map.connect('geocode', '/api/geocode', controller='geocoder', action='geocode')
     map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)
     map.connect('page_view', '/:almanac_slug/:page_slug', controller='page', action='view', _filter=page_expand)

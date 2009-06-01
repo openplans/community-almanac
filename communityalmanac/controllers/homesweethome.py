@@ -23,17 +23,15 @@ class HomesweethomeController(BaseController):
         c.is_homepage = True
         return render('/home.mako')
 
-    @jsonify
-    def almanacs_map(self):
+    def almanacs_kml(self):
         json = request.params.get('extent')
         if json is None:
-            abort(400)
-        shape = simplejson.loads(json)
-        # Stupid asShape returns an Adapter instead of a Geometry.  We round
-        # trip it through wkb to get the correct type.
-        bbox = wkb.loads(asShape(shape).to_wkb())
+            c.almanacs = meta.Session.query(Almanac).limit(10).all()
+        else:
+            shape = simplejson.loads(json)
+            # Stupid asShape returns an Adapter instead of a Geometry.  We round
+            # trip it through wkb to get the correct type.
+            bbox = wkb.loads(asShape(shape).to_wkb())
 
-        almanacs = meta.Session.query(Almanac.location).filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bbox.to_wkb())), storage_SRID))).limit(10).all()
-        almanac_locations = [(a[0].x, a[0].y) for a in almanacs]
-
-        return dict(almanac_locations=almanac_locations)
+            c.almanacs = meta.Session.query(Almanac).filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bbox.to_wkb())), storage_SRID))).limit(10).all()
+        return render('/almanac/kml.mako')

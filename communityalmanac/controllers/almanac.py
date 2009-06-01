@@ -75,7 +75,3 @@ class AlmanacController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         loc = c.almanac.location
         return dict(lat=loc.x, lng=loc.y)
-
-    def kml(self, almanac_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        return render('/almanac/kml.mako')
