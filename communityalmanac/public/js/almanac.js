@@ -259,7 +259,8 @@ function applyDrawFeatureMapBehavior(data) {
     deactivateAllEditingControls();
     var formatter = new OpenLayers.Format.GeoJSON();
     var str = formatter.write(evt.feature.geometry);
-    $('#feature-geometry').val(str);
+    // the hidden input is expected to be right next to the map div
+    $('#' + data.map_id).next().val(str);
   };
   featureLayer.events.on({featureadded: featureAdded});
   var panelControls = [
@@ -275,7 +276,7 @@ function applyDrawFeatureMapBehavior(data) {
   });
   toolbar.addControls(panelControls);
 
-  var map_id = data.map_id ? data.map_id : 'map';
+  var map_id = data.map_id;
   map = new OpenLayers.Map(map_id, {
     projection: new OpenLayers.Projection('EPSG:900913'),
     displayProjection: new OpenLayers.Projection('EPSG:4326'),

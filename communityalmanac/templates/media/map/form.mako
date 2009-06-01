@@ -29,9 +29,9 @@
       %if c.map:
       <div id="pagemedia_${c.map.id}" style="width: 500px; height: 400px"></div>
       %else:
-      <div id="map" style="width: 500px; height: 400px"></div>
+      <div id="${c.map_id}" style="width: 500px; height: 400px"></div>
       %endif
-      <input type="hidden" id="feature-geometry" name="feature" />
+      <input type="hidden" name="feature" />
       <input type="submit" value="Save" />
       %if c.map:
       <a class="media-cancel" href="${h.url_for('media_map_view', media_id=c.map.id)}">Cancel</a>

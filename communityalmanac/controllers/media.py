@@ -31,6 +31,7 @@ from pylons.decorators.rest import dispatch_on
 from shapely import wkb
 from shapely.geometry.geo import asShape
 import communityalmanac.lib.helpers as h
+import uuid
 import simplejson
 
 log = logging.getLogger(__name__)
@@ -120,8 +121,10 @@ class MediaController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
         loc = c.almanac.location
+        c.map_id = str(uuid.uuid4())
         return dict(html=render('/media/map/form.mako'),
                     lat=loc.x, lng=loc.y,
+                    map_id=c.map_id,
                     )
 
     @jsonify
