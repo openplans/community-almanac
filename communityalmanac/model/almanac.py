@@ -116,6 +116,10 @@ class Almanac(Base):
         #XXX change this to the updated time when we store that
         return self.creation_date_string
 
+    @staticmethod
+    def n_almanacs():
+        return len(meta.Session.query(Almanac).all())
+
 class Page(Base):
     __tablename__ = 'pages'
 

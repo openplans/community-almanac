@@ -20,6 +20,7 @@ class HomesweethomeController(BaseController):
 
     def home(self):
         c.almanacs = Almanac.latest()
+        c.n_almanacs = Almanac.n_almanacs()
         c.is_homepage = True
         return render('/home.mako')
 
