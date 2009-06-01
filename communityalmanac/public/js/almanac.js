@@ -97,40 +97,30 @@ $(document).ready(function() {
     var link = $(this);
     var url = link.attr('href');
 
-    var formcontainer = $('#form-container');
+    var formcontainer = $('<li></li>').appendTo($('ul.page-media-items'));
     $.getJSON(url, null, function(data) {
-      formcontainer.empty();
-      formcontainer.show();
       var html = data.html;
       $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
         $(this).find('textarea').focus();
       });
-      link.effect('transfer', {to: '#form-container'}, 1000);
+      link.effect('transfer', {to: 'ul.page-media-items li:last'}, 1000);
       applyDrawFeatureMapBehavior(data);
     });
   });
 
-  var _removeMediaItemForm = function() {
-    // Helper function to remove the media form at the top of the page
-    // This will get called when new media items are added or cancelled
-    $('#form-container').children().each(function() {
-      $(this).fadeOut('slow', function() {
-        $(this).remove();
-      });
-    });
-  };
-
   // behavior when cancelling the edit of a new media item
-  $('#form-container a.media-cancel').live('click', function(e) {
+  $('form.add-media-item a.media-cancel').live('click', function(e) {
     e.preventDefault();
-    _removeMediaItemForm();
+    $(this).closest('li').fadeOut('slow', function() {
+      $(this).remove();
+    });
   });
 
   // behavior when saving a new media item
-  $('#form-container form input[type=submit]').live('click', function(e) {
+  $('form.add-media-item input[type=submit]').live('click', function(e) {
     e.preventDefault();
-    var formcontainer = $('#form-container');
-    var form = $('#form-container form');
+    var formcontainer = $(this).closest('li');
+    var form = formcontainer.find('form');
     var url = form.attr('action');
     var data = form.serialize();
 
@@ -138,10 +128,9 @@ $(document).ready(function() {
       contentType: 'application/x-www-form-urlencoded',
       data: data,
       success: function(data, textStatus) {
-        _removeMediaItemForm();
-        $('<li></li>').append($(data.html)).appendTo('ul.page-media-items').hide().effect('pulsate', {times: 2}, 1000, function() {
-          applyDisplayFeatureMapBehavior(data);
-        });
+        var newli = $('<li></li>').append($(data.html));
+        formcontainer.replaceWith(newli);
+        applyDisplayFeatureMapBehavior(data);
       },
       type: "POST",
       dataType: 'json',
@@ -181,9 +170,9 @@ $(document).ready(function() {
   });
 
   // media item live edit
-  $('ul.page-media-items form.media-item input[type=submit]').live('click', function(e) {
+  $('ul.page-media-items form.edit-media-item input[type=submit]').live('click', function(e) {
     e.preventDefault();
-    var form = $(this).closest('form.media-item');
+    var form = $(this).closest('form.edit-media-item');
     var postUrl = form.attr('action');
     var getUrl = $(this).next().attr('href');
     var data = form.serialize();
@@ -207,7 +196,7 @@ $(document).ready(function() {
   });
 
   // media item live cancel
-  $('ul.page-media-items a.media-cancel').live('click', function(e) {
+  $('ul.page-media-items form.edit-media-item a.media-cancel').live('click', function(e) {
     e.preventDefault();
     var url = $(this).attr('href');
     var li = $(this).closest('li');

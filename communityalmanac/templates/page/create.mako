@@ -23,8 +23,6 @@
 <form id="page-title-form"  method="post" action="${request.path_url}">
   <input id="page-title" type="text" name="name" value="Page Name" />
 </form>
-<div id="form-container">
-</div>
 <ul class="page-media-items">
   % if c.media_items:
     %for media_item in c.media_items:

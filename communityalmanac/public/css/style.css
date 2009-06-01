@@ -604,7 +604,8 @@ ul.page-media-tools li a#pdf-tool {
 background: url(/img/pdf-icon.png) 100% 50% no-repeat;
 }
 
-form.media-item textarea {
+form.add-media-item textarea,
+form.edit-media-item textarea {
 display: block;
 border: 0 none transparent;
 background: #fff;

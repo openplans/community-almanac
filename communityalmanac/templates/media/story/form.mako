@@ -19,7 +19,11 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <div>
-  <form class="media-item" method="post" action="${request.path_url}">
+  %if c.story:
+  <form class="edit-media-item" method="post" action="${request.path_url}">
+  %else:
+  <form class="add-media-item" method="post" action="${request.path_url}">
+  %endif
     <fieldset>
       <legend>Text</legend>
       %if c.story:
