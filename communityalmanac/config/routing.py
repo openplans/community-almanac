@@ -82,11 +82,13 @@ def make_map():
 
     # media item routes
     map.connect('media_story_new', '/media/text/:almanac_slug/new', controller='media', action='new_form_text', _filter=almanac_expand)
+    map.connect('media_story_existing_new', '/media/text/:almanac_slug/:page_slug/new', controller='media', action='new_form_existing_text', _filter=page_expand)
     map.connect('media_story_view', '/media/text/:media_id', controller='media', action='text_view', _filter=media_expand)
     map.connect('media_story_edit', '/media/text/edit/:media_id', controller='media', action='edit_form_text', _filter=media_expand)
     map.connect('media_story_delete', '/media/text/delete/:media_id', controller='media', action='delete_text', conditions=dict(method=['POST']), _filter=media_expand)
 
     map.connect('media_map_new', '/media/map/:almanac_slug/new', controller='media', action='new_form_map', _filter=almanac_expand)
+    map.connect('media_map_existing_new', '/media/map/:almanac_slug/:page_slug/new', controller='media', action='new_form_existing_map', _filter=page_expand)
     map.connect('media_map_view', '/media/map/:media_id', controller='media', action='map_view', _filter=media_expand)
     map.connect('media_map_edit', '/media/map/edit/:media_id', controller='media', action='edit_form_map', _filter=media_expand)
     map.connect('media_map_delete', '/media/map/delete/:media_id', controller='media', action='delete_map', conditions=dict(method=['POST']), _filter=media_expand)

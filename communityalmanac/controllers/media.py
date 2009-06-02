@@ -84,6 +84,31 @@ class MediaController(BaseController):
         c.editable = True
         return dict(html=render('/media/story/item.mako'))
 
+    @dispatch_on(POST='_do_new_form_existing_text')
+    @jsonify
+    def new_form_existing_text(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = h.get_page_by_slug(c.almanac, page_slug)
+        return dict(html=render('/media/story/form.mako'))
+
+    @jsonify
+    def _do_new_form_existing_text(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
+        body = request.POST.get('body', u'')
+        if not body:
+            abort(400)
+
+        c.story = story = Story()
+        story.text = body
+        story.page_id = page.id
+        story.order = len(page.media)
+        meta.Session.add(story)
+        meta.Session.commit()
+
+        c.editable = True
+        return dict(html=render('/media/story/item.mako'))
+
     @dispatch_on(POST='_do_edit_form_text')
     @jsonify
     def edit_form_text(self, media_id):
@@ -131,6 +156,43 @@ class MediaController(BaseController):
     def _do_new_form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
+        json = request.POST.get('feature')
+        if json is None:
+            abort(400)
+        shape = simplejson.loads(json)
+        # Stupid asShape returns a PointAdapter instead of a Point.  We round
+        # trip it through wkb to get the correct type.
+        location = wkb.loads(asShape(shape).to_wkb())
+
+        c.map = map = Map()
+        map.location = location
+        map.page_id = page.id
+        map.order = len(page.media)
+        meta.Session.add(map)
+        meta.Session.commit()
+
+        c.editable = True
+        return dict(html=render('/media/map/item.mako'),
+                    map_id='pagemedia_%d' % map.id,
+                    geometry=json,
+                    )
+
+    @dispatch_on(POST='_do_new_form_existing_map')
+    @jsonify
+    def new_form_existing_map(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = h.get_page_by_slug(c.almanac, page_slug)
+        loc = c.almanac.location
+        c.map_id = str(uuid.uuid4())
+        return dict(html=render('/media/map/form.mako'),
+                    lat=loc.x, lng=loc.y,
+                    map_id=c.map_id,
+                    )
+
+    @jsonify
+    def _do_new_form_existing_map(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
         json = request.POST.get('feature')
         if json is None:
             abort(400)
