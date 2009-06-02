@@ -78,7 +78,7 @@ class PageController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         #XXX check permissions
-        c.media_items = h.render_media_items(c.page.media, editable=True)
+        c.media_items = h.render_media_items(c.page.media, editable=False)
         map_features = h.map_features_for_media(c.page.media)
         c.map_features = h.literal(simplejson.dumps(map_features))
         return render('/page/view.mako')
@@ -96,3 +96,22 @@ class PageController(BaseController):
         meta.Session.add(comment)
         meta.Session.commit()
         redirect_to(h.url_for('page_view', almanac=almanac, page=page))
+
+    @dispatch_on(POST='_do_edit')
+    def edit(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = h.get_page_by_slug(c.almanac, page_slug)
+        c.media_items = h.render_media_items(c.page.media, editable=True)
+        map_features = h.map_features_for_media(c.page.media)
+        c.map_features = h.literal(simplejson.dumps(map_features))
+        return render('/page/edit.mako')
+
+    def _do_edit(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = h.get_page_by_slug(c.almanac, page_slug)
+        name = request.POST.get('name', u'')
+        if name:
+            # all we have to save is the name here for now
+            c.page.name = name
+            meta.Session.commit()
+        redirect_to(h.url_for('page_view', almanac=c.almanac, page=c.page))

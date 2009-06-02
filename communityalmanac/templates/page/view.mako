@@ -27,6 +27,7 @@
   ${len(c.page.comments)} Comments
 %endif
 </a></div>
+<a href="${h.url_for('page_edit', almanac=c.almanac, page=c.page)}" title="Edit Page">Edit</a>
 %if c.media_items:
   <div class="session-data">
     <ul class="page-media-items">
