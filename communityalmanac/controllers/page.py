@@ -57,7 +57,9 @@ class PageController(BaseController):
         c.media_items = h.render_media_items(media_items, editable=True)
         map_features = h.map_features_for_media(media_items)
         c.map_features = h.literal(simplejson.dumps(map_features))
-        return render('/page/create.mako')
+        #return render('/page/create.mako')
+        c.is_add = True
+        return render('/page/add_edit.mako')
 
     def _do_publish(self, almanac_slug):
         c.almanac = almanac = h.get_almanac_by_slug(almanac_slug)
@@ -104,7 +106,8 @@ class PageController(BaseController):
         c.media_items = h.render_media_items(c.page.media, editable=True)
         map_features = h.map_features_for_media(c.page.media)
         c.map_features = h.literal(simplejson.dumps(map_features))
-        return render('/page/edit.mako')
+        c.is_add = False
+        return render('/page/add_edit.mako')
 
     def _do_edit(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
