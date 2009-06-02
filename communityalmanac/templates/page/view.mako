@@ -20,7 +20,7 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <h2 class="page-title">${c.page.name}</h2>
-<div class="page-meta">By <a href="#" onclick="alert('Not implemented!');">Andrew Cochran</a> | Created May 24, 2009 | <a href="#comments">
+<div class="page-meta">By <a href="#" onclick="alert('Not implemented!');">${c.page.user.username}</a> | ${c.page.creation_date_string} | <a href="#comments">
 %if len(c.page.comments) == 1:
   1 Comment
 %else:

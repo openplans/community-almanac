@@ -132,7 +132,6 @@ class Page(Base):
     published = Column(Boolean, nullable=False)
     creation =  Column(DateTime, server_default=text('current_timestamp'))
 
-
     def __init__(self, name=None, slug=None, description=None, almanac_id=None, user_id=None, id=None, published=False):
         self.name = name
         self.slug = slug
@@ -155,6 +154,12 @@ class Page(Base):
         query = query.filter(Page.almanac_id == almanac.id)
         query = query.filter(Page.slug == slug)
         return query.one()
+
+    @property
+    def creation_date_string(self):
+        """return the creation date formatted nicely as a string"""
+        return self.creation.strftime('%B %d, %Y')
+
 Page.pages = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
 
 
