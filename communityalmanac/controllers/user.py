@@ -20,9 +20,9 @@ import mailer
 log = logging.getLogger(__name__)
 
 class UserRegistrationSchema(Schema):
-    login = validators.UnicodeString(min=5, not_empty=True)
+    login = validators.UnicodeString(not_empty=True)
     email_address = validators.Email(not_empty=True)
-    password = validators.String(min=6, not_empty=True, encoding='utf8')
+    password = validators.String(not_empty=True, encoding='utf8')
     password_repeat = validators.String(not_empty=True)
     chained_validators = [validators.FieldsMatch('password', 'password_repeat')]
 
