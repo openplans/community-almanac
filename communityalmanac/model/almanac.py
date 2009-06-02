@@ -160,6 +160,14 @@ class Page(Base):
         """return the creation date formatted nicely as a string"""
         return self.creation.strftime('%B %d, %Y')
 
+    @property
+    def first_story(self):
+        """return the first story media item for the page, or a stub with empty text. This is useful to keep the templates simple."""
+        for media in self.media:
+            if isinstance(media, Story):
+                return media
+        return Story(text=u'')
+
 Page.pages = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
 
 
@@ -217,6 +225,11 @@ class Story(Media):
     __tablename__ = 'stories'
     __mapper_args__ = dict(polymorphic_identity='story')
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
+
+    def excerpt(self, n=140):
+        """short version of the text, useful for displaying in lists"""
+        text = self.text
+        return text if len(text) < n else text[:n-4] + u' ...'
 
 class Map(Media):
     __tablename__ = 'maps'

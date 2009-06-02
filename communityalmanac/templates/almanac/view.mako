@@ -37,7 +37,7 @@
         </a>
       </div>
       <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.user.username}</h4>
-      <div class="almanac-excerpt"><p>Vestibulum vulputate commodo mattis. Nam venenatis, dolor ultrices condimentum pulvinar, risus turpis varius nisl, vitae dictum elit odio eget nunc. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum malesuada malesuada sem. Donec venenatis, ipsum non tincidunt rutrum, sem est ultrices enim, in vulputate nibh nisi non turpis. Pellentesque porta luctus leo, ac blandit felis facilisis eu.</p></div>
+      <div class="almanac-excerpt">${page.first_story.excerpt()}</div>
     </li>
     % endfor
   </ul>
