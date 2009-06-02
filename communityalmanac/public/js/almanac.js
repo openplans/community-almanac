@@ -130,6 +130,7 @@ $(document).ready(function() {
       success: function(data, textStatus) {
         var newli = $('<li></li>').append($(data.html));
         formcontainer.replaceWith(newli);
+        newli.find('.media-content').effect('highlight');
         applyDisplayFeatureMapBehavior(data);
       },
       type: "POST",
@@ -185,7 +186,7 @@ $(document).ready(function() {
         $.getJSON(getUrl, {}, function(data) {
           var newli = $('<li></li>').append($(data.html));
           li.replaceWith(newli);
-          newli.hide().fadeIn('slow');
+          newli.find('.media-content').effect('highlight');
           applyDisplayFeatureMapBehavior(data);
         });
       },
@@ -203,7 +204,6 @@ $(document).ready(function() {
     $.getJSON(url, {}, function(data) {
       var newli = $('<li></li>').append($(data.html));
       li.replaceWith(newli);
-      newli.hide().fadeIn('slow');
       applyDisplayFeatureMapBehavior(data);
     });
   });
