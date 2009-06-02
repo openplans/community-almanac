@@ -22,7 +22,6 @@
 Consists of functions to typically be used within templates, but also
 available to Controllers. This module is available to templates as 'h'.
 """
-from communityalmanac.lib.base import render
 from communityalmanac.model import Almanac
 from communityalmanac.model import Map
 from communityalmanac.model import Media
@@ -30,6 +29,7 @@ from communityalmanac.model import Page
 from communityalmanac.model import Story
 from communityalmanac.model import meta
 from pylons.controllers.util import abort
+from pylons.templating import render_mako as render
 from pylons import session
 from pylons import tmpl_context as c
 from routes.util import url_for
