@@ -43,13 +43,13 @@
     <h4>Add:</h4>
     %if c.is_add:
 	  ${h.link_to('Text', h.url_for('media_story_new', almanac=c.almanac), id='mini-text-tool')}
-		<a id="mini-image-tool" href="#" onclick="alert('not implemented');">Image</a>
+	  ${h.link_to('Image', h.url_for('media_image_new', almanac=c.almanac), id='mini-image-tool')}
 	  ${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='mini-map-tool')}
 		<a id="mini-audio-tool" href="#" onclick="alert('not implemented');">Audio File</a>
 		<a id="mini-pdf-tool" href="#" onclick="alert('not implemented');">PDF</a>
     %else:
 	  ${h.link_to('Text', h.url_for('media_story_existing_new', almanac=c.almanac, page=c.page), id='mini-text-tool')}
-		<a id="mini-image-tool" href="#" onclick="alert('not implemented');">Image</a>
+	  ${h.link_to('Image', h.url_for('media_image_existing_new', almanac=c.almanac, page=c.page), id='mini-image-tool')}
 	  ${h.link_to('Map', h.url_for('media_map_existing_new', almanac=c.almanac, page=c.page), id='mini-map-tool')}
 		<a id="mini-audio-tool" href="#" onclick="alert('not implemented');">Audio File</a>
 		<a id="mini-pdf-tool" href="#" onclick="alert('not implemented');">PDF</a>
@@ -60,9 +60,11 @@
   %else:
   <input type="submit" value="Done" /><%doc>This button should read "Publish" when creating, and "done" otherwise</%doc>
   %endif
+
 </form>
 
 <%def name="extra_body()">
+  <script type="text/javascript" src="/js/upload/swfupload.js"></script>
   <script type="text/javascript">
     pageMapFeatures = ${c.map_features};
   </script>
@@ -91,13 +93,13 @@ Edit Page -  ${c.almanac.name}
 	<ul class="page-media-tools">
     %if c.is_add:
 	  <li>${h.link_to('Text', h.url_for('media_story_new', almanac=c.almanac), id='text-tool')}</li>
-		<li><a id="image-tool" href="#" onclick="alert('not implemented');">Image</a></li>
+	  <li>${h.link_to('Image', h.url_for('media_image_new', almanac=c.almanac), id='image-tool')}</li>
 	  <li>${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='map-tool')}</li>
 		<li><a id="audio-tool" href="#" onclick="alert('not implemented');">Audio File</a></li>
 		<li><a id="pdf-tool" href="#" onclick="alert('not implemented');">PDF</a></li>
     %else:
 	  <li>${h.link_to('Text', h.url_for('media_story_existing_new', almanac=c.almanac, page=c.page), id='text-tool')}</li>
-		<li><a id="image-tool" href="#" onclick="alert('not implemented');">Image</a></li>
+	  <li>${h.link_to('Image', h.url_for('media_image_existing_new', almanac=c.almanac, page=c.page), id='image-tool')}</li>
 	  <li>${h.link_to('Map', h.url_for('media_map_existing_new', almanac=c.almanac, page=c.page), id='map-tool')}</li>
 		<li><a id="audio-tool" href="#" onclick="alert('not implemented');">Audio File</a></li>
 		<li><a id="pdf-tool" href="#" onclick="alert('not implemented');">PDF</a></li>

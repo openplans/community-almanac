@@ -71,7 +71,7 @@ $(document).ready(function() {
     for (var i = 0; i < pageMapFeatures.length; i++) {
       var fn = function(i) {
         var feature_data = pageMapFeatures[i];
-        applyDisplayFeatureMapBehavior(feature_data);
+        applyDisplaySideEffects(feature_data);
       };
       fn(i);
     }
@@ -104,7 +104,7 @@ $(document).ready(function() {
         $(this).find('textarea').focus();
       });
       link.effect('transfer', {to: 'ul.page-media-items li:last'}, 1000);
-      applyDrawFeatureMapBehavior(data);
+      applyEditSideEffects(data);
     });
   });
 
@@ -131,7 +131,7 @@ $(document).ready(function() {
         var newli = $('<li></li>').append($(data.html));
         formcontainer.replaceWith(newli);
         newli.find('.media-content').effect('highlight');
-        applyDisplayFeatureMapBehavior(data);
+        applyDisplaySideEffects(data);
       },
       type: "POST",
       dataType: 'json',
@@ -148,7 +148,7 @@ $(document).ready(function() {
       var newli = $('<li></li>').append($(data.html));
       li.replaceWith(newli);
       newli.find('textarea').focus();
-      applyDrawFeatureMapBehavior(data);
+      applyEditSideEffects(data);
     });
   });
 
@@ -187,7 +187,7 @@ $(document).ready(function() {
           var newli = $('<li></li>').append($(data.html));
           li.replaceWith(newli);
           newli.find('.media-content').effect('highlight');
-          applyDisplayFeatureMapBehavior(data);
+          applyDisplaySideEffects(data);
         });
       },
       type: "POST",
@@ -204,13 +204,22 @@ $(document).ready(function() {
     $.getJSON(url, {}, function(data) {
       var newli = $('<li></li>').append($(data.html));
       li.replaceWith(newli);
-      applyDisplayFeatureMapBehavior(data);
+      applyDisplaySideEffects(data);
     });
   });
 
 });
 
-function applyDisplayFeatureMapBehavior(data) {
+function applyDisplaySideEffects(data) {
+  applyMapDisplaySideEffects(data);
+}
+
+function applyEditSideEffects(data) {
+  applyMapEditSideEffects(data);
+  applyImageEditSideEffects(data);
+}
+
+function applyMapDisplaySideEffects(data) {
   var geometryJson = data.geometry;
   if (!geometryJson) {
     return;
@@ -232,7 +241,7 @@ function applyDisplayFeatureMapBehavior(data) {
   map.zoomToExtent(bounds);
 }
 
-function applyDrawFeatureMapBehavior(data) {
+function applyMapEditSideEffects(data) {
   if (!(data.lng && data.lat) && !data.geometry) {
     return;
   }
@@ -304,4 +313,52 @@ function applyDrawFeatureMapBehavior(data) {
     center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
     map.setCenter(center, 12);
   }
+}
+
+function applyImageEditSideEffects(data) {
+  if (!data.image_id || !data.image_upload_url) {
+    return;
+  }
+  var image_id = data.image_id;
+  var image_upload_url = data.image_upload_url;
+  console.log(image_id);
+  console.log(image_upload_url);
+  var saveLink = $('#' + image_id).nextAll('#submit-upload-image');
+  var uploadStatus = $('#' + image_id).nextAll('#upload-status');
+  var settings = {
+    flash_url: '/js/upload/swfupload.swf',
+    upload_url: image_upload_url,
+    file_types: '*.*',
+    debug: true,
+    button_width: "65",
+    button_height: "29",
+    button_text: '<span class="">Upload</span>',
+    //file_dialog_complete_handler: function() { console.log('start upload'); this.startUpload(); },
+    upload_start_handler: uploadStarted,
+    upload_progress_handler: uploadProgress,
+    upload_sucess_handler: uploadSuccess,
+    upload_complete_handler: uploadComplete,
+    // #XXX probably stick uuids or something to make unique ids here
+    button_placeholder_id: 'upload',
+  };
+  var swfu = new SWFUpload(settings);
+  console.log(saveLink);
+  saveLink.click(function(e) {
+    e.preventDefault();
+    console.log('save clicked');
+    swfu.startUpload();
+  });
+  var uploadStarted = function() {
+    uploadStatus.text('Upload started');
+  };
+  var uploadProgress = function() {
+    console.log('upload progress');
+    uploadStatus.text('Uploading ... please be patient');
+  };
+  var uploadSuccess = function() {
+    uploadStatus.text('Upload success!');
+  };
+  var uploadComplete = function() {
+    console.log('upload completed');
+  };
 }

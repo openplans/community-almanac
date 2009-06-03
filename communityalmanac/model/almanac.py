@@ -219,7 +219,9 @@ class Image(Media):
     __tablename__ = 'images'
     __mapper_args__ = dict(polymorphic_identity='image')
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
-    flickr_id = Column(String)
+    #flickr_id = Column(String)
+    #XXX just store the image somewhere for now
+    path = Column(String)
 
 class Story(Media):
     __tablename__ = 'stories'
