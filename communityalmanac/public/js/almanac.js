@@ -323,20 +323,45 @@ function applyImageEditSideEffects(data) {
   var image_upload_url = data.image_upload_url;
   console.log(image_id);
   console.log(image_upload_url);
-  var saveLink = $('#' + image_id).nextAll('#submit-upload-image');
-  var uploadStatus = $('#' + image_id).nextAll('#upload-status');
+  var imageElt = $('#' + image_id);
+  var saveLink = imageElt.nextAll('#submit-upload-image');
+  var uploadStatus = imageElt.nextAll('.upload-status');
+  var uploadStarted = function() {
+    console.log('upload started');
+    uploadStatus.text('Upload started');
+  };
+  var uploadProgress = function(fileobj, bytesComplete, bytesTotal) {
+    console.log('upload progress');
+    var percent = ((bytesComplete*1.0)/bytesTotal) * 100;
+    console.log(percent);
+    var s = 'Uploading ... ' + percent + '%';
+    console.log('string is: ' + s);
+    uploadStatus.text(s);
+  };
+  var uploadSuccess = function() {
+    console.log('upload success');
+    uploadStatus.text('Upload success!');
+  };
+  var uploadComplete = function() {
+    console.log('upload completed');
+    // XXX need to make a get here to fetch the item
+    // and replace the li with it (removing the form)
+  };
+  var fileDialogCompleteHandler = function() {
+    uploadStatus.text('Ready to upload');
+  };
   var settings = {
     flash_url: '/js/upload/swfupload.swf',
     upload_url: image_upload_url,
     file_types: '*.*',
-    debug: true,
+    //debug: true,
     button_width: "65",
     button_height: "29",
     button_text: '<span class="">Upload</span>',
-    //file_dialog_complete_handler: function() { console.log('start upload'); this.startUpload(); },
+    file_dialog_complete_handler: fileDialogCompleteHandler,
     upload_start_handler: uploadStarted,
     upload_progress_handler: uploadProgress,
-    upload_sucess_handler: uploadSuccess,
+    upload_success_handler: uploadSuccess,
     upload_complete_handler: uploadComplete,
     // #XXX probably stick uuids or something to make unique ids here
     button_placeholder_id: 'upload',
@@ -345,20 +370,7 @@ function applyImageEditSideEffects(data) {
   console.log(saveLink);
   saveLink.click(function(e) {
     e.preventDefault();
-    console.log('save clicked');
+    uploadStatus.text('Uploading ... Please be patient');
     swfu.startUpload();
   });
-  var uploadStarted = function() {
-    uploadStatus.text('Upload started');
-  };
-  var uploadProgress = function() {
-    console.log('upload progress');
-    uploadStatus.text('Uploading ... please be patient');
-  };
-  var uploadSuccess = function() {
-    uploadStatus.text('Upload success!');
-  };
-  var uploadComplete = function() {
-    console.log('upload completed');
-  };
 }
