@@ -8,3 +8,4 @@ build
 data
 dvdev/public/js/development-bundle/*
 .DS_Store
+communityalmanac/public/media/*
