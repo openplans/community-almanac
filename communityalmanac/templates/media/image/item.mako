@@ -26,11 +26,11 @@
     <a class="media-delete" href="${h.url_for('media_image_delete', media_id=c.image.id)}">Delete</a>
   </div>
   <div class="mediacontent image" id="pagemedia_${c.image.id}">
-    <img src="${c.image.path}" />
+    <img src="${c.image.url}" />
   </div>
 </div>
 % else:
 <div class="mediacontent image" id="pagemedia_${c.image.id}">
-  <img src="${c.image.path}" />
+  <img src="${c.image.url}" />
 </div>
 %endif

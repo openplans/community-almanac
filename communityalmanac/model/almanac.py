@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
+from pylons import g
 from pylons import session
 from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
 from sqlalchemy.sql.expression import text
@@ -29,6 +30,7 @@ from uuid import uuid4
 from meta import Base, storage_SRID
 from sqlgeotypes import POINT
 import meta
+import os
 
 class Almanac(Base):
     __tablename__ = 'almanacs'
@@ -222,6 +224,10 @@ class Image(Media):
     #flickr_id = Column(String)
     #XXX just store the image somewhere for now
     path = Column(String)
+
+    @property
+    def url(self):
+        return '/media/images/%s' % self.path.split(os.sep)[-1]
 
 class Story(Media):
     __tablename__ = 'stories'

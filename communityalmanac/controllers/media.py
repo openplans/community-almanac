@@ -19,7 +19,7 @@
 
 import logging
 
-from pylons import request, response, session, tmpl_context as c
+from pylons import request, response, session, tmpl_context as c, g
 from pylons.controllers.util import abort, redirect_to
 
 from communityalmanac.lib.base import BaseController, render
@@ -32,6 +32,7 @@ from pylons.decorators.rest import dispatch_on
 from shapely import wkb
 from shapely.geometry.geo import asShape
 import communityalmanac.lib.helpers as h
+import os
 import uuid
 import simplejson
 
@@ -287,8 +288,8 @@ class MediaController(BaseController):
 
         image_file.make_file()
         image_data = image_file.file.read()
-        new_uuid = uuid.uuid4()
-        path = '/tmp/%s' % new_uuid
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.images_path, new_uuid)
         f = open(path, 'w')
         f.write(image_data)
         f.close()
@@ -320,8 +321,8 @@ class MediaController(BaseController):
 
         image_file.make_file()
         image_data = image_file.file.read()
-        new_uuid = uuid.uuid4()
-        path = '/tmp/%s' % new_uuid
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.images_path, new_uuid)
         f = open(path, 'w')
         f.write(image_data)
         f.close()
@@ -368,7 +369,6 @@ class MediaController(BaseController):
     @jsonify
     def delete_image(self, media_id):
         image = h.get_media_by_id(media_id)
-        import os
         os.unlink(image.path)
         meta.Session.delete(image)
         meta.Session.commit()

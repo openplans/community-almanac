@@ -34,3 +34,6 @@ class Globals(object):
 
         """
         self.map_key = config['map_key']
+        self.images_path = config['images_path']
+        self.audio_path = config['audio_path']
+        self.pdfs_path = config['pdfs_path']
