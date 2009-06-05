@@ -27,7 +27,7 @@
     <fieldset>
       <legend>Image</legend>
       %if c.image:
-      <img src="${h.url_for('media_image', media_id=c.image.media_id)}" />
+      <img src="${c.image.url}" />
       %endif
       <div id="upload">Upload</div>
       <div class="upload-status"></div>
