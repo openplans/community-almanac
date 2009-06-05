@@ -24,14 +24,10 @@
   <div class="media-controls">
     ${self.media_edit_controls()}
   </div>
-  <div class="mediacontent ${c.type}" id="pagemedia_${c.story.id}">
-    ${next.body()}
-  </div>
-</div>
-% else:
-<div class="mediacontent ${c.type}" id="pagemedia_${c.story.id}">
   ${next.body()}
 </div>
+% else:
+  ${next.body()}
 %endif
 
 <%def name="media_edit_controls()">

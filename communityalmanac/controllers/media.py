@@ -65,7 +65,7 @@ class MediaController(BaseController):
     def new_form_text(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
-        c.type = 'text'
+        c.legend = u'Text'
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
@@ -85,7 +85,6 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        c.type = 'text'
         return dict(html=render('/media/story/item.mako'))
 
     @dispatch_on(POST='_do_new_form_existing_text')
@@ -93,7 +92,7 @@ class MediaController(BaseController):
     def new_form_existing_text(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
-        c.type = 'text'
+        c.legend = u'Text'
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
@@ -112,15 +111,14 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        c.type = 'text'
         return dict(html=render('/media/story/item.mako'))
 
     @dispatch_on(POST='_do_edit_form_text')
     @jsonify
     def edit_form_text(self, media_id):
         c.media_item = h.get_media_by_id(media_id)
-        c.type = 'text'
         c.view_url = h.url_for('media_story_view', media_id=c.media_item.id)
+        c.legend = u'Text'
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
@@ -134,14 +132,12 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        c.type = 'text'
         return dict(html=render('/media/story/item.mako'))
 
     @jsonify
     def text_view(self, media_id):
         c.editable = True
         c.story = h.get_media_by_id(media_id)
-        c.type = 'text'
         return dict(html=render('/media/story/item.mako'))
 
     @jsonify
@@ -157,6 +153,7 @@ class MediaController(BaseController):
         page = c.almanac.new_page(self.ensure_user)
         loc = c.almanac.location
         c.map_id = str(uuid.uuid4())
+        c.legend = u'Map'
         return dict(html=render('/media/map/form.mako'),
                     lat=loc.x, lng=loc.y,
                     map_id=c.map_id,
@@ -194,6 +191,7 @@ class MediaController(BaseController):
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         loc = c.almanac.location
         c.map_id = str(uuid.uuid4())
+        c.legend = u'Map'
         return dict(html=render('/media/map/form.mako'),
                     lat=loc.x, lng=loc.y,
                     map_id=c.map_id,
@@ -227,9 +225,11 @@ class MediaController(BaseController):
     @dispatch_on(POST='_do_edit_form_map')
     @jsonify
     def edit_form_map(self, media_id):
-        c.map = h.get_media_by_id(media_id)
+        c.media_item = c.map = h.get_media_by_id(media_id)
         geometry = c.map.location.__geo_interface__
         geojson = simplejson.dumps(geometry)
+        c.view_url = h.url_for('media_map_view', media_id=c.media_item.id)
+        c.legend = u'Map'
         return dict(html=render('/media/map/form.mako'),
                     map_id='pagemedia_%d' % c.map.id,
                     geometry=geojson,

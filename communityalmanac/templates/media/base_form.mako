@@ -25,7 +25,7 @@
   <form class="add-media-item" method="post" action="${request.path_url}">
   %endif
     <fieldset>
-      <legend>${c.type.capitalize()}</legend>
+      <legend>${c.legend}</legend>
       ${next.body()}
       ${self.submit_button()}
       ${self.cancel_button()}

@@ -18,26 +18,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<div>
-  %if c.map:
-  <form class="edit-media-item" method="post" action="${request.path_url}">
-  %else:
-  <form class="add-media-item" method="post" action="${request.path_url}">
-  %endif
-    <fieldset>
-      <legend>Map</legend>
-      %if c.map:
-      <div id="pagemedia_${c.map.id}" style="width: 500px; height: 400px"></div>
-      %else:
-      <div id="${c.map_id}" style="width: 500px; height: 400px"></div>
-      %endif
-      <input type="hidden" name="feature" />
-      <input type="submit" value="Save" />
-      %if c.map:
-      <a class="media-cancel" href="${h.url_for('media_map_view', media_id=c.map.id)}">Cancel</a>
-      %else:
-      <a class="media-cancel" href="#">Cancel</a>
-      %endif
-    </fieldset>
-  </form>
-</div>
+<%inherit file="/media/base_form.mako" />
+%if c.media_item:
+  <div id="pagemedia_${c.media_item.id}" style="width: 500px; height: 400px"></div>
+%else:
+  <div id="${c.map_id}" style="width: 500px; height: 400px"></div>
+%endif
+<input type="hidden" name="feature" />

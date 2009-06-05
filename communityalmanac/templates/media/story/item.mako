@@ -19,7 +19,9 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/media/base_item.mako" />
-<p>${c.story.text}</p>
+<div class="mediacontent text" id="pagemedia_${c.story.id}">
+  <p>${c.story.text}</p>
+</div>
 
 <%def name="media_edit_controls()">
   <a class="media-edit" href="${h.url_for('media_story_edit', media_id=c.story.id)}">Edit</a>
