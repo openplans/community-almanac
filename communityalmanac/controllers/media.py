@@ -277,12 +277,12 @@ class MediaController(BaseController):
     def new_form_image(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
-        c.image_id = str(uuid.uuid4())
-        c.image_upload_url = request.path_url
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
         c.legend = u'Image'
         return dict(html=render('/media/image/form.mako'),
-                    image_id=c.image_id,
-                    image_upload_url=c.image_upload_url,
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
                     )
 
     #@jsonify
@@ -319,12 +319,12 @@ class MediaController(BaseController):
     def new_form_existing_image(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
-        c.image_id = str(uuid.uuid4())
-        c.image_upload_url = request.path_url
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
         c.legend = u'Image'
         return dict(html=render('/media/image/form.mako'),
-                    image_id=c.image_id,
-                    image_upload_url=c.image_upload_url,
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
                     )
 
     def _do_new_form_existing_image(self, almanac_slug, page_slug):
@@ -356,12 +356,13 @@ class MediaController(BaseController):
     @jsonify
     def edit_form_image(self, media_id):
         c.media_item = c.image = h.get_media_by_id(media_id)
-        c.image_id = str(uuid.uuid4())
-        c.image_upload_url = request.path_url
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.view_url = h.url_for('media_image_view', media_id=c.media_item.id)
         c.legend = u'Image'
         return dict(html=render('/media/image/form.mako'),
-                    image_id=c.image_id,
-                    image_upload_url=c.image_upload_url,
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
                     )
 
     def _do_edit_form_image(self, media_id):

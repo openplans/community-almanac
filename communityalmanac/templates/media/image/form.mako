@@ -22,9 +22,9 @@
 %if c.media_item:
   <img src="${c.media_item.url}" />
 %endif
-<div id="${c.image_id}">Upload</div>
+<div id="${c.file_id}">Upload</div>
 <div class="upload-status"></div>
 
 <%def name="submit_button()">
-<a id="submit-upload-image" href="#">Save</a>
+<a id="submit-upload-file" href="#">Save</a>
 </%def>
