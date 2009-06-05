@@ -269,8 +269,7 @@ class MediaController(BaseController):
     def new_form_image(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
-        #XXX hardcoded here for now
-        c.image_id = 'upload'
+        c.image_id = str(uuid.uuid4())
         c.image_upload_url = request.path_url
         return dict(html=render('/media/image/form.mako'),
                     image_id=c.image_id,
@@ -311,13 +310,17 @@ class MediaController(BaseController):
     def new_form_existing_image(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
-        return dict(html=render('/media/image/form.mako'))
+        c.image_id = str(uuid.uuid4())
+        c.image_upload_url = request.path_url
+        return dict(html=render('/media/image/form.mako'),
+                    image_id=c.image_id,
+                    image_upload_url=c.image_upload_url,
+                    )
 
-    @jsonify
     def _do_new_form_existing_image(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
-        image_file = request.POST.get('Filedata')
+        image_file = request.POST.get('userfile')
         if image_file is None:
             abort(400)
 
@@ -337,22 +340,27 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        return dict(html=render('/media/image/item.mako'))
+        return render('/media/image/item.mako')
 
     @dispatch_on(POST='_do_edit_form_image')
     @jsonify
     def edit_form_image(self, media_id):
         c.image = h.get_media_by_id(media_id)
-        return dict(html=render('/media/image/form.mako'))
+        c.image_id = str(uuid.uuid4())
+        c.image_upload_url = request.path_url
+        return dict(html=render('/media/image/form.mako'),
+                    image_id=c.image_id,
+                    image_upload_url=c.image_upload_url,
+                    )
 
-    @jsonify
     def _do_edit_form_image(self, media_id):
         c.image = h.get_media_by_id(media_id)
         image_file = request.POST.get('userfile')
         if image_file is None:
             abort(400)
 
-        image_data = image_file.getvalue()
+        image_file.make_file()
+        image_data = image_file.file.read()
         f = open(c.image.path, 'w')
         f.write(image_data)
         f.close()
@@ -360,7 +368,7 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        return dict(html=render('/media/image/item.mako'))
+        return render('/media/image/item.mako')
 
     @jsonify
     def image_view(self, media_id):

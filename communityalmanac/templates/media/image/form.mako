@@ -29,7 +29,7 @@
       %if c.image:
       <img src="${c.image.url}" />
       %endif
-      <div id="upload">Upload</div>
+      <div id="${c.image_id}">Upload</div>
       <div class="upload-status"></div>
       <a id="submit-upload-image" href="#">Save</a>
       %if c.image:
