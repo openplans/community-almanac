@@ -279,6 +279,7 @@ class MediaController(BaseController):
         page = c.almanac.new_page(self.ensure_user)
         c.image_id = str(uuid.uuid4())
         c.image_upload_url = request.path_url
+        c.legend = u'Image'
         return dict(html=render('/media/image/form.mako'),
                     image_id=c.image_id,
                     image_upload_url=c.image_upload_url,
@@ -320,6 +321,7 @@ class MediaController(BaseController):
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         c.image_id = str(uuid.uuid4())
         c.image_upload_url = request.path_url
+        c.legend = u'Image'
         return dict(html=render('/media/image/form.mako'),
                     image_id=c.image_id,
                     image_upload_url=c.image_upload_url,
@@ -353,9 +355,10 @@ class MediaController(BaseController):
     @dispatch_on(POST='_do_edit_form_image')
     @jsonify
     def edit_form_image(self, media_id):
-        c.image = h.get_media_by_id(media_id)
+        c.media_item = c.image = h.get_media_by_id(media_id)
         c.image_id = str(uuid.uuid4())
         c.image_upload_url = request.path_url
+        c.legend = u'Image'
         return dict(html=render('/media/image/form.mako'),
                     image_id=c.image_id,
                     image_upload_url=c.image_upload_url,
