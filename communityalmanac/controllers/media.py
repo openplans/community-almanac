@@ -85,6 +85,7 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
+        c.type = 'text'
         return dict(html=render('/media/story/item.mako'))
 
     @dispatch_on(POST='_do_new_form_existing_text')
@@ -111,6 +112,7 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
+        c.type = 'text'
         return dict(html=render('/media/story/item.mako'))
 
     @dispatch_on(POST='_do_edit_form_text')
@@ -132,12 +134,14 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
+        c.type = 'text'
         return dict(html=render('/media/story/item.mako'))
 
     @jsonify
     def text_view(self, media_id):
         c.editable = True
         c.story = h.get_media_by_id(media_id)
+        c.type = 'text'
         return dict(html=render('/media/story/item.mako'))
 
     @jsonify
