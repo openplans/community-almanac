@@ -30,13 +30,13 @@
       <img src="${h.url_for('media_image', media_id=c.image.media_id)}" />
       %endif
       <div id="upload">Upload</div>
+      <div class="upload-status"></div>
       <a id="submit-upload-image" href="#">Save</a>
       %if c.image:
       <a class="media-cancel" href="${h.url_for('media_image_view', media_id=c.image.id)}">Cancel</a>
       %else:
       <a class="media-cancel" href="#">Cancel</a>
       %endif
-      <div class="upload-status"></div>
     </fieldset>
   </form>
 </div>
