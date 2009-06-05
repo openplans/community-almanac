@@ -325,43 +325,28 @@ function applyImageEditSideEffects(data) {
   var saveLink = imageElt.nextAll('#submit-upload-image');
   var li = imageElt.closest('li');
   var uploadStatus = imageElt.nextAll('.upload-status');
-  var uploadSuccess = function(fileobj, serverData, receivedResponse) {
-    if (receivedResponse) {
-      uploadStatus.text('Upload Complete!');
-      // XXX there's got to be a better way
-      the_serverData = serverData;
-      hackedServerData = serverData.replace('{"html":', '{html:');
-      // XXX and for some reason this gives me back the html?
-      //serverDataObj = eval(hackedServerData);
-      html = eval(hackedServerData);
-      newli = $('<li></li>').append(html);
-      the_imageElt = imageElt;
-      li.replaceWith(newli);
-    } else {
-      uploadStatus.text('There was an error processing your request. Please try again.');
-    }
+  var onComplete = function(file, response) {
+    uploadStatus.text('Upload Complete!');
+    newli = $('<li></li>').append(response);
+    the_imageElt = imageElt;
+    li.replaceWith(newli);
+    au.destroy();
   };
-  var fileDialogCompleteHandler = function() {
-    var file = this.getFile();
-    uploadStatus.text('Ready to upload: ' + file.name);
-  };
-  var settings = {
-    flash_url: '/js/upload/swfupload.swf',
-    upload_url: image_upload_url,
-    file_types: '*.*',
-    //debug: true,
-    button_width: "65",
-    button_height: "29",
-    button_text: '<span class="">Upload</span>',
-    file_dialog_complete_handler: fileDialogCompleteHandler,
-    upload_success_handler: uploadSuccess,
-    // #XXX probably stick uuids or something to make unique ids here
-    button_placeholder_id: 'upload',
-  };
-  var swfu = new SWFUpload(settings);
+  var au = new AjaxUpload(image_id, {
+    action: image_upload_url,
+    name: 'userfile',
+    //responseType: 'json',
+    autoSubmit: false,
+    onChange: function(file, extension) {
+      uploadStatus.text('Ready to upload: ' + file);
+    },
+    onSubmit: function(file, extension) {
+      uploadStatus.text('Uploading');
+    },
+    onComplete: onComplete
+  });
   saveLink.click(function(e) {
     e.preventDefault();
-    uploadStatus.text('Uploading ...');
-    swfu.startUpload();
+    au.submit();
   });
 }

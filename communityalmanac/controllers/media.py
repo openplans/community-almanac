@@ -277,10 +277,12 @@ class MediaController(BaseController):
                     image_upload_url=c.image_upload_url,
                     )
 
-    @jsonify
+    #@jsonify
+    #XXX ajax file upload plugin does not like response type of
+    # application/json
     def _do_new_form_image(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        image_file = request.POST.get('Filedata')
+        image_file = request.POST.get('userfile')
         if image_file is None:
             abort(400)
 
@@ -302,7 +304,7 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        return dict(html=render('/media/image/item.mako'))
+        return render('/media/image/item.mako')
 
     @dispatch_on(POST='_do_new_form_existing_image')
     @jsonify
