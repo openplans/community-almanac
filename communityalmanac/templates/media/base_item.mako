@@ -18,9 +18,23 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<%inherit file="/media/base_form.mako" />
-%if c.media_item:
-<textarea name="body">${c.media_item.text}</textarea>
-%else:
-<textarea name="body"></textarea>
+%if c.editable:
+<div class="media-tab">drag</div>
+<div class="media-content">
+  <div class="media-controls">
+    ${self.media_edit_controls()}
+  </div>
+  <div class="mediacontent ${c.type}" id="pagemedia_${c.story.id}">
+    ${next.body()}
+  </div>
+</div>
+% else:
+<div class="mediacontent ${c.type}" id="pagemedia_${c.story.id}">
+  ${next.body()}
+</div>
 %endif
+
+<%def name="media_edit_controls()">
+  <a class="media-edit" href="${c.edit_url}">Edit</a>
+  <a class="media-delete" href="${c.delete_url}">Delete</a>
+</%def>

@@ -18,9 +18,29 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<%inherit file="/media/base_form.mako" />
-%if c.media_item:
-<textarea name="body">${c.media_item.text}</textarea>
-%else:
-<textarea name="body"></textarea>
-%endif
+<div>
+  %if c.media_item:
+  <form class="edit-media-item" method="post" action="${request.path_url}">
+  %else:
+  <form class="add-media-item" method="post" action="${request.path_url}">
+  %endif
+    <fieldset>
+      <legend>${c.type.capitalize()}</legend>
+      ${next.body()}
+      ${self.submit_button()}
+      ${self.cancel_button()}
+    </fieldset>
+  </form>
+</div>
+
+<%def name="submit_button()">
+  <input type="submit" value="Save" />
+</%def>
+
+<%def name="cancel_button()">
+  %if c.media_item:
+  <a class="media-cancel" href="${c.view_url}">Cancel</a>
+  %else:
+  <a class="media-cancel" href="#">Cancel</a>
+  %endif
+</%def>

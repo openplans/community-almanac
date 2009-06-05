@@ -65,6 +65,7 @@ class MediaController(BaseController):
     def new_form_text(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
+        c.type = 'text'
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
@@ -91,6 +92,7 @@ class MediaController(BaseController):
     def new_form_existing_text(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
+        c.type = 'text'
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
@@ -114,7 +116,9 @@ class MediaController(BaseController):
     @dispatch_on(POST='_do_edit_form_text')
     @jsonify
     def edit_form_text(self, media_id):
-        c.story = h.get_media_by_id(media_id)
+        c.media_item = h.get_media_by_id(media_id)
+        c.type = 'text'
+        c.view_url = h.url_for('media_story_view', media_id=c.media_item.id)
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
