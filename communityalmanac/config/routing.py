@@ -99,5 +99,11 @@ def make_map():
     map.connect('media_image_edit', '/media/image/edit/:media_id', controller='media', action='edit_form_image', _filter=media_expand)
     map.connect('media_image_delete', '/media/image/delete/:media_id', controller='media', action='delete_image', conditions=dict(method=['POST']), _filter=media_expand)
 
+    map.connect('media_pdf_new', '/media/pdf/:almanac_slug/new', controller='media', action='new_form_pdf', _filter=almanac_expand)
+    map.connect('media_pdf_existing_new', '/media/pdf/:almanac_slug/:page_slug/new', controller='media', action='new_form_existing_pdf', _filter=page_expand)
+    map.connect('media_pdf_view', '/media/pdf/:media_id', controller='media', action='pdf_view', _filter=media_expand)
+    map.connect('media_pdf_edit', '/media/pdf/edit/:media_id', controller='media', action='edit_form_pdf', _filter=media_expand)
+    map.connect('media_pdf_delete', '/media/pdf/delete/:media_id', controller='media', action='delete_pdf', conditions=dict(method=['POST']), _filter=media_expand)
+
 
     return map

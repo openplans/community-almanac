@@ -25,6 +25,7 @@ from pylons.controllers.util import abort, redirect_to
 from communityalmanac.lib.base import BaseController, render
 from communityalmanac.model import Image
 from communityalmanac.model import Map
+from communityalmanac.model import PDF
 from communityalmanac.model import Story
 from communityalmanac.model import meta
 from pylons.decorators import jsonify
@@ -393,4 +394,124 @@ class MediaController(BaseController):
         image = h.get_media_by_id(media_id)
         os.unlink(image.path)
         meta.Session.delete(image)
+        meta.Session.commit()
+
+    @dispatch_on(POST='_do_new_form_pdf')
+    @jsonify
+    def new_form_pdf(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        page = c.almanac.new_page(self.ensure_user)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'PDF'
+        return dict(html=render('/media/pdf/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_new_form_pdf(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        pdf_file = request.POST.get('userfile')
+        if pdf_file is None:
+            abort(400)
+
+        page = c.almanac.new_page(self.ensure_user)
+
+        pdf_file.make_file()
+        pdf_data = pdf_file.file.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.pdfs_path, new_uuid)
+        f = open(path, 'w')
+        f.write(pdf_data)
+        f.close()
+
+        c.pdf = pdf = PDF()
+        pdf.path = path
+        pdf.page_id = page.id
+        pdf.order = len(page.media)
+        meta.Session.add(pdf)
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/pdf/item.mako')
+
+    @dispatch_on(POST='_do_new_form_existing_pdf')
+    @jsonify
+    def new_form_existing_pdf(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = h.get_page_by_slug(c.almanac, page_slug)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'pdf'
+        return dict(html=render('/media/pdf/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_new_form_existing_pdf(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
+        pdf_file = request.POST.get('userfile')
+        if pdf_file is None:
+            abort(400)
+
+        pdf_file.make_file()
+        pdf_data = pdf_file.file.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.pdfs_path, new_uuid)
+        f = open(path, 'w')
+        f.write(pdf_data)
+        f.close()
+
+        c.pdf = pdf = PDF()
+        pdf.path = path
+        pdf.page_id = page.id
+        pdf.order = len(page.media)
+        meta.Session.add(pdf)
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/pdf/item.mako')
+
+    @dispatch_on(POST='_do_edit_form_pdf')
+    @jsonify
+    def edit_form_pdf(self, media_id):
+        c.media_item = c.pdf = h.get_media_by_id(media_id)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.view_url = h.url_for('media_pdf_view', media_id=c.media_item.id)
+        c.legend = u'PDF'
+        return dict(html=render('/media/pdf/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_edit_form_pdf(self, media_id):
+        c.pdf = h.get_media_by_id(media_id)
+        pdf_file = request.POST.get('userfile')
+        if pdf_file is None:
+            abort(400)
+
+        pdf_file.make_file()
+        pdf_data = pdf_file.file.read()
+        f = open(c.pdf.path, 'w')
+        f.write(pdf_data)
+        f.close()
+
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/pdf/item.mako')
+
+    @jsonify
+    def pdf_view(self, media_id):
+        c.editable = True
+        c.pdf = h.get_media_by_id(media_id)
+        return dict(html=render('/media/pdf/item.mako'))
+
+    @jsonify
+    def delete_pdf(self, media_id):
+        pdf = h.get_media_by_id(media_id)
+        os.unlink(pdf.path)
+        meta.Session.delete(pdf)
         meta.Session.commit()

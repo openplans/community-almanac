@@ -46,13 +46,13 @@
 	  ${h.link_to('Image', h.url_for('media_image_new', almanac=c.almanac), id='mini-image-tool')}
 	  ${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='mini-map-tool')}
 		<a id="mini-audio-tool" href="#" onclick="alert('not implemented');">Audio File</a>
-		<a id="mini-pdf-tool" href="#" onclick="alert('not implemented');">PDF</a>
+	  ${h.link_to('PDF', h.url_for('media_pdf_new', almanac=c.almanac), id='mini-pdf-tool')}
     %else:
 	  ${h.link_to('Text', h.url_for('media_story_existing_new', almanac=c.almanac, page=c.page), id='mini-text-tool')}
 	  ${h.link_to('Image', h.url_for('media_image_existing_new', almanac=c.almanac, page=c.page), id='mini-image-tool')}
 	  ${h.link_to('Map', h.url_for('media_map_existing_new', almanac=c.almanac, page=c.page), id='mini-map-tool')}
 		<a id="mini-audio-tool" href="#" onclick="alert('not implemented');">Audio File</a>
-		<a id="mini-pdf-tool" href="#" onclick="alert('not implemented');">PDF</a>
+	  ${h.link_to('PDF', h.url_for('media_pdf_existing_new', almanac=c.almanac, page=c.page), id='mini-pdf-tool')}
     %endif
   </div>
   %if c.is_add:
@@ -96,13 +96,13 @@ Edit Page -  ${c.almanac.name}
 	  <li>${h.link_to('Image', h.url_for('media_image_new', almanac=c.almanac), id='image-tool')}</li>
 	  <li>${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='map-tool')}</li>
 		<li><a id="audio-tool" href="#" onclick="alert('not implemented');">Audio File</a></li>
-		<li><a id="pdf-tool" href="#" onclick="alert('not implemented');">PDF</a></li>
+	  <li>${h.link_to('PDF', h.url_for('media_pdf_new', almanac=c.almanac), id='pdf-tool')}</li>
     %else:
 	  <li>${h.link_to('Text', h.url_for('media_story_existing_new', almanac=c.almanac, page=c.page), id='text-tool')}</li>
 	  <li>${h.link_to('Image', h.url_for('media_image_existing_new', almanac=c.almanac, page=c.page), id='image-tool')}</li>
 	  <li>${h.link_to('Map', h.url_for('media_map_existing_new', almanac=c.almanac, page=c.page), id='map-tool')}</li>
 		<li><a id="audio-tool" href="#" onclick="alert('not implemented');">Audio File</a></li>
-		<li><a id="pdf-tool" href="#" onclick="alert('not implemented');">PDF</a></li>
+	  <li>${h.link_to('PDF', h.url_for('media_pdf_existing_new', almanac=c.almanac, page=c.page), id='pdf-tool')}</li>
     %endif
 	</ul>
 </div>
