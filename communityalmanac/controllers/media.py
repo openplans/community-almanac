@@ -23,6 +23,7 @@ from pylons import request, response, session, tmpl_context as c, g
 from pylons.controllers.util import abort, redirect_to
 
 from communityalmanac.lib.base import BaseController, render
+from communityalmanac.model import Audio
 from communityalmanac.model import Image
 from communityalmanac.model import Map
 from communityalmanac.model import PDF
@@ -514,4 +515,124 @@ class MediaController(BaseController):
         pdf = h.get_media_by_id(media_id)
         os.unlink(pdf.path)
         meta.Session.delete(pdf)
+        meta.Session.commit()
+
+    @dispatch_on(POST='_do_new_form_audio')
+    @jsonify
+    def new_form_audio(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        page = c.almanac.new_page(self.ensure_user)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'audio'
+        return dict(html=render('/media/audio/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_new_form_audio(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        audio_file = request.POST.get('userfile')
+        if audio_file is None:
+            abort(400)
+
+        page = c.almanac.new_page(self.ensure_user)
+
+        audio_file.make_file()
+        audio_data = audio_file.file.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.audio_path, new_uuid)
+        f = open(path, 'w')
+        f.write(audio_data)
+        f.close()
+
+        c.audio = audio = Audio()
+        audio.path = path
+        audio.page_id = page.id
+        audio.order = len(page.media)
+        meta.Session.add(audio)
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/audio/item.mako')
+
+    @dispatch_on(POST='_do_new_form_existing_audio')
+    @jsonify
+    def new_form_existing_audio(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = h.get_page_by_slug(c.almanac, page_slug)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'audio'
+        return dict(html=render('/media/audio/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_new_form_existing_audio(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
+        audio_file = request.POST.get('userfile')
+        if audio_file is None:
+            abort(400)
+
+        audio_file.make_file()
+        audio_data = audio_file.file.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.audio_path, new_uuid)
+        f = open(path, 'w')
+        f.write(audio_data)
+        f.close()
+
+        c.audio = audio = Audio()
+        audio.path = path
+        audio.page_id = page.id
+        audio.order = len(page.media)
+        meta.Session.add(audio)
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/audio/item.mako')
+
+    @dispatch_on(POST='_do_edit_form_audio')
+    @jsonify
+    def edit_form_audio(self, media_id):
+        c.media_item = c.audio = h.get_media_by_id(media_id)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.view_url = h.url_for('media_audio_view', media_id=c.media_item.id)
+        c.legend = u'audio'
+        return dict(html=render('/media/audio/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_edit_form_audio(self, media_id):
+        c.audio = h.get_media_by_id(media_id)
+        audio_file = request.POST.get('userfile')
+        if audio_file is None:
+            abort(400)
+
+        audio_file.make_file()
+        audio_data = audio_file.file.read()
+        f = open(c.audio.path, 'w')
+        f.write(audio_data)
+        f.close()
+
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/audio/item.mako')
+
+    @jsonify
+    def audio_view(self, media_id):
+        c.editable = True
+        c.audio = h.get_media_by_id(media_id)
+        return dict(html=render('/media/audio/item.mako'))
+
+    @jsonify
+    def delete_audio(self, media_id):
+        audio = h.get_media_by_id(media_id)
+        os.unlink(audio.path)
+        meta.Session.delete(audio)
         meta.Session.commit()

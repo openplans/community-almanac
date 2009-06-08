@@ -1,3 +1,4 @@
+<%doc><!--
 # Community Almanac - A place for your stories.
 # Copyright (C) 2009  Douglas Mayle, Robert Marianski,
 # Andy Cochran, Chris Patterson
@@ -16,23 +17,13 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
+--></%doc>
+<%inherit file="/media/base_item.mako" />
+<div class="mediacontent audio" id="pagemedia_${c.audio.id}">
+  <a href="${c.audio.url}">Play file</a>
+</div>
 
-"""The application's model objects"""
-import sqlalchemy as sa
-from sqlalchemy import orm
-
-from communityalmanac.model import meta
-
-def init_model(engine):
-    """Call me before using any of the tables or classes in the model"""
-    ## Reflected tables must be defined and mapped here
-    #global reflected_table
-    #reflected_table = sa.Table("Reflected", meta.metadata, autoload=True,
-    #                           autoload_with=engine)
-    #orm.mapper(Reflected, reflected_table)
-    #
-    meta.Session.configure(bind=engine)
-    meta.engine = engine
-
-
-from communityalmanac.model.almanac import Almanac, Page, User, FullUser, AnonymousUser, Media, PDF, Audio, Image, Story, Map, Comment
+<%def name="media_edit_controls()">
+  <a class="media-edit" href="${h.url_for('media_audio_edit', media_id=c.audio.id)}">Edit</a>
+  <a class="media-delete" href="${h.url_for('media_audio_delete', media_id=c.audio.id)}">Delete</a>
+</%def>
