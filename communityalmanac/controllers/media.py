@@ -541,7 +541,8 @@ class MediaController(BaseController):
         audio_file.make_file()
         audio_data = audio_file.file.read()
         new_uuid = str(uuid.uuid4())
-        path = os.path.join(g.audio_path, new_uuid)
+        fname = '%s.mp3' % new_uuid
+        path = os.path.join(g.audio_path, fname)
         f = open(path, 'w')
         f.write(audio_data)
         f.close()
@@ -554,6 +555,8 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
+        c.flowplayer_id = new_uuid
+        c.audio_url = request.application_url + c.audio.url
         return render('/media/audio/item.mako')
 
     @dispatch_on(POST='_do_new_form_existing_audio')
@@ -579,7 +582,8 @@ class MediaController(BaseController):
         audio_file.make_file()
         audio_data = audio_file.file.read()
         new_uuid = str(uuid.uuid4())
-        path = os.path.join(g.audio_path, new_uuid)
+        fname = '%s.mp3' % new_uuid
+        path = os.path.join(g.audio_path, fname)
         f = open(path, 'w')
         f.write(audio_data)
         f.close()
@@ -592,6 +596,8 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
+        c.flowplayer_id = new_uuid
+        c.audio_url = request.application_url + c.audio.url
         return render('/media/audio/item.mako')
 
     @dispatch_on(POST='_do_edit_form_audio')
@@ -600,6 +606,7 @@ class MediaController(BaseController):
         c.media_item = c.audio = h.get_media_by_id(media_id)
         c.file_id = str(uuid.uuid4())
         c.file_upload_url = request.path_url
+        c.audio_url = request.application_url + c.audio.url
         c.view_url = h.url_for('media_audio_view', media_id=c.media_item.id)
         c.legend = u'audio'
         return dict(html=render('/media/audio/form.mako'),
@@ -622,12 +629,16 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
+        c.flowplayer_id = str(uuid.uuid4())
+        c.audio_url = request.application_url + c.audio.url
         return render('/media/audio/item.mako')
 
     @jsonify
     def audio_view(self, media_id):
         c.editable = True
         c.audio = h.get_media_by_id(media_id)
+        c.flowplayer_id = str(uuid.uuid4())
+        c.audio_url = request.application_url + c.audio.url
         return dict(html=render('/media/audio/item.mako'))
 
     @jsonify

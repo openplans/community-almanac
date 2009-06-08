@@ -33,6 +33,7 @@ from communityalmanac.model import Story
 from communityalmanac.model import meta
 from pylons.controllers.util import abort
 from pylons.templating import render_mako as render
+from pylons import request
 from pylons import session
 from pylons import tmpl_context as c
 from routes.util import url_for
@@ -42,6 +43,7 @@ from webhelpers.html.tags import checkbox
 from webhelpers.html.tags import link_to
 from webhelpers.html.tags import password
 import simplejson
+import uuid
 
 def normalize_url_slug(candidate):
     return candidate.replace(', ', '-').replace(' ', '').replace(',', '-')
@@ -149,6 +151,8 @@ def render_media_items(media_items, editable=False):
             rendered_item = render('/media/pdf/item.mako')
         elif isinstance(media_item, Audio):
             c.audio = media_item
+            c.audio_url = request.application_url + c.audio.url
+            c.flowplayer_id = str(uuid.uuid4())
             rendered_item = render('/media/audio/item.mako')
         else:
             rendered_item = u''

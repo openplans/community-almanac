@@ -77,6 +77,15 @@ $(document).ready(function() {
     }
   }
 
+  // XXX we should have a structure similar to the above for flowplayer
+  // but until we figure out the json issue described below, we hack it for now
+  $('ul.page-media-items li').each(function() {
+    // XXX the flowplayer code currently expects the li as input
+    // but this will be changed to a json structure once the json issue is
+    // figured out
+    applyFlowPlayerSideEffects($(this));
+  });
+
   // add sortable behavior
   $('ul.page-media-items').sortable({
     update: function(event, ui) {
@@ -330,10 +339,14 @@ function applyFileUploadEditSideEffects(data) {
     newli = $('<li></li>').append(response);
     li.replaceWith(newli);
     au.destroy();
+    // XXX this shouldn't be here, but it is until we figure out the json issue
+    applyFlowPlayerSideEffects(newli)
   };
   var au = new AjaxUpload(file_id, {
     action: file_upload_url,
     name: 'userfile',
+    //XXX we're not using json here because eval doesn't seem to want to
+    // convert the json returned from the server into an object
     //responseType: 'json',
     autoSubmit: false,
     onChange: function(file, extension) {
@@ -347,5 +360,47 @@ function applyFileUploadEditSideEffects(data) {
   saveLink.click(function(e) {
     e.preventDefault();
     au.submit();
+  });
+}
+
+function applyFlowPlayerSideEffects(data) {
+  //XXX
+  // this is hardcoded to use html for now until we fix the json issue from the uploader above
+  // the data is actually the html returned back from the server
+
+  var flowplayerElt = data.find('div.flowplayer');
+  if (flowplayerElt.length == 0) {
+    return;
+  }
+  var flowplayerId = flowplayerElt.attr('id');
+  if (!flowplayerId) {
+    return;
+  }
+
+  var flowplayerAudioUrl = flowplayerElt.find('a').attr('href');
+  if (!flowplayerAudioUrl) {
+    return;
+  }
+
+  // flowplayer doesn't work unless element is empty
+  flowplayerElt.empty();
+
+  $f(flowplayerId, '/js/flowplayer/flowplayer-3.1.1.swf', {
+    plugins: {
+      controls: {
+        fullscreen: false,
+        heigh: 30
+      },
+      audio: {
+        url: '/js/flowplayer/flowplayer.audio-3.1.0.swf'
+      }
+    },
+    clip: {
+      autoPlay: false
+    },
+    playlist: [{
+      url: flowplayerAudioUrl,
+      autoPlay: false
+    }]
   });
 }

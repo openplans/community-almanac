@@ -64,10 +64,11 @@
 </form>
 
 <%def name="extra_body()">
-  <script type="text/javascript" src="/js/upload/ajaxupload.3.2.js"></script>
   <script type="text/javascript">
     pageMapFeatures = ${c.map_features};
   </script>
+  <script type="text/javascript" src="/js/upload/ajaxupload.3.2.js"></script>
+  <script type="text/javascript" src="/js/flowplayer/flowplayer-3.1.1.min.js"></script>
 </%def>
 
 <%def name="title()">

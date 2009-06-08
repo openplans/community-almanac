@@ -20,7 +20,9 @@
 --></%doc>
 <%inherit file="/media/base_item.mako" />
 <div class="mediacontent audio" id="pagemedia_${c.audio.id}">
-  <a href="${c.audio.url}">Play file</a>
+  <div style="height: 30px" class="flowplayer" id="${c.flowplayer_id}">
+    <a href="${c.audio_url}">Audio</a>
+  </div>
 </div>
 
 <%def name="media_edit_controls()">
