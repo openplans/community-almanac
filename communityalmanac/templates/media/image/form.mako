@@ -18,25 +18,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<div>
-  %if c.image:
-  <form class="edit-media-item" method="post" action="${request.path_url}">
-  %else:
-  <form class="add-media-item" method="post" action="${request.path_url}">
-  %endif
-    <fieldset>
-      <legend>Image</legend>
-      %if c.image:
-      <img src="${c.image.url}" />
-      %endif
-      <div id="${c.image_id}">Upload</div>
-      <div class="upload-status"></div>
-      <a id="submit-upload-image" href="#">Save</a>
-      %if c.image:
-      <a class="media-cancel" href="${h.url_for('media_image_view', media_id=c.image.id)}">Cancel</a>
-      %else:
-      <a class="media-cancel" href="#">Cancel</a>
-      %endif
-    </fieldset>
-  </form>
-</div>
+<%inherit file="/media/base_form.mako" />
+%if c.media_item:
+  <img src="${c.media_item.url}" />
+%endif
+<div id="${c.file_id}">Upload</div>
+<div class="upload-status"></div>
+
+<%def name="submit_button()">
+<a id="submit-upload-file" href="#">Save</a>
+</%def>

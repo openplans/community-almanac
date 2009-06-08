@@ -23,8 +23,10 @@ from pylons import request, response, session, tmpl_context as c, g
 from pylons.controllers.util import abort, redirect_to
 
 from communityalmanac.lib.base import BaseController, render
+from communityalmanac.model import Audio
 from communityalmanac.model import Image
 from communityalmanac.model import Map
+from communityalmanac.model import PDF
 from communityalmanac.model import Story
 from communityalmanac.model import meta
 from pylons.decorators import jsonify
@@ -65,6 +67,7 @@ class MediaController(BaseController):
     def new_form_text(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
+        c.legend = u'Text'
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
@@ -91,6 +94,7 @@ class MediaController(BaseController):
     def new_form_existing_text(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
+        c.legend = u'Text'
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
@@ -114,7 +118,9 @@ class MediaController(BaseController):
     @dispatch_on(POST='_do_edit_form_text')
     @jsonify
     def edit_form_text(self, media_id):
-        c.story = h.get_media_by_id(media_id)
+        c.media_item = h.get_media_by_id(media_id)
+        c.view_url = h.url_for('media_story_view', media_id=c.media_item.id)
+        c.legend = u'Text'
         return dict(html=render('/media/story/form.mako'))
 
     @jsonify
@@ -149,6 +155,7 @@ class MediaController(BaseController):
         page = c.almanac.new_page(self.ensure_user)
         loc = c.almanac.location
         c.map_id = str(uuid.uuid4())
+        c.legend = u'Map'
         return dict(html=render('/media/map/form.mako'),
                     lat=loc.x, lng=loc.y,
                     map_id=c.map_id,
@@ -186,6 +193,7 @@ class MediaController(BaseController):
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         loc = c.almanac.location
         c.map_id = str(uuid.uuid4())
+        c.legend = u'Map'
         return dict(html=render('/media/map/form.mako'),
                     lat=loc.x, lng=loc.y,
                     map_id=c.map_id,
@@ -219,9 +227,11 @@ class MediaController(BaseController):
     @dispatch_on(POST='_do_edit_form_map')
     @jsonify
     def edit_form_map(self, media_id):
-        c.map = h.get_media_by_id(media_id)
+        c.media_item = c.map = h.get_media_by_id(media_id)
         geometry = c.map.location.__geo_interface__
         geojson = simplejson.dumps(geometry)
+        c.view_url = h.url_for('media_map_view', media_id=c.media_item.id)
+        c.legend = u'Map'
         return dict(html=render('/media/map/form.mako'),
                     map_id='pagemedia_%d' % c.map.id,
                     geometry=geojson,
@@ -269,11 +279,12 @@ class MediaController(BaseController):
     def new_form_image(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
-        c.image_id = str(uuid.uuid4())
-        c.image_upload_url = request.path_url
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'Image'
         return dict(html=render('/media/image/form.mako'),
-                    image_id=c.image_id,
-                    image_upload_url=c.image_upload_url,
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
                     )
 
     #@jsonify
@@ -310,11 +321,12 @@ class MediaController(BaseController):
     def new_form_existing_image(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
-        c.image_id = str(uuid.uuid4())
-        c.image_upload_url = request.path_url
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'Image'
         return dict(html=render('/media/image/form.mako'),
-                    image_id=c.image_id,
-                    image_upload_url=c.image_upload_url,
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
                     )
 
     def _do_new_form_existing_image(self, almanac_slug, page_slug):
@@ -345,12 +357,14 @@ class MediaController(BaseController):
     @dispatch_on(POST='_do_edit_form_image')
     @jsonify
     def edit_form_image(self, media_id):
-        c.image = h.get_media_by_id(media_id)
-        c.image_id = str(uuid.uuid4())
-        c.image_upload_url = request.path_url
+        c.media_item = c.image = h.get_media_by_id(media_id)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.view_url = h.url_for('media_image_view', media_id=c.media_item.id)
+        c.legend = u'Image'
         return dict(html=render('/media/image/form.mako'),
-                    image_id=c.image_id,
-                    image_upload_url=c.image_upload_url,
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
                     )
 
     def _do_edit_form_image(self, media_id):
@@ -381,4 +395,244 @@ class MediaController(BaseController):
         image = h.get_media_by_id(media_id)
         os.unlink(image.path)
         meta.Session.delete(image)
+        meta.Session.commit()
+
+    @dispatch_on(POST='_do_new_form_pdf')
+    @jsonify
+    def new_form_pdf(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        page = c.almanac.new_page(self.ensure_user)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'PDF'
+        return dict(html=render('/media/pdf/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_new_form_pdf(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        pdf_file = request.POST.get('userfile')
+        if pdf_file is None:
+            abort(400)
+
+        page = c.almanac.new_page(self.ensure_user)
+
+        pdf_file.make_file()
+        pdf_data = pdf_file.file.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.pdfs_path, new_uuid)
+        f = open(path, 'w')
+        f.write(pdf_data)
+        f.close()
+
+        c.pdf = pdf = PDF()
+        pdf.path = path
+        pdf.page_id = page.id
+        pdf.order = len(page.media)
+        meta.Session.add(pdf)
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/pdf/item.mako')
+
+    @dispatch_on(POST='_do_new_form_existing_pdf')
+    @jsonify
+    def new_form_existing_pdf(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = h.get_page_by_slug(c.almanac, page_slug)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'pdf'
+        return dict(html=render('/media/pdf/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_new_form_existing_pdf(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
+        pdf_file = request.POST.get('userfile')
+        if pdf_file is None:
+            abort(400)
+
+        pdf_file.make_file()
+        pdf_data = pdf_file.file.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.pdfs_path, new_uuid)
+        f = open(path, 'w')
+        f.write(pdf_data)
+        f.close()
+
+        c.pdf = pdf = PDF()
+        pdf.path = path
+        pdf.page_id = page.id
+        pdf.order = len(page.media)
+        meta.Session.add(pdf)
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/pdf/item.mako')
+
+    @dispatch_on(POST='_do_edit_form_pdf')
+    @jsonify
+    def edit_form_pdf(self, media_id):
+        c.media_item = c.pdf = h.get_media_by_id(media_id)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.view_url = h.url_for('media_pdf_view', media_id=c.media_item.id)
+        c.legend = u'PDF'
+        return dict(html=render('/media/pdf/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_edit_form_pdf(self, media_id):
+        c.pdf = h.get_media_by_id(media_id)
+        pdf_file = request.POST.get('userfile')
+        if pdf_file is None:
+            abort(400)
+
+        pdf_file.make_file()
+        pdf_data = pdf_file.file.read()
+        f = open(c.pdf.path, 'w')
+        f.write(pdf_data)
+        f.close()
+
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/pdf/item.mako')
+
+    @jsonify
+    def pdf_view(self, media_id):
+        c.editable = True
+        c.pdf = h.get_media_by_id(media_id)
+        return dict(html=render('/media/pdf/item.mako'))
+
+    @jsonify
+    def delete_pdf(self, media_id):
+        pdf = h.get_media_by_id(media_id)
+        os.unlink(pdf.path)
+        meta.Session.delete(pdf)
+        meta.Session.commit()
+
+    @dispatch_on(POST='_do_new_form_audio')
+    @jsonify
+    def new_form_audio(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        page = c.almanac.new_page(self.ensure_user)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'audio'
+        return dict(html=render('/media/audio/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_new_form_audio(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        audio_file = request.POST.get('userfile')
+        if audio_file is None:
+            abort(400)
+
+        page = c.almanac.new_page(self.ensure_user)
+
+        audio_file.make_file()
+        audio_data = audio_file.file.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.audio_path, new_uuid)
+        f = open(path, 'w')
+        f.write(audio_data)
+        f.close()
+
+        c.audio = audio = Audio()
+        audio.path = path
+        audio.page_id = page.id
+        audio.order = len(page.media)
+        meta.Session.add(audio)
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/audio/item.mako')
+
+    @dispatch_on(POST='_do_new_form_existing_audio')
+    @jsonify
+    def new_form_existing_audio(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = h.get_page_by_slug(c.almanac, page_slug)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.legend = u'audio'
+        return dict(html=render('/media/audio/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_new_form_existing_audio(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
+        audio_file = request.POST.get('userfile')
+        if audio_file is None:
+            abort(400)
+
+        audio_file.make_file()
+        audio_data = audio_file.file.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(g.audio_path, new_uuid)
+        f = open(path, 'w')
+        f.write(audio_data)
+        f.close()
+
+        c.audio = audio = Audio()
+        audio.path = path
+        audio.page_id = page.id
+        audio.order = len(page.media)
+        meta.Session.add(audio)
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/audio/item.mako')
+
+    @dispatch_on(POST='_do_edit_form_audio')
+    @jsonify
+    def edit_form_audio(self, media_id):
+        c.media_item = c.audio = h.get_media_by_id(media_id)
+        c.file_id = str(uuid.uuid4())
+        c.file_upload_url = request.path_url
+        c.view_url = h.url_for('media_audio_view', media_id=c.media_item.id)
+        c.legend = u'audio'
+        return dict(html=render('/media/audio/form.mako'),
+                    file_id=c.file_id,
+                    file_upload_url=c.file_upload_url,
+                    )
+
+    def _do_edit_form_audio(self, media_id):
+        c.audio = h.get_media_by_id(media_id)
+        audio_file = request.POST.get('userfile')
+        if audio_file is None:
+            abort(400)
+
+        audio_file.make_file()
+        audio_data = audio_file.file.read()
+        f = open(c.audio.path, 'w')
+        f.write(audio_data)
+        f.close()
+
+        meta.Session.commit()
+
+        c.editable = True
+        return render('/media/audio/item.mako')
+
+    @jsonify
+    def audio_view(self, media_id):
+        c.editable = True
+        c.audio = h.get_media_by_id(media_id)
+        return dict(html=render('/media/audio/item.mako'))
+
+    @jsonify
+    def delete_audio(self, media_id):
+        audio = h.get_media_by_id(media_id)
+        os.unlink(audio.path)
+        meta.Session.delete(audio)
         meta.Session.commit()

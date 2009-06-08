@@ -19,10 +19,11 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/media/base_item.mako" />
-<div style="width: 500px; height: 400px" class="mediacontent map" id="pagemedia_${c.map.id}">
+<div class="mediacontent audio" id="pagemedia_${c.audio.id}">
+  <a href="${c.audio.url}">Play file</a>
 </div>
 
 <%def name="media_edit_controls()">
-  <a class="media-edit" href="${h.url_for('media_map_edit', media_id=c.map.id)}">Edit</a>
-  <a class="media-delete" href="${h.url_for('media_map_delete', media_id=c.map.id)}">Delete</a>
+  <a class="media-edit" href="${h.url_for('media_audio_edit', media_id=c.audio.id)}">Edit</a>
+  <a class="media-delete" href="${h.url_for('media_audio_delete', media_id=c.audio.id)}">Delete</a>
 </%def>

@@ -18,11 +18,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-<%inherit file="/media/base_item.mako" />
-<div style="width: 500px; height: 400px" class="mediacontent map" id="pagemedia_${c.map.id}">
-</div>
+<%inherit file="/media/base_form.mako" />
+%if c.media_item:
+  <a href="${c.media_item.url}">Play audio</a>
+%endif
+<div id="${c.file_id}">Upload</div>
+<div class="upload-status"></div>
 
-<%def name="media_edit_controls()">
-  <a class="media-edit" href="${h.url_for('media_map_edit', media_id=c.map.id)}">Edit</a>
-  <a class="media-delete" href="${h.url_for('media_map_delete', media_id=c.map.id)}">Delete</a>
+<%def name="submit_button()">
+<a id="submit-upload-file" href="#">Save</a>
 </%def>

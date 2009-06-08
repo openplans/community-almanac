@@ -216,7 +216,7 @@ function applyDisplaySideEffects(data) {
 
 function applyEditSideEffects(data) {
   applyMapEditSideEffects(data);
-  applyImageEditSideEffects(data);
+  applyFileUploadEditSideEffects(data);
 }
 
 function applyMapDisplaySideEffects(data) {
@@ -315,25 +315,24 @@ function applyMapEditSideEffects(data) {
   }
 }
 
-function applyImageEditSideEffects(data) {
-  if (!data.image_id || !data.image_upload_url) {
+function applyFileUploadEditSideEffects(data) {
+  if (!data.file_id || !data.file_upload_url) {
     return;
   }
-  var image_id = data.image_id;
-  var image_upload_url = data.image_upload_url;
-  var imageElt = $('#' + image_id);
-  var saveLink = imageElt.nextAll('#submit-upload-image');
-  var li = imageElt.closest('li');
-  var uploadStatus = imageElt.nextAll('.upload-status');
+  var file_id = data.file_id;
+  var file_upload_url = data.file_upload_url;
+  var fileElt = $('#' + file_id);
+  var saveLink = fileElt.nextAll('#submit-upload-file');
+  var li = fileElt.closest('li');
+  var uploadStatus = fileElt.nextAll('.upload-status');
   var onComplete = function(file, response) {
     uploadStatus.text('Upload Complete!');
     newli = $('<li></li>').append(response);
-    the_imageElt = imageElt;
     li.replaceWith(newli);
     au.destroy();
   };
-  var au = new AjaxUpload(image_id, {
-    action: image_upload_url,
+  var au = new AjaxUpload(file_id, {
+    action: file_upload_url,
     name: 'userfile',
     //responseType: 'json',
     autoSubmit: false,

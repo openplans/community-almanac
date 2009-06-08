@@ -211,11 +211,20 @@ class PDF(Media):
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     path = Column(Unicode)
 
-class Sound(Media):
-    __tablename__ = 'sounds'
-    __mapper_args__ = dict(polymorphic_identity='sound')
+    @property
+    def url(self):
+        return '/media/pdfs/%s' % self.path.split(os.sep)[-1]
+
+class Audio(Media):
+    __tablename__ = 'audios'
+    __mapper_args__ = dict(polymorphic_identity='audio')
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     path = Column(Unicode)
+
+    @property
+    def url(self):
+        return '/media/audio/%s' % self.path.split(os.sep)[-1]
+
 
 class Image(Media):
     __tablename__ = 'images'

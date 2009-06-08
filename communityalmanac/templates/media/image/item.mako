@@ -18,19 +18,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
-% if c.editable:
-<div class="media-tab">drag</div>
-<div class="media-content">
-  <div class="media-controls">
-    <a class="media-edit" href="${h.url_for('media_image_edit', media_id=c.image.id)}">Edit</a>
-    <a class="media-delete" href="${h.url_for('media_image_delete', media_id=c.image.id)}">Delete</a>
-  </div>
-  <div class="mediacontent image" id="pagemedia_${c.image.id}">
-    <img src="${c.image.url}" />
-  </div>
-</div>
-% else:
+<%inherit file="/media/base_item.mako" />
 <div class="mediacontent image" id="pagemedia_${c.image.id}">
   <img src="${c.image.url}" />
 </div>
-%endif
+
+<%def name="media_edit_controls()">
+  <a class="media-edit" href="${h.url_for('media_image_edit', media_id=c.image.id)}">Edit</a>
+  <a class="media-delete" href="${h.url_for('media_image_delete', media_id=c.image.id)}">Delete</a>
+</%def>

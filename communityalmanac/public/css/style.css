@@ -70,51 +70,45 @@ background: url(/img/brown-noise-dark.png) -50% 0 repeat;
 }
 
 #ill-sky {
-background: url(/img/ill-sky.jpg) center bottom repeat-x;
-min-width: 980px;
+	background: url(/img/ill-sky-sm.jpg) center bottom repeat-x;
 }
-
 #ill-clouds {
-background: url(/img/ill-clouds.png) 30% 7px repeat-x;
+	background: url(/img/ill-clouds-sm.png) 30% 0 repeat-x;
 }
-
 #ill-mountains {
-background: url(/img/ill-mountains.png) 20px bottom no-repeat;
+	background: url(/img/ill-mountains-sm.png) 250px 60px no-repeat;
 }
-
 #ill-hills {
-background: url(/img/ill-hills.png) -20% 162px repeat-x;
+	background: url(/img/ill-hills.png) -20% 112px repeat-x;
 }
-
 #ill-foreground {
-background: url(/img/ill-foreground-b.png) -50% bottom repeat-x;
+	background: url(/img/ill-foreground-b.png) -50% bottom repeat-x;
 }
-
 * html #ill-sky,
 * html #ill-clouds,
 * html #ill-mountains,
 * html #ill-hills,
 * html #ill-foreground { /* IE6 */
-background: url(/img/ill-header-ie6.png) repeat-x;
+background: url(/img/ill-header-ie6-sm.png) repeat-x;
 }
 
 #header {
-height: 230px;
+height: 180px;
 text-align: left;
 margin: auto;
 }
 
 h1#logo {
-width: 252px;
-height: 162px;
-margin: 25px 10% 0 20px;
+width: 202px;
+height: 130px;
+margin: 20px 7% 0 20px;
 float: right;
 }
 
 h1#logo a {
-width: 252px;
-height: 162px;
-background: url(/img/logo.png) top left no-repeat;
+width: 202px;
+height: 130px;
+background: url(/img/logo-sm.png) no-repeat;
 text-indent: -9999px;
 display: block;
 }
@@ -154,6 +148,7 @@ background: url(/img/book-tile.png) center top;
 border: 0.3em solid #d0c9b9;
 border-top: 0;
 text-align: right;
+z-index: 11;
 }
 
 #login input {
@@ -471,6 +466,7 @@ top: -120px;
 left: -23px;
 text-align: left;
 padding: 40px 0 0;
+z-index: 10;
 }
 
 #backtoc a {

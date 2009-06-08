@@ -23,9 +23,11 @@ Consists of functions to typically be used within templates, but also
 available to Controllers. This module is available to templates as 'h'.
 """
 from communityalmanac.model import Almanac
+from communityalmanac.model import Audio
 from communityalmanac.model import Image
 from communityalmanac.model import Map
 from communityalmanac.model import Media
+from communityalmanac.model import PDF
 from communityalmanac.model import Page
 from communityalmanac.model import Story
 from communityalmanac.model import meta
@@ -142,6 +144,12 @@ def render_media_items(media_items, editable=False):
         elif isinstance(media_item, Image):
             c.image = media_item
             rendered_item = render('/media/image/item.mako')
+        elif isinstance(media_item, PDF):
+            c.pdf = media_item
+            rendered_item = render('/media/pdf/item.mako')
+        elif isinstance(media_item, Audio):
+            c.audio = media_item
+            rendered_item = render('/media/audio/item.mako')
         else:
             rendered_item = u''
         rendered_media_items.append((media_item.order, rendered_item))
