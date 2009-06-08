@@ -35,7 +35,18 @@ class Globals(object):
 
         """
         self.map_key = config['map_key']
+
+    @property
+    def images_path(self):
         media_path = path.join(request.environ['pylons.pylons'].config['pylons.paths']['static_files'], 'media')
-        self.images_path = config.get('images_path', path.join(media_path, 'images'))
-        self.audio_path = config.get('audio_path', path.join(media_path, 'images'))
-        self.pdfs_path = config.get('pdfs_path', path.join(media_path, 'images'))
+        return config.get('images_path', path.join(media_path, 'images'))
+
+    @property
+    def audio_path(self):
+        media_path = path.join(request.environ['pylons.pylons'].config['pylons.paths']['static_files'], 'media')
+        return config.get('audio_path', path.join(media_path, 'images'))
+
+    @property
+    def pdfs_path(self):
+        media_path = path.join(request.environ['pylons.pylons'].config['pylons.paths']['static_files'], 'media')
+        return config.get('pdfs_path', path.join(media_path, 'images'))
