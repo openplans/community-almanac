@@ -20,7 +20,9 @@
 --></%doc>
 <%inherit file="/media/base_form.mako" />
 %if c.media_item:
-  <a href="${c.media_item.url}">Play audio</a>
+  <div style="height: 30px" class="flowplayer" id="${c.flowplayer_id}">
+    <a href="${c.audio_url}">Audio</a>
+  </div>
 %endif
 <div id="${c.file_id}">Upload</div>
 <div class="upload-status"></div>

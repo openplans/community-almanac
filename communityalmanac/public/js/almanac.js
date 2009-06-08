@@ -227,6 +227,7 @@ function applyDisplaySideEffects(data) {
 function applyEditSideEffects(data) {
   applyMapEditSideEffects(data);
   applyFileUploadEditSideEffects(data);
+  applyFlowPlayerSideEffects(data);
 }
 
 function applyMapDisplaySideEffects(data) {
