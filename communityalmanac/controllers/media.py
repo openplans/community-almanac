@@ -314,7 +314,7 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        return simplejson.dumps(html=render('/media/image/item.mako'))
+        return h.literal(simplejson.dumps(dict(html=render('/media/image/item.mako'))))
 
     @dispatch_on(POST='_do_new_form_existing_image')
     @jsonify
