@@ -61,7 +61,11 @@ class BaseController(WSGIController):
         # Check for session user
         userid = session.setdefault('userid', None)
         if userid:
-            return meta.Session.query(User).get(userid)
+            user = meta.Session.query(User).get(userid)
+            if user:
+                return user
+            # The failing case should only happen when a valid session exists
+            # with a reference to a user that has been deleted.
         user = AnonymousUser()
         meta.Session.add(user)
         meta.Session.commit()
