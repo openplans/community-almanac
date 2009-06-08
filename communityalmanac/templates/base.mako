@@ -50,9 +50,8 @@
                   <form action="/do_login" method="post">
                     <input id="username" name="login" type="text" />
                     <input id="password" name="password" type="password" />
-                    <input id="login-submit" type="submit" value="Log In"/>Not a member yet? <a href="/signup">Sign Up!</a><br /><a href="/forgot">Forgot your password?</a></form><div class="tab"><a href="#">Login</a></div></div>
-                %endif
-                
+                    <input id="login-submit" type="submit" value="Log In"/>Not a member yet? <a href="/login#login-new">Sign Up!</a><br /><a href="/forgot">Forgot your password?</a></form><div class="tab"><a href="/login#login-returning">Login</a></div></div>
+                %endif         
                 <h3 id="tagline">The heart <span class="amp">&#038;</span> soul of <nobr>the place you live&hellip;</nobr></h3>
               </div>
             </div>

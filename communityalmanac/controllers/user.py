@@ -39,6 +39,7 @@ class PerformResetSchema(Schema):
 class UserController(BaseController):
 
     def login(self):
+        c.active_section = request.params.get('show','login-new')
         if request.environ.get('repoze.who.identity') == None:
             return render('/user/login.mako')
         redirect_to(h.url_for('home'))
