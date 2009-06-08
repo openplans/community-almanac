@@ -18,7 +18,8 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
 """The application's Globals object"""
-from pylons import config
+from pylons import config, request
+from os import path
 
 class Globals(object):
 
@@ -34,6 +35,18 @@ class Globals(object):
 
         """
         self.map_key = config['map_key']
-        self.images_path = config['images_path']
-        self.audio_path = config['audio_path']
-        self.pdfs_path = config['pdfs_path']
+
+    @property
+    def images_path(self):
+        media_path = path.join(request.environ['pylons.pylons'].config['pylons.paths']['static_files'], 'media')
+        return config.get('images_path', path.join(media_path, 'images'))
+
+    @property
+    def audio_path(self):
+        media_path = path.join(request.environ['pylons.pylons'].config['pylons.paths']['static_files'], 'media')
+        return config.get('audio_path', path.join(media_path, 'images'))
+
+    @property
+    def pdfs_path(self):
+        media_path = path.join(request.environ['pylons.pylons'].config['pylons.paths']['static_files'], 'media')
+        return config.get('pdfs_path', path.join(media_path, 'images'))
