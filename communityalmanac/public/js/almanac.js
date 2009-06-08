@@ -221,6 +221,7 @@ $(document).ready(function() {
 
 function applyDisplaySideEffects(data) {
   applyMapDisplaySideEffects(data);
+  applyFlowPlayerSideEffects(data);
 }
 
 function applyEditSideEffects(data) {
@@ -367,6 +368,25 @@ function applyFlowPlayerSideEffects(data) {
   //XXX
   // this is hardcoded to use html for now until we fix the json issue from the uploader above
   // the data is actually the html returned back from the server
+
+  // if it's an actual json structure passed in, then we'll use that to parse
+  // out the html element and recursively call ourselves
+  if (data.html && typeof data.html != 'function') {
+    var html = data.html;
+    // now we'll parse out the id, and use that to find the html element
+    // that we need to call ourselves with, and make the recursive call
+    var flowplayerString = 'class="flowplayer" id="';
+    var idx = html.indexOf(flowplayerString);
+    if (idx == -1) {
+      return;
+    }
+    var startIdx = idx + flowplayerString.length;
+    var endIdx = html.indexOf('"', startIdx);
+    var nchars = endIdx - startIdx;
+    var flowplayerId = html.substr(startIdx, nchars);
+    var li = $('#' + flowplayerId).closest('li');
+    return applyFlowPlayerSideEffects(li);
+  }
 
   var flowplayerElt = data.find('div.flowplayer');
   if (flowplayerElt.length == 0) {
