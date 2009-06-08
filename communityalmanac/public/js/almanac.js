@@ -347,7 +347,7 @@ function applyFileUploadEditSideEffects(data) {
     name: 'userfile',
     //XXX we're not using json here because eval doesn't seem to want to
     // convert the json returned from the server into an object
-    responseType: 'json',
+    responseType: false,
     autoSubmit: false,
     onChange: function(file, extension) {
       uploadStatus.text('Ready to upload: ' + file);
