@@ -768,15 +768,26 @@ min-width: 1065px;
 body.home #content .wrap {
 text-align: left;
 margin: 0 10%;
-min-width: 960px;
+width: 980px;
+}
+
+body.home #intro {
+padding: 25px 12px 0 18px;
+background: url(/img/intro-bg.png) no-repeat;
+}
+
+body.home #intro .text {
+height: 32em;
+width: 340px;
+padding: 0 10px;
+float: right;
+overflow: hidden;
+background: url(/img/page-bg.png) repeat;
+margin: 13px 0 -50px;
 }
 
 body.home #intro .panel-wrap {
 position: relative;
-height: 25em;
-width: 44%;
-float: left;
-overflow: hidden;
 }
 
 body.home #intro .panel {
@@ -785,7 +796,6 @@ top: 0;
 left: 0;
 width: 100%;
 height: 25em;
-color: #ffe1a6;
 }
 
 body.home #intro .inactive {
@@ -824,6 +834,21 @@ float: left;
 float: right;
 }
 
+body.home #intro .prevnext {
+float: right;
+width: 50%;
+}
+
+body.home #intro .next-panel,
+body.home #intro .prev-panel {
+color: #fff;
+background: url(/img/bttn-bg-orange.jpg) repeat;
+border: 2px solid #d0c9b9;
+text-decoration: none;
+font-size: 1.2em;
+padding: 0.3em;
+}
+
 body.home #intro .next-panel {
 float: right;
 }
@@ -833,8 +858,7 @@ float: left;
 }
 
 body.home #intro .map {
-width: 50%;
-margin-left: 50%;
+width: 580px;
 }
 
 * html body.home #intro .map {
@@ -870,8 +894,9 @@ border: 4px solid #b2b32d;
 font-size: 1.5em;
 line-height: 1em;
 padding: 0.3em;
-color: #003459;
+color: #fff;
 text-decoration: none;
+width: 13%;
 }
 
 #almanac-frontispiece {
@@ -911,16 +936,32 @@ margin: 0;
 padding: 0;
 list-style-type: none;
 position: relative;
-height: 81px;
-width: 684px;
+height: 80px;
+width: 691px;
 background: url(/img/almanac-spine-bg.png) 0 0 no-repeat;
 overflow: hidden;
 }
 
+ul#almanacs li:nth-child(even) {
+margin-left: -10px;
+}
+
+ul#almanacs li:nth-child(3n) {
+margin-left: -4px;
+}
+
+ul#almanacs li:nth-child(4n) {
+margin-left: 3px;
+}
+
+ul#almanacs li:nth-child(5n) {
+margin-left: 0;
+}
+
 ul#almanacs li a {
 display: block;
-height: 81px;
-width: 684px;
+height: 80px;
+width: 691px;
 text-decoration: none;
 }
 
@@ -950,21 +991,23 @@ color: #ffe1a6;
 }
 
 #recent-activity {
-background: url(/img/torn-paper.png) repeat-y;
+background: url(/img/torn-paper-top.png) no-repeat;
 width: 260px;
 float: right;
+margin: 65px 0 0;
 }
 
 #recent-activity h2 {
 color: #ff6040;
 font-size: 1.1em;
-padding: 0.5em;
+padding: 20px 15px 0.5em 25px;
 }
 
 ul#pages {
 color: #70818c;
-padding: 0 0.5em;
+padding: 0 15px 0 25px;
 margin: 0;
+background: url(/img/torn-paper.png) repeat-y;
 }
 
 ul#pages li {
