@@ -591,7 +591,10 @@ class MediaController(BaseController):
         c.flowplayer_id = new_uuid
         c.audio_url = request.application_url + c.audio.url
         response.content_type = 'application/javascript'
-        return simplejson.dumps(dict(html=render('/media/audio/item.mako')))
+        return simplejson.dumps(dict(html=render('/media/audio/item.mako'),
+                                     flowplayer_id=c.flowplayer_id,
+                                     audio_url=c.audio_url,
+                                     ))
 
     @dispatch_on(POST='_do_new_form_existing_audio')
     @jsonify
@@ -633,7 +636,10 @@ class MediaController(BaseController):
         c.flowplayer_id = new_uuid
         c.audio_url = request.application_url + c.audio.url
         response.content_type = 'application/javascript'
-        return simplejson.dumps(dict(html=render('/media/audio/item.mako')))
+        return simplejson.dumps(dict(html=render('/media/audio/item.mako'),
+                                     flowplayer_id=c.flowplayer_id,
+                                     audio_url=c.audio_url,
+                                     ))
 
     @dispatch_on(POST='_do_edit_form_audio')
     @jsonify
@@ -648,6 +654,8 @@ class MediaController(BaseController):
         return dict(html=render('/media/audio/form.mako'),
                     file_id=c.file_id,
                     file_upload_url=c.file_upload_url,
+                    flowplayer_id=c.flowplayer_id,
+                    audio_url=c.audio_url,
                     )
 
     def _do_edit_form_audio(self, media_id):
@@ -668,7 +676,10 @@ class MediaController(BaseController):
         c.flowplayer_id = str(uuid.uuid4())
         c.audio_url = request.application_url + c.audio.url
         response.content_type = 'application/javascript'
-        return simplejson.dumps(dict(html=render('/media/audio/item.mako')))
+        return simplejson.dumps(dict(html=render('/media/audio/item.mako'),
+                                     flowplayer_id=c.flowplayer_id,
+                                     audio_url=c.audio_url,
+                                     ))
 
     @jsonify
     def audio_view(self, media_id):
@@ -676,7 +687,10 @@ class MediaController(BaseController):
         c.audio = h.get_media_by_id(media_id)
         c.flowplayer_id = str(uuid.uuid4())
         c.audio_url = request.application_url + c.audio.url
-        return dict(html=render('/media/audio/item.mako'))
+        return dict(html=render('/media/audio/item.mako'),
+                    flowplayer_id=c.flowplayer_id,
+                    audio_url=c.audio_url,
+                    )
 
     @jsonify
     def delete_audio(self, media_id):
