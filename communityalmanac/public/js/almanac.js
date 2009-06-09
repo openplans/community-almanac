@@ -71,20 +71,22 @@ $(document).ready(function() {
     for (var i = 0; i < pageMapFeatures.length; i++) {
       var fn = function(i) {
         var feature_data = pageMapFeatures[i];
-        applyDisplaySideEffects(feature_data);
+        applyMapDisplaySideEffects(feature_data);
       };
       fn(i);
     }
   }
 
   // XXX we should have a structure similar to the above for flowplayer
-  // but until we figure out the json issue described below, we hack it for now
-  $('ul.page-media-items li').each(function() {
-    // XXX the flowplayer code currently expects the li as input
-    // but this will be changed to a json structure once the json issue is
-    // figured out
-    applyFlowPlayerSideEffects($(this));
-  });
+  if (window.flowplayerElts) {
+    for (var i = 0; i < flowplayerElts.length; i++) {
+      var fn = function(i) {
+        var flowplayerData = flowplayerElts[i];
+        applyFlowPlayerSideEffects(flowplayerData);
+      };
+      fn(i);
+    }
+  }
 
   // add sortable behavior
   $('ul.page-media-items').sortable({
@@ -342,7 +344,7 @@ function applyFileUploadEditSideEffects(data) {
     li.replaceWith(newli);
     au.destroy();
     // XXX this shouldn't be here, but it is until we figure out the json issue
-    applyFlowPlayerSideEffects(newli)
+    applyFlowPlayerSideEffects(response)
   };
   var au = new AjaxUpload(file_id, {
     action: file_upload_url,
@@ -366,40 +368,15 @@ function applyFileUploadEditSideEffects(data) {
 }
 
 function applyFlowPlayerSideEffects(data) {
-  //XXX
-  // this is hardcoded to use html for now until we fix the json issue from the uploader above
-  // the data is actually the html returned back from the server
-
-  // if it's an actual json structure passed in, then we'll use that to parse
-  // out the html element and recursively call ourselves
-  if (data.html && typeof data.html != 'function') {
-    var html = data.html;
-    // now we'll parse out the id, and use that to find the html element
-    // that we need to call ourselves with, and make the recursive call
-    var flowplayerString = 'class="flowplayer" id="';
-    var idx = html.indexOf(flowplayerString);
-    if (idx == -1) {
-      return;
-    }
-    var startIdx = idx + flowplayerString.length;
-    var endIdx = html.indexOf('"', startIdx);
-    var nchars = endIdx - startIdx;
-    var flowplayerId = html.substr(startIdx, nchars);
-    var li = $('#' + flowplayerId).closest('li');
-    return applyFlowPlayerSideEffects(li);
+  if (!data.flowplayer_id || !data.audio_url) {
+    return;
   }
 
-  var flowplayerElt = data.find('div.flowplayer');
+  var flowplayerId = data.flowplayer_id;
+  var flowplayerAudioUrl = data.audio_url;
+
+  var flowplayerElt = $('#' + data.flowplayer_id);
   if (flowplayerElt.length == 0) {
-    return;
-  }
-  var flowplayerId = flowplayerElt.attr('id');
-  if (!flowplayerId) {
-    return;
-  }
-
-  var flowplayerAudioUrl = flowplayerElt.find('a').attr('href');
-  if (!flowplayerAudioUrl) {
     return;
   }
 
