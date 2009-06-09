@@ -20,54 +20,54 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <div class="wrap selfclear">
-	<div id="intro" class="selfclear">
-	  <div class="panel-wrap">
-			<div class="panel">
-				<h2>What is a Community Almanac?</h2>
-				<p>It's where you and your community share stories about the heart <span class="amp">&#038;</span> soul of the place you live. It's a lasting record of the place you love—the place you call home.</p> 
-				<p><strong>Start by finding your community on the map.</strong></p>
-				<div id="add-pages-blurb" class="selfclear">
-				  <img class="pngfix" src="/img/paper-icon-64.png" width="64" height="64" alt="Page icon" />
-					<h3>Can I add my own pages?</h3>
-					<p>Yes, and it's free! Just find your community on the map <span class="amp">&#038;</span> start contributing to its almanac.</p>
-				</div>
-				<div id="add-almanac-blurb" class="selfclear">
-				  <img class="pngfix" src="/img/book-icon-64.png" width="64" height="64" alt="Almanac icon" />
-					<h3>What if my town has no almanac?</h3>
-					<p>Simply add a page for your community to start a new almanac.</p>
-					<p class="selfclear"><a class="next-panel" href="${h.url_for('almanac_create')}">Learn more &#187;</a></p>
-				</div>
-			</div><!-- /.panel -->
-			<div class="panel inactive">
-				<h3>Anyone can contribute!</h3>
-				<p>What makes your town a truly special place? You do. Add pages and fill them with your content. Read other people's pages and post your replies. Get reacquainted with your town.</p> 
-				<h3>Make Local connections.</h3>
-				<p>Community Almanac is a fun way to swap stories with your neighbors. Tell 'em about your favorite sledding hill or swimming hole, the best tree to climb or the coolest place to play stickball. Record memories from life, and make connections in your town. </p>
-				<p><strong>Start by finding your community on the map.</strong></p>
-				<p class="selfclear"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-panel" href="#">Learn more &#187;</a></p>
-			</div><!-- /.panel -->
-			<div class="panel inactive">
-				<h3>Share in all sorts of formats.</h3>
-				<p>Add text, pictures, maps, audio, video and PDFs to your pages. It's easy! Add a video of your grandfather speaking about his childhood.</p> 
-				<h3>Connect stories with real places.</h3>
-				<p>Community Almanac's mapping tools let you document particular places in your community. You can draw on a map to show a street corner, bike trail, stretch of shore front, or even the course your canoe floated down that river.</p>
-				<p><strong>Start by finding your community on the map.</strong></p>
-				<p class="selfclear"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-panel" href="#">Learn more &#187;</a></p>
-			</div><!-- /.panel -->
-			<div class="panel inactive">
-				<h3>It's about community heart <span class="amp">&#038;</span> soul.</h3>
-				<p>The Orton Family Foundation coined the term "community heart <span class="amp">&#038;</span> soul" to describe the people, places, history, traditions, issues (even feuds), values and other characteristics that make your town unique. Community Almanac's non-profit sponsors (Orton Family Foundation <span class="amp">&#038;</span> The Open Planning Project) want to help communities articulate, implement and steward their heart <span class="amp">&#038;</span> soul.</p> 
-				<h3>And it's available totally free!</h3>
-				<p>All you have to do is create a free, no-strings-attached login ID and password.</p>
-				<p><strong>Start by finding your community on the map.</strong></p>
-				<p class="selfclear"><a class="prev-panel" href="#">&#171; Previous</a></p>
-			</div><!-- /.panel -->
-		</div><!-- /.panel-wrap -->
+	<div id="intro" class="selfclear pngfix">
+	  <div class="text">
+		  <div class="panel-wrap">
+				<div class="panel">
+					<h2>What is a Community Almanac?</h2>
+					<p>It's where you and your community share stories about the heart <span class="amp">&#038;</span> soul of the place you live. It's a lasting record of the place you love—the place you call home.</p> 
+					<p><strong>Start by finding your community on the map.</strong></p>
+					<div id="add-pages-blurb" class="selfclear">
+					  <h3>Can I add my own pages?</h3>
+						<p>Yes, and it's free! Just find your community on the map <span class="amp">&#038;</span> start contributing to its almanac.</p>
+					</div>
+					<div id="add-almanac-blurb" class="selfclear">
+						<h3>What if my town has no almanac?</h3>
+						<p>Simply add a page for your community to start a new almanac.</p>
+						<p class="prevnext"><a class="next-panel" href="${h.url_for('almanac_create')}">Next &#187;</a></p>
+					</div>
+				</div><!-- /.panel -->
+				<div class="panel inactive">
+					<h3>Anyone can contribute!</h3>
+					<p>What makes your town a truly special place? You do. Add pages and fill them with your content. Read other people's pages and post your replies. Get reacquainted with your town.</p> 
+					<h3>Make Local connections.</h3>
+					<p>Community Almanac is a fun way to swap stories with your neighbors. Tell 'em about your favorite sledding hill or swimming hole, the best tree to climb or the coolest place to play stickball. Record memories from life, and make connections in your town. </p>
+					<p><strong>Start by finding your community on the map.</strong></p>
+					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-panel" href="#">Next &#187;</a></p>
+				</div><!-- /.panel -->
+				<div class="panel inactive">
+					<h3>Share in all sorts of formats.</h3>
+					<p>Add text, pictures, maps, audio, video and PDFs to your pages. It's easy! Add a video of your grandfather speaking about his childhood.</p> 
+					<h3>Connect stories with real places.</h3>
+					<p>Community Almanac's mapping tools let you document particular places in your community. You can draw on a map to show a street corner, bike trail, stretch of shore front, or even the course your canoe floated down that river.</p>
+					<p><strong>Start by finding your community on the map.</strong></p>
+					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-panel" href="#">Next &#187;</a></p>
+				</div><!-- /.panel -->
+				<div class="panel inactive">
+					<h3>It's about community heart <span class="amp">&#038;</span> soul.</h3>
+					<p>The Orton Family Foundation coined the term "community heart <span class="amp">&#038;</span> soul" to describe the people, places, history, traditions, issues (even feuds), values and other characteristics that make your town unique. Community Almanac's non-profit sponsors (Orton Family Foundation <span class="amp">&#038;</span> The Open Planning Project) want to help communities articulate, implement and steward their heart <span class="amp">&#038;</span> soul.</p> 
+					<h3>And it's available totally free!</h3>
+					<p>All you have to do is create a free, no-strings-attached login ID and password.</p>
+					<p><strong>Start by finding your community on the map.</strong></p>
+					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a></p>
+				</div><!-- /.panel -->
+			</div><!-- /.panel-wrap -->	
+		</div><!-- /.text -->
 		<div class="map">
 			<form id="almanac-create-form" action="${h.url_for('almanac_create')}" method="post">
 				<input id="almanac-name" type="text" value=""/>
 				<a class="find-almanac" title="Find almanac" href="#">Locate</a>
-				<div style="height: 350px; width: 500px" id="map"></div>
+				<div style="height: 230px; width: 580px" id="map"></div>
 				<input id="almanac-center" type="hidden" name="almanac_center" value="" />
 				<input id="almanac-authoritative" type="hidden" name="name" value="" />
 				<input id="almanac-submit" type="submit" value="Add a Page" />
@@ -83,10 +83,9 @@
 	  </ul><!-- /#pages -->
 	</div><!-- /#recent-activity -->
 	% if c.almanacs:
-    <h3 id="almanac-frontispiece"><span class="pngfix">${c.n_almanacs} Recently Updated Almanacs</span></h3>
 	  <ul id="almanacs">
 	    % for almanac in c.almanacs:
-	    <li><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name}</span><span class="almanac-timestamp">June 15, 2009</span></a></li>
+	    <li class="pngfix"><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name}</span><span class="almanac-timestamp">June 15, 2009</span></a></li>
 	    % endfor
 	  </ul><!-- /#almanacs -->
 	% endif

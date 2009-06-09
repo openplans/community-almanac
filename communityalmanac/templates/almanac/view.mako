@@ -22,7 +22,7 @@
 <h2 class="almanac-title pngfix">${c.almanac.name}</h2>
 <div id="map" style="width: 100%; height: 300px; border: 4px solid #d0c9b9;"></div>
 % if c.almanac.pages:
-  <h3 id="frontispiece-pages"><strong>Table of Contents</strong> ${len(c.almanac.pages)} pages</h3>
+  <h3 id="frontispiece-pages"><span><strong>Table of Contents</strong> <em>${len(c.almanac.pages)} pages</em></span></h3>
   <ul class="almanac-pages">
     % for page in c.almanac.pages:
     <li class="selfclear">
