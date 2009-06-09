@@ -19,10 +19,8 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/media/base_item.mako" />
-<div class="mediacontent audio" id="pagemedia_${c.audio.id}">
-  <div style="height: 30px" class="flowplayer" id="${c.flowplayer_id}">
-    <a href="${c.audio_url}">Audio</a>
-  </div>
+<div style="height: 30px" class="mediacontent audio" id="pagemedia_${c.audio.id}">
+  <a href="${c.audio_url}">Audio</a>
 </div>
 
 <%def name="media_edit_controls()">

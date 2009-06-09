@@ -57,6 +57,8 @@ class PageController(BaseController):
         c.media_items = h.render_media_items(media_items, editable=True)
         map_features = h.map_features_for_media(media_items)
         c.map_features = h.literal(simplejson.dumps(map_features))
+        flow_data = h.flowplayer_data_for_media(media_items)
+        c.flow_data = h.literal(simplejson.dumps(flow_data))
         c.is_add = True
         return render('/page/add_edit.mako')
 
@@ -82,6 +84,8 @@ class PageController(BaseController):
         c.media_items = h.render_media_items(c.page.media, editable=False)
         map_features = h.map_features_for_media(c.page.media)
         c.map_features = h.literal(simplejson.dumps(map_features))
+        flow_data = h.flowplayer_data_for_media(c.page.media)
+        c.flow_data = h.literal(simplejson.dumps(flow_data))
         return render('/page/view.mako')
 
     @validate(schema=PageCommentForm(), form='view')
@@ -105,6 +109,8 @@ class PageController(BaseController):
         c.media_items = h.render_media_items(c.page.media, editable=True)
         map_features = h.map_features_for_media(c.page.media)
         c.map_features = h.literal(simplejson.dumps(map_features))
+        flow_data = h.flowplayer_data_for_media(c.page.media)
+        c.flow_data = h.literal(simplejson.dumps(flow_data))
         c.is_add = False
         return render('/page/add_edit.mako')
 

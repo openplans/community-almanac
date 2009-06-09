@@ -152,7 +152,7 @@ def render_media_items(media_items, editable=False):
         elif isinstance(media_item, Audio):
             c.audio = media_item
             c.audio_url = request.application_url + c.audio.url
-            c.flowplayer_id = str(uuid.uuid4())
+            c.flowplayer_id = 'pagemedia_%s' % c.audio.id
             rendered_item = render('/media/audio/item.mako')
         else:
             rendered_item = u''
@@ -174,3 +174,16 @@ def map_features_for_media(media_items):
                                      geometry=geojson,
                                      ))
     return map_features
+
+def flowplayer_data_for_media(media_items):
+    """return a list of dicts that contain the flowplayer data for all audio media"""
+    flow_data = []
+    for index, media_item in enumerate(media_items):
+        n = index + 1
+        if isinstance(media_item, Audio):
+            flowplayer_id = 'pagemedia_%s' % media_item.id
+            audio_url = request.application_url + media_item.url
+            flow_data.append(dict(flowplayer_id=flowplayer_id,
+                                  audio_url=audio_url,
+                                  ))
+    return flow_data
