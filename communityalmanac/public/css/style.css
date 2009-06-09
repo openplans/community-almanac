@@ -143,7 +143,7 @@ margin: 0;
 position: absolute;
 line-height: 1em;
 top: -11.8em;
-left: 10%;
+left: 7%;
 background: url(/img/book-tile.png) center top;
 border: 0.3em solid #d0c9b9;
 border-top: 0;
@@ -190,8 +190,8 @@ display: block;
 }
 
 h3#tagline {
-margin: 0 0 0 10%;
-padding: 2em 0 0;
+margin: 0 0 0 7%;
+padding: 1.5em 0 0 16px;
 clear: left;
 font-size: 1.9em;
 }
@@ -381,8 +381,10 @@ line-height: 1.5;
 background: url(/img/bttn-bg-blue.jpg) top left repeat;
 font-family: georgia, serif;
 color: #fff;
-border: 4px solid #069;
-border-width: 0 0 4px;
+border-top: 1px solid #80d4ff;
+border-right: 2px solid #069;
+border-bottom: 2px solid #069;
+border-left: 1px solid #80d4ff;
 font-size: 1.4em;
 line-height: 1em;
 margin: 0 0 20px;
@@ -412,13 +414,16 @@ font-size: 0.8em;
 #comment-bttn:hover,
 #add-page-bttn:hover,
 #submit-button-form input:hover {
-border-width: 4px 0 0;
+border-top: 2px solid #069;
+border-right: 1px solid #08c;
+border-bottom: 1px solid #08c;
+border-left: 2px solid #069;
 }
 
 #comment-submit a:hover,
 #comment-bttn a:hover,
 #add-page-bttn a:hover {
-color: #069;
+color: #fff;
 }
 
 #comment-bttn {
@@ -670,20 +675,31 @@ margin-left: -25px;
 }
 
 h3#frontispiece-pages {
-background: url(/img/frontispiece-pages-bg.png) 50% 50% no-repeat;
-padding: 5px 155px;
-text-align: center;
-font-size: 1em;
-color: #70818c;
+background: transparent url(/img/toc-line.gif) repeat-x scroll left center;
+color:#70818C;
+font-size:1.2em;
+line-height: 1.2;
+text-align:center;
+padding: 0;
+margin: 40px 0 20px;
 }
 
-* html h3#frontispiece-pages {
-background: url(/img/frontispiece-pages-bg-ie6.png) 50% 50% no-repeat;
+h3#frontispiece-pages span {
+background: transparent url(/img/toc-r.gif) no-repeat scroll right center;
+display: inline-block;
+margin: 0 auto;
+padding-right: 30px;
 }
 
-h3#frontispiece-pages strong {
-font-size: 1.2em;
-color: #003459;
+h3#frontispiece-pages span strong {
+color:#003459;
+background: transparent url(/img/toc-l.gif) no-repeat scroll left center;
+padding-left: 30px;
+}
+
+h3#frontispiece-pages span em {
+font-size:0.875em;
+font-style: normal;
 }
 
 ul.almanac-pages {
