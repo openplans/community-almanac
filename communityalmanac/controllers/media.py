@@ -634,6 +634,7 @@ class MediaController(BaseController):
         c.media_item = c.audio = h.get_media_by_id(media_id)
         c.file_id = str(uuid.uuid4())
         c.file_upload_url = request.path_url
+        c.flowplayer_id = str(uuid.uuid4())
         c.audio_url = request.application_url + c.audio.url
         c.view_url = h.url_for('media_audio_view', media_id=c.media_item.id)
         c.legend = u'audio'
