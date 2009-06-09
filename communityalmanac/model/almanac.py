@@ -318,6 +318,10 @@ class AnonymousUser(User):
     __mapper_args__ = dict(polymorphic_identity='anonymous_user')
     id = Column(Integer, ForeignKey('users.id'), primary_key=True)
 
+    @property
+    def username(self):
+        return "Anonymous User"
+
 
 def default_password_compare(cleartext_password, stored_password_hash):
     # Hashing functions work on bytes, not strings, so while unicode passwords

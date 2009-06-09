@@ -36,7 +36,7 @@
           %endif
         </a>
       </div>
-      <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${getattr(page.user,'username', 'Anonymous User')}</h4>
+      <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.user.username}</h4>
       <div class="almanac-excerpt">${page.first_story.excerpt()}</div>
     </li>
     % endfor
