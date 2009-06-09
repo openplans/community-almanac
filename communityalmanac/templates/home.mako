@@ -119,6 +119,8 @@ $(document).ready(function(){
           alert('no geocode - FIXME!');
         }
         else {
+          $('#almanac-authoritative').val(data.locality + ', ' + data.administrative);
+          $('#almanac-submit').val('Add a Page to the ' + data.locality + ', ' + data.administrative + ' Almanac');
           var center = new OpenLayers.LonLat(data.lng, data.lat);
           center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
           map.setCenter(center, 12);
@@ -126,8 +128,6 @@ $(document).ready(function(){
           var formatter = new OpenLayers.Format.GeoJSON();
           var json = formatter.write(point_geometry);
           $('#almanac-center').val(json);
-          $('#almanac-authoritative').val(data.locality + ', ' + data.administrative);
-          $('#almanac-submit').val('Add a Page to the ' + data.locality + ', ' + data.administrative + ' Almanac');
         }
       });
     }
