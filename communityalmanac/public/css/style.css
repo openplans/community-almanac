@@ -117,7 +117,7 @@ display: block;
 color: #ff6040;
 padding: 5px 10px;
 margin: 0;
-background: url(/img/book-tile.png) center top;
+background: url(/img/page-bg.png) center top;
 position: absolute;
 top: 0;
 left: 10%;
@@ -144,7 +144,7 @@ position: absolute;
 line-height: 1em;
 top: -11.8em;
 left: 7%;
-background: url(/img/book-tile.png) center top;
+background: url(/img/page-bg.png) center top;
 border: 0.3em solid #d0c9b9;
 border-top: 0;
 text-align: right;
@@ -187,6 +187,36 @@ margin: 0 0 -0.38em;
 padding: 0.3em 0.3em 0.3em 22px;
 background: url(/img/user-icon.png) 2px 50% no-repeat;
 display: block;
+}
+
+#flash-messages {
+position: absolute;
+top: 0;
+right: 7%;
+width: 40%;
+}
+
+#flash-closer {
+position: absolute;
+left: -50px;
+top: 0;
+width: 42px;
+height: 42px;
+display: block;
+overflow: hidden;
+text-indent: -9999em;
+background: url(/img/flash-closer-bg.png) no-repeat;
+border: 4px solid #d0c9b9;
+border-width: 0 4px 4px;
+}
+
+#flash-messages {
+border: 4px solid #d0c9b9;
+border-width: 0 4px 4px;
+background: url(/img/bttn-bg-orange.jpg) repeat;
+font-size: 1.3em;
+color: #fff;
+padding: 0.4em;
 }
 
 h3#tagline {
@@ -877,8 +907,11 @@ body.home #intro .map {
 width: 580px;
 }
 
-* html body.home #intro .map {
-margin-left: 49%;
+body.home #intro .map #map {
+border:4px solid #d0c9b9;
+border-width: 0 4px 4px;
+height: 230px;
+width: 572px;
 }
 
 body.home #intro .map form {
@@ -914,29 +947,10 @@ text-decoration: none;
 width: 13%;
 }
 
-#almanac-frontispiece {
-background: url(/img/frontispiece-crossbar-bg.png) 0 50% repeat-x;
-padding: 0;
-margin: 0;
-width: 684px;
-font-size: 1.15em;
-float: left;
-color: #ff6040;
-}
-
-#almanac-frontispiece span {
-width: 244px;
-padding: 0 27px;
-margin: 0 auto;
-display: block;
-background: url(/img/frontispiece-almanacs-bg.png) 50% 50% no-repeat;
-text-align: center;
-}
-
-* html #almanac-frontispiece,
-* html #almanac-frontispiece span {
-height: 35px;
-vertical-align: middle;
+body.home #intro .map input#almanac-submit {
+background: url(/img/bttn-bg-blue.jpg) top left repeat;
+width: 100%;
+color: #fff;
 }
 
 ul#almanacs {

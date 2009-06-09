@@ -42,7 +42,13 @@
             <div id="ill-foreground">
               <div id="header" class="selfclear">
                 <h1 id="logo"><a class="pngfix" href="${h.url_for('home')}">Community Almanac</a></h1>
-                <%doc>This needs to be a login link instead if there is not a current session</%doc>
+                <%doc>This needs to be conditional on a flash message being set</%doc>
+                <div id="flash-messages">
+                  <a id="flash-closer" href="#" title="Dismiss messages">Close</a>
+                  <div id="flash-content">
+                    <div>Hello, username! You have been logged in.</div>
+                  </div><!-- /#flash-content -->
+                </div><!-- /#flash-messages -->
                 %if c.user:
                 <div id="welcome">Welcome, ${c.user.username}! <a href="/logout">Sign Out</a></div>
                 %else:

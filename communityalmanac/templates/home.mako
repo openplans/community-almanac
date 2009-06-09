@@ -67,7 +67,7 @@
 			<form id="almanac-create-form" action="${h.url_for('almanac_create')}" method="post">
 				<input id="almanac-name" type="text" value=""/>
 				<a class="find-almanac" title="Find almanac" href="#">Locate</a>
-				<div style="height: 230px; width: 580px" id="map"></div>
+				<div id="map"></div>
 				<input id="almanac-center" type="hidden" name="almanac_center" value="" />
 				<input id="almanac-authoritative" type="hidden" name="name" value="" />
 				<input id="almanac-submit" type="submit" value="Add a Page" />
