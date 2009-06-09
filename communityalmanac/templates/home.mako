@@ -65,11 +65,12 @@
 		</div><!-- /.panel-wrap -->
 		<div class="map">
 			<form id="almanac-create-form" action="${h.url_for('almanac_create')}" method="post">
-				<input id="almanac-name" type="text" value="" name="name"/>
+				<input id="almanac-name" type="text" value=""/>
 				<a class="find-almanac" title="Find almanac" href="#">Locate</a>
 				<div style="height: 350px; width: 500px" id="map"></div>
 				<input id="almanac-center" type="hidden" name="almanac_center" value="" />
-				<input type="submit" value="Add a Page" />
+				<input id="almanac-authoritative" type="hidden" name="name" value="" />
+				<input id="almanac-submit" type="submit" value="Add a Page" />
 			</form>
 		</div>
 	</div><!-- /#intro -->
@@ -115,7 +116,7 @@ $(document).ready(function(){
     function _geocode() {
       var location = $('#almanac-name').val();
       $.getJSON(geocode_url, {location: location}, function(data) {
-        if (!data.lat || !data.lng) {
+        if (!data.lat || !data.lng || !data.locality || !data.administrative) {
           alert('no geocode - FIXME!');
         }
         else {
@@ -126,6 +127,8 @@ $(document).ready(function(){
           var formatter = new OpenLayers.Format.GeoJSON();
           var json = formatter.write(point_geometry);
           $('#almanac-center').val(json);
+          $('#almanac-authoritative').val(data.locality + ', ' + data.administrative);
+          $('#almanac-submit').val('Add a Page to the ' + data.locality + ', ' + data.administrative + ' Almanac');
         }
       });
     }
