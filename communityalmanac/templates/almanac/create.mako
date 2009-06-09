@@ -67,10 +67,11 @@
       });
     }
     var form = $('#almanac-create-form');
+    var submit_blocker = function() { _geocode(); return false; };
     $('#almanac-name').focus(function() {
-      form[0].onsubmit = function() { _geocode(); return false; };
+      form.bind('submit', submit_blocker);
     }).blur(function() {
-      form[0].onsubmit = function() { return true; };
+      form.unbind('submit', submit_blocker);
     });
     $('.find-almanac').click(function() {
       _geocode();

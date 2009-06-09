@@ -880,7 +880,6 @@ body.home #intro .map a.find-almanac {
 position: absolute;
 right: 0;
 top: 0;
-bottom: 0;
 background: url(/img/bttn-bg-green.jpg) top left repeat;
 border: 4px solid #b2b32d;
 font-size: 1.5em;
