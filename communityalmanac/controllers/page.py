@@ -57,7 +57,6 @@ class PageController(BaseController):
         c.media_items = h.render_media_items(media_items, editable=True)
         map_features = h.map_features_for_media(media_items)
         c.map_features = h.literal(simplejson.dumps(map_features))
-        #return render('/page/create.mako')
         c.is_add = True
         return render('/page/add_edit.mako')
 
