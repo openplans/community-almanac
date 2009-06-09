@@ -380,7 +380,8 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        return render('/media/image/item.mako')
+        response.content_type = 'application/javascript'
+        return simplejson.dumps(dict(html=render('/media/image/item.mako')))
 
     @dispatch_on(POST='_do_edit_form_image')
     @jsonify
@@ -410,7 +411,8 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        return render('/media/image/item.mako')
+        response.content_type = 'application/javascript'
+        return simplejson.dumps(dict(html=render('/media/image/item.mako')))
 
     @jsonify
     def image_view(self, media_id):
@@ -462,7 +464,8 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        return render('/media/pdf/item.mako')
+        response.content_type = 'application/javascript'
+        return simplejson.dumps(dict(html=render('/media/pdf/item.mako')))
 
     @dispatch_on(POST='_do_new_form_existing_pdf')
     @jsonify
@@ -500,7 +503,8 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        return render('/media/pdf/item.mako')
+        response.content_type = 'application/javascript'
+        return simplejson.dumps(dict(html=render('/media/pdf/item.mako')))
 
     @dispatch_on(POST='_do_edit_form_pdf')
     @jsonify
@@ -530,7 +534,8 @@ class MediaController(BaseController):
         meta.Session.commit()
 
         c.editable = True
-        return render('/media/pdf/item.mako')
+        response.content_type = 'application/javascript'
+        return simplejson.dumps(dict(html=render('/media/pdf/item.mako')))
 
     @jsonify
     def pdf_view(self, media_id):
@@ -585,7 +590,8 @@ class MediaController(BaseController):
         c.editable = True
         c.flowplayer_id = new_uuid
         c.audio_url = request.application_url + c.audio.url
-        return render('/media/audio/item.mako')
+        response.content_type = 'application/javascript'
+        return simplejson.dumps(dict(html=render('/media/audio/item.mako')))
 
     @dispatch_on(POST='_do_new_form_existing_audio')
     @jsonify
@@ -626,7 +632,8 @@ class MediaController(BaseController):
         c.editable = True
         c.flowplayer_id = new_uuid
         c.audio_url = request.application_url + c.audio.url
-        return render('/media/audio/item.mako')
+        response.content_type = 'application/javascript'
+        return simplejson.dumps(dict(html=render('/media/audio/item.mako')))
 
     @dispatch_on(POST='_do_edit_form_audio')
     @jsonify
@@ -660,7 +667,8 @@ class MediaController(BaseController):
         c.editable = True
         c.flowplayer_id = str(uuid.uuid4())
         c.audio_url = request.application_url + c.audio.url
-        return render('/media/audio/item.mako')
+        response.content_type = 'application/javascript'
+        return simplejson.dumps(dict(html=render('/media/audio/item.mako')))
 
     @jsonify
     def audio_view(self, media_id):
