@@ -476,7 +476,7 @@ AjaxUpload.prototype = {
 					// tag and performs html encoding on the contents.  In this case,
 					// we need to pull the original text content from the text node's
 					// nodeValue property to retrieve the unmangled content.
-					if ((doc.body.children.length == 1) &&
+					if ((doc.body.childNodes.length == 1) &&
 					    (doc.body.firstChild.nodeType == 1) &&
 					    (doc.body.firstChild.nodeName.toUpperCase() == 'PRE')) {
 						response = doc.body.firstChild.firstChild.nodeValue;
