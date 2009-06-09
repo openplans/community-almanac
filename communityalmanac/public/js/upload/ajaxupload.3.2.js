@@ -470,6 +470,18 @@ AjaxUpload.prototype = {
 					// response is html document or plain text
 					response = doc.body.innerHTML;
 					if (settings.responseType == 'json'){
+
+					// If the document was sent as 'application/javascript' or
+					// 'text/javascript', then the browser wraps the text in a <pre>
+					// tag and performs html encoding on the contents.  In this case,
+					// we need to pull the original text content from the text node's
+					// nodeValue property to retrieve the unmangled content.
+					if ((doc.body.children.length == 1) &&
+					    (doc.body.firstChild.nodeType == 1) &&
+					    (doc.body.firstChild.nodeName.toUpperCase() == 'PRE')) {
+						response = doc.body.firstChild.firstChild.nodeValue;
+					}
+
 						response = window["eval"]("(" + response + ")");
 					}
 				} else {
