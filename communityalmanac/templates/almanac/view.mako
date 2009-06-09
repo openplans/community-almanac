@@ -22,7 +22,7 @@
 <h2 class="almanac-title pngfix">${c.almanac.name}</h2>
 <div id="map" style="width: 100%; height: 300px; border: 4px solid #d0c9b9;"></div>
 % if c.almanac.pages:
-  <h3 id="frontispiece-pages"><strong>Table of Contents</strong> ${len(c.almanac.pages)} pages</h3>
+  <h3 id="frontispiece-pages"><span><strong>Table of Contents</strong> <em>${len(c.almanac.pages)} pages</em></span></h3>
   <ul class="almanac-pages">
     % for page in c.almanac.pages:
     <li class="selfclear">
@@ -36,7 +36,7 @@
           %endif
         </a>
       </div>
-      <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${getattr(page.user,'username', 'Anonymous User')}</h4>
+      <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.user.username}</h4>
       <div class="almanac-excerpt">${page.first_story.excerpt()}</div>
     </li>
     % endfor
