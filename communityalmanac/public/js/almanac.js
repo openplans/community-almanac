@@ -336,7 +336,7 @@ function applyFileUploadEditSideEffects(data) {
   var uploadStatus = fileElt.nextAll('.upload-status');
   var onComplete = function(file, response) {
     uploadStatus.text('Upload Complete!');
-    newli = $('<li></li>').append(response);
+    newli = $('<li></li>').append(response.html);
     li.replaceWith(newli);
     au.destroy();
     // XXX this shouldn't be here, but it is until we figure out the json issue
@@ -347,7 +347,7 @@ function applyFileUploadEditSideEffects(data) {
     name: 'userfile',
     //XXX we're not using json here because eval doesn't seem to want to
     // convert the json returned from the server into an object
-    responseType: false,
+    responseType: 'json',
     autoSubmit: false,
     onChange: function(file, extension) {
       uploadStatus.text('Ready to upload: ' + file);
