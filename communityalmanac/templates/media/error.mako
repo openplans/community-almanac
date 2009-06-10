@@ -1,1 +1,1 @@
-<a class="media-error-message" href="#">${c.error}</span>
+<a class="media-error-message" href="#">${c.error}</a>
