@@ -27,12 +27,13 @@ class HomesweethomeController(BaseController):
     def almanacs_kml(self):
         json = request.params.get('extent')
         if json is None:
-            c.almanacs = meta.Session.query(Almanac).limit(10).all()
+            # We need to make sure we only select almanacs with pages here...
+            c.almanacs = meta.Session.query(Almanac).join(Almanac.pages).distinct().limit(10).all()
         else:
             shape = simplejson.loads(json)
             # Stupid asShape returns an Adapter instead of a Geometry.  We round
             # trip it through wkb to get the correct type.
             bbox = wkb.loads(asShape(shape).to_wkb())
 
-            c.almanacs = meta.Session.query(Almanac).filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bbox.to_wkb())), storage_SRID))).limit(10).all()
+            c.almanacs = meta.Session.query(Almanac).join(Almanac.pages).distinct().filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bbox.to_wkb())), storage_SRID))).limit(10).all()
         return render('/almanac/kml.mako')

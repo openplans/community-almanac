@@ -115,12 +115,12 @@ $(document).ready(function(){
     function _geocode() {
       var location = $('#almanac-name').val();
       $.getJSON(geocode_url, {location: location}, function(data) {
-        if (!data.lat || !data.lng || !data.locality || !data.administrative) {
+        if (!data.lat || !data.lng || !data.authoritative_name) {
           alert('no geocode - FIXME!');
         }
         else {
-          $('#almanac-authoritative').val(data.locality + ', ' + data.administrative);
-          $('#almanac-submit').val('Add a Page to the ' + data.locality + ', ' + data.administrative + ' Almanac');
+          $('#almanac-authoritative').val(data.authoritative_name);
+          $('#almanac-submit').val('Add a Page to the ' + data.authoritative_name + ' Almanac');
           var center = new OpenLayers.LonLat(data.lng, data.lat);
           center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
           map.setCenter(center, 12);
