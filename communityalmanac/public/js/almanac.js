@@ -223,6 +223,17 @@ $(document).ready(function() {
     });
   });
 
+  // error uploading media items
+  $('.media-error-message').live('click', function(e) {
+    e.preventDefault();
+    $(this).fadeOut('slow', function() {$(this).remove();});
+  });
+
+  // close flash messages
+  $('a#flash-closer').live('click', function(e) {
+    e.preventDefault();
+    $(this).closest('#flash-messages').fadeOut('slow', function() {$(this).remove();});
+  });
 });
 
 function applyDisplaySideEffects(data) {

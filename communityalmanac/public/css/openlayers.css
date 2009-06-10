@@ -167,57 +167,60 @@ div.olControlMousePosition {
   background-image: url("img/drag-rectangle-off.png");
   background-repeat: no-repeat;
 }
-.olControlEditingToolbar  {
+.olMapViewport .olControlEditingToolbar  {
     float:right;
-    right: 0px;
-    height: 30px; 
+    right: 8px;
+    top: 8px;
+    height: 50px; 
     width: 200px;
 }
-.olControlEditingToolbar div { 
+.olMapViewport .olControlEditingToolbar div { 
   float:right;
   width:  24px;
   height: 24px;
   margin: 5px;
 }
-.olControlEditingToolbar .olControlNavigationItemActive { 
-  background-image: url("img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  background-position: -103px -23px; 
+.olControlEditingToolbar .olControlPanZoomItemInactive,
+.olControlEditingToolbar .olControlPanZoomItemInactive, 
+.olControlEditingToolbar .olControlNavigationItemActive, 
+.olControlEditingToolbar .olControlNavigationItemInactive {
+  display: none;
 }
-.olControlEditingToolbar .olControlNavigationItemInactive { 
-  background-image: url("img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  background-position: -103px -0px; 
+.olMapViewport .olControlEditingToolbar .olControlDrawFeaturePointItemInactive { 
+  background: transparent url("img/tools.png") -135px 0 no-repeat;
+  width: 53px;
+  height: 31px;
+  margin: 0 0 0 2px;
 }
-.olControlEditingToolbar .olControlDrawFeaturePointItemActive { 
-  background-image: url("img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  background-position: -77px -23px; 
+.olMapViewport .olControlEditingToolbar .olControlDrawFeaturePointItemActive { 
+  background: transparent url("img/tools.png") -135px -31px no-repeat;
+  width: 53px;
+  height: 31px;
+  margin: 0 0 0 2px;
 }
-.olControlEditingToolbar .olControlDrawFeaturePointItemInactive { 
-  background-image: url("img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  background-position: -77px -0px; 
+.olMapViewport .olControlEditingToolbar .olControlDrawFeaturePathItemInactive { 
+  background: transparent url("img/tools.png") -62px 0 no-repeat;
+  width: 73px;
+  height: 31px;
+  margin: 0 0 0 2px;
 }
-.olControlEditingToolbar .olControlDrawFeaturePathItemInactive { 
-  background-image: url("img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  background-position: -51px 0px; 
+.olMapViewport .olControlEditingToolbar .olControlDrawFeaturePathItemActive { 
+  background: transparent url("img/tools.png") -62px -31px no-repeat;
+  width: 73px;
+  height: 31px;
+  margin: 0 0 0 2px;
 }
-.olControlEditingToolbar .olControlDrawFeaturePathItemActive { 
-  background-image: url("img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  background-position: -51px -23px; 
+.olMapViewport .olControlEditingToolbar .olControlDrawFeaturePolygonItemInactive { 
+  background: transparent url("img/tools.png") 0 0 no-repeat;
+  width: 62px;
+  height: 31px;
+  margin: 0;
 }
-.olControlEditingToolbar .olControlDrawFeaturePolygonItemInactive { 
-  background-image: url("img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  background-position: -26px 0px; 
-}
-.olControlEditingToolbar .olControlDrawFeaturePolygonItemActive { 
-  background-image: url("img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  background-position: -26px -23px ;                                                                   
+.olMapViewport .olControlEditingToolbar .olControlDrawFeaturePolygonItemActive { 
+  background: transparent url("img/tools.png") 0 -31px no-repeat;
+  width: 62px;
+  height: 31px;
+  margin: 0;
 }
 
 .olHandlerBoxZoomBox {
