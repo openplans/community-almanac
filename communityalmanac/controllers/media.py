@@ -28,6 +28,7 @@ from communityalmanac.model import Image
 from communityalmanac.model import Map
 from communityalmanac.model import PDF
 from communityalmanac.model import Story
+from communityalmanac.model import Video
 from communityalmanac.model import meta
 from pylons.decorators import jsonify
 from pylons.decorators.rest import dispatch_on
@@ -770,4 +771,90 @@ class MediaController(BaseController):
         audio = h.get_media_by_id(media_id)
         os.unlink(audio.path)
         meta.Session.delete(audio)
+        meta.Session.commit()
+
+    @dispatch_on(POST='_do_new_form_video')
+    @jsonify
+    def new_form_video(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        page = c.almanac.new_page(self.ensure_user)
+        c.legend = u'Video'
+        return dict(html=render('/media/video/form.mako'))
+
+    @jsonify
+    def _do_new_form_video(self, almanac_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        body = request.POST.get('body', u'')
+        if not body:
+            abort(400)
+
+        page = c.almanac.new_page(self.ensure_user)
+
+        c.video = video = Video()
+        video.text = body
+        video.page_id = page.id
+        video.order = len(page.media)
+        meta.Session.add(video)
+        meta.Session.commit()
+
+        c.editable = True
+        return dict(html=render('/media/video/item.mako'))
+
+    @dispatch_on(POST='_do_new_form_existing_video')
+    @jsonify
+    def new_form_existing_video(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = h.get_page_by_slug(c.almanac, page_slug)
+        c.legend = u'Video'
+        return dict(html=render('/media/video/form.mako'))
+
+    @jsonify
+    def _do_new_form_existing_video(self, almanac_slug, page_slug):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
+        body = request.POST.get('body', u'')
+        if not body:
+            abort(400)
+
+        c.video = video = Video()
+        video.text = body
+        video.page_id = page.id
+        video.order = len(page.media)
+        meta.Session.add(video)
+        meta.Session.commit()
+
+        c.editable = True
+        return dict(html=render('/media/video/item.mako'))
+
+    @dispatch_on(POST='_do_edit_form_video')
+    @jsonify
+    def edit_form_video(self, media_id):
+        c.media_item = h.get_media_by_id(media_id)
+        c.view_url = h.url_for('media_video_view', media_id=c.media_item.id)
+        c.legend = u'Video'
+        return dict(html=render('/media/video/form.mako'))
+
+    @jsonify
+    def _do_edit_form_video(self, media_id):
+        c.video = h.get_media_by_id(media_id)
+        body = request.POST.get('body', u'')
+        if not body:
+            abort(400)
+
+        c.video.text = body
+        meta.Session.commit()
+
+        c.editable = True
+        return dict(html=render('/media/video/item.mako'))
+
+    @jsonify
+    def video_view(self, media_id):
+        c.editable = True
+        c.video = h.get_media_by_id(media_id)
+        return dict(html=render('/media/video/item.mako'))
+
+    @jsonify
+    def delete_video(self, media_id):
+        video = h.get_media_by_id(media_id)
+        meta.Session.delete(video)
         meta.Session.commit()

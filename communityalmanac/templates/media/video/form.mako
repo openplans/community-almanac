@@ -1,3 +1,4 @@
+<%doc><!--
 # Community Almanac - A place for your stories.
 # Copyright (C) 2009  Douglas Mayle, Robert Marianski,
 # Andy Cochran, Chris Patterson
@@ -16,23 +17,10 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
-
-"""The application's model objects"""
-import sqlalchemy as sa
-from sqlalchemy import orm
-
-from communityalmanac.model import meta
-
-def init_model(engine):
-    """Call me before using any of the tables or classes in the model"""
-    ## Reflected tables must be defined and mapped here
-    #global reflected_table
-    #reflected_table = sa.Table("Reflected", meta.metadata, autoload=True,
-    #                           autoload_with=engine)
-    #orm.mapper(Reflected, reflected_table)
-    #
-    meta.Session.configure(bind=engine)
-    meta.engine = engine
-
-
-from communityalmanac.model.almanac import Almanac, Page, User, FullUser, AnonymousUser, Media, PDF, Audio, Image, Story, Map, Comment, Video
+--></%doc>
+<%inherit file="/media/base_form.mako" />
+%if c.media_item:
+<textarea name="body">${c.media_item.text}</textarea>
+%else:
+<textarea name="body"></textarea>
+%endif

@@ -634,6 +634,10 @@ ul.page-media-tools li a#pdf-tool {
 background: url(/img/pdf-icon.png) 100% 50% no-repeat;
 }
 
+ul.page-media-tools li a#video-tool {
+background: url(/img/film-icon.png) 100% 50% no-repeat;
+}
+
 form.add-media-item textarea,
 form.edit-media-item textarea {
 display: block;
@@ -692,6 +696,10 @@ background: url(/img/audio-icon.png) 100% 50% no-repeat;
 
 .mini-page-media-tools a#mini-pdf-tool {
 background: url(/img/pdf-icon.png) 100% 50% no-repeat;
+}
+
+.mini-page-media-tools a#mini-video-tool {
+background: url(/img/film-icon.png) 100% 50% no-repeat;
 }
 
 /*view almanac */

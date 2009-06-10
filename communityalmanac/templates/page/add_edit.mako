@@ -47,12 +47,14 @@
 	  ${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='mini-map-tool')}
 	  ${h.link_to('Audio', h.url_for('media_audio_new', almanac=c.almanac), id='mini-audio-tool')}
 	  ${h.link_to('PDF', h.url_for('media_pdf_new', almanac=c.almanac), id='mini-pdf-tool')}
+	  ${h.link_to('Video', h.url_for('media_video_new', almanac=c.almanac), id='mini-video-tool')}
     %else:
 	  ${h.link_to('Text', h.url_for('media_story_existing_new', almanac=c.almanac, page=c.page), id='mini-text-tool')}
 	  ${h.link_to('Image', h.url_for('media_image_existing_new', almanac=c.almanac, page=c.page), id='mini-image-tool')}
 	  ${h.link_to('Map', h.url_for('media_map_existing_new', almanac=c.almanac, page=c.page), id='mini-map-tool')}
 	  ${h.link_to('Audio', h.url_for('media_audio_existing_new', almanac=c.almanac, page=c.page), id='mini-audio-tool')}
 	  ${h.link_to('PDF', h.url_for('media_pdf_existing_new', almanac=c.almanac, page=c.page), id='mini-pdf-tool')}
+	  ${h.link_to('Video', h.url_for('media_video_existing_new', almanac=c.almanac, page=c.page), id='mini-video-tool')}
     %endif
   </div>
   %if c.is_add:
@@ -99,12 +101,14 @@ Edit Page -  ${c.almanac.name}
 	  <li>${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='map-tool')}</li>
 	  <li>${h.link_to('Audio', h.url_for('media_audio_new', almanac=c.almanac), id='audio-tool')}</li>
 	  <li>${h.link_to('PDF', h.url_for('media_pdf_new', almanac=c.almanac), id='pdf-tool')}</li>
+	  <li>${h.link_to('Video', h.url_for('media_video_new', almanac=c.almanac), id='video-tool')}</li>
     %else:
 	  <li>${h.link_to('Text', h.url_for('media_story_existing_new', almanac=c.almanac, page=c.page), id='text-tool')}</li>
 	  <li>${h.link_to('Image', h.url_for('media_image_existing_new', almanac=c.almanac, page=c.page), id='image-tool')}</li>
 	  <li>${h.link_to('Map', h.url_for('media_map_existing_new', almanac=c.almanac, page=c.page), id='map-tool')}</li>
 	  <li>${h.link_to('Audio', h.url_for('media_audio_existing_new', almanac=c.almanac, page=c.page), id='audio-tool')}</li>
 	  <li>${h.link_to('PDF', h.url_for('media_pdf_existing_new', almanac=c.almanac, page=c.page), id='pdf-tool')}</li>
+	  <li>${h.link_to('Video', h.url_for('media_video_existing_new', almanac=c.almanac, page=c.page), id='video-tool')}</li>
     %endif
 	</ul>
 </div>

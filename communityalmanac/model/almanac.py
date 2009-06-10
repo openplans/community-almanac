@@ -242,6 +242,12 @@ class Audio(Media):
         return '/media/audio/%s' % self.path.split(os.sep)[-1]
 
 
+class Video(Media):
+    __tablename__ = 'videos'
+    __mapper_args__ = dict(polymorphic_identity='video')
+    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
+
+
 class Image(Media):
     __tablename__ = 'images'
     __mapper_args__ = dict(polymorphic_identity='image')

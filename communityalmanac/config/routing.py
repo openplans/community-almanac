@@ -112,4 +112,10 @@ def make_map():
     map.connect('media_audio_edit', '/media/audio/edit/:media_id', controller='media', action='edit_form_audio', _filter=media_expand)
     map.connect('media_audio_delete', '/media/audio/delete/:media_id', controller='media', action='delete_audio', conditions=dict(method=['POST']), _filter=media_expand)
 
+    map.connect('media_video_new', '/media/video/:almanac_slug/new', controller='media', action='new_form_video', _filter=almanac_expand)
+    map.connect('media_video_existing_new', '/media/video/:almanac_slug/:page_slug/new', controller='media', action='new_form_existing_video', _filter=page_expand)
+    map.connect('media_video_view', '/media/video/:media_id', controller='media', action='video_view', _filter=media_expand)
+    map.connect('media_video_edit', '/media/video/edit/:media_id', controller='media', action='edit_form_video', _filter=media_expand)
+    map.connect('media_video_delete', '/media/video/delete/:media_id', controller='media', action='delete_video', conditions=dict(method=['POST']), _filter=media_expand)
+
     return map
