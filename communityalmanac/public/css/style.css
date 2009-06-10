@@ -440,7 +440,6 @@ background: url(/img/add-page-icon.png) 10px 50% no-repeat;
 font-size: 0.8em;
 }
 
-#comment-submit:hover,
 #comment-bttn:hover,
 #add-page-bttn:hover,
 #submit-button-form input:hover {
@@ -948,10 +947,17 @@ width: 13%;
 }
 
 body.home #intro .map input#almanac-submit {
-background: url(/img/bttn-bg-blue.jpg) top left repeat;
+background: url(/img/home-add-page-bg.png) 0 50% repeat;
 width: 100%;
 color: #fff;
 border-width: 0 4px 4px;
+padding: 0.3em 30px;
+text-align: left;
+}
+
+body.home #intro .map input#almanac-submit.disabled {
+background: url(/img/home-add-page-disabled-bg.png) 0 50% repeat;
+color: #ccc;
 }
 
 ul#almanacs {
