@@ -34,6 +34,7 @@ from pylons.decorators.rest import dispatch_on
 from shapely import wkb
 from shapely.geometry.geo import asShape
 import communityalmanac.lib.helpers as h
+import mimetypes
 import os
 import uuid
 import simplejson
@@ -296,6 +297,10 @@ class MediaController(BaseController):
         if image_file is None:
             abort(400)
 
+        mimetype, _ = mimetypes.guess_type(image_file.filename)
+        if not mimetype.startswith('image/'):
+            abort(400)
+
         page = c.almanac.new_page(self.ensure_user)
 
         image_file.make_file()
@@ -364,6 +369,10 @@ class MediaController(BaseController):
         if image_file is None:
             abort(400)
 
+        mimetype, _ = mimetypes.guess_type(image_file.filename)
+        if not mimetype.startswith('image/'):
+            abort(400)
+
         image_file.make_file()
         image_data = image_file.file.read()
         new_uuid = str(uuid.uuid4())
@@ -400,6 +409,10 @@ class MediaController(BaseController):
         c.image = h.get_media_by_id(media_id)
         image_file = request.POST.get('userfile')
         if image_file is None:
+            abort(400)
+
+        mimetype, _ = mimetypes.guess_type(image_file.filename)
+        if not mimetype.startswith('image/'):
             abort(400)
 
         image_file.make_file()
@@ -446,6 +459,10 @@ class MediaController(BaseController):
         if pdf_file is None:
             abort(400)
 
+        mimetype, _ = mimetypes.guess_type(pdf_file.filename)
+        if mimetype != 'application/pdf':
+            abort(400)
+
         page = c.almanac.new_page(self.ensure_user)
 
         pdf_file.make_file()
@@ -487,6 +504,10 @@ class MediaController(BaseController):
         if pdf_file is None:
             abort(400)
 
+        mimetype, _ = mimetypes.guess_type(pdf_file.filename)
+        if mimetype != 'application/pdf':
+            abort(400)
+
         pdf_file.make_file()
         pdf_data = pdf_file.file.read()
         new_uuid = str(uuid.uuid4())
@@ -523,6 +544,10 @@ class MediaController(BaseController):
         c.pdf = h.get_media_by_id(media_id)
         pdf_file = request.POST.get('userfile')
         if pdf_file is None:
+            abort(400)
+
+        mimetype, _ = mimetypes.guess_type(pdf_file.filename)
+        if mimetype != 'application/pdf':
             abort(400)
 
         pdf_file.make_file()
@@ -567,6 +592,10 @@ class MediaController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         audio_file = request.POST.get('userfile')
         if audio_file is None:
+            abort(400)
+
+        mimetype, _ = mimetypes.guess_type(audio_file.filename)
+        if mimetype != 'audio/mpeg':
             abort(400)
 
         page = c.almanac.new_page(self.ensure_user)
@@ -616,6 +645,10 @@ class MediaController(BaseController):
         if audio_file is None:
             abort(400)
 
+        mimetype, _ = mimetypes.guess_type(audio_file.filename)
+        if mimetype != 'audio/mpeg':
+            abort(400)
+
         audio_file.make_file()
         audio_data = audio_file.file.read()
         new_uuid = str(uuid.uuid4())
@@ -662,6 +695,10 @@ class MediaController(BaseController):
         c.audio = h.get_media_by_id(media_id)
         audio_file = request.POST.get('userfile')
         if audio_file is None:
+            abort(400)
+
+        mimetype, _ = mimetypes.guess_type(audio_file.filename)
+        if mimetype != 'audio/mpeg':
             abort(400)
 
         audio_file.make_file()
