@@ -32,6 +32,7 @@ from meta import Base, storage_SRID
 from sqlgeotypes import POINT
 import meta
 import os
+import time
 
 class Almanac(Base):
     __tablename__ = 'almanacs'
@@ -243,7 +244,9 @@ class Image(Media):
 
     @property
     def url(self):
-        return '/media/images/%s' % self.path.split(os.sep)[-1]
+        # we add a querystring to prevent the browser from caching
+        qs = time.time()
+        return '/media/images/%s?%s' % (self.path.split(os.sep)[-1], qs)
 
 class Story(Media):
     __tablename__ = 'stories'
