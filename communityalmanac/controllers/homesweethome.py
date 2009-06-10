@@ -19,7 +19,8 @@ log = logging.getLogger(__name__)
 class HomesweethomeController(BaseController):
 
     def home(self):
-        c.almanacs = Almanac.latest()
+        c.limit, c.offset = int(request.params.get('limit', 10)), int(request.params.get('offset', 0))
+        c.almanacs = Almanac.latest(c.limit, c.offset)
         c.n_almanacs = Almanac.n_almanacs()
         c.is_homepage = True
         return render('/home.mako')

@@ -91,7 +91,7 @@
 	% endif
 </div>
 <div id="shelf">
-  <div id="almanac-pagination-footer"><a class="prev" href="#" onclick="alert('not implemented');">&#171; 1-10</a> Showing 11-20 Recently Updated Almanacs <a class="next" href="#" onclick="alert('not implemented');">21-30 &#187;</a></div>
+  <div id="almanac-pagination-footer"><a class="prev" href="?limit=${c.limit}&offset=${max(0,c.offset-c.limit)}">&#171; ${max(1,c.offset-c.limit)}-${max(1,c.offset-c.limit)+c.limit-1}</a> Showing ${c.offset+1}-${c.offset+c.limit} Recently Updated Almanacs <a class="next" href="?limit=${c.limit}&offset=${c.offset+c.limit}">${c.offset+c.limit+1}-${c.offset+2*c.limit} &#187;</a></div>
 </div>
 <%def name="pagearea()">
       ${self.body()}

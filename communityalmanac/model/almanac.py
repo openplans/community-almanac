@@ -106,9 +106,9 @@ class Almanac(Base):
         return meta.Session.query(Almanac).filter(Almanac.slug == slug).one()
 
     @staticmethod
-    def latest():
+    def latest(limit=10, offset=0):
         #FIXME we'll need to store created/modified times
-        return meta.Session.query(Almanac).all()
+        return meta.Session.query(Almanac).join(Almanac.pages).distinct().limit(limit).offset(offset).all()
 
     @property
     def creation_date_string(self):
