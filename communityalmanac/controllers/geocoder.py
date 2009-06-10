@@ -10,6 +10,8 @@ from pylons.decorators import jsonify
 log = logging.getLogger(__name__)
 
 from geopy import geocoders
+from communityalmanac.model import meta, Almanac
+from sqlalchemy.orm import exc
 
 class GeocoderController(BaseController):
 
@@ -26,8 +28,12 @@ class GeocoderController(BaseController):
             place, (lat, lng) = result
         except ValueError:
             return {}
-        else:
-            return dict(lat=lat, lng=lng, administrative=result.administrative, locality=result.locality)
+        authoritative_name = '%s, %s' % (result.locality, result.administrative)
+        try:
+            almanac_slug = meta.Session.query(Almanac).filter(Almanac.name==authoritative_name).one().slug
+        except exc.NoResultFound:
+            almanac_slug = ''
+        return dict(lat=lat, lng=lng, authoritative_name=authoritative_name, almanac_slug=almanac_slug)
 
     @staticmethod
     def _get_first(gen):

@@ -47,11 +47,17 @@ class AlmanacController(BaseController):
 
     @dispatch_on(POST='_do_create')
     def create(self):
-        return render('/almanac/create.mako')
+        redirect_to(h.url_for('home'))
 
     @validate(schema=AlmanacCreateForm(), form='create')
     def _do_create(self):
         name = self.form_result['name']
+
+        # Prevent creation of duplicates
+        almanac = meta.Session.query(Almanac).filter(Almanac.name==name).one()
+        if almanac:
+            return redirect_to(h.url_for('page_create', almanac_slug=almanac.slug))
+
         json = self.form_result['almanac_center']
         shape = simplejson.loads(json)
         point = asShape(shape)
@@ -62,7 +68,7 @@ class AlmanacController(BaseController):
         meta.Session.save(almanac)
         meta.Session.commit()
 
-        redirect_to(h.url_for('almanac_view', almanac_slug=slug))
+        redirect_to(h.url_for('page_create', almanac_slug=slug))
 
     def view(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
