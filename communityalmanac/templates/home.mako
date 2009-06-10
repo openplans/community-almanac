@@ -72,7 +72,7 @@
 				<div id="map"></div>
 				<input id="almanac-center" type="hidden" name="almanac_center" value="" />
 				<input id="almanac-authoritative" type="hidden" name="name" value="" />
-				<input id="almanac-submit" class="disabled" type="submit" value="Add a Page" />
+				<input id="almanac-submit" class="disabled" disabled="disabled" type="submit" value="Add a Page" />
 			</form>
 		</div>
 	</div><!-- /#intro -->
@@ -119,11 +119,11 @@ $(document).ready(function(){
       $.getJSON(geocode_url, {location: location}, function(data) {
         if (!data.lat || !data.lng || !data.authoritative_name) {
           // Problem geocoding, we need to disable the submit button
-          $('#almanac-submit').val('Add a Page').attr('disabled', 'true').addClass('disabled');
+          $('#almanac-submit').val('Add a Page').attr('disabled', 'disabled').addClass('disabled');
         }
         else {
           $('#almanac-authoritative').val(data.authoritative_name);
-          $('#almanac-submit').val('Add a Page to the ' + data.authoritative_name + ' Almanac').attr('disabled', 'false').removeClass('disabled');
+          $('#almanac-submit').val('Add a Page to the ' + data.authoritative_name + ' Almanac').removeAttr('disabled').removeClass('disabled');
           var center = new OpenLayers.LonLat(data.lng, data.lat);
           center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
           map.setCenter(center, 12);
