@@ -54,9 +54,11 @@ class AlmanacController(BaseController):
         name = self.form_result['name']
 
         # Prevent creation of duplicates
-        almanac = meta.Session.query(Almanac).filter(Almanac.name==name).one()
-        if almanac:
+        try:
+            almanac = meta.Session.query(Almanac).filter(Almanac.name==name).one()
             return redirect_to(h.url_for('page_create', almanac_slug=almanac.slug))
+        except exc.NoResultFound:
+            pass
 
         json = self.form_result['almanac_center']
         shape = simplejson.loads(json)
