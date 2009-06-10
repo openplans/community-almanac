@@ -21,6 +21,7 @@ from pylons import g
 from pylons import session
 from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
 from sqlalchemy.sql.expression import text
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import exc
 from sqlalchemy import and_
@@ -39,7 +40,10 @@ class Almanac(Base):
     name = Column(Unicode)
     slug = Column(String, unique=True)
     location = Column(POINT(storage_SRID))
-    creation = Column(DateTime, server_default=text('current_timestamp'))
+    creation = Column(DateTime, server_default=func.current_timestamp())
+    # The auto-update field below doesn't do too much, because we almost always
+    # update attached items, not the object itself.
+    modified = Column(DateTime, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
 
     def __init__(self, name=None, slug=None, id=None):
         self.name = name
@@ -132,7 +136,10 @@ class Page(Base):
     slug = Column(String)
     description = Column(Unicode)
     published = Column(Boolean, nullable=False)
-    creation =  Column(DateTime, server_default=text('current_timestamp'))
+    creation = Column(DateTime, server_default=func.current_timestamp())
+    # The auto-update field below doesn't do too much, because we almost always
+    # update attached items, not the object itself.
+    modified = Column(DateTime, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
 
     def __init__(self, name=None, slug=None, description=None, almanac_id=None, user_id=None, id=None, published=False):
         self.name = name
@@ -178,7 +185,7 @@ class Comment(Base):
 
     id = Column(Integer, primary_key=True)
     page_id = Column(Integer, ForeignKey('pages.id'))
-    creation = Column(DateTime, server_default=text('current_timestamp'))
+    creation = Column(DateTime, server_default=func.current_timestamp())
     fullname = Column(Unicode)
     email = Column(Unicode)
     website = Column(Unicode)
@@ -266,6 +273,7 @@ class User(Base):
     comment_website =    Column(Unicode(100))
     id =                 Column(Integer, primary_key=True)
     discriminator =      Column('type', String(50))
+    creation =           Column(DateTime, server_default=func.current_timestamp())
 
     __mapper_args__ = dict(polymorphic_on=discriminator)
 
