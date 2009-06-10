@@ -22,15 +22,18 @@ class GeocoderController(BaseController):
             abort(400)
         geoc = geocoders.Google(g.map_key, output_format='json')
         try:
-            result = GeocoderController._get_first(geoc.geocode(location, exactly_one=False))
+            result = GeocoderController._result_with_locality(geoc.geocode(location, exactly_one=False))
             if not result:
                 return {}
-            if not result.locality:
-                result = GeocoderController._get_first(geoc.geocode('%f, %f' % (result.latitude, result.longitude), exactly_one=False))
+            if not result.locality or not result.administrative:
+                result = GeocoderController._result_with_locality(geoc.geocode('%f, %f' % (result.latitude, result.longitude), exactly_one=False))
             place, (lat, lng) = result
         except ValueError:
             return {}
-        authoritative_name = '%s, %s' % (result.locality, result.administrative)
+        if result.locality and result.administrative:
+            authoritative_name = '%s, %s' % (result.locality, result.administrative)
+        else:
+            authoritative_name = None
         try:
             almanac_slug = meta.Session.query(Almanac).filter(Almanac.name==authoritative_name).one().slug
         except exc.NoResultFound:
@@ -38,6 +41,11 @@ class GeocoderController(BaseController):
         return dict(lat=lat, lng=lng, authoritative_name=authoritative_name, almanac_slug=almanac_slug)
 
     @staticmethod
-    def _get_first(gen):
+    def _result_with_locality(gen):
+        first = None
         for x in gen:
-            return x
+            if not first:
+                first = x
+            if x and x.locality and x.administrative:
+                return x
+        return first
