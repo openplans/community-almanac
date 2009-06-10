@@ -91,7 +91,7 @@
 	% endif
 </div>
 <div id="shelf">
-showing recently updated almanacs
+  <div id="almanac-pagination-footer"><a class="prev" href="#" onclick="alert('not implemented');">&#171; 1-10</a> Showing 11-20 Recently Updated Almanacs <a class="next" href="#" onclick="alert('not implemented');">21-30 &#187;</a></div>
 </div>
 <%def name="pagearea()">
       ${self.body()}

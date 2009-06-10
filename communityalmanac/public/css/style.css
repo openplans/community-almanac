@@ -440,7 +440,6 @@ background: url(/img/add-page-icon.png) 10px 50% no-repeat;
 font-size: 0.8em;
 }
 
-#comment-submit:hover,
 #comment-bttn:hover,
 #add-page-bttn:hover,
 #submit-button-form input:hover {
@@ -948,9 +947,17 @@ width: 13%;
 }
 
 body.home #intro .map input#almanac-submit {
-background: url(/img/bttn-bg-blue.jpg) top left repeat;
+background: url(/img/home-add-page-bg.png) 0 50% repeat;
 width: 100%;
 color: #fff;
+border-width: 0 4px 4px;
+padding: 0.3em 30px;
+text-align: left;
+}
+
+body.home #intro .map input#almanac-submit.disabled {
+background: url(/img/home-add-page-disabled-bg.png) 0 50% repeat;
+color: #ccc;
 }
 
 ul#almanacs {
@@ -1073,6 +1080,41 @@ background: url(/img/comments-icon.png) 0 50% no-repeat;
 div#shelf {
 height: 80px;
 background: url(/img/shelf-bg.png) repeat-x;
+padding: 15px 0 0;
+overflow: hidden;
+}
+
+div#almanac-pagination-footer {
+background: #b2b32d url(/img/bttn-bg-pea.jpg) repeat;
+color: #340f03;
+margin: 0 0 0 10%;
+position: relative;
+font-size: 1.2em;
+line-height: 1em;
+padding: 0.5em;
+width: 684px;
+}
+
+div#almanac-pagination-footer .prev {
+display: block;
+position: absolute;
+top: 0;
+left: 0;
+bottom: 0;
+background: #033459 url(/img/bttn-bg-navy.jpg) repeat;
+padding: 0.5em;
+text-decoration: none;
+}
+
+div#almanac-pagination-footer .next {
+display: block;
+position: absolute;
+top: 0;
+right: 0;
+bottom: 0;
+background: #033459 url(/img/bttn-bg-navy.jpg) repeat;
+padding: 0.5em;
+text-decoration: none;
 }
 
 /* rob's starting point */
