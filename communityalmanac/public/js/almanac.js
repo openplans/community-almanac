@@ -28,6 +28,10 @@ $(document).ready(function() {
     return true;
   });
 
+  $('input[type=submit,disabled=disabled].disabled').click(function() {
+    return false;
+  });
+
   // on pages, have the add a comment link unhide the form
   $("#comment-form").hide();
   $("#comment-bttn").click(function() {
