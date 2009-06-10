@@ -1154,6 +1154,16 @@ body.fivehundred h1 {
 color: #00ace6;
 }
 
+body.fourhundred #searchform {
+width: 402px;
+margin: 0 0 1em;
+}
+
+
+body.fourhundred input#s {
+width: 378px;
+}
+
 /* rob's starting point */
 form div.selfclear label {
 font-weight: bold;
