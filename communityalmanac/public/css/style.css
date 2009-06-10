@@ -1001,7 +1001,7 @@ width: 691px;
 text-decoration: none;
 }
 
-ul#almanacs li a span.almanac-name { /* Right now, Opera and IE misrender this element. Refactor to fix and make semi-fluid? */
+ul#almanacs li a span.almanac-name { 
 position: absolute;
 left: 245px;
 top: 50%;
@@ -1011,7 +1011,7 @@ font-size: 1.2em;
 color: #00ace6;
 }
 
-ul#almanacs li a span.almanac-timestamp { /* Right now, Opera and IE misrender this element. Refactor to fix and make semi-fluid? */
+ul#almanacs li a span.almanac-timestamp {
 position: absolute;
 right: 35px;
 top: 50%;
@@ -1115,6 +1115,43 @@ bottom: 0;
 background: #033459 url(/img/bttn-bg-navy.jpg) repeat;
 padding: 0.5em;
 text-decoration: none;
+}
+
+/* Error pages */
+body.fourhundred #content,
+body.fivehundred #content,
+body.fourhundred #wrap-a,
+body.fivehundred #wrap-a {
+background: none transparent;
+padding: 0;
+}
+
+body.fourhundred #turn_wrapper,
+body.fivehundred #turn_wrapper {
+display: none;
+}
+
+body.fourhundred #wrap-b,
+body.fivehundred #wrap-b {
+height: 594px;
+padding: 20px 0 0;
+}
+
+body.fourhundred #wrap-b {
+background: url(/img/book-torn.png) 50% 0 no-repeat;
+}
+
+body.fivehundred #wrap-b {
+background: url(/img/book-stained.png) 50% 0 no-repeat;
+}
+
+body.fourhundred #right-page {
+left: 460px;
+}
+
+body.fourhundred h1,
+body.fivehundred h1 {
+color: #00ace6;
 }
 
 /* rob's starting point */

@@ -33,6 +33,8 @@
   <body 
   %if c.is_homepage:
   class="home"
+  %elif self.attr.error_class:
+  class="${self.attr.error_class}"
   %endif
   >
     <div id="ill-sky">
@@ -146,6 +148,7 @@
 </div><!-- /#wrap-a -->
 </%def>
 <%!
+error_class = ""
 prev_page_url = ""
 prev_page = "Previous"
 prev_page_class = "prev"
