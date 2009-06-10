@@ -219,6 +219,11 @@ $(document).ready(function() {
     });
   });
 
+  // error uploading media items
+  $('.media-error-message').live('click', function(e) {
+    e.preventDefault();
+    $(this).fadeOut('slow', function() {$(this).remove();});
+  });
 });
 
 function applyDisplaySideEffects(data) {

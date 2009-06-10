@@ -34,6 +34,7 @@ from pylons.decorators.rest import dispatch_on
 from shapely import wkb
 from shapely.geometry.geo import asShape
 import communityalmanac.lib.helpers as h
+import mimetypes
 import os
 import uuid
 import simplejson
@@ -296,6 +297,10 @@ class MediaController(BaseController):
         if image_file is None:
             abort(400)
 
+        mimetype, _ = mimetypes.guess_type(image_file.filename)
+        if not mimetype.startswith('image/'):
+            abort(400)
+
         page = c.almanac.new_page(self.ensure_user)
 
         image_file.make_file()
@@ -362,7 +367,15 @@ class MediaController(BaseController):
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
         image_file = request.POST.get('userfile')
         if image_file is None:
-            abort(400)
+            c.error = u'No file uploaded'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
+
+        mimetype, _ = mimetypes.guess_type(image_file.filename)
+        if not mimetype.startswith('image/'):
+            c.error = u'Invalid image file'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         image_file.make_file()
         image_data = image_file.file.read()
@@ -400,7 +413,15 @@ class MediaController(BaseController):
         c.image = h.get_media_by_id(media_id)
         image_file = request.POST.get('userfile')
         if image_file is None:
-            abort(400)
+            c.error = u'No file uploaded'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
+
+        mimetype, _ = mimetypes.guess_type(image_file.filename)
+        if not mimetype.startswith('image/'):
+            c.error = u'Invalid image file'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         image_file.make_file()
         image_data = image_file.file.read()
@@ -444,7 +465,15 @@ class MediaController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         pdf_file = request.POST.get('userfile')
         if pdf_file is None:
-            abort(400)
+            c.error = u'No file uploaded'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
+
+        mimetype, _ = mimetypes.guess_type(pdf_file.filename)
+        if mimetype != 'application/pdf':
+            c.error = u'Invalid pdf file'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         page = c.almanac.new_page(self.ensure_user)
 
@@ -485,7 +514,15 @@ class MediaController(BaseController):
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
         pdf_file = request.POST.get('userfile')
         if pdf_file is None:
-            abort(400)
+            c.error = u'No file uploaded'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
+
+        mimetype, _ = mimetypes.guess_type(pdf_file.filename)
+        if mimetype != 'application/pdf':
+            c.error = u'Invalid pdf file'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         pdf_file.make_file()
         pdf_data = pdf_file.file.read()
@@ -523,7 +560,15 @@ class MediaController(BaseController):
         c.pdf = h.get_media_by_id(media_id)
         pdf_file = request.POST.get('userfile')
         if pdf_file is None:
-            abort(400)
+            c.error = u'No file uploaded'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
+
+        mimetype, _ = mimetypes.guess_type(pdf_file.filename)
+        if mimetype != 'application/pdf':
+            c.error = u'Invalid pdf file'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         pdf_file.make_file()
         pdf_data = pdf_file.file.read()
@@ -567,7 +612,15 @@ class MediaController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         audio_file = request.POST.get('userfile')
         if audio_file is None:
-            abort(400)
+            c.error = u'No file uploaded'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
+
+        mimetype, _ = mimetypes.guess_type(audio_file.filename)
+        if mimetype != 'audio/mpeg':
+            c.error = u'Invalid audio file'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         page = c.almanac.new_page(self.ensure_user)
 
@@ -614,7 +667,15 @@ class MediaController(BaseController):
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
         audio_file = request.POST.get('userfile')
         if audio_file is None:
-            abort(400)
+            c.error = u'No file uploaded'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
+
+        mimetype, _ = mimetypes.guess_type(audio_file.filename)
+        if mimetype != 'audio/mpeg':
+            c.error = u'Invalid audio file'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         audio_file.make_file()
         audio_data = audio_file.file.read()
@@ -662,7 +723,15 @@ class MediaController(BaseController):
         c.audio = h.get_media_by_id(media_id)
         audio_file = request.POST.get('userfile')
         if audio_file is None:
-            abort(400)
+            c.error = u'No file uploaded'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
+
+        mimetype, _ = mimetypes.guess_type(audio_file.filename)
+        if mimetype != 'audio/mpeg':
+            c.error = u'Invalid audio file'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         audio_file.make_file()
         audio_data = audio_file.file.read()
