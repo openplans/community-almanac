@@ -295,11 +295,15 @@ class MediaController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         image_file = request.POST.get('userfile')
         if image_file is None:
-            abort(400)
+            c.error = u'No file uploaded'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         mimetype, _ = mimetypes.guess_type(image_file.filename)
         if not mimetype.startswith('image/'):
-            abort(400)
+            c.error = u'Invalid image file'
+            response.content_type = 'application/javascript'
+            return simplejson.dumps(dict(html=render('/media/error.mako')))
 
         page = c.almanac.new_page(self.ensure_user)
 
