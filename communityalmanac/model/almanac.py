@@ -119,9 +119,7 @@ class Almanac(Base):
     @property
     def updated_date_string(self):
         """return the updated date formatted nicely as a string"""
-        #XXX this is stubbed out to be the creation date for now
-        #XXX change this to the updated time when we store that
-        return self.creation_date_string
+        return self.modified.strftime('%B %d, %Y')
 
     @staticmethod
     def n_almanacs():
@@ -177,6 +175,16 @@ class Page(Base):
             if isinstance(media, Story):
                 return media
         return Story(text=u'')
+
+    @property
+    def map_media(self):
+        """return a list of the map media associated with this page"""
+        return [media for media in self.media if isinstance(media, Map)]
+
+    @property
+    def updated_date_string(self):
+        """return the updated date formatted nicely as a string"""
+        return self.modified.strftime('%B %d, %Y')
 
 Page.pages = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
 
@@ -265,6 +273,7 @@ class Map(Media):
     location = Column(POINT(storage_SRID))
 
     maps = relation("Page", backref="maps")
+
 
 class User(Base):
 

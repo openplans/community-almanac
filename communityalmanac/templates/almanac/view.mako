@@ -67,6 +67,17 @@ ${c.almanac.name}
         map.addLayer(baseLayer);
         var center = new OpenLayers.LonLat(${c.lng}, ${c.lat});
         center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+        var pagesLayer = new OpenLayers.Layer.GML('pages', "${h.url_for('pages_kml', almanac=c.almanac)}", {
+          format: OpenLayers.Format.KML,
+          projection: new OpenLayers.Projection('EPSG:4326'),
+          styleMap: new OpenLayers.StyleMap({
+            externalGraphic: '/js/img/story_marker.png',
+            graphicWidth: 16,
+            graphicHeight: 16,
+            graphicYOffset: 0,
+          })
+        });
+        map.addLayer(pagesLayer);
         map.setCenter(center, 12);
     });
   </script>
