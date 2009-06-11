@@ -30,6 +30,7 @@ from communityalmanac.model import Media
 from communityalmanac.model import PDF
 from communityalmanac.model import Page
 from communityalmanac.model import Story
+from communityalmanac.model import Video
 from communityalmanac.model import meta
 from lxml.html.clean import Cleaner
 from pylons.controllers.util import abort
@@ -156,6 +157,9 @@ def render_media_items(media_items, editable=False):
             c.audio_url = request.application_url + c.audio.url
             c.flowplayer_id = 'pagemedia_%s' % c.audio.id
             rendered_item = render('/media/audio/item.mako')
+        elif isinstance(media_item, Video):
+            c.video = media_item
+            rendered_item = render('/media/video/item.mako')
         else:
             rendered_item = u''
         rendered_media_items.append((media_item.order, rendered_item))
