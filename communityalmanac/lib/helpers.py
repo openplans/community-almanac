@@ -31,8 +31,10 @@ from communityalmanac.model import PDF
 from communityalmanac.model import Page
 from communityalmanac.model import Story
 from communityalmanac.model import meta
+from lxml.html.clean import Cleaner
 from pylons.controllers.util import abort
 from pylons.templating import render_mako as render
+from pylons import g
 from pylons import request
 from pylons import session
 from pylons import tmpl_context as c
@@ -187,3 +189,12 @@ def flowplayer_data_for_media(media_items):
                                   audio_url=audio_url,
                                   ))
     return flow_data
+
+def clean_embed_markup(markup):
+    allow_tags = g.allow_tags
+    host_whitelist = g.host_whitelist
+
+    cleaner = Cleaner(remove_unknown_tags=False,
+                      whitelist_tags=allow_tags,
+                      host_whitelist=host_whitelist)
+    return cleaner.clean_html(markup)
