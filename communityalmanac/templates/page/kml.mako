@@ -21,7 +21,7 @@
           ]]>
         </description>
         <Point>
-          <coordinates>${map_media.location.centroid.y},${map_media.location.centroid.x},0</coordinates>
+          <coordinates>${map_media.location_4326.centroid.x},${map_media.location_4326.centroid.y},0</coordinates>
         </Point>
       </Placemark>
     %endfor
