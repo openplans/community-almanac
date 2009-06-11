@@ -1,7 +1,9 @@
 import sqlalchemy
+from sqlalchemy.sql import func
 
 from shapely import geometry, wkb
 import pyproj
+from psycopg2.extensions import AsIs
 
 from binascii import a2b_hex, b2a_hex
 
@@ -24,8 +26,12 @@ class Geometry(sqlalchemy.types.TypeEngine):
         def process(value):
             if value is None:
                 return None
-            else:
-                return 'SRID=%s;%s' % (self.SRID, b2a_hex(value.to_wkb()))
+            geom_srid = getattr(value, 'srid', None)
+            if geom_srid and geom_srid != self.SRID:
+                # temp = func.st_transform('SRID=%s;%s' % (geom_srid, b2a_hex(value.to_wkb())), self.SRID)
+                # import pdb; pdb.set_trace()
+                return AsIs("ST_TRANSFORM('SRID=%s;%s', %s)" % (geom_srid, b2a_hex(value.to_wkb()), self.SRID))
+            return 'SRID=%s;%s' % (self.SRID, b2a_hex(value.to_wkb()))
         return process
 
     def result_processor(self, dialect):
@@ -34,9 +40,13 @@ class Geometry(sqlalchemy.types.TypeEngine):
             if value is None:
                 return None
             elif ';' in value:
-                return wkb.loads(a2b_hex(value.split(';')[-1]))
+                geom = wkb.loads(a2b_hex(value.split(';')[-1]))
+                geom.srid = self.SRID
+                return geom
             else:
-                return wkb.loads(a2b_hex(value))
+                geom = wkb.loads(a2b_hex(value))
+                geom.srid = self.SRID
+                return geom
         return process
 
 
