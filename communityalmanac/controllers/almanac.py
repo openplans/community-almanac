@@ -62,7 +62,10 @@ class AlmanacController(BaseController):
 
         json = self.form_result['almanac_center']
         shape = simplejson.loads(json)
+        # We've requested a LonLat from OpenLayers, so it gives us a point in
+        # Plate Carree (4326)
         point = asShape(shape)
+        point.srid = 4326
         slug = name_almanac(name)
         almanac = Almanac(name, slug)
         almanac.location = point
@@ -74,8 +77,8 @@ class AlmanacController(BaseController):
 
     def view(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        loc = c.almanac.location
-        c.lat, c.lng = loc.x, loc.y
+        loc = c.almanac.transform(4326)
+        c.lng, c.lat = loc.x, loc.y
         return render('/almanac/view.mako')
 
     @jsonify

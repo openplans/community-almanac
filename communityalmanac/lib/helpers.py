@@ -167,7 +167,7 @@ def map_features_for_media(media_items):
     for index, media_item in enumerate(media_items):
         n = index + 1
         if isinstance(media_item, Map):
-            geometry = media_item.location.__geo_interface__
+            geometry = media_item.location_900913.__geo_interface__
             geojson = simplejson.dumps(geometry)
             map_id = 'pagemedia_%s' % (media_item.id or n)
             map_features.append(dict(map_id=map_id,

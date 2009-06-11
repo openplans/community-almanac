@@ -155,11 +155,11 @@ class MediaController(BaseController):
     def new_form_map(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
-        loc = c.almanac.location
+        loc = c.almanac.location_4326
         c.map_id = str(uuid.uuid4())
         c.legend = u'Map'
         return dict(html=render('/media/map/form.mako'),
-                    lat=loc.x, lng=loc.y,
+                    lat=loc.y, lng=loc.x,
                     map_id=c.map_id,
                     )
 
@@ -174,6 +174,7 @@ class MediaController(BaseController):
         # Stupid asShape returns a PointAdapter instead of a Point.  We round
         # trip it through wkb to get the correct type.
         location = wkb.loads(asShape(shape).to_wkb())
+        location.srid = 900913
 
         c.map = map = Map()
         map.location = location
@@ -193,11 +194,11 @@ class MediaController(BaseController):
     def new_form_existing_map(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
-        loc = c.almanac.location
+        loc = c.almanac.location_4326
         c.map_id = str(uuid.uuid4())
         c.legend = u'Map'
         return dict(html=render('/media/map/form.mako'),
-                    lat=loc.x, lng=loc.y,
+                    lat=loc.y, lng=loc.x,
                     map_id=c.map_id,
                     )
 
@@ -212,6 +213,7 @@ class MediaController(BaseController):
         # Stupid asShape returns a PointAdapter instead of a Point.  We round
         # trip it through wkb to get the correct type.
         location = wkb.loads(asShape(shape).to_wkb())
+        location.srid = 900913
 
         c.map = map = Map()
         map.location = location
@@ -230,7 +232,7 @@ class MediaController(BaseController):
     @jsonify
     def edit_form_map(self, media_id):
         c.media_item = c.map = h.get_media_by_id(media_id)
-        geometry = c.map.location.__geo_interface__
+        geometry = c.map.location_4326.__geo_interface__
         geojson = simplejson.dumps(geometry)
         c.view_url = h.url_for('media_map_view', media_id=c.media_item.id)
         c.legend = u'Map'
@@ -250,6 +252,8 @@ class MediaController(BaseController):
         # trip it through wkb to get the correct type.
         location = wkb.loads(asShape(shape).to_wkb())
 
+        location.srid = 900913
+
         c.map.location = location
         meta.Session.commit()
 
@@ -263,7 +267,7 @@ class MediaController(BaseController):
     def map_view(self, media_id):
         c.editable = True
         c.map = h.get_media_by_id(media_id)
-        geometry = c.map.location.__geo_interface__
+        geometry = c.map.location_900913.__geo_interface__
         geojson = simplejson.dumps(geometry)
         return dict(html=render('/media/map/item.mako'),
                     map_id='pagemedia_%d' % c.map.id,
