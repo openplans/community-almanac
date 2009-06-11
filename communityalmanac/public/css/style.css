@@ -1243,3 +1243,8 @@ margin: 0.2em 0 0 0;
 .ui-effects-transfer {
 border: 2px solid #D0C9B9;
 }
+
+div.mediacontent.map {
+width:500px;
+height:400px;
+}
