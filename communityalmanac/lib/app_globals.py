@@ -18,6 +18,7 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
 """The application's Globals object"""
+from paste.deploy.converters import aslist
 from pylons import config, request
 from os import path
 
@@ -35,6 +36,15 @@ class Globals(object):
 
         """
         self.map_key = config['map_key']
+
+        self.allow_tags = aslist(config['allow_tags'], sep=',')
+        host_whitelist = aslist(config['host_whitelist'], sep=',')
+        # prefix www subdomain to all hosts as a convenience
+        self.host_whitelist = set(host_whitelist)
+        for host in host_whitelist:
+            if not host.startswith('www.'):
+                self.host_whitelist.add('www.' + host)
+
 
     @property
     def images_path(self):

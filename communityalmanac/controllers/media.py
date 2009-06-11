@@ -795,7 +795,7 @@ class MediaController(BaseController):
         page = c.almanac.new_page(self.ensure_user)
 
         c.video = video = Video()
-        video.text = body
+        video.text = h.clean_embed_markup(body)
         video.page_id = page.id
         video.order = len(page.media)
         meta.Session.add(video)
@@ -821,7 +821,7 @@ class MediaController(BaseController):
             abort(400)
 
         c.video = video = Video()
-        video.text = body
+        video.text = h.clean_embed_markup(body)
         video.page_id = page.id
         video.order = len(page.media)
         meta.Session.add(video)
@@ -845,7 +845,7 @@ class MediaController(BaseController):
         if not body:
             abort(400)
 
-        c.video.text = body
+        c.video.text = h.clean_embed_markup(body)
         meta.Session.commit()
 
         c.editable = True

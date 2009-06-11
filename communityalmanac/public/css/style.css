@@ -798,13 +798,26 @@ padding: 0;
 
 ul.page-items li {
 margin: 1em 0;
-padding: 0;
+padding: 1em 0 0;
 list-style-type: none;
 border-top: 1px solid #99b0bf;
 }
 
 ul.page-items li:first-child {
 border-top: 0 none transparent;
+}
+
+ul.page-items li .image {
+text-align: center;
+}
+
+ul.page-items li .image img {
+border:4px solid #d0c9b9;
+}
+
+ul.page-items li .map {
+border:4px solid #d0c9b9;
+height: 400px;
 }
 
 div.comment {
@@ -830,7 +843,7 @@ background: url(/img/intro-bg.png) no-repeat;
 }
 
 body.home #intro .text {
-height: 32em;
+height: 33em;
 width: 340px;
 padding: 0 10px;
 float: right;
@@ -1086,7 +1099,7 @@ background: url(/img/comments-icon.png) 0 50% no-repeat;
 }
 
 div#shelf {
-height: 80px;
+height: 65px;
 background: url(/img/shelf-bg.png) repeat-x;
 padding: 15px 0 0;
 overflow: hidden;
