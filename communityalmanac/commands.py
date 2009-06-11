@@ -123,6 +123,8 @@ def main():
         'smtp_server': args.emailserver,
         'sqlalchemy.url': args.url,
         'map_key': args.map_key,
+        'host_whitelist': 'player.soundcloud.com,soundcloud.com,youtube.com,video.google.com,vimeo.com,blip.tv'.split(','),
+        'allow_tags': 'embed,object,param'.split(','),
     }
 
     if args.setup:
