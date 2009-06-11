@@ -24,12 +24,16 @@ from sqlalchemy.sql.expression import text
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import exc
+from sqlalchemy.orm import column_property
 from sqlalchemy import and_
 
 from uuid import uuid4
 
 from meta import Base, storage_SRID
 from sqlgeotypes import POINT
+from shapely.geometry.point import Point
+from shapely import wkb
+from binascii import a2b_hex
 import pyproj
 import meta
 import os
@@ -67,7 +71,7 @@ class Almanac(Base):
         # At this point, we need work through each of the points in the
         # geometry and transform them seperately.  This is more work than I
         # bargained for, so I'll look at this later...
-        return pyproj.transform(source, projection, self.location.x, self.location.y)
+        return Point(pyproj.transform(source, projection, self.location.x, self.location.y))
 
     def new_page(self, user, **fields):
         assert('almanac_id' not in fields)
@@ -138,6 +142,23 @@ class Almanac(Base):
     @staticmethod
     def n_almanacs():
         return len(meta.Session.query(Almanac).all())
+
+    @property
+    def location_4326(self):
+        if self._location_4326 is None:
+            # God this is ugly Fix for bug #xxx in SQLAlchemy
+            meta.Session.commit()
+            if self._location_4326 is None:
+                return None
+        if ';' in self._location_4326:
+            geom = wkb.loads(a2b_hex(self._location_4326.split(';')[-1]))
+            geom.srid = 4326
+            return geom
+        else:
+            geom = wkb.loads(a2b_hex(self._location_4326))
+            geom.srid = 4326
+            return geom
+Almanac._location_4326 = column_property(func.st_transform(Almanac.location, 4326).label('_location_4326'))
 
 class Page(Base):
     __tablename__ = 'pages'
@@ -293,6 +314,39 @@ class Map(Media):
     location = Column(POINT(storage_SRID))
 
     maps = relation("Page", backref="maps")
+
+    @property
+    def location_4326(self):
+        if self._location_4326 is None:
+            # God this is ugly Fix for bug #xxx in SQLAlchemy
+            meta.Session.commit()
+            if self._location_4326 is None:
+                return None
+        if ';' in self._location_4326:
+            geom = wkb.loads(a2b_hex(self._location_4326.split(';')[-1]))
+            geom.srid = 4326
+            return geom
+        else:
+            geom = wkb.loads(a2b_hex(self._location_4326))
+            geom.srid = 4326
+            return geom
+    @property
+    def location_900913(self):
+        if self._location_900913 is None:
+            # God this is ugly Fix for bug #xxx in SQLAlchemy
+            meta.Session.commit()
+            if self._location_900913 is None:
+                return None
+        if ';' in self._location_900913:
+            geom = wkb.loads(a2b_hex(self._location_900913.split(';')[-1]))
+            geom.srid = 900913
+            return geom
+        else:
+            geom = wkb.loads(a2b_hex(self._location_900913))
+            geom.srid = 900913
+            return geom
+Map._location_4326 = column_property(func.st_transform(Map.location, 4326).label('_location_4326'))
+Map._location_900913 = column_property(func.st_transform(Map.location, 900913).label('_location_900913'))
 
 
 class User(Base):
