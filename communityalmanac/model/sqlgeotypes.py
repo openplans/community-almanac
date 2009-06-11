@@ -1,7 +1,7 @@
 import sqlalchemy
 from sqlalchemy.sql import func
 
-from shapely import geometry, wkb
+from shapely import wkb
 import pyproj
 from psycopg2.extensions import AsIs
 
