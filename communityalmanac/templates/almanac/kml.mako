@@ -21,7 +21,7 @@
         ]]>
       </description>
       <Point>
-        <coordinates>${almanac.location.y},${almanac.location.x},0</coordinates>
+        <coordinates>${almanac.transform(4326)[0]},${almanac.transform(4326)[1]},0</coordinates>
       </Point>
     </Placemark>
   %endfor
