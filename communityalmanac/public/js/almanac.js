@@ -252,7 +252,10 @@ function applyMapDisplaySideEffects(data) {
     return;
   }
   var map_id = data.map_id;
-  var formatter = new OpenLayers.Format.GeoJSON();
+  var formatter = new OpenLayers.Format.GeoJSON({
+    'internalProjection': new OpenLayers.Projection("EPSG:900913"),
+    'externalProjection': new OpenLayers.Projection("EPSG:4326")
+  });
   var feature = formatter.read(geometryJson)[0];
   var bounds = feature.geometry.getBounds();
   var map = new OpenLayers.Map(map_id, {
@@ -324,7 +327,10 @@ function applyMapEditSideEffects(data) {
   // if this is an edit on an existing feature, we should displaly that feature too
   if (data.geometry) {
     var geometryJson = data.geometry;
-    var formatter = new OpenLayers.Format.GeoJSON();
+    var formatter = new OpenLayers.Format.GeoJSON({
+      'internalProjection': new OpenLayers.Projection("EPSG:900913"),
+      'externalProjection': new OpenLayers.Projection("EPSG:4326")
+    });
     var feature = formatter.read(geometryJson)[0];
     var bounds = feature.geometry.getBounds();
     featureLayer.addFeatures([feature]);
