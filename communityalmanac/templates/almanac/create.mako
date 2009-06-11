@@ -59,7 +59,7 @@
           var center = new OpenLayers.LonLat(data.lng, data.lat);
           center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
           map.setCenter(center, 12);
-          var point_geometry = new OpenLayers.Geometry.Point(data.lat, data.lng);
+          var point_geometry = new OpenLayers.Geometry.Point(data.lng, data.lat);
           var formatter = new OpenLayers.Format.GeoJSON();
           var json = formatter.write(point_geometry);
           $('#almanac-center').val(json);
