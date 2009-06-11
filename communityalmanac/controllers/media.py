@@ -183,10 +183,12 @@ class MediaController(BaseController):
         meta.Session.add(map)
         meta.Session.commit()
 
+        geometry = c.map.location_4326.__geo_interface__
+
         c.editable = True
         return dict(html=render('/media/map/item.mako'),
                     map_id='pagemedia_%d' % map.id,
-                    geometry=json,
+                    geometry=geometry,
                     )
 
     @dispatch_on(POST='_do_new_form_existing_map')
@@ -233,12 +235,11 @@ class MediaController(BaseController):
     def edit_form_map(self, media_id):
         c.media_item = c.map = h.get_media_by_id(media_id)
         geometry = c.map.location_4326.__geo_interface__
-        geojson = simplejson.dumps(geometry)
         c.view_url = h.url_for('media_map_view', media_id=c.media_item.id)
         c.legend = u'Map'
         return dict(html=render('/media/map/form.mako'),
                     map_id='pagemedia_%d' % c.map.id,
-                    geometry=geojson,
+                    geometry=geometry,
                     )
 
     @jsonify
@@ -267,11 +268,10 @@ class MediaController(BaseController):
     def map_view(self, media_id):
         c.editable = True
         c.map = h.get_media_by_id(media_id)
-        geometry = c.map.location_900913.__geo_interface__
-        geojson = simplejson.dumps(geometry)
+        geometry = c.map.location_4326.__geo_interface__
         return dict(html=render('/media/map/item.mako'),
                     map_id='pagemedia_%d' % c.map.id,
-                    geometry=geojson,
+                    geometry=geometry,
                     )
 
     @jsonify

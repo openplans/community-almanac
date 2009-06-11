@@ -45,7 +45,6 @@ from webhelpers.html import literal
 from webhelpers.html.tags import checkbox
 from webhelpers.html.tags import link_to
 from webhelpers.html.tags import password
-import simplejson
 import uuid
 
 def normalize_url_slug(candidate):
@@ -173,11 +172,10 @@ def map_features_for_media(media_items):
     for index, media_item in enumerate(media_items):
         n = index + 1
         if isinstance(media_item, Map):
-            geometry = media_item.location_900913.__geo_interface__
-            geojson = simplejson.dumps(geometry)
+            geometry = media_item.location_4326.__geo_interface__
             map_id = 'pagemedia_%s' % (media_item.id or n)
             map_features.append(dict(map_id=map_id,
-                                     geometry=geojson,
+                                     geometry=geometry,
                                      ))
     return map_features
 
