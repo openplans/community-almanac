@@ -29,8 +29,8 @@
 </a></div>
 <a href="${h.url_for('page_edit', almanac=c.almanac, page=c.page)}" title="Edit Page">Edit</a>
 %if c.media_items:
-  <div class="session-data">
-    <ul class="page-media-items">
+  <div>
+    <ul class="page-items">
       %for media_item in c.media_items:
         <li>${media_item}</li>
       %endfor
