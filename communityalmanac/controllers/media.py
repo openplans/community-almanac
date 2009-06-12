@@ -71,10 +71,10 @@ class MediaController(BaseController):
         page = c.almanac.new_page(self.ensure_user)
         c.legend = u'Text'
         new_uuid = str(uuid.uuid4())
-        c.textarea_id = 'textarea_%s' % new_uuid
+        c.storyinput_id = 'storyinput_%s' % new_uuid
         c.textarea_class = 'mceSimple_%s' % new_uuid
         return dict(html=render('/media/story/form.mako'),
-                    textarea_id=c.textarea_id,
+                    storyinput_id=c.storyinput_id,
                     textarea_class=c.textarea_class,
                     )
 
@@ -106,10 +106,10 @@ class MediaController(BaseController):
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         c.legend = u'Text'
         new_uuid = str(uuid.uuid4())
-        c.textarea_id = 'textarea_%s' % new_uuid
+        c.storyinput_id = 'storyinput_%s' % new_uuid
         c.textarea_class = 'mceSimple_%s' % new_uuid
         return dict(html=render('/media/story/form.mako'),
-                    textarea_id=c.textarea_id,
+                    storyinput_id=c.storyinput_id,
                     textarea_class=c.textarea_class,
                     )
 
@@ -140,10 +140,10 @@ class MediaController(BaseController):
         c.view_url = h.url_for('media_story_view', media_id=c.media_item.id)
         c.legend = u'Text'
         new_uuid = str(uuid.uuid4())
-        c.textarea_id = 'textarea_%s' % new_uuid
+        c.storyinput_id = 'storyinput_%s' % new_uuid
         c.textarea_class = 'mceSimple_%s' % new_uuid
         return dict(html=render('/media/story/form.mako'),
-                    textarea_id=c.textarea_id,
+                    storyinput_id=c.storyinput_id,
                     textarea_class=c.textarea_class,
                     )
 

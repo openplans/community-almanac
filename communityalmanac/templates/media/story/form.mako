@@ -24,4 +24,4 @@
 ${h.literal(c.media_item.text)}
 %endif
 </textarea>
-<input id="${c.textarea_id}" type="hidden" name="body" />
+<input id="${c.storyinput_id}" type="hidden" name="body" />

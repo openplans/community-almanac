@@ -114,9 +114,7 @@ $(document).ready(function() {
     var formcontainer = $('<li></li>').appendTo($('ul.page-media-items'));
     $.getJSON(url, null, function(data) {
       var html = data.html;
-      $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
-        $(this).find('textarea').focus();
-      });
+      $(html).appendTo(formcontainer).hide().fadeIn('fast');
       link.effect('transfer', {to: 'ul.page-media-items li:last'}, 1000);
       applyEditSideEffects(data);
     });
@@ -419,16 +417,16 @@ function applyFlowPlayerSideEffects(data) {
 }
 
 function applyRichTextSideEffects(data) {
-  if (!data.textarea_id || !data.textarea_class) {
+  if (!data.storyinput_id || !data.textarea_class) {
     return;
   }
-  var textarea = $('#' + data.textarea_id);
-  if (textarea.length == 0) {
+  var storyinput = $('#' + data.storyinput_id);
+  if (storyinput.length == 0) {
     return;
   }
   var _onChangeHandler = function(inst) {
     var data = inst.getBody().innerHTML;
-    textarea.val(data);
+    storyinput.val(data);
   };
   tinyMCE.init({
     mode : "specific_textareas",
