@@ -244,6 +244,7 @@ function applyEditSideEffects(data) {
   applyMapEditSideEffects(data);
   applyFileUploadEditSideEffects(data);
   applyFlowPlayerSideEffects(data);
+  applyRichTextSideEffects(data);
 }
 
 function applyMapDisplaySideEffects(data) {
@@ -414,5 +415,25 @@ function applyFlowPlayerSideEffects(data) {
       url: flowplayerAudioUrl,
       autoPlay: false
     }]
+  });
+}
+
+function applyRichTextSideEffects(data) {
+  if (!data.textarea_id || !data.textarea_class) {
+    return;
+  }
+  var textarea = $('#' + data.textarea_id);
+  if (textarea.length == 0) {
+    return;
+  }
+  var _onChangeHandler = function(inst) {
+    var data = inst.getBody().innerHTML;
+    textarea.val(data);
+  };
+  tinyMCE.init({
+    mode : "specific_textareas",
+    theme : "simple",
+    editor_selector : data.textarea_class,
+    onchange_callback : _onChangeHandler
   });
 }

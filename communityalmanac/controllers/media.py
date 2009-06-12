@@ -70,7 +70,13 @@ class MediaController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = c.almanac.new_page(self.ensure_user)
         c.legend = u'Text'
-        return dict(html=render('/media/story/form.mako'))
+        new_uuid = str(uuid.uuid4())
+        c.textarea_id = 'textarea_%s' % new_uuid
+        c.textarea_class = 'mceSimple_%s' % new_uuid
+        return dict(html=render('/media/story/form.mako'),
+                    textarea_id=c.textarea_id,
+                    textarea_class=c.textarea_class,
+                    )
 
     @jsonify
     def _do_new_form_text(self, almanac_slug):
@@ -81,8 +87,10 @@ class MediaController(BaseController):
 
         page = c.almanac.new_page(self.ensure_user)
 
+        cleaned = h.clean_html(body)
+
         c.story = story = Story()
-        story.text = body
+        story.text = cleaned
         story.page_id = page.id
         story.order = len(page.media)
         meta.Session.add(story)
@@ -97,7 +105,13 @@ class MediaController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         c.legend = u'Text'
-        return dict(html=render('/media/story/form.mako'))
+        new_uuid = str(uuid.uuid4())
+        c.textarea_id = 'textarea_%s' % new_uuid
+        c.textarea_class = 'mceSimple_%s' % new_uuid
+        return dict(html=render('/media/story/form.mako'),
+                    textarea_id=c.textarea_id,
+                    textarea_class=c.textarea_class,
+                    )
 
     @jsonify
     def _do_new_form_existing_text(self, almanac_slug, page_slug):
@@ -107,8 +121,10 @@ class MediaController(BaseController):
         if not body:
             abort(400)
 
+        cleaned = h.clean_html(body)
+
         c.story = story = Story()
-        story.text = body
+        story.text = cleaned
         story.page_id = page.id
         story.order = len(page.media)
         meta.Session.add(story)
@@ -123,7 +139,13 @@ class MediaController(BaseController):
         c.media_item = h.get_media_by_id(media_id)
         c.view_url = h.url_for('media_story_view', media_id=c.media_item.id)
         c.legend = u'Text'
-        return dict(html=render('/media/story/form.mako'))
+        new_uuid = str(uuid.uuid4())
+        c.textarea_id = 'textarea_%s' % new_uuid
+        c.textarea_class = 'mceSimple_%s' % new_uuid
+        return dict(html=render('/media/story/form.mako'),
+                    textarea_id=c.textarea_id,
+                    textarea_class=c.textarea_class,
+                    )
 
     @jsonify
     def _do_edit_form_text(self, media_id):
@@ -132,7 +154,9 @@ class MediaController(BaseController):
         if not body:
             abort(400)
 
-        c.story.text = body
+        cleaned = h.clean_html(body)
+
+        c.story.text = cleaned
         meta.Session.commit()
 
         c.editable = True

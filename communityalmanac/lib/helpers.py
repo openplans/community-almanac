@@ -32,7 +32,7 @@ from communityalmanac.model import Page
 from communityalmanac.model import Story
 from communityalmanac.model import Video
 from communityalmanac.model import meta
-from lxml.html.clean import Cleaner
+import lxml.html.clean
 from pylons.controllers.util import abort
 from pylons.templating import render_mako as render
 from pylons import g
@@ -142,6 +142,9 @@ def render_media_items(media_items, editable=False):
         c.media_id = media_item.id or n
         if isinstance(media_item, Story):
             c.story = media_item
+            new_uuid = str(uuid.uuid4())
+            c.textarea_id = 'textarea_%s' % new_uuid
+            c.textarea_class = 'mceSimple_%s' % new_uuid
             rendered_item = render('/media/story/item.mako')
         elif isinstance(media_item, Map):
             c.map = media_item
@@ -198,7 +201,10 @@ def clean_embed_markup(markup):
     allow_tags = g.allow_tags
     host_whitelist = g.host_whitelist
 
-    cleaner = Cleaner(remove_unknown_tags=False,
-                      whitelist_tags=allow_tags,
-                      host_whitelist=host_whitelist)
+    cleaner = lxml.html.clean.Cleaner(remove_unknown_tags=False,
+                                      whitelist_tags=allow_tags,
+                                      host_whitelist=host_whitelist)
     return cleaner.clean_html(markup)
+
+def clean_html(markup):
+    return lxml.html.clean.clean_html(markup)
