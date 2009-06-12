@@ -126,10 +126,18 @@ $(document).ready(function(){
     format: OpenLayers.Format.KML,
     projection: new OpenLayers.Projection('EPSG:4326'),
     styleMap: new OpenLayers.StyleMap({
-      externalGraphic: '/js/img/almanac_marker.png',
-      graphicWidth: 28,
-      graphicHeight: 16,
-      graphicYOffset: 0,
+      default: new OpenLayers.Style({
+        externalGraphic: '/js/img/almanac_marker.png',
+        graphicWidth: 28,
+        graphicHeight: 16,
+        graphicYOffset: 0,
+      }),
+      select: new OpenLayers.Style({
+        externalGraphic: '/js/img/book-open.png',
+        graphicWidth: 28,
+        graphicHeight: 16,
+        graphicYOffset: 0,
+      })
     })
   });
   map.addLayer(almanacLayer);
@@ -152,12 +160,6 @@ $(document).ready(function(){
   map.zoomToExtent(extent);
   map.events.on({'moveend': populateMap});
   var featureSelected = function(feature) {
-    almanacLayer.drawFeature(feature,{
-      externalGraphic: '/js/img/book-open.png',
-      graphicWidth: 28,
-      graphicHeight: 16,
-      graphicYOffset: 0,
-    });
     var popup = new OpenLayers.Popup.AnchoredBubble(null, feature.geometry.getBounds().getCenterLonLat(),
                                                     new OpenLayers.Size(100, 100), feature.attributes.description,
                                                     {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(-64, -126)},
@@ -169,12 +171,6 @@ $(document).ready(function(){
     map.removePopup(feature.popup);
     feature.popup.destroy();
     feature.popup = null;
-    almanacLayer.drawFeature(feature,{
-      externalGraphic: '/js/img/almanac_marker.png',
-      graphicWidth: 28,
-      graphicHeight: 16,
-      graphicYOffset: 0,
-    });
   };
   var selectControl = new OpenLayers.Control.SelectFeature(almanacLayer, {
     onSelect: featureSelected, onUnselect: featureUnselected
