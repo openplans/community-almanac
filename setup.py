@@ -58,7 +58,7 @@ setup(
         "Pylons>=0.9.7",
         "SQLAlchemy>=0.5",
         "psycopg2",
-        "geopy",
+        "geopy==0.93dev-r84",
         "shapely",
         "pyproj",
         "formalchemy",
@@ -67,6 +67,9 @@ setup(
         "repoze.who.plugins.sa",
         "lxml>=2.2",
         "mailer>=0.5",
+    ],
+    dependency_links=[
+        "https://source.openplans.org/eggs/geopy-0.93dev-r84.tar.gz",
     ],
     setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),
