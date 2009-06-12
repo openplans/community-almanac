@@ -72,7 +72,7 @@
   </script>
   <script type="text/javascript" src="/js/upload/ajaxupload.3.2.js"></script>
   <script type="text/javascript" src="/js/flowplayer/flowplayer-3.1.1.min.js"></script>
-  <script type="text/javascript" src="/js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+  <script type="text/javascript" src="/js/tinymce/tiny_mce.js"></script>
 </%def>
 
 <%def name="title()">
