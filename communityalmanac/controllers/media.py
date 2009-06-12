@@ -45,11 +45,7 @@ log = logging.getLogger(__name__)
 
 class MediaController(BaseController):
 
-    @dispatch_on(GET='donothing')
-    def sort(self, almanac_slug, page_slug):
-        almanac = h.get_almanac_by_slug(almanac_slug)
-        page = h.get_page_by_slug(almanac, page_slug)
-
+    def _sort(self, page):
         id = request.params.get('id')
         index = request.params.get('index')
         if not id or not index:
@@ -73,8 +69,15 @@ class MediaController(BaseController):
         # empty body.
         return ''
 
-    def donothing(self, almanac_slug):
-        abort(400)
+    def sort(self, almanac_slug, page_slug):
+        almanac = h.get_almanac_by_slug(almanac_slug)
+        page = h.get_page_by_slug(almanac, page_slug)
+        return self._sort(page)
+
+    def temppage_sort(self, almanac_slug):
+        almanac = h.get_almanac_by_slug(almanac_slug)
+        page = almanac.new_page(self.ensure_user)
+        return self._sort(page)
 
     @dispatch_on(POST='_do_new_form_text')
     @jsonify
