@@ -73,7 +73,7 @@ def make_map():
     map.connect('user_requestreset', '/forgot', controller='user', action='request_reset')
     map.connect('user_performreset', '/reset/{username}/{key}', controller='user', action='perform_reset')
     map.connect('test', '/test', controller='user', action='test')
-    map.connect('session_sort', '/sort', controller='media', action='sort')
+    map.connect('media_item_sort', '/api/sort/:almanac_slug/:page_slug', controller='media', action='sort', _filter=page_expand)
     map.connect('almanac_center', '/api/center/:almanac_slug', controller='almanac', action='center', _filter=almanac_expand)
     map.connect('geocode', '/api/geocode', controller='geocoder', action='geocode')
     map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)

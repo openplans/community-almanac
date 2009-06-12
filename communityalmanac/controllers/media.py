@@ -46,7 +46,10 @@ log = logging.getLogger(__name__)
 class MediaController(BaseController):
 
     @dispatch_on(GET='donothing')
-    def sort(self):
+    def sort(self, almanac_slug, page_slug):
+        almanac = h.get_almanac_by_slug(almanac_slug)
+        page = h.get_page_by_slug(almanac, page_slug)
+
         id = request.params.get('id')
         index = request.params.get('index')
         if not id or not index:
@@ -56,8 +59,16 @@ class MediaController(BaseController):
             id = int(id.split('_')[-1])
         except ValueError:
             abort(400)
-        if not h.sort_media_items(id, index):
+        media = page.media
+        media.sort(key=lambda x:x.order)
+        curidx = -1
+        for idx, item in enumerate(media):
+            if item.id == id:
+                curidx = idx
+        assert curidx != -1, "didn't find item"
+        if not h.sort_media_items(media, curidx, index):
             abort(400)
+        meta.Session.commit()
         # The only useful return value is the HTTP response, so we return an
         # empty body.
         return ''

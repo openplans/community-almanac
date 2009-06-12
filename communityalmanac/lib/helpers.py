@@ -104,9 +104,7 @@ def get_media_by_id(media_id):
     except exc.NoResultFound:
         abort(404)
 
-def sort_media_items(index_move, newsort):
-    media = get_session_media_items()
-
+def sort_media_items(media, index_move, newsort):
     if index_move < 0 or index_move >= len(media):
         return False
 
@@ -116,12 +114,14 @@ def sort_media_items(index_move, newsort):
             if item.order == oldsort:
                 item.order = newsort
             elif item.order >= newsort and item.order < oldsort:
+                meta.Session.add(item)
                 item.order += 1
     elif oldsort < newsort:
         for item in media:
             if item.order == oldsort:
                 item.order = newsort
-            elif item.order > oldsort and item.sort <= newsort:
+            elif item.order > oldsort and item.order <= newsort:
+                meta.Session.add(item)
                 item.order -= 1
     return True
 
