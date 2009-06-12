@@ -41,7 +41,7 @@
       %if first_image is not None:
         <div class="page-first-image"><img src="${first_image.small_url}" /></div>
       %endif
-      <div class="page-excerpt">${page.first_story.excerpt()}</div>
+      <div class="page-excerpt">${h.literal(page.first_story.excerpt())}</div>
     </li>
     % endfor
   </ul>
