@@ -30,6 +30,7 @@ from communityalmanac.model import PDF
 from communityalmanac.model import Story
 from communityalmanac.model import Video
 from communityalmanac.model import meta
+from paste.fileapp import FileApp
 from pylons.decorators import jsonify
 from pylons.decorators.rest import dispatch_on
 from shapely import wkb
@@ -906,3 +907,28 @@ class MediaController(BaseController):
         video = h.get_media_by_id(media_id)
         meta.Session.delete(video)
         meta.Session.commit()
+
+    # actions to handle the urls to view the media themselves
+    def view_image_large(self, media_id, filename):
+        image = h.get_media_by_id(media_id)
+        return self._view_media(image.path_520)
+
+    def view_image_small(self, media_id, filename):
+        image = h.get_media_by_id(media_id)
+        return self._view_media(image.path_75)
+
+    def view_image(self, media_id, filename):
+        image = h.get_media_by_id(media_id)
+        return self._view_media(image.path)
+
+    def view_audio(self, media_id, filename):
+        audio = h.get_media_by_id(media_id)
+        return self._view_media(audio.path)
+
+    def view_pdf(self, media_id, filename):
+        pdf = h.get_media_by_id(media_id)
+        return self._view_media(pdf.path)
+
+    def _view_media(self, path):
+        app = FileApp(path)
+        return app(request.environ, self.start_response)

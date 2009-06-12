@@ -273,7 +273,8 @@ class PDF(Media):
 
     @property
     def url(self):
-        return '/media/pdfs/%s' % self.path.split(os.sep)[-1]
+        import communityalmanac.lib.helpers as h
+        return h.url_for('view_media_pdf', media=self)
 
 
 class Audio(Media):
@@ -285,7 +286,8 @@ class Audio(Media):
 
     @property
     def url(self):
-        return '/media/audio/%s' % self.path.split(os.sep)[-1]
+        import communityalmanac.lib.helpers as h
+        return h.url_for('view_media_audio', media=self)
 
 
 class Video(Media):
@@ -307,19 +309,19 @@ class Image(Media):
     def url(self):
         # we add a querystring to prevent the browser from caching
         qs = time.time()
-        return '/media/images/%s?%s' % (self.path.split(os.sep)[-1], qs)
+        return '/media/view/image/%s/%s?%s' % (self.id, self.filename, qs)
 
     @property
     def large_url(self):
         # we add a querystring to prevent the browser from caching
         qs = time.time()
-        return '/media/images/%s?%s' % (self.path_520.split(os.sep)[-1], qs)
+        return '/media/view/image/large/%s/%s?%s' % (self.id, self.filename, qs)
 
     @property
     def small_url(self):
         # we add a querystring to prevent the browser from caching
         qs = time.time()
-        return '/media/images/%s?%s' % (self.path_75.split(os.sep)[-1], qs)
+        return '/media/view/image/small/%s/%s?%s' % (self.id, self.filename, qs)
 
     def create_scales(self, base_path, replace_existing=False):
         """create the necessary image scales from the saved path
