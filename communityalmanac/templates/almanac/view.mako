@@ -72,7 +72,7 @@ ${c.almanac.name}
           projection: new OpenLayers.Projection('EPSG:4326'),
           styleMap: new OpenLayers.StyleMap({
             externalGraphic: '/js/img/story_marker.png',
-            graphicWidth: 16,
+            graphicWidth: 28,
             graphicHeight: 16,
             graphicYOffset: 0,
           })
