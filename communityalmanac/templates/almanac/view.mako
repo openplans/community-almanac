@@ -90,6 +90,24 @@ ${c.almanac.name}
         });
         map.addLayer(pagesLayer);
         map.setCenter(center, 12);
+        var featureSelected = function(feature) {
+          var popup = new OpenLayers.Popup.AnchoredBubble(null, feature.geometry.getBounds().getCenterLonLat(),
+                                                          new OpenLayers.Size(100, 100), feature.attributes.description,
+                                                          {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(-64, -126)},
+                                                          true, function() { selectControl.unselect(feature); });
+          feature.popup = popup;
+          map.addPopup(popup);
+        };
+        var featureUnselected = function(feature) {
+          map.removePopup(feature.popup);
+          feature.popup.destroy();
+          feature.popup = null;
+        };
+        var selectControl = new OpenLayers.Control.SelectFeature(pagesLayer, {
+          onSelect: featureSelected, onUnselect: featureUnselected
+        });
+        map.addControl(selectControl);
+        selectControl.activate();
     });
   </script>
 </%def>
