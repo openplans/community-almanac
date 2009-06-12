@@ -20,7 +20,7 @@
 --></%doc>
 <%inherit file="/media/base_item.mako" />
 <div class="mediacontent text" id="pagemedia_${c.story.id}">
-  <p>${c.story.text}</p>
+  <p>${h.literal(c.story.text)}</p>
 </div>
 
 <%def name="media_edit_controls()">

@@ -114,9 +114,7 @@ $(document).ready(function() {
     var formcontainer = $('<li></li>').appendTo($('ul.page-media-items'));
     $.getJSON(url, null, function(data) {
       var html = data.html;
-      $(html).appendTo(formcontainer).hide().fadeIn('fast', function() {
-        $(this).find('textarea').focus();
-      });
+      $(html).appendTo(formcontainer).hide().fadeIn('fast');
       link.effect('transfer', {to: 'ul.page-media-items li:last'}, 1000);
       applyEditSideEffects(data);
     });
@@ -244,6 +242,7 @@ function applyEditSideEffects(data) {
   applyMapEditSideEffects(data);
   applyFileUploadEditSideEffects(data);
   applyFlowPlayerSideEffects(data);
+  applyRichTextSideEffects(data);
 }
 
 function applyMapDisplaySideEffects(data) {
@@ -420,5 +419,25 @@ function applyFlowPlayerSideEffects(data) {
       url: flowplayerAudioUrl,
       autoPlay: false
     }]
+  });
+}
+
+function applyRichTextSideEffects(data) {
+  if (!data.storyinput_id || !data.textarea_class) {
+    return;
+  }
+  var storyinput = $('#' + data.storyinput_id);
+  if (storyinput.length == 0) {
+    return;
+  }
+  var _onChangeHandler = function(inst) {
+    var data = inst.getBody().innerHTML;
+    storyinput.val(data);
+  };
+  tinyMCE.init({
+    mode : "specific_textareas",
+    theme : "simple",
+    editor_selector : data.textarea_class,
+    onchange_callback : _onChangeHandler
   });
 }
