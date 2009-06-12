@@ -612,7 +612,7 @@ def default_password_hash(cleartext_password, scheme='BESTAVAILABLE'):
             from bcrypt import bcrypt
         except ImportError:
             raise NotImplementedError("Unable to load bcrypt module for Blowfish hashes")
-        return "{CRYPT}%s" % bcrypt.hashpw(password, bcrypt.gensalt())
+        return "{CRYPT}%s" % bcrypt.hashpw(cleartext_password, bcrypt.gensalt())
 
     # The salted SHA hashes work the same.  The only difference is how to find
     # the suitable hash module.
