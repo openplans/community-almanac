@@ -114,37 +114,6 @@ $(document).ready(function(){
 	);
 	$('.panel-wrap').cycle({fx: 'fade', speed: 'fast', timeout: 0, next: '.next-panel', prev: '.prev-panel'
 	});
-    function _geocode() {
-      var location = $('#almanac-name').val();
-      $.getJSON(geocode_url, {location: location}, function(data) {
-        if (!data.lat || !data.lng || !data.authoritative_name) {
-          // Problem geocoding, we need to disable the submit button
-          $('#almanac-submit').val('Add a Page').attr('disabled', 'disabled').addClass('disabled');
-        }
-        else {
-          $('#almanac-authoritative').val(data.authoritative_name);
-          $('#almanac-submit').val('Add a Page to the ' + data.authoritative_name + ' Almanac').removeAttr('disabled').removeClass('disabled');
-          var center = new OpenLayers.LonLat(data.lng, data.lat);
-          center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-          map.setCenter(center, 12);
-          var point_geometry = new OpenLayers.Geometry.Point(data.lng, data.lat);
-          var formatter = new OpenLayers.Format.GeoJSON();
-          var json = formatter.write(point_geometry);
-          $('#almanac-center').val(json);
-        }
-      });
-    }
-    var form = $('#almanac-geolocate');
-    var submit_blocker = function() { _geocode(); return false; };
-    $('#almanac-name').focus(function() {
-      form.bind('submit', submit_blocker);
-    }).blur(function() {
-      form.unbind('submit', submit_blocker);
-    });
-    $('.find-almanac').click(function() {
-      _geocode();
-      return false;
-    });
   var extent = new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400);
   map = new OpenLayers.Map('map', {
     projection: new OpenLayers.Projection('EPSG:900913'),
@@ -200,6 +169,44 @@ $(document).ready(function(){
   });
   map.addControl(selectControl);
   selectControl.activate();
+    function _geocode() {
+      var location = $('#almanac-name').val();
+      $.getJSON(geocode_url, {location: location}, function(data) {
+        if (!data.lat || !data.lng || !data.authoritative_name) {
+          // Problem geocoding, we need to disable the submit button
+          $('#almanac-submit').val('Add a Page').attr('disabled', 'disabled').addClass('disabled');
+        }
+        else {
+          $('#almanac-authoritative').val(data.authoritative_name);
+          $('#almanac-submit').val('Add a Page to the ' + data.authoritative_name + ' Almanac').removeAttr('disabled').removeClass('disabled');
+          var center = new OpenLayers.LonLat(data.lng, data.lat);
+          center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+          map.setCenter(center, 12);
+          var point_geometry = new OpenLayers.Geometry.Point(data.lng, data.lat);
+          var formatter = new OpenLayers.Format.GeoJSON();
+          var json = formatter.write(point_geometry);
+          $('#almanac-center').val(json);
+          if (data.almanac) {
+            for (var index=0; index<almanacLayer.features.length; ++index) {
+              if (almanacLayer.features[index].attributes.name == data.authoritative_name) {
+                featureSelected(almanacLayer.features[index]);
+              }
+            }
+          }
+        }
+      });
+    }
+    var form = $('#almanac-geolocate');
+    var submit_blocker = function() { _geocode(); return false; };
+    $('#almanac-name').focus(function() {
+      form.bind('submit', submit_blocker);
+    }).blur(function() {
+      form.unbind('submit', submit_blocker);
+    });
+    $('.find-almanac').click(function() {
+      _geocode();
+      return false;
+    });
 });
 //]]>
   </script>

@@ -35,10 +35,11 @@ class GeocoderController(BaseController):
         else:
             authoritative_name = None
         try:
-            almanac_slug = meta.Session.query(Almanac).filter(Almanac.name==authoritative_name).one().slug
+            meta.Session.query(Almanac).filter(Almanac.name==authoritative_name).one()
+            almanac = True
         except exc.NoResultFound:
-            almanac_slug = ''
-        return dict(lat=lat, lng=lng, authoritative_name=authoritative_name, almanac_slug=almanac_slug)
+            almanac = False
+        return dict(lat=lat, lng=lng, authoritative_name=authoritative_name, almanac=almanac)
 
     @staticmethod
     def _result_with_locality(gen):
