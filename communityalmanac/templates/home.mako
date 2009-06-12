@@ -152,9 +152,15 @@ $(document).ready(function(){
   map.zoomToExtent(extent);
   map.events.on({'moveend': populateMap});
   var featureSelected = function(feature) {
+    almanacLayer.drawFeature(feature,{
+      externalGraphic: '/js/img/book-open.png',
+      graphicWidth: 28,
+      graphicHeight: 16,
+      graphicYOffset: 0,
+    });
     var popup = new OpenLayers.Popup.AnchoredBubble(null, feature.geometry.getBounds().getCenterLonLat(),
                                                     new OpenLayers.Size(100, 100), feature.attributes.description,
-                                                    {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(1, -12)},
+                                                    {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(-64, -126)},
                                                     true, function() { selectControl.unselect(feature); });
     feature.popup = popup;
     map.addPopup(popup);
@@ -163,6 +169,12 @@ $(document).ready(function(){
     map.removePopup(feature.popup);
     feature.popup.destroy();
     feature.popup = null;
+    almanacLayer.drawFeature(feature,{
+      externalGraphic: '/js/img/almanac_marker.png',
+      graphicWidth: 28,
+      graphicHeight: 16,
+      graphicYOffset: 0,
+    });
   };
   var selectControl = new OpenLayers.Control.SelectFeature(almanacLayer, {
     onSelect: featureSelected, onUnselect: featureUnselected
