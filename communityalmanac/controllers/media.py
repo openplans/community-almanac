@@ -348,6 +348,7 @@ class MediaController(BaseController):
         image.page_id = page.id
         image.order = len(page.media)
         image.create_scales(g.images_path)
+        image.filename = filename
         meta.Session.add(image)
         meta.Session.commit()
 
@@ -425,6 +426,7 @@ class MediaController(BaseController):
         image.page_id = page.id
         image.order = len(page.media)
         image.create_scales(g.images_path)
+        image.filename = filename
         meta.Session.add(image)
         meta.Session.commit()
 
@@ -453,7 +455,8 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        mimetype, _ = mimetypes.guess_type(image_file.filename)
+        filename = image_file.filename
+        mimetype, _ = mimetypes.guess_type(filename)
         if not mimetype.startswith('image/'):
             c.error = u'Invalid image file'
             response.content_type = 'application/javascript'
@@ -465,8 +468,8 @@ class MediaController(BaseController):
         f.write(image_data)
         f.close()
 
-        c.image.create_scales(g.images_path, replace_existing=True)
-
+        c.image.create_scales(g.images_path)
+        c.image.filename = filename
         meta.Session.commit()
 
         c.editable = True
@@ -507,7 +510,8 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        mimetype, _ = mimetypes.guess_type(pdf_file.filename)
+        filename = pdf_file.filename
+        mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'application/pdf':
             c.error = u'Invalid pdf file'
             response.content_type = 'application/javascript'
@@ -527,6 +531,7 @@ class MediaController(BaseController):
         pdf.path = path
         pdf.page_id = page.id
         pdf.order = len(page.media)
+        pdf.filename = filename
         meta.Session.add(pdf)
         meta.Session.commit()
 
@@ -556,7 +561,8 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        mimetype, _ = mimetypes.guess_type(pdf_file.filename)
+        filename = pdf_file.filename
+        mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'application/pdf':
             c.error = u'Invalid pdf file'
             response.content_type = 'application/javascript'
@@ -574,6 +580,7 @@ class MediaController(BaseController):
         pdf.path = path
         pdf.page_id = page.id
         pdf.order = len(page.media)
+        pdf.filename = filename
         meta.Session.add(pdf)
         meta.Session.commit()
 
@@ -602,7 +609,8 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        mimetype, _ = mimetypes.guess_type(pdf_file.filename)
+        filename = pdf_file.filename
+        mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'application/pdf':
             c.error = u'Invalid pdf file'
             response.content_type = 'application/javascript'
@@ -614,6 +622,7 @@ class MediaController(BaseController):
         f.write(pdf_data)
         f.close()
 
+        c.pdf.filename = filename
         meta.Session.commit()
 
         c.editable = True
@@ -654,7 +663,8 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        mimetype, _ = mimetypes.guess_type(audio_file.filename)
+        filename = audio_file.filename
+        mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'audio/mpeg':
             c.error = u'Invalid audio file'
             response.content_type = 'application/javascript'
@@ -675,6 +685,7 @@ class MediaController(BaseController):
         audio.path = path
         audio.page_id = page.id
         audio.order = len(page.media)
+        audio.filename = filename
         meta.Session.add(audio)
         meta.Session.commit()
 
@@ -709,7 +720,8 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        mimetype, _ = mimetypes.guess_type(audio_file.filename)
+        filename = audio_file.filename
+        mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'audio/mpeg':
             c.error = u'Invalid audio file'
             response.content_type = 'application/javascript'
@@ -728,6 +740,7 @@ class MediaController(BaseController):
         audio.path = path
         audio.page_id = page.id
         audio.order = len(page.media)
+        audio.filename = filename
         meta.Session.add(audio)
         meta.Session.commit()
 
@@ -765,7 +778,8 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        mimetype, _ = mimetypes.guess_type(audio_file.filename)
+        filename = audio_file.filename
+        mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'audio/mpeg':
             c.error = u'Invalid audio file'
             response.content_type = 'application/javascript'
@@ -777,6 +791,7 @@ class MediaController(BaseController):
         f.write(audio_data)
         f.close()
 
+        c.audio.filename = filename
         meta.Session.commit()
 
         c.editable = True
