@@ -82,7 +82,7 @@ ${c.almanac.name}
           format: OpenLayers.Format.KML,
           projection: new OpenLayers.Projection('EPSG:4326'),
           styleMap: new OpenLayers.StyleMap({
-            externalGraphic: '/js/img/story_marker.png',
+            externalGraphic: '/js/img/page.png',
             graphicWidth: 28,
             graphicHeight: 16,
             graphicYOffset: 0,
