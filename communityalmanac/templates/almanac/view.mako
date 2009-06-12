@@ -37,7 +37,11 @@
         </a>
       </div>
       <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.user.username}</h4>
-      <div class="almanac-excerpt">${page.first_story.excerpt()}</div>
+      <% first_image = page.first_image %>
+      %if first_image is not None:
+        <div class="page-first-image"><img src="${first_image.small_url}" /></div>
+      %endif
+      <div class="page-excerpt">${page.first_story.excerpt()}</div>
     </li>
     % endfor
   </ul>

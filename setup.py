@@ -67,9 +67,11 @@ setup(
         "repoze.who.plugins.sa",
         "lxml>=2.2",
         "mailer>=0.5",
+        "PIL",
     ],
     dependency_links=[
         "https://source.openplans.org/eggs/geopy-0.93dev-r84.tar.gz",
+        "http://dist.repoze.org/PIL-1.1.6.tar.gz",
     ],
     setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),

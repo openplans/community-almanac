@@ -317,9 +317,6 @@ class MediaController(BaseController):
                     file_upload_url=c.file_upload_url,
                     )
 
-    #@jsonify
-    #XXX ajax file upload plugin does not like response type of
-    # application/json
     def _do_new_form_image(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         image_file = request.POST.get('userfile')
@@ -328,7 +325,9 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        mimetype, _ = mimetypes.guess_type(image_file.filename)
+        filename = image_file.filename
+        _, ext = os.path.splitext(filename)
+        mimetype, _ = mimetypes.guess_type(filename)
         if not mimetype.startswith('image/'):
             c.error = u'Invalid image file'
             response.content_type = 'application/javascript'
@@ -339,7 +338,7 @@ class MediaController(BaseController):
         image_file.make_file()
         image_data = image_file.file.read()
         new_uuid = str(uuid.uuid4())
-        path = os.path.join(g.images_path, new_uuid)
+        path = os.path.join(g.images_path, new_uuid) + ext
         f = open(path, 'w')
         f.write(image_data)
         f.close()
@@ -348,6 +347,7 @@ class MediaController(BaseController):
         image.path = path
         image.page_id = page.id
         image.order = len(page.media)
+        image.create_scales(g.images_path)
         meta.Session.add(image)
         meta.Session.commit()
 
@@ -404,7 +404,9 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        mimetype, _ = mimetypes.guess_type(image_file.filename)
+        filename = image_file.filename
+        _, ext = os.path.splitext(filename)
+        mimetype, _ = mimetypes.guess_type(filename)
         if not mimetype.startswith('image/'):
             c.error = u'Invalid image file'
             response.content_type = 'application/javascript'
@@ -413,7 +415,7 @@ class MediaController(BaseController):
         image_file.make_file()
         image_data = image_file.file.read()
         new_uuid = str(uuid.uuid4())
-        path = os.path.join(g.images_path, new_uuid)
+        path = os.path.join(g.images_path, new_uuid) + ext
         f = open(path, 'w')
         f.write(image_data)
         f.close()
@@ -422,6 +424,7 @@ class MediaController(BaseController):
         image.path = path
         image.page_id = page.id
         image.order = len(page.media)
+        image.create_scales(g.images_path)
         meta.Session.add(image)
         meta.Session.commit()
 
@@ -461,6 +464,8 @@ class MediaController(BaseController):
         f = open(c.image.path, 'w')
         f.write(image_data)
         f.close()
+
+        c.image.create_scales(g.images_path, replace_existing=True)
 
         meta.Session.commit()
 
@@ -513,7 +518,7 @@ class MediaController(BaseController):
         pdf_file.make_file()
         pdf_data = pdf_file.file.read()
         new_uuid = str(uuid.uuid4())
-        path = os.path.join(g.pdfs_path, new_uuid)
+        path = os.path.join(g.pdfs_path, new_uuid) + '.pdf'
         f = open(path, 'w')
         f.write(pdf_data)
         f.close()
@@ -560,7 +565,7 @@ class MediaController(BaseController):
         pdf_file.make_file()
         pdf_data = pdf_file.file.read()
         new_uuid = str(uuid.uuid4())
-        path = os.path.join(g.pdfs_path, new_uuid)
+        path = os.path.join(g.pdfs_path, new_uuid) + '.pdf'
         f = open(path, 'w')
         f.write(pdf_data)
         f.close()
