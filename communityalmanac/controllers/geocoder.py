@@ -41,7 +41,7 @@ class GeocoderController(BaseController):
             almanac = True
         except exc.NoResultFound:
             almanac = False
-        geopoint = Point(lat, lng)
+        geopoint = Point(lng, lat)
         return dict(lat=lat, lng=lng, geojson=simplejson.dumps(geopoint.__geo_interface__), authoritative_name=authoritative_name, almanac=almanac)
 
     @staticmethod
