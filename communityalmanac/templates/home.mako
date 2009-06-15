@@ -158,7 +158,7 @@ $(document).ready(function(){
     })
   });
   map.addLayer(almanacLayer);
-  map.addLayer(geocodeLayer);
+  //map.addLayer(geocodeLayer);
   var curExtent = extent;
   var disableMoveEvents = false;
   var populateMap = function(evt) {
@@ -169,12 +169,12 @@ $(document).ready(function(){
     var zoom = map.getZoom();
     if (zoom < 9) {
       // We restrict zoom navigation to closup views, because the data is not very useful on a grand scale.
-      almanacLayer.setVisibility(true);
-      geocodeLayer.setVisibility(false);
+      //almanacLayer.setVisibility(true);
+      //geocodeLayer.setVisibility(false);
       return false;
     }
-    almanacLayer.setVisibility(false);
-    geocodeLayer.setVisibility(true);
+    //almanacLayer.setVisibility(false);
+    //geocodeLayer.setVisibility(true);
 
     var extent = map.getExtent();
     if (curExtent.bottom == extent.bottom &&
