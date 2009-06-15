@@ -295,7 +295,10 @@ function applyMapEditSideEffects(data) {
   };
   var featureAdded = function(evt) {
     deactivateAllEditingControls();
-    var formatter = new OpenLayers.Format.GeoJSON();
+    var formatter = new OpenLayers.Format.GeoJSON({
+      'internalProjection': new OpenLayers.Projection("EPSG:900913"),
+      'externalProjection': new OpenLayers.Projection("EPSG:4326")
+    });
     var str = formatter.write(evt.feature.geometry);
     // the hidden input is expected to be right next to the map div
     $('#' + data.map_id).next().val(str);

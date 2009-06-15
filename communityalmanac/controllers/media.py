@@ -198,7 +198,7 @@ class MediaController(BaseController):
         # Stupid asShape returns a PointAdapter instead of a Point.  We round
         # trip it through wkb to get the correct type.
         location = wkb.loads(asShape(shape).to_wkb())
-        location.srid = 900913
+        location.srid = 4326
 
         c.map = map = Map()
         map.location = location
@@ -239,7 +239,7 @@ class MediaController(BaseController):
         # Stupid asShape returns a PointAdapter instead of a Point.  We round
         # trip it through wkb to get the correct type.
         location = wkb.loads(asShape(shape).to_wkb())
-        location.srid = 900913
+        location.srid = 4326
 
         c.map = map = Map()
         map.location = location
@@ -277,7 +277,7 @@ class MediaController(BaseController):
         # trip it through wkb to get the correct type.
         location = wkb.loads(asShape(shape).to_wkb())
 
-        location.srid = 900913
+        location.srid = 4326
 
         c.map.location = location
         meta.Session.commit()
