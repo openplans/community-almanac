@@ -74,6 +74,7 @@ class PageController(BaseController):
 
         meta.Session.commit()
 
+        h.flash(u'Page created')
         redirect_to(h.url_for('page_view', almanac=almanac, page=page))
 
     @dispatch_on(POST='_do_comment')
@@ -100,6 +101,7 @@ class PageController(BaseController):
         comment.page_id = page.id
         meta.Session.add(comment)
         meta.Session.commit()
+        h.flash(u'Comment added')
         redirect_to(h.url_for('page_view', almanac=almanac, page=page))
 
     @dispatch_on(POST='_do_edit')
@@ -122,4 +124,5 @@ class PageController(BaseController):
             # all we have to save is the name here for now
             c.page.name = name
             meta.Session.commit()
+        h.flash(u'Page edited')
         redirect_to(h.url_for('page_view', almanac=c.almanac, page=c.page))
