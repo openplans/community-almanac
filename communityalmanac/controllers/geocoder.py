@@ -12,6 +12,8 @@ log = logging.getLogger(__name__)
 from geopy import geocoders
 from communityalmanac.model import meta, Almanac
 from sqlalchemy.orm import exc
+from shapely.geometry.point import Point
+import simplejson
 
 class GeocoderController(BaseController):
 
@@ -39,7 +41,8 @@ class GeocoderController(BaseController):
             almanac = True
         except exc.NoResultFound:
             almanac = False
-        return dict(lat=lat, lng=lng, authoritative_name=authoritative_name, almanac=almanac)
+        geopoint = Point(lat, lng)
+        return dict(lat=lat, lng=lng, geojson=simplejson.dumps(geopoint.__geo_interface__), authoritative_name=authoritative_name, almanac=almanac)
 
     @staticmethod
     def _result_with_locality(gen):

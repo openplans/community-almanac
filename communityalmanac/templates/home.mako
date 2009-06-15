@@ -143,6 +143,7 @@ $(document).ready(function(){
   map.addLayer(almanacLayer);
   var curExtent = extent;
   var populateMap = function(evt) {
+    // We have to combine both the geocode and the map update into a single step...
     var extent = map.getExtent();
     if (curExtent.bottom == extent.bottom &&
         curExtent.left == extent.left &&
@@ -187,14 +188,11 @@ $(document).ready(function(){
         }
         else {
           $('#almanac-authoritative').val(data.authoritative_name);
+          $('#almanac-center').val(data.geojson);
           $('#almanac-submit').val('Add a Page to the ' + data.authoritative_name + ' Almanac').removeAttr('disabled').removeClass('disabled');
           var center = new OpenLayers.LonLat(data.lng, data.lat);
           center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
           map.setCenter(center, 12);
-          var point_geometry = new OpenLayers.Geometry.Point(data.lng, data.lat);
-          var formatter = new OpenLayers.Format.GeoJSON();
-          var json = formatter.write(point_geometry);
-          $('#almanac-center').val(json);
           if (data.almanac) {
             for (var index=0; index<almanacLayer.features.length; ++index) {
               if (almanacLayer.features[index].attributes.name == data.authoritative_name) {
