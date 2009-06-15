@@ -140,23 +140,60 @@ $(document).ready(function(){
       })
     })
   });
+  var geocodeLayer = new OpenLayers.Layer.Vector('geocode', {
+    projection: new OpenLayers.Projection('EPSG:4326'),
+    styleMap: new OpenLayers.StyleMap({
+      default: new OpenLayers.Style({
+        externalGraphic: '/js/img/almanac_marker.png',
+        graphicWidth: 28,
+        graphicHeight: 16,
+        graphicYOffset: 0,
+      }),
+      select: new OpenLayers.Style({
+        externalGraphic: '/js/img/book-open.png',
+        graphicWidth: 28,
+        graphicHeight: 16,
+        graphicYOffset: 0,
+      })
+    })
+  });
   map.addLayer(almanacLayer);
+  map.addLayer(geocodeLayer);
   var curExtent = extent;
+  var disableMoveEvents = false;
   var populateMap = function(evt) {
+    if (disableMoveEvents) {
+      return false;
+    }
     // We have to combine both the geocode and the map update into a single step...
+    var zoom = map.getZoom();
+    if (zoom < 6) {
+      // We restrict zoom navigation to closup views, because the data is not very useful on a grand scale.
+      almanacLayer.setVisibility(true);
+      geocodeLayer.setVisibility(false);
+      return false;
+    }
+    almanacLayer.setVisibility(false);
+    geocodeLayer.setVisibility(true);
+
     var extent = map.getExtent();
     if (curExtent.bottom == extent.bottom &&
         curExtent.left == extent.left &&
         curExtent.right == extent.right &&
         curExtent.top == extent.top) {
-      return;
+      return false;
     }
     curExtent = extent;
     var geometry = extent.toGeometry();
-    var formatter = new OpenLayers.Format.GeoJSON({externalProjection: new OpenLayers.Projection('EPSG:4326'), internalProjection: new OpenLayers.Projection('EPSG:900913')});
+    var formatter = new OpenLayers.Format.GeoJSON({
+      'internalProjection': new OpenLayers.Projection("EPSG:900913"),
+      'externalProjection': new OpenLayers.Projection("EPSG:4326")
+    });
     var geojson = formatter.write(geometry);
-    //almanacLayer.setUrl("${h.url_for('almanacs_kml')}" + '?extent=' + geojson);
-    console.log('Would have requested: ' + "${h.url_for('almanacs_kml')}" + '?extent=' + geojson);
+    disableMoveEvents = true;
+    _geocode(geojson);
+    disableMoveEvents = false;
+    return false;
   };
   map.zoomToExtent(extent);
   map.events.on({'moveend': populateMap});
@@ -179,9 +216,9 @@ $(document).ready(function(){
   });
   map.addControl(selectControl);
   selectControl.activate();
-    function _geocode() {
-      var location = $('#almanac-name').val();
-      $.getJSON(geocode_url, {location: location}, function(data) {
+    function _geocode(bbox) {
+      var location = bbox ? null : $('#almanac-name').val();
+      $.getJSON(geocode_url, {location: location, bbox: bbox}, function(data) {
         if (!data.lat || !data.lng || !data.authoritative_name) {
           // Problem geocoding, we need to disable the submit button
           $('#almanac-submit').val('Add a Page').attr('disabled', 'disabled').addClass('disabled');
@@ -190,28 +227,42 @@ $(document).ready(function(){
           $('#almanac-authoritative').val(data.authoritative_name);
           $('#almanac-center').val(data.geojson);
           $('#almanac-submit').val('Add a Page to the ' + data.authoritative_name + ' Almanac').removeAttr('disabled').removeClass('disabled');
-          var center = new OpenLayers.LonLat(data.lng, data.lat);
-          center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-          map.setCenter(center, 12);
-          if (data.almanac) {
-            for (var index=0; index<almanacLayer.features.length; ++index) {
-              if (almanacLayer.features[index].attributes.name == data.authoritative_name) {
-                featureSelected(almanacLayer.features[index]);
+          if (!data.layer) {
+            var center = new OpenLayers.LonLat(data.lng, data.lat);
+            center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+            if (!disableMoveEvents) {
+              var interfere = true;
+              disableMoveEvents = true;
+            } else {
+              var interfere = false;
+            }
+            map.setCenter(center, 12);
+            if (interfere) {
+              disableMoveEvents = false;
+            }
+            if (data.almanac) {
+              for (var index=0; index<almanacLayer.features.length; ++index) {
+                if (almanacLayer.features[index].attributes.name == data.authoritative_name) {
+                  featureSelected(almanacLayer.features[index]);
+                }
               }
             }
+          } else {
+            $('#almanac-name').val('');
+            //geocodeLayer.destroyFeatures();
           }
         }
       });
-    }
+    } // end geocode.
     var form = $('#almanac-geolocate');
-    var submit_blocker = function() { _geocode(); return false; };
+    var submit_blocker = function() { _geocode(false); return false; };
     $('#almanac-name').focus(function() {
       form.bind('submit', submit_blocker);
     }).blur(function() {
       form.unbind('submit', submit_blocker);
     });
     $('.find-almanac').click(function() {
-      _geocode();
+      _geocode(false);
       return false;
     });
 });
