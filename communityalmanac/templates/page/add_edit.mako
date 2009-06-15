@@ -69,6 +69,11 @@
   <script type="text/javascript">
     pageMapFeatures = ${c.map_features};
     flowplayerElts = ${c.flow_data};
+    %if c.is_add:
+        sortUrl = "${h.url_for('media_item_temppage_sort', almanac=c.almanac)}";
+    %else:
+        sortUrl = "${h.url_for('media_item_sort', almanac=c.almanac, page=c.page)}";
+    %endif
   </script>
   <script type="text/javascript" src="/js/upload/ajaxupload.3.2.js"></script>
   <script type="text/javascript" src="/js/flowplayer/flowplayer-3.1.1.min.js"></script>

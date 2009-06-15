@@ -22,7 +22,14 @@
 <h2 class="almanac-title pngfix">${c.almanac.name}</h2>
 <div id="map" style="width: 100%; height: 300px; border: 4px solid #d0c9b9;"></div>
 % if c.almanac.pages:
-  <h3 id="frontispiece-pages"><span><strong>Table of Contents</strong> <em>${len(c.almanac.pages)} pages</em></span></h3>
+<h3 id="frontispiece-pages">
+  <span><strong>Table of Contents</strong>
+    %if len(c.almanac.pages) == 1:
+      <em>1 page</em>
+    %else:
+      <em>${len(c.almanac.pages)} pages</em>
+    %endif
+  </span></h3>
   <ul class="almanac-pages">
     % for page in c.almanac.pages:
     <li class="selfclear">
@@ -37,7 +44,11 @@
         </a>
       </div>
       <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.user.username}</h4>
-      <div class="almanac-excerpt">${page.first_story.excerpt()}</div>
+      <% first_image = page.first_image %>
+      %if first_image is not None:
+        <div class="page-first-image"><img src="${first_image.small_url}" /></div>
+      %endif
+      <div class="page-excerpt">${h.literal(page.first_story.excerpt())}</div>
     </li>
     % endfor
   </ul>
@@ -71,7 +82,7 @@ ${c.almanac.name}
           format: OpenLayers.Format.KML,
           projection: new OpenLayers.Projection('EPSG:4326'),
           styleMap: new OpenLayers.StyleMap({
-            externalGraphic: '/js/img/story_marker.png',
+            externalGraphic: '/js/img/page.png',
             graphicWidth: 28,
             graphicHeight: 16,
             graphicYOffset: 0,
@@ -79,6 +90,24 @@ ${c.almanac.name}
         });
         map.addLayer(pagesLayer);
         map.setCenter(center, 12);
+        var featureSelected = function(feature) {
+          var popup = new OpenLayers.Popup.AnchoredBubble(null, feature.geometry.getBounds().getCenterLonLat(),
+                                                          new OpenLayers.Size(100, 100), feature.attributes.description,
+                                                          {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(-64, -126)},
+                                                          true, function() { selectControl.unselect(feature); });
+          feature.popup = popup;
+          map.addPopup(popup);
+        };
+        var featureUnselected = function(feature) {
+          map.removePopup(feature.popup);
+          feature.popup.destroy();
+          feature.popup = null;
+        };
+        var selectControl = new OpenLayers.Control.SelectFeature(pagesLayer, {
+          onSelect: featureSelected, onUnselect: featureUnselected
+        });
+        map.addControl(selectControl);
+        selectControl.activate();
     });
   </script>
 </%def>

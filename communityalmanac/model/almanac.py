@@ -34,10 +34,12 @@ from sqlgeotypes import POINT
 from shapely.geometry.point import Point
 from shapely import wkb
 from binascii import a2b_hex
+import PIL.Image
 import pyproj
 import meta
 import os
 import time
+import uuid
 
 class Almanac(Base):
     __tablename__ = 'almanacs'
@@ -210,6 +212,12 @@ class Page(Base):
             if isinstance(media, Story):
                 return media
         return Story(text=u'')
+    @property
+    def first_image(self):
+        """Return the first image media item for the page. Return None if the image doesn't exist"""
+        for media in self.media:
+            if isinstance(media, Image):
+                return media
 
     @property
     def map_media(self):
@@ -261,20 +269,25 @@ class PDF(Media):
     __mapper_args__ = dict(polymorphic_identity='pdf')
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     path = Column(Unicode)
+    filename = Column(Unicode)
 
     @property
     def url(self):
-        return '/media/pdfs/%s' % self.path.split(os.sep)[-1]
+        import communityalmanac.lib.helpers as h
+        return h.url_for('view_media_pdf', media=self)
+
 
 class Audio(Media):
     __tablename__ = 'audios'
     __mapper_args__ = dict(polymorphic_identity='audio')
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     path = Column(Unicode)
+    filename = Column(Unicode)
 
     @property
     def url(self):
-        return '/media/audio/%s' % self.path.split(os.sep)[-1]
+        import communityalmanac.lib.helpers as h
+        return h.url_for('view_media_audio', media=self)
 
 
 class Video(Media):
@@ -287,15 +300,59 @@ class Image(Media):
     __tablename__ = 'images'
     __mapper_args__ = dict(polymorphic_identity='image')
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
-    #flickr_id = Column(String)
-    #XXX just store the image somewhere for now
-    path = Column(String)
+    path = Column(Unicode)
+    path_520 = Column(Unicode)
+    path_75 = Column(Unicode)
+    filename = Column(Unicode)
 
     @property
     def url(self):
         # we add a querystring to prevent the browser from caching
         qs = time.time()
-        return '/media/images/%s?%s' % (self.path.split(os.sep)[-1], qs)
+        return '/media/view/image/%s/%s?%s' % (self.id, self.filename, qs)
+
+    @property
+    def large_url(self):
+        # we add a querystring to prevent the browser from caching
+        qs = time.time()
+        return '/media/view/image/large/%s/%s?%s' % (self.id, self.filename, qs)
+
+    @property
+    def small_url(self):
+        # we add a querystring to prevent the browser from caching
+        qs = time.time()
+        return '/media/view/image/small/%s/%s?%s' % (self.id, self.filename, qs)
+
+    def create_scales(self, base_path, replace_existing=False):
+        """create the necessary image scales from the saved path
+
+        replace_existing is for the edit case, when you want to replace the scales with new ones"""
+        path = self.path
+        assert path, "No image path set"
+
+        _, ext = os.path.splitext(path)
+
+        if replace_existing:
+            new_path = self.path_520
+        else:
+            new_uuid = str(uuid.uuid4())
+            new_path = os.path.join(base_path, new_uuid) + ext
+        self._create_scale((520,1000), new_path)
+        self.path_520 = new_path
+
+        if replace_existing:
+            new_path = self.path_75
+        else:
+            new_uuid = str(uuid.uuid4())
+            new_path = os.path.join(base_path, new_uuid) + ext
+        self._create_scale((75,75), new_path)
+        self.path_75 = new_path
+
+    def _create_scale(self, size, new_path):
+        im = PIL.Image.open(self.path)
+        im.thumbnail(size, PIL.Image.ANTIALIAS)
+        im.save(new_path)
+
 
 class Story(Media):
     __tablename__ = 'stories'
@@ -612,7 +669,7 @@ def default_password_hash(cleartext_password, scheme='BESTAVAILABLE'):
             from bcrypt import bcrypt
         except ImportError:
             raise NotImplementedError("Unable to load bcrypt module for Blowfish hashes")
-        return "{CRYPT}%s" % bcrypt.hashpw(password, bcrypt.gensalt())
+        return "{CRYPT}%s" % bcrypt.hashpw(cleartext_password, bcrypt.gensalt())
 
     # The salted SHA hashes work the same.  The only difference is how to find
     # the suitable hash module.

@@ -46,6 +46,7 @@ def media_expand(kw):
     if 'media' in kw:
         media = kw['media']
         kw['media_id'] = media.id
+        kw['filename'] = media.filename
         del kw['media']
     return kw
 
@@ -72,7 +73,8 @@ def make_map():
     map.connect('user_requestreset', '/forgot', controller='user', action='request_reset')
     map.connect('user_performreset', '/reset/{username}/{key}', controller='user', action='perform_reset')
     map.connect('test', '/test', controller='user', action='test')
-    map.connect('session_sort', '/sort', controller='media', action='sort')
+    map.connect('media_item_sort', '/api/sort/:almanac_slug/:page_slug', controller='media', action='sort', conditions=dict(method=['POST']), _filter=page_expand)
+    map.connect('media_item_temppage_sort', '/api/sort/:almanac_slug', controller='media', action='temppage_sort', conditions=dict(method=['POST']), _filter=almanac_expand)
     map.connect('almanac_center', '/api/center/:almanac_slug', controller='almanac', action='center', _filter=almanac_expand)
     map.connect('geocode', '/api/geocode', controller='geocoder', action='geocode')
     map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)
@@ -117,5 +119,12 @@ def make_map():
     map.connect('media_video_view', '/media/video/:media_id', controller='media', action='video_view', _filter=media_expand)
     map.connect('media_video_edit', '/media/video/edit/:media_id', controller='media', action='edit_form_video', _filter=media_expand)
     map.connect('media_video_delete', '/media/video/delete/:media_id', controller='media', action='delete_video', conditions=dict(method=['POST']), _filter=media_expand)
+
+    # add special routes to the media items themselves, so we can use nice names
+    map.connect('view_media_image_large', '/media/view/image/large/:media_id/:filename', controller='media', action='view_image_large', _filter=media_expand)
+    map.connect('view_media_image_small', '/media/view/image/small/:media_id/:filename', controller='media', action='view_image_small', _filter=media_expand)
+    map.connect('view_media_image', '/media/view/image/:media_id/:filename', controller='media', action='view_image', _filter=media_expand)
+    map.connect('view_media_audio', '/media/view/audio/:media_id/:filename', controller='media', action='view_audio', _filter=media_expand)
+    map.connect('view_media_pdf', '/media/view/pdf/:media_id/:filename', controller='media', action='view_pdf', _filter=media_expand)
 
     return map

@@ -92,18 +92,20 @@ $(document).ready(function() {
   }
 
   // add sortable behavior
-  $('ul.page-media-items').sortable({
-    update: function(event, ui) {
-      ui.item.parent().children().each(function(index) {
-        if (this == ui.item.get(0)) {
-          var content = $(this).find('div.mediacontent').get(0);
-          $.post('/sort', {id: content.id, index: index})
-          $(this).effect('bounce', {times: 2});
-        }
-      });
-    },
-    handle: 'div.media-tab'
-  });
+  if (window.sortUrl) {
+    $('ul.page-media-items').sortable({
+      update: function(event, ui) {
+        ui.item.parent().children().each(function(index) {
+          if (this == ui.item.get(0)) {
+            var content = $(this).find('div.mediacontent').get(0);
+            $.post(window.sortUrl, {id: content.id, index: index})
+            $(this).effect('bounce', {times: 2});
+          }
+        });
+      },
+      handle: 'div.media-tab'
+    });
+  }
 
   // behavior when adding a media type
   $('ul.page-media-tools li a').add('.mini-page-media-tools a').click(function(e) {

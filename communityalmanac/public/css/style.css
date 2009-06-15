@@ -549,6 +549,11 @@ font-family: Baskerville,"Goudy Old Style","Palatino","Book Antiqua",serif;
 font-size: 1.2em;
 font-style: italic;
 }
+
+.mediacontent {
+overflow: hidden;
+}
+
 /* edit page */
 
 ul.page-media-items li {

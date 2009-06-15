@@ -20,7 +20,7 @@
 --></%doc>
 <%inherit file="/media/base_item.mako" />
 <div class="mediacontent image" id="pagemedia_${c.image.id}">
-  <img src="${c.image.url}" />
+  <img src="${c.image.large_url}" />
 </div>
 
 <%def name="media_edit_controls()">

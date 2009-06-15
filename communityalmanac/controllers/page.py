@@ -52,7 +52,7 @@ class PageController(BaseController):
     @dispatch_on(POST='_do_publish')
     def create(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        page = c.almanac.new_page(self.ensure_user)
+        c.page = page = c.almanac.new_page(self.ensure_user)
         media_items = page.media
         c.media_items = h.render_media_items(media_items, editable=True)
         map_features = h.map_features_for_media(media_items)
