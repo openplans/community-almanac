@@ -159,8 +159,9 @@ $(document).ready(function(){
   };
   map.zoomToExtent(extent);
   map.events.on({'moveend': populateMap});
+  var AlmaPopup = OpenLayers.Class(OpenLayers.Popup.Framed, {fixedRelativePosition: true, relativePosition: "tl", positionBlocks: OpenLayers.Popup.FramedCloud.prototype.positionBlocks});
   var featureSelected = function(feature) {
-    var popup = new OpenLayers.Popup.AnchoredBubble(null, feature.geometry.getBounds().getCenterLonLat(),
+    var popup = new AlmaPopup(null, feature.geometry.getBounds().getCenterLonLat(),
                                                     new OpenLayers.Size(100, 100), feature.attributes.description,
                                                     {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(-64, -126)},
                                                     true, function() { selectControl.unselect(feature); });
