@@ -167,7 +167,7 @@ $(document).ready(function(){
     }
     // We have to combine both the geocode and the map update into a single step...
     var zoom = map.getZoom();
-    if (zoom < 6) {
+    if (zoom < 9) {
       // We restrict zoom navigation to closup views, because the data is not very useful on a grand scale.
       almanacLayer.setVisibility(true);
       geocodeLayer.setVisibility(false);
