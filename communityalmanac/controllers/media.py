@@ -925,11 +925,11 @@ class MediaController(BaseController):
     # actions to handle the urls to view the media themselves
     def view_image_large(self, media_id, filename):
         image = h.get_media_by_id(media_id)
-        return self._view_media(image.path_520)
+        return self._view_media(image.path_large)
 
     def view_image_small(self, media_id, filename):
         image = h.get_media_by_id(media_id)
-        return self._view_media(image.path_75)
+        return self._view_media(image.path_small)
 
     def view_image(self, media_id, filename):
         image = h.get_media_by_id(media_id)

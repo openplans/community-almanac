@@ -366,8 +366,8 @@ class Image(Media):
     __mapper_args__ = dict(polymorphic_identity='image')
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     path = Column(Unicode)
-    path_520 = Column(Unicode)
-    path_75 = Column(Unicode)
+    path_large = Column(Unicode)
+    path_small = Column(Unicode)
     filename = Column(Unicode)
 
     @property
@@ -388,35 +388,31 @@ class Image(Media):
         qs = time.time()
         return '/media/view/image/small/%s/%s?%s' % (self.id, self.filename, qs)
 
-    def create_scales(self, base_path, replace_existing=False):
-        """create the necessary image scales from the saved path
-
-        replace_existing is for the edit case, when you want to replace the scales with new ones"""
+    def create_scales(self, base_path):
+        """create the necessary image scales from the saved path"""
         path = self.path
         assert path, "No image path set"
 
         _, ext = os.path.splitext(path)
 
-        if replace_existing:
-            new_path = self.path_520
-        else:
-            new_uuid = str(uuid.uuid4())
-            new_path = os.path.join(base_path, new_uuid) + ext
-        self._create_scale((520,1000), new_path)
-        self.path_520 = new_path
-
-        if replace_existing:
-            new_path = self.path_75
-        else:
-            new_uuid = str(uuid.uuid4())
-            new_path = os.path.join(base_path, new_uuid) + ext
-        self._create_scale((75,75), new_path)
-        self.path_75 = new_path
-
-    def _create_scale(self, size, new_path):
         im = PIL.Image.open(self.path)
-        im.thumbnail(size, PIL.Image.ANTIALIAS)
-        im.save(new_path)
+
+        new_uuid = str(uuid.uuid4())
+        new_path = os.path.join(base_path, new_uuid) + ext
+        self._create_scale(im, (520,1000), new_path)
+        self.path_large = new_path
+
+        new_uuid = str(uuid.uuid4())
+        new_path = os.path.join(base_path, new_uuid) + ext
+        self._create_scale(im, (75,75), new_path)
+        self.path_small = new_path
+
+    def _create_scale(self, im, size, new_path):
+        scale = im.convert(dither=PIL.Image.NONE, palette=PIL.Image.ADAPTIVE)
+        scale.thumbnail(size, PIL.Image.ANTIALIAS)
+        scale.save(new_path)
+        return scale
+
 image_modify_trigger = DDL("""CREATE TRIGGER image_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON images FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Image.__table__)
