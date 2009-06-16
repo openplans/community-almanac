@@ -124,9 +124,3 @@ ${c.almanac.name}
   </form>
 </div>
 </%def>
-<%!
-prev_page_url = "#"
-prev_page = "Pages 1-10"
-next_page_url = "#"
-next_page = "Pages 21-30"
-%>

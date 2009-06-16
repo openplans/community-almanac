@@ -20,6 +20,8 @@
 from pylons import g
 from pylons import session
 from sqlalchemy import Table, Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
+from sqlalchemy import asc
+from sqlalchemy import desc
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql import func
 from sqlalchemy.schema import DDL
@@ -267,6 +269,21 @@ class Page(Base):
         for media in self.media:
             if isinstance(media, Image):
                 return media
+
+    def page_navigation(self):
+        """return points to the prev and next pages, order by modification time
+
+        will return a dictionary of 'prev' and 'next' keys"""
+
+        def _find_navigation_for(query, ordering=asc):
+            elts = list(meta.Session.query(Page).filter(query).order_by(ordering(Page.modified))[:2])
+            if len(elts) == 2:
+                return elts[1] if elts[0].id == self.id else elts[0]
+            elif len(elts) == 1:
+                return None if elts[0].id == self.id else elts[0]
+        return dict(next=_find_navigation_for(Page.modified >= self.modified),
+                    prev=_find_navigation_for(Page.modified <= self.modified, desc),
+                    )
 
     @property
     def map_media(self):

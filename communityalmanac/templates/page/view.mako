@@ -106,9 +106,7 @@ ${c.page.name} - ${c.almanac.name}
   <a href="${h.url_for('almanac_view', almanac=c.almanac)}"><span>&laquo; ${c.almanac.name}</span></a>
 </div>
 </%def>
-<%!
-prev_page_url = "#"
-prev_page = "Previous Page Name"
-next_page_url = "#"
-next_page = "Next Page Name"
-%>
+
+<%def name="pagenav()">
+${parent.pagenav(c.prev_page, c.next_page)}
+</%def>

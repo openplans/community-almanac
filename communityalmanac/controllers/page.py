@@ -91,6 +91,10 @@ class PageController(BaseController):
         c.map_features = h.literal(simplejson.dumps(map_features))
         flow_data = h.flowplayer_data_for_media(c.page.media)
         c.flow_data = h.literal(simplejson.dumps(flow_data))
+
+        page_navigation = c.page.page_navigation()
+        c.next_page = page_navigation['next']
+        c.prev_page = page_navigation['prev']
         return render('/page/view.mako')
 
     @validate(schema=PageCommentForm(), form='view')
