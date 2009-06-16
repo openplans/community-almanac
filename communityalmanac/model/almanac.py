@@ -458,23 +458,7 @@ class Map(Media):
             geom = wkb.loads(a2b_hex(self._location_4326))
             geom.srid = 4326
             return geom
-    @property
-    def location_900913(self):
-        if self._location_900913 is None:
-            # God this is ugly Fix for bug #xxx in SQLAlchemy
-            meta.Session.commit()
-            if self._location_900913 is None:
-                return None
-        if ';' in self._location_900913:
-            geom = wkb.loads(a2b_hex(self._location_900913.split(';')[-1]))
-            geom.srid = 900913
-            return geom
-        else:
-            geom = wkb.loads(a2b_hex(self._location_900913))
-            geom.srid = 900913
-            return geom
 Map._location_4326 = column_property(func.st_transform(Map.location, 4326).label('_location_4326'))
-Map._location_900913 = column_property(func.st_transform(Map.location, 900913).label('_location_900913'))
 map_modify_trigger = DDL("""CREATE TRIGGER map_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON maps FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Map.__table__)
