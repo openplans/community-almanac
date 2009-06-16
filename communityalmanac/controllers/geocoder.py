@@ -70,7 +70,7 @@ class GeocoderController(BaseController):
 
     def _nearby_almanacs(self, bounds):
 
-        return meta.Session.query(Almanac).join(Almanac.pages).distinct().filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bounds.to_wkb())), storage_SRID))).limit(10).all() or True
+        return meta.Session.query(Almanac).join(Almanac.pages).distinct().filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bounds.to_wkb())), storage_SRID))).limit(10).all() and True or False
 
     @staticmethod
     def _result_with_locality(gen):
