@@ -278,7 +278,7 @@ class Page(Base):
         """return the updated date formatted nicely as a string"""
         return self.modified.strftime('%B %d, %Y')
 
-Page.pages = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
+Page.almanac = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
 page_modify_trigger = DDL("""CREATE TRIGGER page_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON pages FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_almanacs();""", on='postgres').execute_at('after-create', Page.__table__)
@@ -295,7 +295,7 @@ class Comment(Base):
     website = Column(Unicode)
     text = Column(Unicode)
 
-    comments = relation("Page", backref="comments")
+    page = relation("Page", backref="comments")
 
 
 class Media(Base):
@@ -310,7 +310,7 @@ class Media(Base):
 
     __mapper_args__ = dict(polymorphic_on=discriminator)
 
-    media = relation("Page", backref="media")
+    page = relation("Page", backref="media")
 
     @staticmethod
     def by_id(media_id):
@@ -441,7 +441,7 @@ class Map(Media):
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     location = Column(POINT(storage_SRID))
 
-    maps = relation("Page", backref="maps")
+    page = relation("Page", backref="maps")
 
     @property
     def location_4326(self):
