@@ -36,11 +36,77 @@ from repoze.who.plugins.openid import OpenIdIdentificationPlugin
 
 from repoze.who.classifiers import default_request_classifier
 from repoze.who.classifiers import default_challenge_decider
+from repoze.what.predicates import Predicate
 from communityalmanac.model import meta, User, Group, Permission
+import communityalmanac.lib.helpers as h
 from pylons import config
+from pylons import tmpl_context as c
 
 from os import path
 import sys
+
+class is_media_owner(Predicate):
+    """
+    Check that the current user owns the media in question.
+
+    Example::
+
+        p = is_media_owner()
+
+    """
+    message = u'The user must have the own this media'
+
+    def __init__(self, **kwargs):
+        super(is_media_owner, self).__init__(**kwargs)
+
+    def evaluate(self, environ, credentials):
+
+        user = c.user
+        if not user:
+            self.unmet()
+
+        media_id = environ['pylons.routes_dict']['media_id']
+        media = h.get_media_by_id(media_id)
+
+        if media.page.user_id == user.id:
+            return
+        if credentials and \
+           'manage' in credentials.get('permissions'):
+            return
+        self.unmet()
+
+class is_page_owner(Predicate):
+    """
+    Check that the current user owns the page in question.
+
+    Example::
+
+        p = is_page_owner()
+
+    """
+    message = u'The user must have the own this page'
+
+    def __init__(self, **kwargs):
+        super(is_page_owner, self).__init__(**kwargs)
+
+    def evaluate(self, environ, credentials):
+
+        user = c.user
+        if not user:
+            self.unmet()
+
+        almanac_slug = environ['pylons.routes_dict']['almanac_slug']
+        page_slug = environ['pylons.routes_dict']['page_slug']
+
+        almanac = h.get_almanac_by_slug(almanac_slug)
+        page = h.get_page_by_slug(almanac, page_slug)
+
+        if page.user_id == user.id:
+            return
+        if credentials and \
+           'manage' in credentials.get('permissions'):
+            return
+        self.unmet()
 
 def wsgi_authorization(app, app_conf):
     """Add a WSGI middleware wrapper to this application."""
