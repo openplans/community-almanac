@@ -8,15 +8,15 @@
       <description>
         <![CDATA[
         <div>
-          <a href="${h.url_for('almanac_view', almanac=almanac)}">${almanac.name}</a>
+          <a class="almanac-title" href="${h.url_for('almanac_view', almanac=almanac)}">${almanac.name}</a>
           <% n = len(almanac.pages) %>
           %if n == 1:
-          <span>1 page</span>
+          <span class="almanac-pagecount"> 1 page</span>
           %else:
-          <span>${n} pages</span>
+          <span class="almanac-pagecount">${n} pages</span>
           %endif
-          <span>Updated ${almanac.updated_date_string}</span>
-          <a href="${h.url_for('page_create', almanac=almanac)}">Add page</a>
+          <span class="almanac-timestamp">Updated ${almanac.updated_date_string}</span>
+          <a class="addpage" href="${h.url_for('page_create', almanac=almanac)}">Add page</a>
         </div>
         ]]>
       </description>
