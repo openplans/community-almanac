@@ -32,6 +32,9 @@ from pylons.decorators import jsonify
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 
+from repoze.what.predicates import not_anonymous
+from communityalmanac.lib.auths import is_page_owner
+from repoze.what.plugins.pylonshq import ActionProtector
 from communityalmanac.lib.base import BaseController, render
 from shapely.geometry.geo import asShape
 from shapely import wkb
@@ -62,6 +65,7 @@ class PageController(BaseController):
         c.is_add = True
         return render('/page/add_edit.mako')
 
+    @ActionProtector(not_anonymous())
     def _do_publish(self, almanac_slug):
         c.almanac = almanac = h.get_almanac_by_slug(almanac_slug)
         name = request.POST.get('name', u'')
@@ -116,6 +120,7 @@ class PageController(BaseController):
         c.is_add = False
         return render('/page/add_edit.mako')
 
+    @ActionProtector(is_page_owner())
     def _do_edit(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)

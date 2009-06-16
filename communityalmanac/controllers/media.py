@@ -23,6 +23,8 @@ from pylons import request, response, session, tmpl_context as c, g
 from pylons.controllers.util import abort, redirect_to
 
 from communityalmanac.lib.base import BaseController, render
+from repoze.what.plugins.pylonshq import ActionProtector
+from communityalmanac.lib.auths import is_media_owner, is_page_owner
 from communityalmanac.model import Audio
 from communityalmanac.model import Image
 from communityalmanac.model import Map
@@ -69,6 +71,7 @@ class MediaController(BaseController):
         # empty body.
         return ''
 
+    @ActionProtector(is_page_owner())
     def sort(self, almanac_slug, page_slug):
         almanac = h.get_almanac_by_slug(almanac_slug)
         page = h.get_page_by_slug(almanac, page_slug)
@@ -129,6 +132,7 @@ class MediaController(BaseController):
                     )
 
     @jsonify
+    @ActionProtector(is_page_owner())
     def _do_new_form_existing_text(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
@@ -163,6 +167,7 @@ class MediaController(BaseController):
                     )
 
     @jsonify
+    @ActionProtector(is_media_owner())
     def _do_edit_form_text(self, media_id):
         c.story = h.get_media_by_id(media_id)
         body = request.POST.get('body', u'')
@@ -184,7 +189,9 @@ class MediaController(BaseController):
         return dict(html=render('/media/story/item.mako'))
 
     @jsonify
+    @ActionProtector(is_media_owner())
     def delete_text(self, media_id):
+        import pdb; pdb.set_trace()
         story = h.get_media_by_id(media_id)
         meta.Session.delete(story)
         meta.Session.commit()
@@ -244,6 +251,7 @@ class MediaController(BaseController):
                     )
 
     @jsonify
+    @ActionProtector(is_page_owner())
     def _do_new_form_existing_map(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
@@ -282,6 +290,7 @@ class MediaController(BaseController):
                     )
 
     @jsonify
+    @ActionProtector(is_media_owner())
     def _do_edit_form_map(self, media_id):
         c.map = h.get_media_by_id(media_id)
         json = request.POST.get('feature')
@@ -314,6 +323,7 @@ class MediaController(BaseController):
                     )
 
     @jsonify
+    @ActionProtector(is_media_owner())
     def delete_map(self, media_id):
         map = h.get_media_by_id(media_id)
         meta.Session.delete(map)
@@ -411,6 +421,7 @@ class MediaController(BaseController):
                     file_upload_url=c.file_upload_url,
                     )
 
+    @ActionProtector(is_page_owner())
     def _do_new_form_existing_image(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
@@ -462,6 +473,7 @@ class MediaController(BaseController):
                     file_upload_url=c.file_upload_url,
                     )
 
+    @ActionProtector(is_media_owner())
     def _do_edit_form_image(self, media_id):
         c.image = h.get_media_by_id(media_id)
         image_file = request.POST.get('userfile')
@@ -498,6 +510,7 @@ class MediaController(BaseController):
         return dict(html=render('/media/image/item.mako'))
 
     @jsonify
+    @ActionProtector(is_media_owner())
     def delete_image(self, media_id):
         image = h.get_media_by_id(media_id)
         os.unlink(image.path)
@@ -567,6 +580,7 @@ class MediaController(BaseController):
                     file_upload_url=c.file_upload_url,
                     )
 
+    @ActionProtector(is_page_owner())
     def _do_new_form_existing_pdf(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
@@ -616,6 +630,7 @@ class MediaController(BaseController):
                     file_upload_url=c.file_upload_url,
                     )
 
+    @ActionProtector(is_media_owner())
     def _do_edit_form_pdf(self, media_id):
         c.pdf = h.get_media_by_id(media_id)
         pdf_file = request.POST.get('userfile')
@@ -651,6 +666,7 @@ class MediaController(BaseController):
         return dict(html=render('/media/pdf/item.mako'))
 
     @jsonify
+    @ActionProtector(is_media_owner())
     def delete_pdf(self, media_id):
         pdf = h.get_media_by_id(media_id)
         os.unlink(pdf.path)
@@ -726,6 +742,7 @@ class MediaController(BaseController):
                     file_upload_url=c.file_upload_url,
                     )
 
+    @ActionProtector(is_page_owner())
     def _do_new_form_existing_audio(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
@@ -785,6 +802,7 @@ class MediaController(BaseController):
                     audio_url=c.audio_url,
                     )
 
+    @ActionProtector(is_media_owner())
     def _do_edit_form_audio(self, media_id):
         c.audio = h.get_media_by_id(media_id)
         audio_file = request.POST.get('userfile')
@@ -830,6 +848,7 @@ class MediaController(BaseController):
                     )
 
     @jsonify
+    @ActionProtector(is_media_owner())
     def delete_audio(self, media_id):
         audio = h.get_media_by_id(media_id)
         os.unlink(audio.path)
@@ -872,6 +891,7 @@ class MediaController(BaseController):
         return dict(html=render('/media/video/form.mako'))
 
     @jsonify
+    @ActionProtector(is_page_owner())
     def _do_new_form_existing_video(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = page = h.get_page_by_slug(c.almanac, page_slug)
@@ -898,6 +918,7 @@ class MediaController(BaseController):
         return dict(html=render('/media/video/form.mako'))
 
     @jsonify
+    @ActionProtector(is_media_owner())
     def _do_edit_form_video(self, media_id):
         c.video = h.get_media_by_id(media_id)
         body = request.POST.get('body', u'')
@@ -917,6 +938,7 @@ class MediaController(BaseController):
         return dict(html=render('/media/video/item.mako'))
 
     @jsonify
+    @ActionProtector(is_media_owner())
     def delete_video(self, media_id):
         video = h.get_media_by_id(media_id)
         meta.Session.delete(video)
