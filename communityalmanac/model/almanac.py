@@ -19,7 +19,7 @@
 
 from pylons import g
 from pylons import session
-from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
+from sqlalchemy import Table, Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql import func
 from sqlalchemy.schema import DDL
@@ -464,6 +464,23 @@ map_modify_trigger = DDL("""CREATE TRIGGER map_modify_trigger
     EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Map.__table__)
 
 
+# This is the association table for the many-to-many relationship between
+# groups and permissions.
+groups_permissions_table = Table('groups_permissions', Base.metadata,
+    Column('group_id', Integer, ForeignKey('groups.id',
+        onupdate="CASCADE", ondelete="CASCADE")),
+    Column('permission_id', Integer, ForeignKey('permissions.id',
+        onupdate="CASCADE", ondelete="CASCADE"))
+)
+
+# This is the association table for the many-to-many relationship between
+# groups and members - this is, the memberships.
+users_groups_table = Table('users_groups', Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id',
+        onupdate="CASCADE", ondelete="CASCADE")),
+    Column('group_id', Integer, ForeignKey('groups.id',
+        onupdate="CASCADE", ondelete="CASCADE"))
+)
 class User(Base):
 
     #define name of table
@@ -536,6 +553,25 @@ class AnonymousUser(User):
     def username(self):
         return "Anonymous User"
 
+
+class Group(Base):
+    """An ultra-simple group definition."""
+    __tablename__ = 'groups'
+
+    id =   Column(Integer, autoincrement=True, primary_key=True)
+    name = Column(Unicode(16), unique=True)
+
+    users = relation('User', secondary=users_groups_table, backref='groups')
+
+class Permission(Base):
+    """A relationship that determines what each Group can do"""
+    __tablename__ = 'permissions'
+
+    id =   Column(Integer, autoincrement=True, primary_key=True)
+    name = Column(Unicode(16), unique=True)
+
+    groups = relation(Group, secondary=groups_permissions_table,
+                      backref='permissions')
 
 def default_password_compare(cleartext_password, stored_password_hash):
     # Hashing functions work on bytes, not strings, so while unicode passwords

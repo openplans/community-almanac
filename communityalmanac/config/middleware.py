@@ -30,23 +30,8 @@ from routes.middleware import RoutesMiddleware
 from os import path
 
 from communityalmanac.config.environment import load_environment
+from communityalmanac.lib.auths import wsgi_authorization
 
-# All sorts of repoze.who symbols.
-from repoze.who.middleware import PluggableAuthenticationMiddleware
-from repoze.who.interfaces import IIdentifier
-from repoze.who.interfaces import IChallenger
-from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
-from repoze.who.plugins.form import RedirectingFormPlugin
-from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin
-from repoze.who.plugins.sa import SQLAlchemyUserMDPlugin
-from communityalmanac.model import FullUser
-from communityalmanac.model.meta import Session
-from repoze.who.plugins.openid import OpenIdIdentificationPlugin
-
-
-from repoze.who.classifiers import default_request_classifier
-from repoze.who.classifiers import default_challenge_decider
-import sys
 
 def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
     """Create a Pylons WSGI application and return it
@@ -83,51 +68,7 @@ def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
     app = CacheMiddleware(app, config)
 
     # CUSTOM MIDDLEWARE HERE (filtered by error handling middlewares)
-    auth_tkt = AuthTktCookiePlugin(')h,&xCWlS}+u:<yD]BJV', 'auth_tkt')
-    openid = OpenIdIdentificationPlugin('file', # 'mem'
-            openid_field = 'openid',
-            error_field = 'error',
-            session_name = 'beaker.session',
-            login_form_url = '/login_form',
-            login_handler_path = '/_do_login',
-            logout_handler_path = '/logout',
-            store_file_path = path.join(config['pylons.cache_dir'], 'sstore'),
-            logged_in_url = '/success',
-            logged_out_url = '/',
-            came_from_field = 'came_from',
-            rememberer_name = 'auth_tkt',
-            sql_associations_table = '',
-            sql_nonces_table = '',
-            sql_connstring = ''
-            )
-
-    formplugin = RedirectingFormPlugin('/login', '/do_login', '/logout', rememberer_name='auth_tkt')
-    sqlauth = SQLAlchemyAuthenticatorPlugin(FullUser, Session)
-    sqlauth.translations['user_name'] = 'username'
-    sqlauth.translations['validate_password'] = 'authenticate'
-
-    sqlmetadata = SQLAlchemyUserMDPlugin(FullUser, Session)
-    sqlmetadata.translations['user_name'] = 'username'
-
-    identifiers = [('form', formplugin), ('openid', openid),('auth_tkt',auth_tkt)]
-    authenticators = [('sqlauth', sqlauth), ('openid', openid)]
-    challengers = [('form', formplugin), ('openid', openid)]
-    mdproviders = [('sqlmetadata', sqlmetadata)]
-    log_stream = None
-    #if config.get('WHO_LOG'):
-    log_stream = sys.stdout
-
-    app = PluggableAuthenticationMiddleware(
-        app,
-        identifiers,
-        authenticators,
-        challengers,
-        mdproviders,
-        default_request_classifier,
-        default_challenge_decider,
-        log_stream = log_stream,
-        log_level=app_conf.get('who.log_level','error')
-        )
+    app = wsgi_authorization(app, app_conf)
 
     if asbool(full_stack):
         # Handle Python exceptions
