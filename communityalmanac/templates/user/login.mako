@@ -52,8 +52,9 @@
     <legend>Returning Users</legend>
     <a class="js-toggler rightwise" href="#login-new">New user?</a>
     <div class="selfclear">
-      <label for="email_address">Email Address:</label>
-      <input type="text" name="email_address" />
+      <%doc> We use the unintuitive 'login' for username so that we can register and log in at the same time.</%doc>
+      <label for="user-login">Username</label>
+      <input type="text" name="login" id="user-login" value="${request.POST.get('login', u'')}" />
     </div>
     <div class="selfclear">
       <label for="password">Password:</label>
