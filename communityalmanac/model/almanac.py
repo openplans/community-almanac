@@ -484,6 +484,9 @@ class User(Base):
         if id is not None:
             self.id = id
 
+    def __repr__(self):
+        return '<User(id=%d, subtype=%s)>' % (self.id, self.discriminator)
+
 
 class FullUser(User):
     __tablename__ = 'full_users'
@@ -521,6 +524,8 @@ class FullUser(User):
     def set_password(self, password):
         self.password = default_password_hash(password)
 
+    def __repr__(self):
+        return '<FullUser(id=%d, username=%s)>' % (self.id, self.username)
 
 class AnonymousUser(User):
     __tablename__ = 'anonymous_users'
