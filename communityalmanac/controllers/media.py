@@ -74,12 +74,10 @@ class MediaController(BaseController):
     @ActionProtector(is_page_owner())
     def sort(self, almanac_slug, page_slug):
         almanac = h.get_almanac_by_slug(almanac_slug)
-        page = h.get_page_by_slug(almanac, page_slug)
-        return self._sort(page)
-
-    def temppage_sort(self, almanac_slug):
-        almanac = h.get_almanac_by_slug(almanac_slug)
-        page = almanac.new_page(self.ensure_user)
+        if page_slug:
+            page = h.get_page_by_slug(almanac, page_slug)
+        else:
+            page = almanac.new_page(self.ensure_user)
         return self._sort(page)
 
     @dispatch_on(POST='_do_new_form_text')
