@@ -91,7 +91,10 @@
             src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${g.map_key}"></script>
     <script type="text/javascript">
   		$(document).ready(function(){
-  			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 135,	startingWidth: 24, startingHeight: 24});
+  			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 110,	startingWidth: 24, startingHeight: 24});
+  			$('#turn_object').resize(function(){
+          if('${self.attr.next_page_url}' != '' && $('#turn_object').width() >= 110) {window.location = '${self.attr.next_page_url}'}
+        });
       	$('div#login').hover(
       	  function () {
       	    $(this).animate({top: '0'},{queue:false,duration:500});
