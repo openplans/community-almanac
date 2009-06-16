@@ -98,6 +98,7 @@ class UserController(BaseController):
         server = mailer.Mailer(config['smtp_server'])
         server.send(message)
 
+        h.flash(u'A password reset has been sent. Please check your email.')
         redirect_to(h.url_for('home'))
 
     @dispatch_on(POST='_perform_reset')
@@ -123,6 +124,7 @@ class UserController(BaseController):
         meta.Session.commit()
         self._login(username)
 
+        h.flash(u'Your password has been reset')
         redirect_to(h.url_for('home'))
 
     def test(self):

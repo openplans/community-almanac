@@ -206,3 +206,18 @@ def clean_embed_markup(markup):
 
 def clean_html(markup):
     return lxml.html.clean.clean_html(markup)
+
+def flash(s):
+    """add the string "s" to the session's flash store"""
+    session.setdefault('flash', []).append(s)
+    session.save()
+
+def retrieve_flash_messages():
+    """return a list of all the session's flash messages, and remove them from the session"""
+    flash_messages = session.get('flash', None)
+    if flash_messages is None:
+        return []
+    msgs = list(flash_messages)
+    flash_messages[:] = []
+    session.save()
+    return msgs
