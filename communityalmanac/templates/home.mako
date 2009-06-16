@@ -243,7 +243,7 @@ $(document).ready(function(){
             if (data.almanac) {
               for (var index=0; index<almanacLayer.features.length; ++index) {
                 if (almanacLayer.features[index].attributes.name == data.authoritative_name) {
-                  featureSelected(almanacLayer.features[index]);
+                  selectControl.select(almanacLayer.features[index]);
                 }
               }
             }
