@@ -22,6 +22,7 @@ from pylons import session
 from sqlalchemy import Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql import func
+from sqlalchemy.schema import DDL
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import exc
 from sqlalchemy.orm import column_property
@@ -40,6 +41,53 @@ import meta
 import os
 import time
 import uuid
+
+# This is such a complicated trigger function, I was tempted to install
+# PLPython to use python in the database.  Luckily, it's still pretty readable.
+# You install this trigger on some table, and it updates another table's
+# modified times. (e.g. A trigger on the pages table will update the almanacs
+# table on INSERT, UPDATE, or DELETE.)  In addition, there's a special case to
+# look for 'draft' pages and not cascade the modified time.
+cascade_modify_time = """CREATE OR REPLACE FUNCTION cascade_modify_time_%(table)s() RETURNS trigger AS $cascade_modify_time_%(table)s$
+  BEGIN
+    IF '%(table)s' = 'almanacs' THEN
+      IF TG_OP IN ('UPDATE', 'INSERT') THEN
+        IF NOT NEW.published THEN
+          -- We don't update the almanac when we modify draft pages.
+          RETURN NULL;
+        END IF;
+      ELSE
+        -- We're deleting a page, still need to perform the published check.
+        IF NOT OLD.published THEN
+          -- We don't update the almanac when we modify draft pages.
+          RETURN NULL;
+        END IF;
+      END IF;
+    END IF;
+    IF TG_OP IN ('UPDATE', 'INSERT') THEN
+      -- On delete, the foreign key can't have changed
+      UPDATE %(table)s SET modified=CURRENT_TIMESTAMP WHERE id = NEW.%(foreign_key)s;
+      IF TG_OP = 'UPDATE' THEN
+        IF NEW.%(foreign_key)s != OLD.%(foreign_key)s THEN
+          -- If we move an item from one entry to another, they have both been 'modified'
+          UPDATE %(table)s SET modified=CURRENT_TIMESTAMP WHERE id = OLD.%(foreign_key)s;
+        END IF;
+      END IF;
+    ELSE
+      UPDATE %(table)s SET modified=CURRENT_TIMESTAMP WHERE id = OLD.%(foreign_key)s;
+    END IF;
+    RETURN NULL;
+  END;
+$cascade_modify_time_%(table)s$ LANGUAGE plpgsql;"""
+cascade_modify_time_almanacs = DDL(cascade_modify_time,
+                                  context=dict(table='almanacs', foreign_key='almanac_id'),
+                                  on='postgres').execute_at('before-create', Base.metadata)
+cascade_modify_time_pages = DDL(cascade_modify_time,
+                                  context=dict(table='pages', foreign_key='page_id'),
+                                  on='postgres').execute_at('before-create', Base.metadata)
+cascade_modify_time_media = DDL(cascade_modify_time,
+                                  context=dict(table='media', foreign_key='id'),
+                                  on='postgres').execute_at('before-create', Base.metadata)
 
 class Almanac(Base):
     __tablename__ = 'almanacs'
@@ -162,6 +210,7 @@ class Almanac(Base):
             return geom
 Almanac._location_4326 = column_property(func.st_transform(Almanac.location, 4326).label('_location_4326'))
 
+
 class Page(Base):
     __tablename__ = 'pages'
 
@@ -230,6 +279,9 @@ class Page(Base):
         return self.modified.strftime('%B %d, %Y')
 
 Page.pages = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
+page_modify_trigger = DDL("""CREATE TRIGGER page_modify_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON pages FOR EACH ROW
+    EXECUTE PROCEDURE cascade_modify_time_almanacs();""", on='postgres').execute_at('after-create', Page.__table__)
 
 
 class Comment(Base):
@@ -254,6 +306,7 @@ class Media(Base):
     text = Column(Unicode)
     order = Column(Integer)
     discriminator = Column('type', String(50))
+    modified = Column(DateTime, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
 
     __mapper_args__ = dict(polymorphic_on=discriminator)
 
@@ -262,6 +315,9 @@ class Media(Base):
     @staticmethod
     def by_id(media_id):
         return meta.Session.query(Media).filter(Media.id == media_id).one()
+media_modify_trigger = DDL("""CREATE TRIGGER media_modify_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON media FOR EACH ROW
+    EXECUTE PROCEDURE cascade_modify_time_pages();""", on='postgres').execute_at('after-create', Media.__table__)
 
 
 class PDF(Media):
@@ -275,6 +331,9 @@ class PDF(Media):
     def url(self):
         import communityalmanac.lib.helpers as h
         return h.url_for('view_media_pdf', media=self)
+pdf_modify_trigger = DDL("""CREATE TRIGGER pdf_modify_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON pdfs FOR EACH ROW
+    EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', PDF.__table__)
 
 
 class Audio(Media):
@@ -288,12 +347,18 @@ class Audio(Media):
     def url(self):
         import communityalmanac.lib.helpers as h
         return h.url_for('view_media_audio', media=self)
+audio_modify_trigger = DDL("""CREATE TRIGGER audio_modify_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON audios FOR EACH ROW
+    EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Audio.__table__)
 
 
 class Video(Media):
     __tablename__ = 'videos'
     __mapper_args__ = dict(polymorphic_identity='video')
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
+video_modify_trigger = DDL("""CREATE TRIGGER video_modify_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON videos FOR EACH ROW
+    EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Video.__table__)
 
 
 class Image(Media):
@@ -352,6 +417,9 @@ class Image(Media):
         im = PIL.Image.open(self.path)
         im.thumbnail(size, PIL.Image.ANTIALIAS)
         im.save(new_path)
+image_modify_trigger = DDL("""CREATE TRIGGER image_modify_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON images FOR EACH ROW
+    EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Image.__table__)
 
 
 class Story(Media):
@@ -363,6 +431,9 @@ class Story(Media):
         """short version of the text, useful for displaying in lists"""
         text = self.text
         return text if len(text) < n else text[:n-4] + u' ...'
+story_modify_trigger = DDL("""CREATE TRIGGER story_modify_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON stories FOR EACH ROW
+    EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Story.__table__)
 
 class Map(Media):
     __tablename__ = 'maps'
@@ -404,6 +475,9 @@ class Map(Media):
             return geom
 Map._location_4326 = column_property(func.st_transform(Map.location, 4326).label('_location_4326'))
 Map._location_900913 = column_property(func.st_transform(Map.location, 900913).label('_location_900913'))
+map_modify_trigger = DDL("""CREATE TRIGGER map_modify_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON maps FOR EACH ROW
+    EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Map.__table__)
 
 
 class User(Base):
