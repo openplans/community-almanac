@@ -20,7 +20,7 @@
 --></%doc>
 <%inherit file="/base.mako" />
 %if c.is_add:
-<h2>Create page</h2>
+<h2>Add page to ${c.almanac.name}</h2>
 %else:
 <h2>Edit page</h2>
 %endif
@@ -128,4 +128,9 @@ Edit Page -  ${c.almanac.name}
     <a href="${h.url_for('page_view', almanac=c.almanac, page=c.page)}">Cancel Editing Page</a>
   %endif
   </span>
+</%def>
+<%def name="bookmark()">
+<div id="backtoc" class="pngfix">
+  <a href="${h.url_for('almanac_view', almanac=c.almanac)}"><span>&laquo; ${c.almanac.name}</span></a>
+</div>
 </%def>
