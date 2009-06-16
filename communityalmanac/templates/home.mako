@@ -200,7 +200,7 @@ $(document).ready(function(){
   var AlmaPopup = OpenLayers.Class(OpenLayers.Popup.AnchoredBubble, {fixedRelativePosition: true, relativePosition: "tl", positionBlocks: OpenLayers.Popup.FramedCloud.prototype.positionBlocks});
   var featureSelected = function(feature) {
     var popup = new AlmaPopup(null, feature.geometry.getBounds().getCenterLonLat(),
-                                                    new OpenLayers.Size(100, 100), feature.attributes.description,
+                                                    new OpenLayers.Size(235, 85), feature.attributes.description,
                                                     {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(0, 0)},
                                                     true, function() { selectControl.unselect(feature); });
     feature.popup = popup;

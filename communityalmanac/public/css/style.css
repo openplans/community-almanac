@@ -43,9 +43,14 @@ zoom: 1;
 behavior: expression((this.runtimeStyle.behavior="none")&&(this.pngSet?this.pngSet=true:(this.nodeName == "IMG" && this.src.toLowerCase().indexOf('.png')>-1 ? (this.runtimeStyle.backgroundImage = "none", this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.src + "', sizingMethod='image')", this.src = "/img/transparent.gif") : (this.origBg = this.origBg ? this.origBg : this.currentStyle.backgroundImage.toString().replace('url("','').replace('")',''), this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.origBg + "', sizingMethod='" + (this.currentStyle.backgroundRepeat=='no-repeat' ? 'crop' : 'scale') +"')", this.runtimeStyle.backgroundImage = "none")),this.pngSet=true));
 }
 
-a { color: #00ace6; }
+a {
+color: #00ace6;
+outline: none !important; /* avoid ugly dotted border for Firefox */
+}
 
-a:hover { color: #ff6040; }
+a:hover {
+color: #ff6040;
+}
 
 body {
 font-family: georgia, serif;
@@ -985,6 +990,42 @@ body.home #intro .map input#almanac-submit.disabled {
 background: url(/img/home-add-page-disabled-bg.png) 0 50% repeat;
 color: #ccc;
 }
+
+body.home #intro .map .olPopup {
+background: transparent url(/img/map-popup-bg.png) no-repeat !important;
+width:243px !important;
+height: 88px !important;
+padding: 3px 14px 3px 3px !important;
+}
+
+body.home #intro .map .olPopupContent {
+padding: 0 0 0 5px !important;
+}
+
+body.home #intro .map .almanac-timestamp,
+body.home #intro .map .almanac-pagecount  {
+white-space: nowrap;
+color: #70818c;
+font-size: 0.95em;
+}
+
+body.home #intro .map a.almanac-title {
+white-space: normal;
+font-size: 1.1em;
+}
+
+body.home #intro .map .almanac-pagecount {
+color: #b2b32d;
+}
+
+body.home #intro .map .addpage {
+display: block;
+font-size: 0.95em;
+padding: 0.3em 0 0.3em 20px;
+background: url(/img/popup-add-page-icon.png) 0 50% no-repeat;
+}
+
+
 
 ul#almanacs {
 padding: 0;
