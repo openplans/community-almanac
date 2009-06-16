@@ -3,7 +3,7 @@ import logging
 
 from pylons import request, response, session, tmpl_context as c
 from pylons import config
-from pylons.controllers.util import abort, redirect_to
+from pylons.controllers.util import abort, redirect_to, redirect
 from pylons.decorators.rest import dispatch_on
 from pylons.decorators import validate
 from formencode import Schema
@@ -42,7 +42,7 @@ class UserController(BaseController):
         c.active_section = request.params.get('show','login-new')
         if request.environ.get('repoze.who.identity') == None:
             return render('/user/login.mako')
-        redirect_to(h.url_for('home'))
+        redirect(request.params.get('came_from', h.url_for('home')))
 
     def logout(self):
         # The logout/forget process is handled by repoze.who.
