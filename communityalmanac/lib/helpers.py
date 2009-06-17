@@ -45,6 +45,7 @@ from webhelpers.html import literal
 from webhelpers.html.tags import checkbox
 from webhelpers.html.tags import link_to
 from webhelpers.html.tags import password
+from webhelpers.paginate import Page as PaginationPage
 from webhelpers.text import plural
 import uuid
 
@@ -222,3 +223,34 @@ def retrieve_flash_messages():
     flash_messages[:] = []
     session.save()
     return msgs
+
+def setup_pagination(collection, page=1, per_page=10):
+    """set a number of "c" variables to allow for easy pagination in templates
+
+    c.next_page_text, c.next_page_url
+    c.prev_page_text, c.prev_page_url
+    c.showing_start, c.showing_end
+    c.items (this is the view of the current items in the collection)
+    c.pagination (pagination object itself)
+    """
+    c.pagination = PaginationPage(collection, page=page, items_per_page=per_page)
+    cur_page = c.pagination.page
+    next_page = c.pagination.next_page
+    prev_page = c.pagination.previous_page
+    if next_page:
+        start = ((next_page-1) * per_page) + 1
+        end = start + per_page - 1
+        end = min(end, c.pagination.item_count)
+        c.next_page_text = '%d - %d' % (start, end)
+        c.next_page_url = '%s?page=%s' % (request.path_url, next_page)
+    if prev_page:
+        start = (prev_page-1) * per_page
+        end = (start + per_page - 1) + 1
+        start = max(start, 1)
+        c.prev_page_text = '%d - %d' % (start, end)
+        c.prev_page_url = '%s?page=%s' % (request.path_url, prev_page)
+    c.showing_start = ((cur_page-1) * per_page) + 1
+    c.showing_end = cur_page * per_page
+    c.showing_end = min(c.showing_end, c.pagination.item_count)
+    c.items = c.pagination.items
+    return c.pagination

@@ -13,7 +13,6 @@ from communityalmanac.model.meta import storage_SRID
 from sqlalchemy.sql import func
 from shapely import wkb
 from shapely.geometry.geo import asShape
-from webhelpers.paginate import Page as PaginationPage
 import simplejson
 
 log = logging.getLogger(__name__)
@@ -27,29 +26,10 @@ class HomesweethomeController(BaseController):
         except ValueError:
             page_idx = 1
         almanac_query = meta.Session.query(Almanac).order_by(Almanac.modified.desc())
+        h.setup_pagination(almanac_query, page_idx)
+        c.almanacs = c.pagination.items
         c.pages = Page.latest()
         c.is_homepage = True
-        c.pagination = PaginationPage(almanac_query, page=page_idx, items_per_page=10)
-        cur_page = c.pagination.page
-        next_page = c.pagination.next_page
-        prev_page = c.pagination.previous_page
-        per_page = c.pagination.items_per_page
-        if next_page:
-            start = ((next_page-1) * per_page) + 1
-            end = start + per_page - 1
-            end = min(end, c.pagination.item_count)
-            c.next_page_text = '%d - %d' % (start, end)
-            c.next_page_url = '%s?page=%s' % (request.path_url, next_page)
-        if prev_page:
-            start = (prev_page-1) * per_page
-            end = (start + per_page - 1) + 1
-            start = max(start, 1)
-            c.prev_page_text = '%d - %d' % (start, end)
-            c.prev_page_url = '%s?page=%s' % (request.path_url, prev_page)
-        c.showing_start = ((cur_page-1) * per_page) + 1
-        c.showing_end = cur_page * per_page
-        c.showing_end = min(c.showing_end, c.pagination.item_count)
-        c.almanacs = c.pagination.items
         return render('/home.mako')
 
     def almanacs_kml(self):
