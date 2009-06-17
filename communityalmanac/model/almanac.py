@@ -177,10 +177,6 @@ class Almanac(Base):
         """return the updated date formatted nicely as a string"""
         return self.modified.strftime('%B %d, %Y')
 
-    @staticmethod
-    def n_almanacs():
-        return len(meta.Session.query(Almanac).all())
-
     @property
     def location_4326(self):
         if self._location_4326 is None:

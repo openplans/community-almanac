@@ -32,7 +32,6 @@ from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 from shapely.geometry.geo import asShape
 from sqlalchemy.orm import exc
-from webhelpers.paginate import Page as PaginationPage
 import communityalmanac.lib.helpers as h
 import simplejson
 
@@ -85,28 +84,9 @@ class AlmanacController(BaseController):
             page_idx = int(page_idx)
         except ValueError:
             page_idx = 1
-        c.npages = len(c.almanac.pages)
-        c.pagination = PaginationPage(c.almanac.pages, page=page_idx, items_per_page=10)
-        cur_page = c.pagination.page
-        next_page = c.pagination.next_page
-        prev_page = c.pagination.previous_page
-        per_page = c.pagination.items_per_page
-        if next_page:
-            start = ((next_page-1) * per_page) + 1
-            end = start + per_page - 1
-            end = min(end, c.npages)
-            c.next_page_text = '%d - %d' % (start, end)
-            c.next_page_url = '%s?page=%s' % (request.path_url, next_page)
-        if prev_page:
-            start = (prev_page-1) * per_page
-            end = (start + per_page - 1) + 1
-            start = max(start, 1)
-            c.prev_page_text = '%d - %d' % (start, end)
-            c.prev_page_url = '%s?page=%s' % (request.path_url, prev_page)
-        c.showing_start = ((cur_page-1) * per_page) + 1
-        c.showing_end = cur_page * per_page
-        c.showing_end = min(c.showing_end, c.npages)
+        c.pagination = h.setup_pagination(c.almanac.pages, page_idx)
         c.pages = c.pagination.items
+        c.npages = c.pagination.item_count
         return render('/almanac/view.mako')
 
     @jsonify

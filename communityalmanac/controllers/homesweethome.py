@@ -20,10 +20,15 @@ log = logging.getLogger(__name__)
 class HomesweethomeController(BaseController):
 
     def home(self):
-        c.limit, c.offset = int(request.params.get('limit', 10)), int(request.params.get('offset', 0))
-        c.almanacs = Almanac.latest(c.limit, c.offset)
-        c.pages = Page.latest(c.limit, c.offset)
-        c.n_almanacs = Almanac.n_almanacs()
+        page_idx = request.GET.get('page', 1)
+        try:
+            page_idx = int(page_idx)
+        except ValueError:
+            page_idx = 1
+        almanac_query = meta.Session.query(Almanac).order_by(Almanac.modified.desc())
+        h.setup_pagination(almanac_query, page_idx)
+        c.almanacs = c.pagination.items
+        c.pages = Page.latest()
         c.is_homepage = True
         return render('/home.mako')
 
