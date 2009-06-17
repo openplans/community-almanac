@@ -112,19 +112,6 @@ class Almanac(Base):
     def __repr__(self):
         return '<Almanac(id=%d, name=%s)>' % (self.id, self.name)
 
-    def transform(self, srid):
-        if srid == 900913:
-            # Spherical mercator needs manual initialization in pyproj
-            projection = pyproj.Proj("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +units=m +k=1.0 +nadgrids=@null +no_defs")
-        else:
-            projection = pyproj.Proj(init="epsg:%s" % srid)
-        source = pyproj.Proj(init="epsg:%s" % storage_SRID)
-
-        # At this point, we need work through each of the points in the
-        # geometry and transform them seperately.  This is more work than I
-        # bargained for, so I'll look at this later...
-        return Point(pyproj.transform(source, projection, self.location.x, self.location.y))
-
     def new_page(self, user, **fields):
         assert('almanac_id' not in fields)
         assert('user_id' not in fields)

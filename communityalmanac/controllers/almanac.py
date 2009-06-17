@@ -78,7 +78,7 @@ class AlmanacController(BaseController):
 
     def view(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        loc = c.almanac.transform(4326)
+        loc = c.almanac.location_4326
         c.lng, c.lat = loc.x, loc.y
         page_idx = request.GET.get('page', 1)
         try:
