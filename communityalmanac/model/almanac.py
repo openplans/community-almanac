@@ -279,7 +279,7 @@ class Page(Base):
         will return a dictionary of 'prev' and 'next' keys"""
 
         def _find_navigation_for(query, ordering=asc):
-            elts = list(meta.Session.query(Page).filter(query).order_by(ordering(Page.modified))[:2])
+            elts = list(meta.Session.query(Page).filter(Page.published == True).filter(query).order_by(ordering(Page.modified))[:2])
             if len(elts) == 2:
                 return elts[1] if elts[0].id == self.id else elts[0]
             elif len(elts) == 1:
