@@ -178,8 +178,7 @@ class Almanac(Base):
 
     @staticmethod
     def latest(limit=10, offset=0):
-        #FIXME we'll need to store created/modified times
-        return meta.Session.query(Almanac).join(Almanac.pages).distinct().limit(limit).offset(offset).all()
+        return meta.Session.query(Almanac).join(Almanac.pages).order_by(Almanac.modified.desc()).distinct().limit(limit).offset(offset).all()
 
     @property
     def creation_date_string(self):
@@ -244,12 +243,16 @@ class Page(Base):
     def __repr__(self):
         return '<Page(id=%d, name=%s)>' % (self.id, self.name)
 
-    @classmethod
-    def get_by_slug(cls, almanac, slug):
+    @staticmethod
+    def get_by_slug(almanac, slug):
         query = meta.Session.query(Page)
         query = query.filter(Page.almanac_id == almanac.id)
         query = query.filter(Page.slug == slug)
         return query.one()
+
+    @staticmethod
+    def latest(limit=10, offset=0):
+        return meta.Session.query(Page).filter(Page.published==True).order_by(Page.modified.desc()).limit(limit).offset(offset).all()
 
     @property
     def creation_date_string(self):

@@ -7,6 +7,7 @@ from pylons.decorators import jsonify
 
 from communityalmanac.lib.base import BaseController, render
 from communityalmanac.model import Almanac
+from communityalmanac.model import Page
 from communityalmanac.model import meta
 from communityalmanac.model.meta import storage_SRID
 from sqlalchemy.sql import func
@@ -21,6 +22,7 @@ class HomesweethomeController(BaseController):
     def home(self):
         c.limit, c.offset = int(request.params.get('limit', 10)), int(request.params.get('offset', 0))
         c.almanacs = Almanac.latest(c.limit, c.offset)
+        c.pages = Page.latest(c.limit, c.offset)
         c.n_almanacs = Almanac.n_almanacs()
         c.is_homepage = True
         return render('/home.mako')
