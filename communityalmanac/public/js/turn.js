@@ -62,10 +62,19 @@
 
     if (!options.autoCurl) {
       // Hit 'em with the drag-stick because it ain't gonna curl itself!
+      var triggered = false;
       turn_object.resizable({ 
         maxHeight: options.maxHeight, 
         aspectRatio: true,
-        handles: options.side == 'left' ? 'se' : 'sw'
+        handles: options.side == 'left' ? 'se' : 'sw',
+        resize: function(event, ui) {
+          if ((ui.size.width > 90) && !triggered) {
+            triggered = true;
+            $('a.turn:first').each(function(index) {
+              document.location = $(this).attr('href');
+            });
+          }
+        }
       });
     } else {
       // Thanks to @zzzrByte for this bit!
