@@ -29,14 +29,14 @@ from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
 from repoze.who.plugins.form import RedirectingFormPlugin
 from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin
 from repoze.who.plugins.sa import SQLAlchemyUserMDPlugin
-from communityalmanac.model import FullUser
-from communityalmanac.model.meta import Session
 from repoze.who.plugins.openid import OpenIdIdentificationPlugin
 
 
 from repoze.who.classifiers import default_request_classifier
 from repoze.who.classifiers import default_challenge_decider
 from repoze.what.predicates import Predicate
+from communityalmanac.model import FullUser
+from communityalmanac.model.meta import Session
 from communityalmanac.model import meta, User, Group, Permission
 import communityalmanac.lib.helpers as h
 from pylons import config
@@ -108,6 +108,9 @@ class is_page_owner(Predicate):
             return
         self.unmet()
 
+def valid_user(username):
+    return meta.Session.query(FullUser).filter(FullUser.username==username).count() == 1
+
 def wsgi_authorization(app, app_conf):
     """Add a WSGI middleware wrapper to this application."""
     source_adapters = configure_sql_adapters(
@@ -121,7 +124,7 @@ def wsgi_authorization(app, app_conf):
     group_adapters = {'sql_auth': source_adapters['group']}
     permission_adapters = {'sql_auth': source_adapters['permission']}
 
-    auth_tkt = AuthTktCookiePlugin(')h,&xCWlS}+u:<yD]BJV', 'auth_tkt')
+    auth_tkt = AuthTktCookiePlugin(')h,&xCWlS}+u:<yD]BJV', 'auth_tkt', userid_checker=valid_user)
     openid = OpenIdIdentificationPlugin('file', # 'mem'
             openid_field = 'openid',
             error_field = 'error',
