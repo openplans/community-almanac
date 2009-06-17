@@ -24,6 +24,7 @@ class UserRegistrationSchema(Schema):
     email_address = validators.Email(not_empty=True)
     password = validators.String(not_empty=True, encoding='utf8')
     password_repeat = validators.String(not_empty=True)
+    came_from = validators.String(not_empty=False)
     chained_validators = [validators.FieldsMatch('password', 'password_repeat')]
 
 class RequestResetSchema(Schema):
@@ -66,7 +67,7 @@ class UserController(BaseController):
 
         self._login(username)
 
-        redirect_to(h.url_for('home'))
+        redirect(request.params.get('came_from', h.url_for('home')))
 
     def _login(self, username):
         # This is how we manually log in a user, as per repoze issue 58
