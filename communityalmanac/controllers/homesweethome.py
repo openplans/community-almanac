@@ -6,6 +6,7 @@ from pylons.controllers.util import abort, redirect_to
 from pylons.decorators import jsonify
 
 from communityalmanac.lib.base import BaseController, render
+from communityalmanac.lib import helpers as h
 from communityalmanac.model import Almanac
 from communityalmanac.model import Page
 from communityalmanac.model import meta
