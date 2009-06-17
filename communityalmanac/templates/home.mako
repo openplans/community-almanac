@@ -122,6 +122,8 @@ $(document).ready(function(){
     displayProjection: new OpenLayers.Projection('EPSG:4326'),
     maxExtent: extent
     });
+  var navControl = map.getControlsByClass('OpenLayers.Control.Navigation')[0];
+  navControl.disableZoomWheel();
   var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
   map.addLayer(baseLayer);
   var almanacLayer = new OpenLayers.Layer.GML('almanacs', "${h.url_for('almanacs_kml')}", {

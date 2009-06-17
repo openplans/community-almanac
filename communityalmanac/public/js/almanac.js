@@ -264,6 +264,8 @@ function applyMapDisplaySideEffects(data) {
     displayProjection: new OpenLayers.Projection('EPSG:4326'),
     maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
     });
+  var navControl = map.getControlsByClass('OpenLayers.Control.Navigation')[0];
+  navControl.disableZoomWheel();
   var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
   map.addLayer(baseLayer);
   var featureLayer = new OpenLayers.Layer.Vector('features');
