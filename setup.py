@@ -65,7 +65,7 @@ setup(
         "repoze.what>=1.0.8",
         "repoze.what-pylons>=1.0",
         "repoze.what.plugins.sql>=1.0rc1",
-        "repoze.who>=1.0.13",
+        "repoze.who>=1.0.14",
         "repoze.who.plugins.openid>=0.5",
         "repoze.who.plugins.sa>=1.0rc2",
         "lxml>=2.2",
