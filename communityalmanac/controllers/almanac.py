@@ -80,13 +80,14 @@ class AlmanacController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         loc = c.almanac.transform(4326)
         c.lng, c.lat = loc.x, loc.y
-        cur_page = request.GET.get('page', 1)
+        page_idx = request.GET.get('page', 1)
         try:
-            cur_page = int(cur_page)
+            page_idx = int(page_idx)
         except ValueError:
-            cur_page = 1
+            page_idx = 1
         c.npages = len(c.almanac.pages)
-        c.pagination = PaginationPage(c.almanac.pages, page=cur_page, items_per_page=10)
+        c.pagination = PaginationPage(c.almanac.pages, page=page_idx, items_per_page=10)
+        cur_page = c.pagination.page
         next_page = c.pagination.next_page
         prev_page = c.pagination.previous_page
         per_page = c.pagination.items_per_page
@@ -102,6 +103,9 @@ class AlmanacController(BaseController):
             start = max(start, 1)
             c.prev_page_text = '%d - %d' % (start, end)
             c.prev_page_url = '%s?page=%s' % (request.path_url, prev_page)
+        c.showing_start = ((cur_page-1) * per_page) + 1
+        c.showing_end = cur_page * per_page
+        c.showing_end = min(c.showing_end, c.npages)
         c.pages = c.pagination.items
         return render('/almanac/view.mako')
 

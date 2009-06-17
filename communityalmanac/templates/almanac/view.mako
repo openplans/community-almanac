@@ -53,7 +53,7 @@
     % endfor
   </ul>
 % endif
-<p id="almanac-pagination">Showing 11-20 of 23.</p>
+<p id="almanac-pagination">Showing ${c.showing_start}-${c.showing_end} of ${c.npages}.</p>
 <%def name="title()">
 ${c.almanac.name}
 </%def>
