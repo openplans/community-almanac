@@ -21,17 +21,17 @@
 <%inherit file="/base.mako" />
 <h2 class="almanac-title pngfix">${c.almanac.name}</h2>
 <div id="map" style="width: 100%; height: 300px; border: 4px solid #d0c9b9;"></div>
-% if c.almanac.pages:
+% if c.pages:
 <h3 id="frontispiece-pages">
   <span><strong>Table of Contents</strong>
-    %if len(c.almanac.pages) == 1:
+    %if len(c.pages) == 1:
       <em>1 page</em>
     %else:
-      <em>${len(c.almanac.pages)} pages</em>
+      <em>${len(c.pages)} pages</em>
     %endif
   </span></h3>
   <ul class="almanac-pages">
-    % for page in c.almanac.pages:
+    % for page in c.pages:
     <li class="selfclear">
       <div class="almanac-meta">${page.creation_date_string}<br />
         <a href="${h.url_for('page_view', almanac=c.almanac, page=page)}#comments">
@@ -123,4 +123,8 @@ ${c.almanac.name}
     <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
   </form>
 </div>
+</%def>
+
+<%def name="pagenav()">
+${parent.pagenav(c.prev_page_url, c.prev_page_text, c.next_page_url, c.next_page_text)}
 </%def>
