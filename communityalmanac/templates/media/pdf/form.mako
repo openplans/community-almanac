@@ -20,11 +20,11 @@
 --></%doc>
 <%inherit file="/media/base_form.mako" />
 %if c.media_item:
-  <a href="${c.media_item.url}">Download PDF</a>
+  Download <a href="${c.media_item.url}">${c.media_item.filename}</a>
 %endif
-<div id="${c.file_id}">Upload</div>
+<div id="${c.file_id}">Choose File</div>
 <div class="upload-status"></div>
 
 <%def name="submit_button()">
-<a id="submit-upload-file" href="#">Save</a>
+<a id="submit-upload-file" href="#">Upload</a>
 </%def>

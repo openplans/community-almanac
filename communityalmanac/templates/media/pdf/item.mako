@@ -20,7 +20,7 @@
 --></%doc>
 <%inherit file="/media/base_item.mako" />
 <div class="mediacontent pdf" id="pagemedia_${c.pdf.id}">
-  <a href="${c.pdf.url}">Download PDF</a>
+  Download <a href="${c.pdf.url}">${c.pdf.filename}</a>
 </div>
 
 <%def name="media_edit_controls()">
