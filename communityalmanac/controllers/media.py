@@ -189,7 +189,6 @@ class MediaController(BaseController):
     @jsonify
     @ActionProtector(is_media_owner())
     def delete_text(self, media_id):
-        import pdb; pdb.set_trace()
         story = h.get_media_by_id(media_id)
         meta.Session.delete(story)
         meta.Session.commit()

@@ -29,7 +29,6 @@ class Geometry(sqlalchemy.types.TypeEngine):
             geom_srid = getattr(value, 'srid', None)
             if geom_srid and geom_srid != self.SRID:
                 # temp = func.st_transform('SRID=%s;%s' % (geom_srid, b2a_hex(value.to_wkb())), self.SRID)
-                # import pdb; pdb.set_trace()
                 return AsIs("ST_TRANSFORM('SRID=%s;%s', %s)" % (geom_srid, b2a_hex(value.to_wkb()), self.SRID))
             return 'SRID=%s;%s' % (self.SRID, b2a_hex(value.to_wkb()))
         return process
