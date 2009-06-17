@@ -269,8 +269,8 @@ class Page(Base):
             query = query.filter(q)
             query = query.order_by(ordering(Page.modified))
             try:
-                return query.limit(1).one()
-            except exc.NoResultFound:
+                return query[:1][0]
+            except (exc.NoResultFound, IndexError):
                 return None
         return dict(next=_find_navigation_for(Page.modified >= self.modified),
                     prev=_find_navigation_for(Page.modified <= self.modified, desc),
