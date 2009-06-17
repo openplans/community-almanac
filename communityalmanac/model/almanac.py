@@ -282,13 +282,13 @@ class Page(Base):
             query = meta.Session.query(Page)
             query = query.filter(Page.almanac_id == self.almanac_id)
             query = query.filter(Page.published == True)
+            query = query.filter(Page.id != self.id)
             query = query.filter(q)
             query = query.order_by(ordering(Page.modified))
-            elts = list(query[:2])
-            if len(elts) == 2:
-                return elts[1] if elts[0].id == self.id else elts[0]
-            elif len(elts) == 1:
-                return None if elts[0].id == self.id else elts[0]
+            try:
+                return query.limit(1).one()
+            except exc.NoResultFound:
+                return None
         return dict(next=_find_navigation_for(Page.modified >= self.modified),
                     prev=_find_navigation_for(Page.modified <= self.modified, desc),
                     )
