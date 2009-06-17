@@ -45,6 +45,7 @@ from webhelpers.html import literal
 from webhelpers.html.tags import checkbox
 from webhelpers.html.tags import link_to
 from webhelpers.html.tags import password
+from webhelpers.text import plural
 import uuid
 
 def normalize_url_slug(candidate):

@@ -113,12 +113,12 @@
 <%def name="extra_head()"></%def>
 <%def name="extra_body()"></%def>
 <%def name="bookmark()"></%def>
-<%def name="pagenav(prev_page=None, next_page=None)">
-%if prev_page:
-<span class="prev"><a href="${h.url_for('page_view', almanac=c.almanac, page=prev_page)}">${prev_page.name}</a></span>
+<%def name="pagenav(prev_page_url=None, prev_page_text=None, next_page_url=None, next_page_text=None)">
+%if prev_page_url and prev_page_text:
+<span class="prev"><a href="${prev_page_url}">${prev_page_text}</a></span>
 %endif
-%if next_page:
-<span class="next"><a href="${h.url_for('page_view', almanac=c.almanac, page=next_page)}">${next_page.name}</a></span>
+%if next_page_url and next_page_text:
+<span class="next"><a href="${next_page_url}">${next_page_text}</a></span>
 %endif
 </%def>
 <%def name="sidebar()">

@@ -108,5 +108,17 @@ ${c.page.name} - ${c.almanac.name}
 </%def>
 
 <%def name="pagenav()">
-${parent.pagenav(c.prev_page, c.next_page)}
+<%
+if c.prev_page:
+    ptext = c.prev_page.name
+    purl = h.url_for('page_view', almanac=c.almanac, page=c.prev_page)
+else:
+    ptext = purl = None
+if c.next_page:
+    ntext = c.next_page.name
+    nurl = h.url_for('page_view', almanac=c.almanac, page=c.next_page)
+else:
+    ntext = nurl = None
+%>
+${parent.pagenav(purl, ptext, nurl, ntext)}
 </%def>
