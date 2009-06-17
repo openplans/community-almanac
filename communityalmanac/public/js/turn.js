@@ -71,7 +71,7 @@
           if ((ui.size.width > 90) && !triggered) {
             triggered = true;
             $('a.turn:first').each(function(index) {
-              document.location = $(this).attr('href');
+              window.location = $(this).attr('href');
             });
           }
         }
