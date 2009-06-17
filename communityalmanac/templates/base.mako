@@ -118,7 +118,7 @@
 <span class="prev"><a href="${prev_page_url}">${prev_page_text}</a></span>
 %endif
 %if next_page_url and next_page_text:
-<span class="next"><a href="${next_page_url}">${next_page_text}</a></span>
+<span class="next"><a class="turn" href="${next_page_url}">${next_page_text}</a></span>
 %endif
 </%def>
 <%def name="sidebar()">
