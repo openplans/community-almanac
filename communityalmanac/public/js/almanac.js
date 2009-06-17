@@ -445,6 +445,8 @@ function applyRichTextSideEffects(data) {
     mode : "specific_textareas",
     theme : "simple",
     editor_selector : data.textarea_class,
-    onchange_callback : _onChangeHandler
+    onchange_callback : _onChangeHandler,
+    plugins : "paste",
+    paste_auto_cleanup_on_paste : true
   });
 }
