@@ -531,7 +531,6 @@ class FullUser(User):
     reset_key =          Column(String(50), nullable=True)
     password =           Column(String(100), nullable=True)
     openid =             Column(String(200), nullable=True)
-    super_user =         Column(Boolean, nullable=False, default=False)
 
     def __init__(self, username=None, email_address=None, password=None, id=None):
         self.username = username
@@ -539,7 +538,6 @@ class FullUser(User):
         if password:
             self.set_password(password)
         self.reset_key = None
-        self.super_user = False
         if id is not None:
             self.id = id
 

@@ -22,7 +22,9 @@ from __future__ import with_statement
 import logging
 
 from communityalmanac.config.environment import load_environment
-from communityalmanac.model import meta
+from communityalmanac.model import meta, FullUser, Group, Permission
+from random import sample
+from string import letters, digits, punctuation
 
 log = logging.getLogger(__name__)
 
@@ -43,4 +45,23 @@ def setup_app(command, conf, vars):
 
         # Create the tables if they don't already exist
         meta.metadata.create_all(bind=meta.engine)
+
+    # Create the admin group and permission, and generate an admin user...
+    managers = Group(name='managers')
+    meta.Session.add(managers)
+
+    can_manage = Permission(name='manage')
+    meta.Session.add(can_manage)
+
+    managers.permissions.append(can_manage)
+
+    admin = FullUser(username='admin')
+    password = ''.join(sample(letters + digits + punctuation, 20))
+    admin.set_password(password)
+    meta.Session.add(admin)
+
+    admin.groups.append(managers)
+
+    meta.Session.commit()
+    print "Creating initial admin account:\nUsername: %s\nPassword: %s" % (admin.username, password)
 
