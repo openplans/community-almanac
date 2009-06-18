@@ -103,9 +103,11 @@ class Almanac(Base):
     # update attached items, not the object itself.
     modified = Column(DateTime, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
 
-    def __init__(self, name=None, slug=None, id=None):
+    def __init__(self, name=None, slug=None, location=None, id=None):
         self.name = name
         self.slug = slug
+        if location:
+            self.location = location
         if id is not None:
             self.id = id
 
@@ -514,8 +516,8 @@ class FullUser(User):
     __mapper_args__ = dict(polymorphic_identity='full_user')
 
     id =                 Column(Integer, ForeignKey('users.id'), primary_key=True)
-    username =           Column(Unicode(50), nullable=False)
-    email_address =      Column(Unicode(100), nullable=True)
+    username =           Column(Unicode(50), unique=True, nullable=False)
+    email_address =      Column(Unicode(100), unique=True, nullable=True)
     reset_key =          Column(String(50), nullable=True)
     password =           Column(String(100), nullable=True)
     openid =             Column(String(200), nullable=True)
