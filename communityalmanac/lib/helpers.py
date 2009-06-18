@@ -63,7 +63,7 @@ def name_almanac(candidate):
     else:
         i = 1
         while True:
-            name = '%s-%s' % (normalized, i)
+            name = u'%s-%s' % (normalized, i)
             try:
                 Almanac.get_by_slug(name)
                 i += 1
@@ -81,7 +81,7 @@ def name_page(almanac, candidate):
     else:
         i = 1
         while True:
-            name = '%s-%s' % (normalized, i)
+            name = u'%s-%s' % (normalized, i)
             try:
                 Page.get_by_slug(almanac, name)
                 i += 1
