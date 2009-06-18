@@ -19,8 +19,8 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/media/base_item.mako" />
-<div class="mediacontent text" id="pagemedia_${c.video.id}">
-  <p>${h.literal(c.video.text)}</p>
+<div class="mediacontent video" id="pagemedia_${c.video.id}">
+  ${h.literal(c.video.text)}
 </div>
 
 <%def name="media_edit_controls()">
