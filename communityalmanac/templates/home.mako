@@ -115,7 +115,7 @@ var geocode_url = "${geocode_url}";
 $(document).ready(function(){ 
 	$('ul#almanacs li').hover(
 	  function () {
-	    $(this).animate({left: '-50px'},{queue:false,duration:500});	
+	    $(this).animate({left: '-20px'},{queue:false,duration:500});	
 	  }, 
 	  function () {
 	    $(this).animate({left: '0px'},{queue:false,duration:500});	
