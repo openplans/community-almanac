@@ -60,6 +60,7 @@
 					<p>All you have to do is create a free, no-strings-attached login ID and password.</p>
 					<p><strong>Start by finding your community on the map.</strong></p>
 					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a></p>
+          <a href="${h.url_for('user_register')}">Sign up</a>
 				</div><!-- /.panel -->
 			</div><!-- /.panel-wrap -->	
 		</div><!-- /.text -->
