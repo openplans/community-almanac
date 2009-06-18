@@ -1059,20 +1059,40 @@ background: url(/img/almanac-spine-bg.png) 0 0 no-repeat;
 overflow: hidden;
 }
 
-ul#almanacs li:nth-child(even) {
+ul#almanacs li.almanac-1 {
 margin-left: -10px;
 }
 
-ul#almanacs li:nth-child(3n) {
-margin-left: -4px;
+ul#almanacs li.almanac-2 {
+margin-left: -13px;
 }
 
-ul#almanacs li:nth-child(4n) {
-margin-left: 3px;
+ul#almanacs li.almanac-3 {
+margin-left: -2px;
 }
 
-ul#almanacs li:nth-child(5n) {
-margin-left: 0;
+ul#almanacs li.almanac-4 {
+margin-left: -5px;
+}
+
+ul#almanacs li.almanac-5 {
+margin-left: -15px;
+}
+
+ul#almanacs li.almanac-6 {
+margin-left: -6px;
+}
+
+ul#almanacs li.almanac-8 {
+margin-left: -7px;
+}
+
+ul#almanacs li.almanac-9 {
+margin-left: -10px;
+}
+
+ul#almanacs li.almanac-10 {
+margin-left: -2px;
 }
 
 ul#almanacs li a {
@@ -1122,7 +1142,7 @@ padding: 20px 15px 0.5em 25px;
 
 ul#pages {
 color: #70818c;
-padding: 0 15px 0 25px;
+padding: 0 15px 15px 25px;
 margin: 0;
 background: url(/img/torn-paper.png) repeat-y;
 }
