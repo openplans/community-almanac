@@ -21,6 +21,7 @@ import logging
 
 from communityalmanac.lib.helpers import name_almanac
 from communityalmanac.model import Almanac
+from communityalmanac.model import Page
 from communityalmanac.model import meta
 from formencode import Invalid
 from formencode import Schema
@@ -84,7 +85,8 @@ class AlmanacController(BaseController):
             page_idx = int(page_idx)
         except ValueError:
             page_idx = 1
-        c.pagination = h.setup_pagination(c.almanac.pages, page_idx)
+        pages_query = meta.Session.query(Page).filter(Page.published == True).order_by(Page.modified.desc())
+        c.pagination = h.setup_pagination(pages_query, page_idx)
         c.pages = c.pagination.items
         c.npages = c.pagination.item_count
         return render('/almanac/view.mako')

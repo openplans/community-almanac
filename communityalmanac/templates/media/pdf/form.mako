@@ -22,9 +22,9 @@
 %if c.media_item:
   Download <a href="${c.media_item.url}">${c.media_item.filename}</a>
 %endif
-<div id="${c.file_id}">Choose File</div>
+<div id="${c.file_id}" class="upload-bttn">Choose File</div>
 <div class="upload-status"></div>
 
 <%def name="submit_button()">
-<a id="submit-upload-file" href="#">Upload</a>
+<a id="submit-upload-file" class="media-save" href="#"><span>Upload</span></a>
 </%def>

@@ -27,20 +27,22 @@
     <fieldset>
       <legend>${c.legend}</legend>
       ${next.body()}
+      <div class="media-item-actions selfclear">
       ${self.submit_button()}
       ${self.cancel_button()}
+      </div>
     </fieldset>
   </form>
 </div>
 
 <%def name="submit_button()">
-  <input type="submit" value="Save" />
+  <button class="media-save" type="submit"><span>Save</span></button>
 </%def>
 
 <%def name="cancel_button()">
   %if c.media_item:
-  <a class="media-cancel" href="${c.view_url}">Cancel</a>
+  <a class="media-cancel" href="${c.view_url}"><span>Cancel</span></a>
   %else:
-  <a class="media-cancel" href="#">Cancel</a>
+  <a class="media-cancel" href="#"><span>Cancel</span></a>
   %endif
 </%def>

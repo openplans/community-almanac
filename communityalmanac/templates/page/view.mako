@@ -20,13 +20,7 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <h2 class="page-title">${c.page.name}</h2>
-<div class="page-meta">By <a href="#" onclick="alert('Not implemented!');">${c.page.user.username}</a> | ${c.page.creation_date_string} | <a href="#comments">
-%if len(c.page.comments) == 1:
-  1 Comment
-%else:
-  ${len(c.page.comments)} Comments
-%endif
-</a></div>
+<div class="page-meta">By <a href="#" onclick="alert('Not implemented!');">${c.page.user.username}</a> | ${c.page.creation_date_string} | <a href="#comments">${h.plural(len(c.page.comments), 'Comment', 'Comments')}</a></div>
 <a href="${h.url_for('page_edit', almanac=c.almanac, page=c.page)}" title="Edit Page">Edit</a>
 %if c.media_items:
   <div>
@@ -41,11 +35,7 @@
 <div class="comments-head selfclear">
   <% n = len(c.page.comments) %>
   <h3 id="comments">
-    %if n == 1:
-      1 Comment
-    %else:
-      ${len(c.page.comments)} Comments
-    %endif
+    ${h.plural(len(c.page.comments), 'Comment', 'Comments')}
     <a class="comment-link" href="#comment">Leave a comment</a>
   </h3>
 </div>

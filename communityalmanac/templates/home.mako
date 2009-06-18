@@ -24,42 +24,37 @@
 	  <div class="text">
 		  <div class="panel-wrap">
 				<div class="panel">
-					<h2>What is a Community Almanac?</h2>
+					<h3>What is a Community Almanac?</h3>
 					<p>It's where you and your community share stories about the heart <span class="amp">&#038;</span> soul of the place you live. It's a lasting record of the place you love—the place you call home.</p> 
-					<p><strong>Start by finding your community on the map.</strong></p>
-					<div id="add-pages-blurb" class="selfclear">
-					  <h3>Can I add my own pages?</h3>
-						<p>Yes, and it's free! Just find your community on the map <span class="amp">&#038;</span> start contributing to its almanac.</p>
-					</div>
-					<div id="add-almanac-blurb" class="selfclear">
-						<h3>What if my town has no almanac?</h3>
-						<p>Simply add a page for your community to start a new almanac.</p>
-						<p class="prevnext"><a class="next-panel" href="${h.url_for('almanac_create')}">Next &#187;</a></p>
-					</div>
+					<h3>Anyone can contribute!</h3>
+					<p>And it's free! Just find your community on the map and start adding to its almanac.</p>
+					<p>If your community has no almanac, simply find your community on the map and add a page. Your new almanac will be created automatically.</p>
+					<h3 class="start-by">Start by finding your community on the map.</h3>
+					<p class="prevnext"><a class="next-panel" href="${h.url_for('almanac_create')}">Next &#187;</a></p>
 				</div><!-- /.panel -->
 				<div class="panel inactive">
-					<h3>Anyone can contribute!</h3>
-					<p>What makes your town a truly special place? You do. Add pages and fill them with your content. Read other people's pages and post your replies. Get reacquainted with your town.</p> 
+					<h3>What makes your town special?</h3>
+					<p>You do! Add pages and fill them with your content. Read other people's pages and post your replies. Get reacquainted with your town.</p> 
 					<h3>Make Local connections.</h3>
-					<p>Community Almanac is a fun way to swap stories with your neighbors. Tell 'em about your favorite sledding hill or swimming hole, the best tree to climb or the coolest place to play stickball. Record memories from life, and make connections in your town. </p>
-					<p><strong>Start by finding your community on the map.</strong></p>
+					<p>Community Almanac is a fun way to swap stories with your neighbors. Tell 'em about your favorite sledding hill or swimming hole, the best tree to climb or the coolest place to play stickball. Record memories from your life, and make connections in your community.</p>
+					<h3 class="start-by">Start by finding your community on the map.</h3>
 					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-panel" href="#">Next &#187;</a></p>
 				</div><!-- /.panel -->
 				<div class="panel inactive">
 					<h3>Share in all sorts of formats.</h3>
-					<p>Add text, pictures, maps, audio, video and PDFs to your pages. It's easy! Add a video of your grandfather speaking about his childhood.</p> 
+					<p>Adding text, pictures, audio, video and PDFs to pages is easy! Upload video of your grandfather speaking about his childhood or a recording of your friend singing at a local bar. Paste a poem you wrote while floating down the river in a canoe!</p> 
 					<h3>Connect stories with real places.</h3>
-					<p>Community Almanac's mapping tools let you document particular places in your community. You can draw on a map to show a street corner, bike trail, stretch of shore front, or even the course your canoe floated down that river.</p>
-					<p><strong>Start by finding your community on the map.</strong></p>
+					<p>The mapping tools let you pinpoint locations in your community. Draw a map to show a street corner, bike trail, stretch of shore front, or even the course your canoe floated down that river.</p>
+					<h3 class="start-by">Start by finding your community on the map.</h3>
 					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-panel" href="#">Next &#187;</a></p>
 				</div><!-- /.panel -->
 				<div class="panel inactive">
-					<h3>It's about community heart <span class="amp">&#038;</span> soul.</h3>
-					<p>The Orton Family Foundation coined the term "community heart <span class="amp">&#038;</span> soul" to describe the people, places, history, traditions, issues (even feuds), values and other characteristics that make your town unique. Community Almanac's non-profit sponsors (Orton Family Foundation <span class="amp">&#038;</span> The Open Planning Project) want to help communities articulate, implement and steward their heart <span class="amp">&#038;</span> soul.</p> 
+					<h3>It's community heart <span class="amp">&#038;</span> soul.</h3>
+					<p>The Orton Family Foundation coined the term "community heart <span class="amp">&#038;</span> soul" to describe the people, places, history, traditions, issues, and values that make your community unique. Community Almanac's non-profit sponsors (<a href="http://www.orton.org/">Orton Family Foundation</a> and <a href="http://openplans.org/">The Open Planning Project</a>) want to help communities articulate, implement and steward their heart & soul.</p> 
 					<h3>And it's available totally free!</h3>
-					<p>All you have to do is create a free, no-strings-attached login ID and password.</p>
-					<p><strong>Start by finding your community on the map.</strong></p>
-					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a></p>
+					<p>All you have to do is <a href="${h.url_for('user_register')}">sign up</a> for a free, no-strings-attached account.</p>
+					<h3 class="start-by">Start by finding your community on the map.</h3>
+					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-signup" href="${h.url_for('user_register')}">Sign Up!</a></p>
 				</div><!-- /.panel -->
 			</div><!-- /.panel-wrap -->	
 		</div><!-- /.text -->
@@ -88,8 +83,8 @@
 	</div><!-- /#recent-activity -->
 	% if c.almanacs:
 	  <ul id="almanacs">
-	    % for almanac in c.almanacs:
-	    <li class="pngfix"><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name}</span><span class="almanac-timestamp">${almanac.updated_date_string}></a></li>
+	    % for i, almanac in enumerate(c.almanacs):
+      <li class="pngfix almanac-${i+1}"><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name}</span><span class="almanac-timestamp">${almanac.updated_date_string}</a></li>
 	    % endfor
 	  </ul><!-- /#almanacs -->
 	% endif
@@ -115,7 +110,7 @@ var geocode_url = "${geocode_url}";
 $(document).ready(function(){ 
 	$('ul#almanacs li').hover(
 	  function () {
-	    $(this).animate({left: '-50px'},{queue:false,duration:500});	
+	    $(this).animate({left: '-20px'},{queue:false,duration:500});	
 	  }, 
 	  function () {
 	    $(this).animate({left: '0px'},{queue:false,duration:500});	

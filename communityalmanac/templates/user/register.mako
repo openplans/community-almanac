@@ -39,6 +39,7 @@
       <label for="password_repeat">Retype Password</label>
       <input type="password" name="password_repeat" id="password_repeat" />
     </div>
+    <input type="hidden" name="came_from" value="${request.params.get('came_from', '')}"/>
     <input class="indented-submit" type="submit" value="Add" />
   </fieldset>
 </form>

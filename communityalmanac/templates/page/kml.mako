@@ -10,12 +10,7 @@
           <![CDATA[
           <div>
             <a href="${h.url_for('page_view', almanac=c.almanac, page=page)}">${page.name}</a>
-            <% n = len(page.comments) %>
-            %if n == 1:
-            <span>1 comment</span>
-            %else:
-            <span>${n} comments</span>
-            %endif
+            <span>${h.plural(len(page.comments), 'comment', 'comments')}</span>
             <span>Updated ${page.updated_date_string}</span>
           </div>
           ]]>
