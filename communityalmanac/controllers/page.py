@@ -63,6 +63,7 @@ class PageController(BaseController):
         flow_data = h.flowplayer_data_for_media(media_items)
         c.flow_data = h.literal(simplejson.dumps(flow_data))
         c.is_add = True
+        c.behalf = render('/page/behalf.mako')
         return render('/page/add_edit.mako')
 
     @ActionProtector(not_anonymous())
@@ -135,3 +136,23 @@ class PageController(BaseController):
             meta.Session.commit()
         h.flash(u'Page edited')
         redirect_to(h.url_for('page_view', almanac=c.almanac, page=c.page))
+
+    def on_behalf_of(self, page_id):
+        c.page = h.get_page_by_id(page_id)
+        return render('/page/behalf.mako')
+
+    @dispatch_on(POST='_do_on_behalf_of_form')
+    def on_behalf_of_form(self, page_id):
+        c.page = h.get_page_by_id(page_id)
+        return render('/page/behalf-form.mako')
+
+    #XXX getting almanac_slug error here
+    #@ActionProtector(is_page_owner())
+    def _do_on_behalf_of_form(self, page_id):
+        c.page = h.get_page_by_id(page_id)
+        on_behalf_of = request.POST.get('on_behalf_of')
+        if on_behalf_of is None:
+            abort(400)
+        c.page.on_behalf_of = on_behalf_of
+        meta.Session.commit()
+        return render('/page/behalf.mako')
