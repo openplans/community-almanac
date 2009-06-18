@@ -677,7 +677,7 @@ class MediaController(BaseController):
         page = c.almanac.new_page(self.ensure_user)
         c.file_id = str(uuid.uuid4())
         c.file_upload_url = request.path_url
-        c.legend = u'audio'
+        c.legend = u'Audio'
         return dict(html=render('/media/audio/form.mako'),
                     file_id=c.file_id,
                     file_upload_url=c.file_upload_url,
@@ -733,7 +733,7 @@ class MediaController(BaseController):
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         c.file_id = str(uuid.uuid4())
         c.file_upload_url = request.path_url
-        c.legend = u'audio'
+        c.legend = u'Audio'
         return dict(html=render('/media/audio/form.mako'),
                     file_id=c.file_id,
                     file_upload_url=c.file_upload_url,
@@ -791,7 +791,7 @@ class MediaController(BaseController):
         c.flowplayer_id = 'pagemedia_%s' % c.media_item.id
         c.audio_url = request.application_url + c.audio.url
         c.view_url = h.url_for('media_audio_view', media_id=c.media_item.id)
-        c.legend = u'audio'
+        c.legend = u'Audio'
         return dict(html=render('/media/audio/form.mako'),
                     file_id=c.file_id,
                     file_upload_url=c.file_upload_url,
