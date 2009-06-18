@@ -488,8 +488,6 @@ class Map(Media):
     id = Column(Integer, ForeignKey('media.id'), primary_key=True)
     location = Column(POINT(storage_SRID))
 
-    page = relation("Page", backref="maps")
-
     @property
     def location_4326(self):
         if self._location_4326 is None:
