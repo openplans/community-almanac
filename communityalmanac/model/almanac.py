@@ -234,10 +234,14 @@ class Page(Base):
     # update attached items, not the object itself.
     modified = Column(DateTime, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
 
-    def __init__(self, name=None, slug=None, description=None, almanac_id=None, user_id=None, id=None, published=False):
+    def __init__(self, name=None, slug=None, modified=None, created=None, description=None, almanac_id=None, user_id=None, id=None, published=False):
         self.name = name
         self.slug = slug
-        self.published = False
+        self.published = published
+        if modified:
+            self.modified = modified
+        if created:
+            self.created = created
         if user_id is not None:
             self.user_id = user_id
         if almanac_id is not None:
