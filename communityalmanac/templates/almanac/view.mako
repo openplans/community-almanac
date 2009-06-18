@@ -24,23 +24,14 @@
 % if c.pages:
 <h3 id="frontispiece-pages">
   <span><strong>Table of Contents</strong>
-    %if len(c.pages) == 1:
-      <em>1 page</em>
-    %else:
-      <em>${len(c.pages)} pages</em>
-    %endif
+    <em>${h.plural(len(c.pages), 'page', 'pages')}</em>
   </span></h3>
   <ul class="almanac-pages">
     % for page in c.pages:
     <li class="selfclear">
       <div class="almanac-meta">${page.creation_date_string}<br />
         <a href="${h.url_for('page_view', almanac=c.almanac, page=page)}#comments">
-          <% n = len(page.comments) %>
-          %if n == 1:
-            1 Comment
-          %else:
-            ${n} Comments
-          %endif
+          ${h.plural(len(page.comments), 'Comment', 'Comments')}
         </a>
       </div>
       <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.user.username}</h4>
