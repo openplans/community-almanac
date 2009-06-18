@@ -412,7 +412,8 @@ line-height: 1.5;
 
 #comment-bttn,
 #add-page-bttn,
-#submit-button-form input {
+#submit-button-form input,
+.upload-bttn {
 background: url(/img/bttn-bg-blue.jpg) top left repeat;
 font-family: georgia, serif;
 color: #fff;
@@ -432,11 +433,18 @@ font-size: 1.1em;
 
 #comment-submit a,
 #comment-bttn a,
-#add-page-bttn a {
+#add-page-bttn a,
+.upload-bttn {
 display: block;
 padding: 10px;
 color: #fff;
 text-decoration: none;
+}
+
+.upload-bttn {
+float: left;
+font-size: 1em;
+margin: 1em 0;
 }
 
 #add-page-bttn a {
@@ -447,11 +455,13 @@ font-size: 0.8em;
 
 #comment-bttn:hover,
 #add-page-bttn:hover,
-#submit-button-form input:hover {
+#submit-button-form input:hover,
+.upload-bttn:hover {
 border-top: 2px solid #069;
 border-right: 1px solid #08c;
 border-bottom: 1px solid #08c;
 border-left: 2px solid #069;
+cursor: pointer;
 }
 
 #comment-submit a:hover,
@@ -462,6 +472,41 @@ color: #fff;
 
 #comment-bttn {
 margin-right: 180px;
+}
+
+.page-media-items form .media-item-actions {
+clear: both;
+padding: 0;
+margin: 10px 0 0;
+}
+
+.media-save,
+.media-cancel {
+border: 1px solid transparent;
+background: transparent;
+float: left;
+padding: 10px;
+text-decoration: none;
+font-size: 1.2em;
+font-family: georgia,serif;
+color: #00ace6;
+}
+
+.media-save span {
+padding-left: 20px;
+background: url(/img/save-icon.png) 0 50% no-repeat;
+}
+
+.media-cancel span {
+padding-left: 20px;
+background: url(/img/cancel-icon.png) 0 50% no-repeat;
+}
+
+.media-save:hover,
+.media-cancel:hover {
+border: 1px solid #d0c9b9;
+background: #fffbf5;
+color: #ff6040;
 }
 
 /* fancy borders */
