@@ -84,7 +84,7 @@ class AlmanacController(BaseController):
             page_idx = int(page_idx)
         except ValueError:
             page_idx = 1
-        pages_query = meta.Session.query(Page).filter(Page.published == True).order_by(Page.modified.desc())
+        pages_query = meta.Session.query(Page).filter(Page.almanac_id==c.almanac.id).filter(Page.published == True).order_by(Page.modified.desc())
         c.pagination = h.setup_pagination(pages_query, page_idx)
         c.pages = c.pagination.items
         c.npages = c.pagination.item_count
