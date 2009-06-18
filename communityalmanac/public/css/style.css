@@ -81,13 +81,13 @@ background: url(/img/brown-noise-dark.png) -50% 0 repeat;
 	background: url(/img/ill-clouds-sm.png) 30% 0 repeat-x;
 }
 #ill-mountains {
-	background: url(/img/ill-mountains-sm.png) 250px 60px no-repeat;
+	background: url(/img/ill-mountains-sm.png) 275px 60px no-repeat;
 }
 #ill-hills {
-	background: url(/img/ill-hills.png) -20% 112px repeat-x;
+	background: url(/img/ill-hills.png) -25% 112px repeat-x;
 }
 #ill-foreground {
-	background: url(/img/ill-foreground-b.png) -50% bottom repeat-x;
+	background: url(/img/ill-foreground-b.png) -60% bottom repeat-x;
 }
 * html #ill-sky,
 * html #ill-clouds,
@@ -106,7 +106,7 @@ margin: auto;
 h1#logo {
 width: 202px;
 height: 130px;
-margin: 20px 7% 0 20px;
+margin: 20px 10% 0 20px;
 float: right;
 }
 
@@ -125,7 +125,7 @@ margin: 0;
 background: url(/img/page-bg.png) center top;
 position: absolute;
 top: 0;
-left: 10%;
+left: 7%;
 border: 4px solid #d0c9b9;
 border-top: 0;
 }
@@ -226,7 +226,7 @@ padding: 0.4em;
 
 h3#tagline {
 margin: 0 0 0 7%;
-padding: 1.5em 0 0 16px;
+padding: 1.5em 0 0 4px;
 clear: left;
 font-size: 1.9em;
 }
@@ -280,7 +280,7 @@ margin-right: 25%;
 
 #left-page {
 margin: 20px 50% 20px 0;
-padding: 0 200px 0 0;
+padding: 0 235px 0 0;
 }
 
 .sidebar {
@@ -843,7 +843,7 @@ min-width: 1065px;
 
 body.home #content .wrap {
 text-align: left;
-margin: 0 10%;
+margin: 0 auto;
 width: 980px;
 }
 
@@ -853,7 +853,7 @@ background: url(/img/intro-bg.png) no-repeat;
 }
 
 body.home #intro .text {
-height: 33em;
+height: 28em;
 width: 340px;
 padding: 0 10px;
 float: right;
@@ -871,36 +871,42 @@ position: absolute;
 top: 0;
 left: 0;
 width: 100%;
-height: 25em;
+height: 15em;
 }
 
 body.home #intro .inactive {
 display: none;
 }
 
-body.home #intro .panel h2 {
-font-size: 2em;
+body.home #intro .panel h3,
+body.home #intro .panel p {
+padding-left: 10px;
+padding-right: 5px;
 }
 
 body.home #intro .panel h3 {
-font-size: 1.7em;
-}
-
-body.home #intro .panel h2,
-body.home #intro .panel h3 {
+line-height: 1;
 color: #ff6040;
-margin: 0;
+margin: 0 0 0.2em;
+}
+
+body.home #intro .panel h3 {
+font-size: 1.6em;
+}
+
+body.home #intro .panel h3.start-by {
+font-size: 1.6em;
+background: transparent url(/img/paper-icon-64.png) 0 0 no-repeat;
+min-height: 64px;
+padding-left: 70px;
+color: #b2b32d;
 }
 
 body.home #intro .panel p {
-margin: 0 0 0.4em;
+margin: 0 0 0.6em;
+line-height: 1.3;
 }
 
-body.home #intro .panel strong {
-color: #b2b32d;
-font-weight: normal;
-font-size: 1.2em;
-}
 
 #add-pages-blurb img {
 float: left;
@@ -912,21 +918,28 @@ float: right;
 
 body.home #intro .prevnext {
 float: right;
-width: 50%;
 }
 
 body.home #intro .next-panel,
-body.home #intro .prev-panel {
+body.home #intro .prev-panel,
+body.home #intro .next-signup {
 color: #fff;
 background: url(/img/bttn-bg-orange.jpg) repeat;
 border: 2px solid #d0c9b9;
 text-decoration: none;
-font-size: 1.2em;
-padding: 0.3em;
+font-size: 1.1em;
+padding: 0.3em 0;
+width: 100px;
+text-align: center;
+}
+body.home #intro .next-signup {
+background: url(/img/bttn-bg-pea.jpg) repeat;
 }
 
-body.home #intro .next-panel {
+body.home #intro .next-panel,
+body.home #intro .next-signup {
 float: right;
+margin-left: 10px;
 }
 
 body.home #intro .prev-panel {
@@ -950,7 +963,7 @@ background: #d0c9b9; /* webkit broswers are getting input height wrong */
 }
 
 body.home #intro .map input {
-font-size: 1.5em;
+font-size: 1.4em;
 width: 80%;
 line-height: 1em;
 color: #003459;
@@ -969,11 +982,12 @@ right: 0;
 top: 0;
 background: url(/img/bttn-bg-green.jpg) top left repeat;
 border: 4px solid #b2b32d;
-font-size: 1.5em;
+font-size: 1.4em;
 line-height: 1em;
 padding: 0.3em;
 color: #fff;
 text-decoration: none;
+text-align: center;
 width: 13%;
 }
 
@@ -1080,7 +1094,7 @@ color: #00ace6;
 
 ul#almanacs li a span.almanac-timestamp {
 position: absolute;
-right: 35px;
+right: 48px;
 top: 50%;
 margin-top: -0.5em;
 line-height: 1.2em;
@@ -1146,7 +1160,7 @@ background: url(/img/comments-icon.png) 0 50% no-repeat;
 
 div#shelf {
 height: 65px;
-background: url(/img/shelf-bg.png) repeat-x;
+background: url(/img/shelf-bg.png) center 0 repeat-x;
 padding: 15px 0 0;
 overflow: hidden;
 }
@@ -1154,8 +1168,9 @@ overflow: hidden;
 div#almanac-pagination-footer {
 background: #b2b32d url(/img/bttn-bg-pea.jpg) repeat;
 color: #340f03;
-margin: 0 0 0 10%;
+margin: 0 auto;
 position: relative;
+left: -145px;
 font-size: 1.2em;
 line-height: 1em;
 padding: 0.5em;
