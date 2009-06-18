@@ -83,8 +83,8 @@
 	</div><!-- /#recent-activity -->
 	% if c.almanacs:
 	  <ul id="almanacs">
-	    % for almanac in c.almanacs:
-	    <li class="pngfix"><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name}</span><span class="almanac-timestamp">${almanac.updated_date_string}</a></li>
+	    % for i, almanac in enumerate(c.almanacs):
+      <li class="pngfix almanac-${i+1}"><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name}</span><span class="almanac-timestamp">${almanac.updated_date_string}</a></li>
 	    % endfor
 	  </ul><!-- /#almanacs -->
 	% endif
