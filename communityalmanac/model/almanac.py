@@ -91,6 +91,9 @@ cascade_modify_time_media = DDL(cascade_modify_time,
                                   context=dict(table='media', foreign_key='id'),
                                   on='postgres').execute_at('before-create', Base.metadata)
 
+def normalize_url_slug(candidate):
+    return candidate.replace(', ', '-').replace(' ', '').replace(',', '-')
+
 class Almanac(Base):
     __tablename__ = 'almanacs'
 
@@ -113,6 +116,25 @@ class Almanac(Base):
 
     def __repr__(self):
         return '<Almanac(id=%d, name=%s)>' % (self.id, self.name)
+
+    @staticmethod
+    def name_almanac(candidate):
+        """name the almanac given the candidate name"""
+
+        normalized = normalize_url_slug(candidate)
+        try:
+            Almanac.get_by_slug(normalized)
+        except exc.NoResultFound:
+            return normalized
+        else:
+            i = 1
+            while True:
+                name = u'%s-%s' % (normalized, i)
+                try:
+                    Almanac.get_by_slug(name)
+                    i += 1
+                except exc.NoResultFound:
+                    return name
 
     def new_page(self, user, **fields):
         assert('almanac_id' not in fields)
@@ -227,6 +249,25 @@ class Page(Base):
 
     def __repr__(self):
         return '<Page(id=%d, name=%s)>' % (self.id, self.name)
+
+    @staticmethod
+    def name_page(almanac, candidate):
+        """name the page given the almanac and candidate name"""
+
+        normalized = normalize_url_slug(candidate)
+        try:
+            Page.get_by_slug(almanac, normalized)
+        except exc.NoResultFound:
+            return normalized
+        else:
+            i = 1
+            while True:
+                name = u'%s-%s' % (normalized, i)
+                try:
+                    Page.get_by_slug(almanac, name)
+                    i += 1
+                except exc.NoResultFound:
+                    return name
 
     @staticmethod
     def get_by_slug(almanac, slug):

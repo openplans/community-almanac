@@ -72,7 +72,7 @@ class PageController(BaseController):
         if not name:
             name = u'Unnamed'
 
-        slug = h.name_page(almanac, name)
+        slug = Page.name_page(almanac, name)
         page = c.almanac.new_page(self.ensure_user, name=name, slug=slug)
         page.published = True
 

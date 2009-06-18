@@ -19,7 +19,6 @@
 
 import logging
 
-from communityalmanac.lib.helpers import name_almanac
 from communityalmanac.model import Almanac
 from communityalmanac.model import Page
 from communityalmanac.model import meta
@@ -67,7 +66,7 @@ class AlmanacController(BaseController):
         # Plate Carree (4326)
         point = asShape(shape)
         point.srid = 4326
-        slug = name_almanac(name)
+        slug = Almanac.name_almanac(name)
         almanac = Almanac(name, slug)
         almanac.location = point
 

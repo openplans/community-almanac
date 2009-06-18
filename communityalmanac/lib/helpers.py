@@ -49,45 +49,6 @@ from webhelpers.paginate import Page as PaginationPage
 from webhelpers.text import plural
 import uuid
 
-def normalize_url_slug(candidate):
-    return candidate.replace(', ', '-').replace(' ', '').replace(',', '-')
-
-def name_almanac(candidate):
-    """name the almanac given the candidate name"""
-
-    normalized = normalize_url_slug(candidate)
-    try:
-        Almanac.get_by_slug(normalized)
-    except exc.NoResultFound:
-        return normalized
-    else:
-        i = 1
-        while True:
-            name = u'%s-%s' % (normalized, i)
-            try:
-                Almanac.get_by_slug(name)
-                i += 1
-            except exc.NoResultFound:
-                return name
-
-def name_page(almanac, candidate):
-    """name the page given the almanac and candidate name"""
-
-    normalized = normalize_url_slug(candidate)
-    try:
-        Page.get_by_slug(almanac, normalized)
-    except exc.NoResultFound:
-        return normalized
-    else:
-        i = 1
-        while True:
-            name = u'%s-%s' % (normalized, i)
-            try:
-                Page.get_by_slug(almanac, name)
-                i += 1
-            except exc.NoResultFound:
-                return name
-
 def get_almanac_by_slug(almanac_slug):
     try:
         return Almanac.get_by_slug(almanac_slug)
