@@ -131,7 +131,7 @@ $(document).ready(function() {
   });
 
   // behavior when saving a new media item
-  $('form.add-media-item input[type=submit]').live('click', function(e) {
+  $('form.add-media-item button.media-save').live('click', function(e) {
     e.preventDefault();
     var formcontainer = $(this).closest('li');
     var form = formcontainer.find('form');
@@ -185,7 +185,7 @@ $(document).ready(function() {
   });
 
   // media item live edit
-  $('ul.page-media-items form.edit-media-item input[type=submit]').live('click', function(e) {
+  $('form.edit-media-item button.media-save').live('click', function(e) {
     e.preventDefault();
     var form = $(this).closest('form.edit-media-item');
     var postUrl = form.attr('action');
@@ -211,7 +211,7 @@ $(document).ready(function() {
   });
 
   // media item live cancel
-  $('ul.page-media-items form.edit-media-item a.media-cancel').live('click', function(e) {
+  $('form.edit-media-item a.media-cancel').live('click', function(e) {
     e.preventDefault();
     var url = $(this).attr('href');
     var li = $(this).closest('li');
