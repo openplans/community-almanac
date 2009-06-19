@@ -34,7 +34,7 @@
           ${h.plural(len(page.comments), 'Comment', 'Comments')}
         </a>
       </div>
-      <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.user.username}</h4>
+      <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.author}</h4>
       <% first_image = page.first_image %>
       %if first_image is not None:
         <div class="page-first-image"><img src="${first_image.small_url}" /></div>

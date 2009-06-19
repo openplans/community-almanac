@@ -340,6 +340,11 @@ class Page(Base):
     def by_id(page_id):
         return meta.Session.query(Page).filter(Page.id == page_id).one()
 
+    @property
+    def author(self):
+        """return the on_behalf_of if it exists, otherwise the user's fullname"""
+        return self.on_behalf_of if self.on_behalf_of else self.user.username
+
 Page.almanac = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
 page_modify_trigger = DDL("""CREATE TRIGGER page_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON pages FOR EACH ROW
