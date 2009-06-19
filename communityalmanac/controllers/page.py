@@ -123,6 +123,7 @@ class PageController(BaseController):
         flow_data = h.flowplayer_data_for_media(c.page.media)
         c.flow_data = h.literal(simplejson.dumps(flow_data))
         c.is_add = False
+        c.behalf = render('/page/behalf.mako')
         return render('/page/add_edit.mako')
 
     @ActionProtector(is_page_owner())
