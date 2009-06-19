@@ -385,7 +385,8 @@ function applyFileUploadEditSideEffects(data) {
   var file_id = data.file_id;
   var file_upload_url = data.file_upload_url;
   var fileElt = $('#' + file_id);
-  var saveLink = fileElt.nextAll('#submit-upload-file');
+  var mediaItemActions = fileElt.nextAll('.media-item-actions');
+  var saveLink = mediaItemActions.find('#submit-upload-file');
   var li = fileElt.closest('li');
   var uploadStatus = fileElt.nextAll('.upload-status');
   var onComplete = function(file, response) {
