@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import with_statement
 from pylons import g
 from pylons import session
 from sqlalchemy import Table, Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
@@ -37,6 +38,7 @@ from sqlgeotypes import POINT
 from shapely.geometry.point import Point
 from shapely import wkb
 from binascii import a2b_hex
+import mimetypes
 import PIL.Image
 import pyproj
 import meta
@@ -344,6 +346,7 @@ class Comment(Base):
 
     id = Column(Integer, primary_key=True)
     page_id = Column(Integer, ForeignKey('pages.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
     creation = Column(DateTime, server_default=func.current_timestamp())
     fullname = Column(Unicode)
     email = Column(Unicode)
@@ -398,6 +401,37 @@ class Audio(Media):
     path = Column(Unicode)
     filename = Column(Unicode)
 
+    @staticmethod
+    def from_file(filename, fileobj=None, newpath=None, upload=None, page=None, **kwargs):
+
+        if not newpath:
+            newpath = g.audio_path
+
+        mimetype, _ = mimetypes.guess_type(filename)
+
+        if mimetype != 'audio/mpeg':
+            raise ValueError(u'Invalid audio file')
+
+        if upload:
+            upload.make_file()
+            fileobj = upload.file
+
+        audio_data = fileobj.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(newpath, new_uuid) + '.mp3'
+        with open(path, 'w') as f:
+            f.write(audio_data)
+
+        audio = Audio(**kwargs)
+        if page:
+            page.media.append(audio)
+            audio.order = len(page.media)
+        else:
+            audio.order = len(audio.page.media)
+        audio.path = path
+        audio.filename = filename
+        return audio
+
     @property
     def url(self):
         import communityalmanac.lib.helpers as h
@@ -442,6 +476,39 @@ class Image(Media):
         # we add a querystring to prevent the browser from caching
         qs = time.time()
         return '/media/view/image/small/%s/%s?%s' % (self.id, self.filename, qs)
+
+    @staticmethod
+    def from_file(filename, fileobj=None, newpath=None, upload=None, page=None, **kwargs):
+
+        if not newpath:
+            newpath = g.images_path
+
+        _, ext = os.path.splitext(filename)
+        mimetype, _ = mimetypes.guess_type(filename)
+
+        if not mimetype.startswith('image/'):
+            raise ValueError(u'Invalid image file %s' % filename)
+
+        if upload:
+            upload.make_file()
+            fileobj = upload.file
+
+        image_data = fileobj.read()
+        new_uuid = str(uuid.uuid4())
+        path = os.path.join(newpath, new_uuid) + ext
+        with open(path, 'w') as f:
+            f.write(image_data)
+
+        image = Image(**kwargs)
+        if page:
+            page.media.append(image)
+            image.order = len(page.media)
+        else:
+            image.order = len(image.page.media)
+        image.path = path
+        image.create_scales(newpath)
+        image.filename = filename
+        return image
 
     def create_scales(self, base_path):
         """create the necessary image scales from the saved path"""

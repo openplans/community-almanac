@@ -347,30 +347,15 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        filename = image_file.filename
-        _, ext = os.path.splitext(filename)
-        mimetype, _ = mimetypes.guess_type(filename)
-        if not mimetype.startswith('image/'):
-            c.error = u'Invalid image file'
+        page = c.almanac.new_page(self.ensure_user)
+
+        try:
+            c.image = image = Image.from_file(image_file.filename, upload=image_file, page_id=page.id)
+        except ValueError, e:
+            c.error = e.message
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        page = c.almanac.new_page(self.ensure_user)
-
-        image_file.make_file()
-        image_data = image_file.file.read()
-        new_uuid = str(uuid.uuid4())
-        path = os.path.join(g.images_path, new_uuid) + ext
-        f = open(path, 'w')
-        f.write(image_data)
-        f.close()
-
-        c.image = image = Image()
-        image.path = path
-        image.page_id = page.id
-        image.order = len(page.media)
-        image.create_scales(g.images_path)
-        image.filename = filename
         meta.Session.add(image)
         meta.Session.commit()
 
