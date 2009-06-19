@@ -239,7 +239,9 @@ $(document).ready(function() {
     e.preventDefault();
     var url = $(this).attr('href');
     var pageMeta = $(this).closest('.page-meta');
-    pageMeta.load(url);
+    pageMeta.load(url, function() {
+      pageMeta.find('input').focus();
+    });
   });
   $('#behalf-save').live('click', function(e) {
     e.preventDefault();
