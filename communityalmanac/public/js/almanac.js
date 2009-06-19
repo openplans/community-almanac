@@ -402,8 +402,6 @@ function applyFileUploadEditSideEffects(data) {
   var au = new AjaxUpload(file_id, {
     action: file_upload_url,
     name: 'userfile',
-    //XXX we're not using json here because eval doesn't seem to want to
-    // convert the json returned from the server into an object
     responseType: 'json',
     autoSubmit: false,
     onChange: function(file, extension) {
