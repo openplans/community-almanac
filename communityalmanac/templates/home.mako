@@ -271,6 +271,7 @@ $(document).ready(function(){
       _geocode(false);
       return false;
     });
+    $('#almanac-name').focus();
 });
 //]]>
   </script>
