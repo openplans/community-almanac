@@ -25,6 +25,7 @@
 <h2>Edit page</h2>
 %endif
 <form id="page-title-form"  method="post" action="${request.path_url}">
+  ${h.literal(c.behalf)}
   %if c.is_add:
     <input id="page-title" type="text" name="name" value="Page Name" />
   %else:

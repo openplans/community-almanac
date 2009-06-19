@@ -26,7 +26,7 @@ class HomesweethomeController(BaseController):
             page_idx = int(page_idx)
         except ValueError:
             page_idx = 1
-        almanac_query = meta.Session.query(Almanac).order_by(Almanac.modified.desc())
+        almanac_query = meta.Session.query(Almanac).join(Almanac.pages).distinct().order_by(Almanac.modified.desc())
         h.setup_pagination(almanac_query, page_idx)
         c.almanacs = c.pagination.items
         c.pages = Page.latest()

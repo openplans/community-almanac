@@ -229,6 +229,7 @@ class Page(Base):
     almanac_id = Column(Integer, ForeignKey('almanacs.id'))
     name = Column(Unicode)
     slug = Column(String)
+    on_behalf_of = Column(Unicode)
     description = Column(Unicode)
     published = Column(Boolean, nullable=False)
     creation = Column(DateTime, server_default=func.current_timestamp())
@@ -334,6 +335,10 @@ class Page(Base):
     def updated_date_string(self):
         """return the updated date formatted nicely as a string"""
         return self.modified.strftime('%B %d, %Y')
+
+    @staticmethod
+    def by_id(page_id):
+        return meta.Session.query(Page).filter(Page.id == page_id).one()
 
 Page.almanac = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
 page_modify_trigger = DDL("""CREATE TRIGGER page_modify_trigger

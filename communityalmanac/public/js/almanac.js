@@ -233,6 +233,30 @@ $(document).ready(function() {
     e.preventDefault();
     $(this).closest('#flash-messages').fadeOut('slow', function() {$(this).remove();});
   });
+
+  // on behalf of behavior
+  $('a.on_behalf_of').live('click', function(e) {
+    e.preventDefault();
+    var url = $(this).attr('href');
+    var pageMeta = $(this).closest('.page-meta');
+    pageMeta.load(url);
+  });
+  $('#behalf-save').live('click', function(e) {
+    e.preventDefault();
+    var on_behalf_of = $(this).prev().val();
+    var url = $(this).attr('href');
+    var pageMeta = $(this).closest('.page-meta');
+    $.post(url, {on_behalf_of: on_behalf_of}, function(data) {
+      pageMeta.empty();
+      pageMeta.append(data);
+    });
+  });
+  $('#behalf-cancel').live('click', function(e) {
+    e.preventDefault();
+    var pageMeta = $(this).closest('.page-meta');
+    var url = $(this).attr('href');
+    pageMeta.load(url);
+  });
 });
 
 function applyDisplaySideEffects(data) {

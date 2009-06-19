@@ -72,6 +72,8 @@ def make_map():
     map.connect('user_register', '/signup', controller='user', action='register')
     map.connect('user_requestreset', '/forgot', controller='user', action='request_reset')
     map.connect('user_performreset', '/reset/{username}/{key}', controller='user', action='perform_reset')
+    map.connect('behalf-form', '/on-behalf-of-form/:page_id', controller="page", action="on_behalf_of_form")
+    map.connect('behalf', '/on-behalf-of/:page_id', controller="page", action="on_behalf_of")
     map.connect('test', '/test', controller='user', action='test')
     map.connect('media_item_sort', '/api/sort/:almanac_slug/:page_slug', controller='media', action='sort', conditions=dict(method=['POST']), _filter=page_expand)
     map.connect('media_item_temppage_sort', '/api/sort/:almanac_slug', controller='media', action='sort', page_slug=None, conditions=dict(method=['POST']), _filter=almanac_expand)

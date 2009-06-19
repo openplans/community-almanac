@@ -67,6 +67,12 @@ def get_media_by_id(media_id):
     except exc.NoResultFound:
         abort(404)
 
+def get_page_by_id(page_id):
+    try:
+        return Page.by_id(page_id)
+    except exc.NoResultFound:
+        abort(404)
+
 def sort_media_items(media, index_move, newsort):
     if index_move < 0 or index_move >= len(media):
         return False
