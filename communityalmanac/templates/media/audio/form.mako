@@ -24,9 +24,9 @@
     <a href="${c.audio_url}">Audio</a>
   </div>
 %endif
-<div id="${c.file_id}">Upload</div>
+<div id="${c.file_id}" class="upload-bttn">Choose File</div>
 <div class="upload-status"></div>
 
 <%def name="submit_button()">
-<a id="submit-upload-file" href="#">Save</a>
+<a class="media-save submit-upload-file" href="#"><span>Upload</span></a>
 </%def>
