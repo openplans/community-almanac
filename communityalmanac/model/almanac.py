@@ -230,7 +230,6 @@ class Page(Base):
     name = Column(Unicode)
     slug = Column(String)
     on_behalf_of = Column(Unicode)
-    description = Column(Unicode)
     published = Column(Boolean, nullable=False)
     creation = Column(DateTime, server_default=func.current_timestamp())
     # The auto-update field below doesn't do too much, because we almost always
