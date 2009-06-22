@@ -20,7 +20,7 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <h2 class="page-title">${c.page.name}</h2>
-<div class="page-meta">By <a href="#" onclick="alert('Not implemented!');">${c.page.user.username}</a> | ${c.page.creation_date_string} | <a href="#comments">${h.plural(len(c.page.comments), 'Comment', 'Comments')}</a></div>
+<div class="page-meta">By ${c.page.author} | ${c.page.creation_date_string} | <a href="#comments">${h.plural(len(c.page.comments), 'Comment', 'Comments')}</a></div>
 <a href="${h.url_for('page_edit', almanac=c.almanac, page=c.page)}" title="Edit Page">Edit</a>
 %if c.media_items:
   <div>

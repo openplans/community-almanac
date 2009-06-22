@@ -26,5 +26,5 @@
 <div class="upload-status"></div>
 
 <%def name="submit_button()">
-<a id="submit-upload-file" class="media-save" href="#"><span>Upload</span></a>
+<a class="media-save submit-upload-file" href="#"><span>Upload</span></a>
 </%def>

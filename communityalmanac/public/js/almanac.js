@@ -131,7 +131,7 @@ $(document).ready(function() {
   });
 
   // behavior when saving a new media item
-  $('form.add-media-item input[type=submit]').live('click', function(e) {
+  $('form.add-media-item button.media-save').live('click', function(e) {
     e.preventDefault();
     var formcontainer = $(this).closest('li');
     var form = formcontainer.find('form');
@@ -185,7 +185,7 @@ $(document).ready(function() {
   });
 
   // media item live edit
-  $('ul.page-media-items form.edit-media-item input[type=submit]').live('click', function(e) {
+  $('form.edit-media-item button.media-save').live('click', function(e) {
     e.preventDefault();
     var form = $(this).closest('form.edit-media-item');
     var postUrl = form.attr('action');
@@ -211,7 +211,7 @@ $(document).ready(function() {
   });
 
   // media item live cancel
-  $('ul.page-media-items form.edit-media-item a.media-cancel').live('click', function(e) {
+  $('form.edit-media-item a.media-cancel').live('click', function(e) {
     e.preventDefault();
     var url = $(this).attr('href');
     var li = $(this).closest('li');
@@ -239,7 +239,9 @@ $(document).ready(function() {
     e.preventDefault();
     var url = $(this).attr('href');
     var pageMeta = $(this).closest('.page-meta');
-    pageMeta.load(url);
+    pageMeta.load(url, function() {
+      pageMeta.find('input').focus();
+    });
   });
   $('#behalf-save').live('click', function(e) {
     e.preventDefault();
@@ -385,7 +387,8 @@ function applyFileUploadEditSideEffects(data) {
   var file_id = data.file_id;
   var file_upload_url = data.file_upload_url;
   var fileElt = $('#' + file_id);
-  var saveLink = fileElt.nextAll('#submit-upload-file');
+  var mediaItemActions = fileElt.nextAll('.media-item-actions');
+  var saveLink = mediaItemActions.find('.submit-upload-file');
   var li = fileElt.closest('li');
   var uploadStatus = fileElt.nextAll('.upload-status');
   var onComplete = function(file, response) {
