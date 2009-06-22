@@ -21,7 +21,9 @@ import logging
 
 from communityalmanac.model import Almanac
 from communityalmanac.model import Page
+from communityalmanac.model import IndexLine
 from communityalmanac.model import meta
+from communityalmanac.model.meta import Session as s
 from formencode import Invalid
 from formencode import Schema
 from formencode import validators
@@ -32,6 +34,8 @@ from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 from shapely.geometry.geo import asShape
 from sqlalchemy.orm import exc
+from sqlalchemy.sql import func
+from sqlalchemy import desc
 import communityalmanac.lib.helpers as h
 import simplejson
 
@@ -89,6 +93,28 @@ class AlmanacController(BaseController):
         c.pages = c.pagination.items
         c.npages = c.pagination.item_count
         return render('/almanac/view.mako')
+
+    @dispatch_on(POST='_search')
+    def search(self, almanac_slug, query):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        loc = c.almanac.location_4326
+        c.lng, c.lat = loc.x, loc.y
+        page_idx = request.GET.get('page', 1)
+        try:
+            page_idx = int(page_idx)
+        except ValueError:
+            page_idx = 1
+        rank = func.ts_rank(IndexLine.weighted, func.plainto_tsquery(query))
+        maxrank = func.max(rank).label('maxrank')
+        stmt = s.query(IndexLine.page_id, maxrank).filter(IndexLine.almanac_id==c.almanac.id).group_by(IndexLine.almanac_id, IndexLine.page_id).filter(rank > 0).subquery()
+        pages_query = s.query(Page).join(stmt).filter(Page.published==True).order_by(stmt.c.maxrank.desc())
+        c.pagination = h.setup_pagination(pages_query, page_idx)
+        c.pages = c.pagination.items
+        c.npages = c.pagination.item_count
+        return render('/almanac/search.mako')
+
+    def _search(self, almanac_slug, query=''):
+        redirect_to(h.url_for('almanac_search', almanac_slug=almanac_slug, query=request.params.get('query','')))
 
     @jsonify
     def center(self, almanac_slug):

@@ -35,6 +35,7 @@ from uuid import uuid4
 
 from meta import Base, storage_SRID
 from sqlgeotypes import POINT
+from sqlfulltexttypes import WeightedText
 from shapely.geometry.point import Point
 from shapely import wkb
 from binascii import a2b_hex
@@ -92,6 +93,45 @@ cascade_modify_time_pages = DDL(cascade_modify_time,
 cascade_modify_time_media = DDL(cascade_modify_time,
                                   context=dict(table='media', foreign_key='id'),
                                   on='postgres').execute_at('before-create', Base.metadata)
+
+index_line_update_page = DDL("""CREATE OR REPLACE FUNCTION index_line_update_page() RETURNS trigger AS $index_line_update_page$
+  BEGIN
+    IF TG_OP = 'INSERT' THEN
+      INSERT INTO index_lines (almanac_id, page_id, media_id, comment_id, weighted) VALUES(NEW.almanac_id, NEW.id, NULL, NULL, setweight(to_tsvector(NEW.name), 'A'));
+    ELSIF TG_OP = 'UPDATE' THEN
+      UPDATE index_lines SET weighted=setweight(to_tsvector(NEW.name), 'A') WHERE page_id = NEW.id AND media_id IS NULL AND comment_id IS NULL;
+    ELSE
+      DELETE FROM index_lines WHERE page_id = NEW.id AND media_id IS NULL AND comment_id IS NULL;
+    END IF;
+    RETURN NULL;
+  END;
+$index_line_update_page$ LANGUAGE plpgsql;""", on='postgres').execute_at('before-create', Base.metadata)
+
+index_line_update_media = DDL("""CREATE OR REPLACE FUNCTION index_line_update_media() RETURNS trigger AS $index_line_update_media$
+  BEGIN
+    IF TG_OP = 'INSERT' THEN
+      INSERT INTO index_lines (almanac_id, page_id, media_id, comment_id, weighted) SELECT pages.almanac_id, NEW.page_id, NEW.id, NULL, setweight(to_tsvector(NEW.text), 'C') FROM pages WHERE pages.id = NEW.page_id;
+    ELSIF TG_OP = 'UPDATE' THEN
+      UPDATE index_lines SET weighted=setweight(to_tsvector(NEW.text), 'C') WHERE page_id = NEW.page_id AND media_id = NEW.id AND comment_id IS NULL;
+    ELSE
+      DELETE FROM index_lines WHERE page_id = NEW.page_id AND media_id = NEW.id AND comment_id IS NULL;
+    END IF;
+    RETURN NULL;
+  END;
+$index_line_update_media$ LANGUAGE plpgsql;""", on='postgres').execute_at('before-create', Base.metadata)
+
+index_line_update_comment = DDL("""CREATE OR REPLACE FUNCTION index_line_update_comment() RETURNS trigger AS $index_line_update_comment$
+  BEGIN
+    IF TG_OP = 'INSERT' THEN
+      INSERT INTO index_lines (almanac_id, page_id, media_id, comment_id, weighted) SELECT pages.almanac_id, NEW.page_id, NULL, NEW.id, setweight(to_tsvector(NEW.text), 'D') FROM pages WHERE pages.id = NEW.page_id;
+    ELSIF TG_OP = 'UPDATE' THEN
+      UPDATE index_lines SET weighted=setweight(to_tsvector(NEW.text), 'D') WHERE page_id = NEW.page_id AND media_id IS NULL AND comment_id = NEW.id;
+    ELSE
+      DELETE FROM index_lines WHERE page_id = NEW.page_id AND media_id IS NULL AND comment_id = NEW.id;
+    END IF;
+    RETURN NULL;
+  END;
+$index_line_update_comment$ LANGUAGE plpgsql;""", on='postgres').execute_at('before-create', Base.metadata)
 
 def normalize_url_slug(candidate):
     return candidate.replace(', ', '-').replace(' ', '').replace(',', '-')
@@ -230,14 +270,13 @@ class Page(Base):
     name = Column(Unicode)
     slug = Column(String)
     on_behalf_of = Column(Unicode)
-    description = Column(Unicode)
     published = Column(Boolean, nullable=False)
     creation = Column(DateTime, server_default=func.current_timestamp())
     # The auto-update field below doesn't do too much, because we almost always
     # update attached items, not the object itself.
     modified = Column(DateTime, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
 
-    def __init__(self, name=None, slug=None, modified=None, created=None, description=None, almanac_id=None, user_id=None, id=None, published=False):
+    def __init__(self, name=None, slug=None, modified=None, created=None, almanac_id=None, user_id=None, id=None, published=False):
         self.name = name
         self.slug = slug
         self.published = published
@@ -249,8 +288,6 @@ class Page(Base):
             self.user_id = user_id
         if almanac_id is not None:
             self.almanac_id = almanac_id
-        if description is not None:
-            self.description = description
         if id is not None:
             self.id = id
 
@@ -349,6 +386,9 @@ Page.almanac = relation("Almanac", backref="pages", primaryjoin=and_(Page.almana
 page_modify_trigger = DDL("""CREATE TRIGGER page_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON pages FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_almanacs();""", on='postgres').execute_at('after-create', Page.__table__)
+page_modify_index = DDL("""CREATE TRIGGER page_modify_index
+    AFTER INSERT OR UPDATE OR DELETE ON pages FOR EACH ROW
+    EXECUTE PROCEDURE index_line_update_page();""", on='postgres').execute_at('after-create', Page.__table__)
 
 
 class Comment(Base):
@@ -364,7 +404,19 @@ class Comment(Base):
     text = Column(Unicode)
 
     page = relation("Page", backref="comments")
+comment_modify_index = DDL("""CREATE TRIGGER comment_modify_index
+    AFTER INSERT OR UPDATE OR DELETE ON comments FOR EACH ROW
+    EXECUTE PROCEDURE index_line_update_comment();""", on='postgres').execute_at('after-create', Comment.__table__)
 
+
+class IndexLine(Base):
+    __tablename__ = 'index_lines'
+    id = Column(Integer, primary_key=True)
+    almanac_id = Column(Integer, ForeignKey('almanacs.id'))
+    page_id = Column(Integer, ForeignKey('pages.id'))
+    media_id = Column(Integer, ForeignKey('media.id'))
+    comment_id = Column(Integer, ForeignKey('comments.id'))
+    weighted = Column(WeightedText)
 
 class Media(Base):
     __tablename__ = 'media'
@@ -386,6 +438,9 @@ class Media(Base):
 media_modify_trigger = DDL("""CREATE TRIGGER media_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON media FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_pages();""", on='postgres').execute_at('after-create', Media.__table__)
+media_modify_index = DDL("""CREATE TRIGGER media_modify_index
+    AFTER INSERT OR UPDATE OR DELETE ON media FOR EACH ROW
+    EXECUTE PROCEDURE index_line_update_media();""", on='postgres').execute_at('after-create', Media.__table__)
 
 
 class PDF(Media):

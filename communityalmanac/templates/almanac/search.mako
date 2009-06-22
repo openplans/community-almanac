@@ -34,7 +34,7 @@
           ${h.plural(len(page.comments), 'Comment', 'Comments')}
         </a>
       </div>
-      <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.author}</h4>
+      <h4>${h.link_to(page.name, h.url_for('page_view', almanac=c.almanac, page=page))} by ${page.user.username}</h4>
       <% first_image = page.first_image %>
       %if first_image is not None:
         <div class="page-first-image"><img src="${first_image.small_url}" /></div>
@@ -49,12 +49,9 @@
 ${c.almanac.name}
 </%def>
 <%def name="bookmark()">
-<%doc>
-<!-- We had decided not to show bookmark on almanac view pages. Leaving the markup in case we decide that we need to have the "bookmark in front" effect -->
 <div id="backtoc" class="pngfix">
   <a href="${h.url_for('almanac_view', almanac=c.almanac)}"><span>&laquo; ${c.almanac.name}</span></a>
 </div>
-</%doc>
 </%def>
 <%def name="extra_body()">
   <script>
