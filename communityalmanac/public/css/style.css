@@ -579,7 +579,7 @@ line-height: 1em;
 padding: 5px 5px;
 }
 
-input#s {
+input#query {
 background: transparent;
 border: 0;
 width: 118px;
@@ -1313,7 +1313,7 @@ margin: 0 0 1em;
 }
 
 
-body.fourhundred input#s {
+body.fourhundred input#query {
 width: 378px;
 }
 

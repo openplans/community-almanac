@@ -35,5 +35,5 @@ def init_model(engine):
     meta.engine = engine
 
 
-from communityalmanac.model.almanac import Almanac, Page, Media, PDF, Audio, Image, Story, Map, Comment, Video
+from communityalmanac.model.almanac import Almanac, Page, Media, PDF, Audio, Image, Story, Map, Comment, Video, IndexLine
 from communityalmanac.model.almanac import User, FullUser, AnonymousUser, Group, Permission
