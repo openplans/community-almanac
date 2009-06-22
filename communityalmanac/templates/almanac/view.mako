@@ -49,9 +49,12 @@
 ${c.almanac.name}
 </%def>
 <%def name="bookmark()">
+<%doc>
+<!-- We had decided not to show bookmark on almanac view pages. Leaving the markup in case we decide that we need to have the "bookmark in front" effect -->
 <div id="backtoc" class="pngfix">
   <a href="${h.url_for('almanac_view', almanac=c.almanac)}"><span>&laquo; ${c.almanac.name}</span></a>
 </div>
+</%doc>
 </%def>
 <%def name="extra_body()">
   <script>

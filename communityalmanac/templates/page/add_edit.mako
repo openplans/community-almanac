@@ -35,7 +35,7 @@
 <ul class="page-media-items">
   % if c.media_items:
     %for media_item in c.media_items:
-      <li>${media_item}</li>
+      <li class="page-item">${media_item}</li>
     %endfor
   % endif
 </ul>
@@ -43,19 +43,19 @@
   <div class="mini-page-media-tools">
     <h4>Add:</h4>
     %if c.is_add:
-	  ${h.link_to('Text', h.url_for('media_story_new', almanac=c.almanac), id='mini-text-tool', onclick='return false;')}
-	  ${h.link_to('Image', h.url_for('media_image_new', almanac=c.almanac), id='mini-image-tool', onclick='return false;')}
-	  ${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='mini-map-tool', onclick='return false;')}
-	  ${h.link_to('Audio', h.url_for('media_audio_new', almanac=c.almanac), id='mini-audio-tool', onclick='return false;')}
-	  ${h.link_to('PDF', h.url_for('media_pdf_new', almanac=c.almanac), id='mini-pdf-tool', onclick='return false;')}
-	  ${h.link_to('Video', h.url_for('media_video_new', almanac=c.almanac), id='mini-video-tool', onclick='return false;')}
+	  ${h.link_to('Text', h.url_for('media_story_new', almanac=c.almanac), id='mini-text-tool', onclick='return false;', title='Text')}
+	  ${h.link_to('Image', h.url_for('media_image_new', almanac=c.almanac), id='mini-image-tool', onclick='return false;', title='Image')}
+	  ${h.link_to('Map', h.url_for('media_map_new', almanac=c.almanac), id='mini-map-tool', onclick='return false;', title='Map')}
+	  ${h.link_to('MP3', h.url_for('media_audio_new', almanac=c.almanac), id='mini-audio-tool', onclick='return false;', title='MP3')}
+	  ${h.link_to('PDF', h.url_for('media_pdf_new', almanac=c.almanac), id='mini-pdf-tool', onclick='return false;', title='PDF')}
+	  ${h.link_to('Embed Video', h.url_for('media_video_new', almanac=c.almanac), id='mini-video-tool', onclick='return false;', title='Embed Video')}
     %else:
-	  ${h.link_to('Text', h.url_for('media_story_existing_new', almanac=c.almanac, page=c.page), id='mini-text-tool', onclick='return false;')}
-	  ${h.link_to('Image', h.url_for('media_image_existing_new', almanac=c.almanac, page=c.page), id='mini-image-tool', onclick='return false;')}
-	  ${h.link_to('Map', h.url_for('media_map_existing_new', almanac=c.almanac, page=c.page), id='mini-map-tool', onclick='return false;')}
-	  ${h.link_to('Audio', h.url_for('media_audio_existing_new', almanac=c.almanac, page=c.page), id='mini-audio-tool', onclick='return false;')}
-	  ${h.link_to('PDF', h.url_for('media_pdf_existing_new', almanac=c.almanac, page=c.page), id='mini-pdf-tool', onclick='return false;')}
-	  ${h.link_to('Video', h.url_for('media_video_existing_new', almanac=c.almanac, page=c.page), id='mini-video-tool', onclick='return false;')}
+	  ${h.link_to('Text', h.url_for('media_story_existing_new', almanac=c.almanac, page=c.page), id='mini-text-tool', onclick='return false;', title='Text')}
+	  ${h.link_to('Image', h.url_for('media_image_existing_new', almanac=c.almanac, page=c.page), id='mini-image-tool', onclick='return false;', title='Image')}
+	  ${h.link_to('Map', h.url_for('media_map_existing_new', almanac=c.almanac, page=c.page), id='mini-map-tool', onclick='return false;', title='Map')}
+	  ${h.link_to('MP3', h.url_for('media_audio_existing_new', almanac=c.almanac, page=c.page), id='mini-audio-tool', onclick='return false;', title='MP3')}
+	  ${h.link_to('PDF', h.url_for('media_pdf_existing_new', almanac=c.almanac, page=c.page), id='mini-pdf-tool', onclick='return false;', title='PDF')}
+	  ${h.link_to('Embed Video', h.url_for('media_video_existing_new', almanac=c.almanac, page=c.page), id='mini-video-tool', onclick='return false;', title='Embed Video')}
     %endif
   </div>
   %if c.is_add:
