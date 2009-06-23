@@ -71,6 +71,7 @@ setup(
         "lxml>=2.2",
         "mailer>=0.5",
         "PIL==1.1.6",
+        "recaptcha-client",
     ],
     dependency_links=[
         "https://source.openplans.org/eggs/geopy-0.93dev-r84.tar.gz",

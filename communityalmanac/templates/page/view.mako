@@ -74,6 +74,12 @@
       <label for="body">Comment <span class="required">* </span></label>
       <textarea cols="60" name="text" rows="15"></textarea>
     </div>
+    %if g.captcha_enabled and not c.user:
+      <div class="form-row">
+        <input type="hidden" name="recaptcha_marker_field" />
+        ${c.captcha_html}
+      </div>
+    %endif
     <div class="form-row">
       <h3 id="comment-submit"><a class="comment-link" href="${h.url_for('page_view', almanac=c.almanac, page=c.page)}">Add your Comment</a></h3>
     </div>

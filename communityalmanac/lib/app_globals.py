@@ -18,6 +18,7 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
 """The application's Globals object"""
+from paste.deploy.converters import asbool
 from paste.deploy.converters import aslist
 from pylons import config, request
 from os import path
@@ -36,6 +37,10 @@ class Globals(object):
 
         """
         self.map_key = config['map_key']
+
+        self.captcha_enabled = asbool(config['captcha_enabled'])
+        self.captcha_pubkey = config['captcha_pubkey']
+        self.captcha_privkey = config['captcha_privkey']
 
         self.allow_tags = aslist(config['allow_tags'], sep=',')
         host_whitelist = aslist(config['host_whitelist'], sep=',')

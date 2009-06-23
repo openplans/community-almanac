@@ -24,9 +24,11 @@ from communityalmanac.model import Map
 from communityalmanac.model import Page
 from communityalmanac.model import Story
 from communityalmanac.model import meta
+from formencode.compound import Any
 from formencode import Schema
 from formencode import validators
 from pylons import request, response, session, tmpl_context as c
+from pylons import g
 from pylons.controllers.util import abort, redirect_to
 from pylons.decorators import jsonify
 from pylons.decorators import validate
@@ -39,15 +41,52 @@ from communityalmanac.lib.base import BaseController, render
 from shapely.geometry.geo import asShape
 from shapely import wkb
 import communityalmanac.lib.helpers as h
+import recaptcha.client.captcha
 import simplejson
 
 log = logging.getLogger(__name__)
+
+class LoggedInValidator(validators.FancyValidator):
+    messages = {
+        'invalid': 'must be logged in'
+        }
+
+    def validate_python(self, value, state):
+        if not c.user:
+            raise validators.Invalid(self.message('invalid', state), value, state)
+
+class RecaptchaValidator(validators.FancyValidator):
+    messages = {
+        'invalid': u'Please enter both words'
+        }
+
+    def validate_python(self, field_dict, state):
+        if not g.captcha_enabled:
+            return
+
+        def do_invalid():
+            errormsg = self.message('invalid', state)
+            errors = {'recaptcha_marker_field': errormsg}
+            raise validators.Invalid(errormsg, field_dict, state, error_dict=errors)
+
+        try:
+            captcha_challenge = field_dict['recaptcha_challenge_field']
+            captcha_response = field_dict['recaptcha_response_field']
+        except KeyError, e:
+            do_invalid()
+
+        recaptcha_response = recaptcha.client.captcha.submit(captcha_challenge, captcha_response, g.captcha_privkey, '127.0.0.1')
+        if not recaptcha_response.is_valid:
+            do_invalid()
+
 
 class PageCommentForm(Schema):
     fullname = validators.String(not_empty=True)
     email = validators.Email(not_empty=True)
     website = validators.String()
     text = validators.String(not_empty=True)
+    chained_validators = [Any(RecaptchaValidator(), LoggedInValidator())]
+    allow_extra_fields = True
 
 
 class PageController(BaseController):
@@ -96,12 +135,15 @@ class PageController(BaseController):
         page_navigation = c.page.page_navigation()
         c.next_page = page_navigation['next']
         c.prev_page = page_navigation['prev']
+        if g.captcha_enabled and not c.user:
+            c.captcha_html = h.literal(recaptcha.client.captcha.displayhtml(g.captcha_pubkey))
         return render('/page/view.mako')
 
     @validate(schema=PageCommentForm(), form='view')
     def _do_comment(self, almanac_slug, page_slug):
         almanac = h.get_almanac_by_slug(almanac_slug)
         page = h.get_page_by_slug(almanac, page_slug)
+
         comment = Comment(fullname=self.form_result['fullname'],
                           email=self.form_result['email'],
                           website=self.form_result['website'],
