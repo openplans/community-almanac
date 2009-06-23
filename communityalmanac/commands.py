@@ -125,6 +125,9 @@ def main():
         'map_key': args.map_key,
         'host_whitelist': 'player.soundcloud.com,soundcloud.com,youtube.com,video.google.com,vimeo.com,blip.tv'.split(','),
         'allow_tags': 'embed,object,param'.split(','),
+        'captcha_enabled': 'False',
+        'captcha_pubkey': '???',
+        'captcha_privkey': '???',
     }
 
     if args.setup:
