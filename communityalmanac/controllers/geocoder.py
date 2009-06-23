@@ -31,8 +31,10 @@ class GeocoderController(BaseController):
 
         geoc = geocoders.Google(g.map_key, output_format='json')
 
+        name_based = False
         if not bbox:
             # We don't have a point, so we work with the name...
+            name_based = True
             try:
                 result = GeocoderController._result_with_locality(geoc.geocode(location, exactly_one=False))
                 if not result:
@@ -63,14 +65,20 @@ class GeocoderController(BaseController):
         except exc.NoResultFound:
             almanac = False
         geopoint = Point(lng, lat)
-        return dict(lat=lat, lng=lng, layer=bbox and self._nearby_almanacs(bbox) or False,
+        if bbox:
+            c.almanacs = self._nearby_almanacs(bbox)
+            nearby_kml = render('/almanac/kml.mako')
+        else:
+            nearby_kml = False
+        return dict(lat=lat, lng=lng, layer=nearby_kml,
                     geojson=simplejson.dumps(geopoint.__geo_interface__),
                     authoritative_name=authoritative_name,
+                    name_based=name_based,
                     almanac=almanac)
 
     def _nearby_almanacs(self, bounds):
 
-        return meta.Session.query(Almanac).join(Almanac.pages).distinct().filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bounds.to_wkb())), storage_SRID))).limit(10).all() and True or False
+        return meta.Session.query(Almanac).join(Almanac.pages).distinct().filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bounds.to_wkb())), storage_SRID))).limit(10).all()
 
     @staticmethod
     def _result_with_locality(gen):
