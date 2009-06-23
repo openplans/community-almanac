@@ -264,7 +264,7 @@ $(document).ready(function(){
           replaceFeatures(almanacLayer, newfeatures);
         }
         var zoom = map.getZoom();
-        if (!data.lat || !data.lng || !data.authoritative_name || zoom < 7) {
+        if (!data.lat || !data.lng || !data.authoritative_name || ((zoom < 7) && (!data.name_based))) {
           // Problem geocoding, we need to disable the submit button
           $('#almanac-submit').val('Add a Page').attr('disabled', 'disabled').addClass('disabled');
         }
