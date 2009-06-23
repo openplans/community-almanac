@@ -178,6 +178,10 @@ class Almanac(Base):
                 except exc.NoResultFound:
                     return name
 
+    @staticmethod
+    def search(query):
+        pass
+
     def new_page(self, user, **fields):
         assert('almanac_id' not in fields)
         assert('user_id' not in fields)
@@ -321,7 +325,7 @@ class Page(Base):
         return query.one()
 
     @staticmethod
-    def latest(limit=10, offset=0):
+    def latest(limit=8, offset=0):
         return meta.Session.query(Page).filter(Page.published==True).order_by(Page.modified.desc()).limit(limit).offset(offset).all()
 
     @property
