@@ -135,7 +135,7 @@ class PageController(BaseController):
         page_navigation = c.page.page_navigation()
         c.next_page = page_navigation['next']
         c.prev_page = page_navigation['prev']
-        if g.captcha_enabled:
+        if g.captcha_enabled and not c.user:
             c.captcha_html = h.literal(recaptcha.client.captcha.displayhtml(g.captcha_pubkey))
         return render('/page/view.mako')
 
