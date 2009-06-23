@@ -26,7 +26,7 @@
   <div>
     <ul class="page-items">
       %for media_item in c.media_items:
-        <li>${media_item}</li>
+        <li class="page-item">${media_item}</li>
       %endfor
     </ul>
   </div>
@@ -81,7 +81,7 @@
       </div>
     %endif
     <div class="form-row">
-      <h3 id="comment-submit"><a class="comment-link" href="${h.url_for('page_view', almanac=c.almanac, page=c.page)}"><span>Leave a Comment</span></a></h3>
+      <h3 id="comment-submit"><a class="comment-link" href="${h.url_for('page_view', almanac=c.almanac, page=c.page)}">Add your Comment</a></h3>
     </div>
   </form>
 </div>
@@ -106,12 +106,12 @@ ${c.page.name} - ${c.almanac.name}
 <%def name="pagenav()">
 <%
 if c.prev_page:
-    ptext = c.prev_page.name
+    ptext = h.literal('&#171; ' +c.prev_page.name)
     purl = h.url_for('page_view', almanac=c.almanac, page=c.prev_page)
 else:
     ptext = purl = None
 if c.next_page:
-    ntext = c.next_page.name
+    ntext = h.literal(c.next_page.name + ' &#187;')
     nurl = h.url_for('page_view', almanac=c.almanac, page=c.next_page)
 else:
     ntext = nurl = None
