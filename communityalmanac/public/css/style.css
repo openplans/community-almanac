@@ -844,6 +844,12 @@ ul.almanac-pages div.almanac-excerpt {
 margin-right: 110px;
 }
 
+.page-first-image {
+float: left;
+margin: 0 10px 10px 0;
+border: 2px solid #d0c9b9;
+}
+
 #almanac-pagination {
 position: relative;
 bottom: -80px;
