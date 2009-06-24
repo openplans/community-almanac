@@ -856,6 +856,12 @@ bottom: -80px;
 color: #70818c;
 }
 
+.kml-link {
+display: block;
+padding: 0 0 20px;
+background: url(/img/kml-icon.png) 0 50% no-repeat;
+}
+
 /*view page */
 h2.page-title {
 color: #00ace6;
