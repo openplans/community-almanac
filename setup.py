@@ -78,7 +78,7 @@ setup(
         "https://source.openplans.org/eggs/geopy-0.93dev-r84.tar.gz",
         "http://dist.repoze.org/PIL-1.1.6.tar.gz",
         "https://source.openplans.org/eggs/FormAlchemy-1.2.tar.gz",
-        "http://www.mindrot.org/files/py-bcrypt/py-bcrypt-0.1.tar.gz",
+        "http://www.mindrot.org/files/py-bcrypt/py-bcrypt-0.1.tar.gz#egg=bcrypt-0.1",
     ],
     setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),
