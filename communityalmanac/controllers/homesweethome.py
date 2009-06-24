@@ -29,7 +29,8 @@ class HomesweethomeController(BaseController):
         almanac_query = meta.Session.query(Almanac).join(Almanac.pages).distinct().order_by(Almanac.modified.desc())
         h.setup_pagination(almanac_query, page_idx)
         c.almanacs = c.pagination.items
-        c.pages = Page.latest()
+        # Almanacs are slightly smaller on the page, we need to show slightly less so that the almanacs are resting on the shelf.
+        c.pages = Page.latest(limit=(len(c.almanacs)-2))
         c.is_homepage = True
         return render('/home.mako')
 
