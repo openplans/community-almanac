@@ -330,15 +330,15 @@ margin: auto;
 }
 
 ul#footer-nav {
-float: right;
+float: left;
 list-style: none;
-margin: 20px 20px 40px;
+margin: 20px 20px 40px 0;
 font-size: .9em;
 }
 
 ul#footer-nav li {
 float: left;
-margin-left: 1.5em;
+margin-right: 1.5em;
 }
 
 ul#footer-nav a {
@@ -1230,7 +1230,9 @@ color: #ffe1a6;
 background: url(/img/torn-paper-top.png) no-repeat;
 width: 260px;
 float: right;
-margin: 65px 0 0;
+margin: 65px 0;
+height: 650px;
+overflow: visible;
 }
 
 #recent-activity h2 {
