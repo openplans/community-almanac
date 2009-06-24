@@ -113,9 +113,6 @@ class AlmanacController(BaseController):
     def _search(self, almanac_slug, query=''):
         redirect_to(h.url_for('almanac_search', almanac_slug=almanac_slug, query=request.params.get('query','')))
 
-    def index(self):
-        c.indexlines = s.query(func.ts_stat('SELECT weighted FROM index_lines WHERE almanac_id = %d' % c.almanac.id))
-
     @jsonify
     def center(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
