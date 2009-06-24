@@ -20,7 +20,11 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <h2 class="page-title">${c.page.name}</h2>
+% if c.page.on_behalf_of:
+<div class="page-meta">By ${c.page.user.username} <span class="onbehalf">(on behalf of ${c.page.on_behalf_of})</span> | ${c.page.creation_date_string} | <a href="#comments">${h.plural(len(c.page.comments), 'Comment', 'Comments')}</a></div>
+% else:
 <div class="page-meta">By ${c.page.author} | ${c.page.creation_date_string} | <a href="#comments">${h.plural(len(c.page.comments), 'Comment', 'Comments')}</a></div>
+% endif
 <a href="${h.url_for('page_edit', almanac=c.almanac, page=c.page)}" title="Edit Page">Edit</a>
 %if c.media_items:
   <div>
