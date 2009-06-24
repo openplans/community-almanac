@@ -180,9 +180,11 @@ class Almanac(Base):
                 except exc.NoResultFound:
                     return name
 
-    @staticmethod
-    def search(query):
-        pass
+    def search(self, query):
+        rank = func.ts_rank(IndexLine.weighted, func.plainto_tsquery(query))
+        maxrank = func.max(rank).label('maxrank')
+        stmt = s.query(IndexLine.page_id, maxrank).filter(IndexLine.almanac_id==self.id).group_by(IndexLine.almanac_id, IndexLine.page_id).filter(rank > 0).subquery()
+        return s.query(Page).join(stmt).filter(Page.published==True).order_by(stmt.c.maxrank.desc())
 
     def new_page(self, user, **fields):
         assert('almanac_id' not in fields)

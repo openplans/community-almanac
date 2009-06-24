@@ -104,11 +104,7 @@ class AlmanacController(BaseController):
             page_idx = int(page_idx)
         except ValueError:
             page_idx = 1
-        rank = func.ts_rank(IndexLine.weighted, func.plainto_tsquery(query))
-        maxrank = func.max(rank).label('maxrank')
-        stmt = s.query(IndexLine.page_id, maxrank).filter(IndexLine.almanac_id==c.almanac.id).group_by(IndexLine.almanac_id, IndexLine.page_id).filter(rank > 0).subquery()
-        pages_query = s.query(Page).join(stmt).filter(Page.published==True).order_by(stmt.c.maxrank.desc())
-        c.pagination = h.setup_pagination(pages_query, page_idx)
+        c.pagination = h.setup_pagination(c.almanac.search(query), page_idx)
         c.pages = c.pagination.items
         c.npages = c.pagination.item_count
         return render('/almanac/search.mako')
