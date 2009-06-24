@@ -1106,7 +1106,7 @@ body.home #intro .map .olPopupContent {
 padding: 0 0 0 5px !important;
 }
 
-body.home #intro .map .olPopupContent .olPopupCloseBox {
+body.home #intro .map .olPopupCloseBox {
 background:transparent url(/img/close.gif) no-repeat scroll 0 0;
 }
 
