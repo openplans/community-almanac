@@ -19,7 +19,7 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/media/base_item.mako" />
-<div class="mediacontent map" id="pagemedia_${c.map.id}">
+<div style="height: 400px" class="mediacontent map" id="pagemedia_${c.map.id}">
 </div>
 
 <%def name="media_edit_controls()">
