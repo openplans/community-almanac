@@ -801,7 +801,7 @@ padding: 0;
 
 ul.almanac-pages li {
 margin: 1em 0;
-padding: 0;
+padding: 0 0 1em;
 list-style-type: none;
 border-bottom: 1px solid #99b0bf;
 }
@@ -1106,6 +1106,10 @@ body.home #intro .map .olPopupContent {
 padding: 0 0 0 5px !important;
 }
 
+body.home #intro .map .olPopupContent .olPopupCloseBox {
+background:transparent url(/img/close.gif) no-repeat scroll 0 0;
+}
+
 body.home #intro .map .almanac-timestamp,
 body.home #intro .map .almanac-pagecount  {
 white-space: nowrap;
@@ -1270,7 +1274,7 @@ ul#pages a.page-comments {
 padding-left: 20px;
 margin-left: 0.3em;
 color: #b2b32d;
-background: url(/img/comments-icon.png) 0 50% no-repeat;
+background: url(/img/comments-icon.gif) 0 50% no-repeat;
 }
 
 div#shelf {
