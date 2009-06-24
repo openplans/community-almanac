@@ -69,7 +69,7 @@ ${c.almanac.name}
         map.addLayer(baseLayer);
         var center = new OpenLayers.LonLat(${c.lng}, ${c.lat});
         center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-        var pagesLayer = new OpenLayers.Layer.GML('pages', "${h.url_for('pages_kml', almanac=c.almanac)}", {
+        var pagesLayer = new OpenLayers.Layer.GML('pages', "${h.url_for('pages_kml_search', almanac=c.almanac, query=c.query)}", {
           format: OpenLayers.Format.KML,
           projection: new OpenLayers.Projection('EPSG:4326'),
           styleMap: new OpenLayers.StyleMap({

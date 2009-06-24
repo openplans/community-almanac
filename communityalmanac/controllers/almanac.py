@@ -107,6 +107,7 @@ class AlmanacController(BaseController):
         c.pagination = h.setup_pagination(c.almanac.search(query), page_idx)
         c.pages = c.pagination.items
         c.npages = c.pagination.item_count
+        c.query = query
         return render('/almanac/search.mako')
 
     def _search(self, almanac_slug, query=''):
