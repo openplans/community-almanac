@@ -122,3 +122,26 @@ else:
 %>
 ${parent.pagenav(purl, ptext, nurl, ntext)}
 </%def>
+<%def name="sidebar()">
+<div class="sidebar">
+  % if c.almanac:
+  <h3 id="add-page-bttn">
+    ${h.link_to(u'Add a page to this almanac!', h.url_for('page_create', almanac=c.almanac))}
+  </h3>
+  <form action="${h.url_for('almanac_search', almanac=c.almanac, query='form')}" method="post" id="searchform">
+    <input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="Search&hellip;" class="text" name="query" id="query"/>
+    <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
+  </form>
+  % endif
+  % if c.latest_pages:
+   <div id="recent-activity" class="pngfix">
+     <h2>Recently Updated Pages</h2><!-- should this link to a list of all pages sorted by update time? -->
+     <ul id="pages">
+       % for page in c.latest_pages:
+       <li class="selfclear"><a class="page-title" href="${h.url_for('page_view', almanac_slug=page.almanac.slug, page_slug=page.slug)}">${page.name}</a> <span class="page-timestamp">${page.updated_date_string}</span> <a class="page-comments" href="${h.url_for('page_view', almanac_slug=page.almanac.slug, page_slug=page.slug)}#comments">${h.plural(len(page.comments), 'comment', 'comments')}</a> <span class="page-almanac">(${page.almanac.name})</span></li>
+       % endfor
+     </ul><!-- /#pages -->
+   </div><!-- /#recent-activity -->
+  % endif
+</div>
+</%def>
