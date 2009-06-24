@@ -52,7 +52,7 @@ class UserController(BaseController):
     @dispatch_on(POST='_register')
     def register(self):
         if request.environ.get('repoze.who.identity') == None:
-            return render('/user/register.mako')
+            redirect_to(h.url_for('login'))
         redirect_to(h.url_for('home'))
 
     @validate(schema=UserRegistrationSchema(), form='register')
