@@ -66,7 +66,8 @@ def make_map():
 
     map.connect('home', '/', controller='homesweethome', action='home')
     map.connect('almanacs_kml', '/api/kml/almanacs', controller='homesweethome', action='almanacs_kml')
-    map.connect('pages_kml', '/api/kml/:almanac_slug/pages', controller='almanac', action='pages_kml', _filter=almanac_expand)
+    map.connect('pages_kml', '/api/kml/:almanac_slug/pages', controller='almanac', action='pages_kml', query=None, _filter=almanac_expand)
+    map.connect('pages_kml_search', '/api/kml/:almanac_slug/pages/*query', controller='almanac', action='pages_kml', _filter=almanac_expand)
     # FIXME not sure if we should keep this url scheme
     map.connect('login', '/login', controller='user', action='login')
     map.connect('user_register', '/signup', controller='user', action='register')

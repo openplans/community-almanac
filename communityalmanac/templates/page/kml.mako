@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document>
-  %for page in c.almanac.pages:
+  %for page in c.pages:
     %for map_media in page.map_media:
       <Placemark>
         <name>${page.name}</name>

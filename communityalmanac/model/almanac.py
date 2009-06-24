@@ -34,7 +34,7 @@ from pylons import config
 
 from uuid import uuid4
 
-from meta import Base, storage_SRID
+from meta import Base, storage_SRID, Session as s
 from sqlgeotypes import POINT
 from sqlfulltexttypes import WeightedText
 from shapely.geometry.point import Point

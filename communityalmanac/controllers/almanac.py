@@ -120,6 +120,10 @@ class AlmanacController(BaseController):
         loc = c.almanac.location
         return dict(lat=loc.x, lng=loc.y)
 
-    def pages_kml(self, almanac_slug):
+    def pages_kml(self, almanac_slug, query):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
+        if query:
+            c.pages = c.almanac.search(query).all()
+        else:
+            c.pages = c.almanac.pages
         return render('/page/kml.mako')
