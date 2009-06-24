@@ -115,6 +115,7 @@ class AlmanacController(BaseController):
 
     def index(self):
         c.indexlines = s.query(func.ts_stat('SELECT weighted FROM index_lines WHERE almanac_id = %d' % c.almanac.id))
+
     @jsonify
     def center(self, almanac_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
@@ -127,4 +128,5 @@ class AlmanacController(BaseController):
             c.pages = c.almanac.search(query).all()
         else:
             c.pages = c.almanac.pages
+        response.content_type = 'application/vnd.google-earth.kml+xml kml'
         return render('/page/kml.mako')

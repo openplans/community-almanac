@@ -8,10 +8,10 @@
       <description>
         <![CDATA[
         <div>
-          <a class="almanac-title" href="${h.url_for('almanac_view', almanac=almanac)}">${almanac.name}</a>
+          <a class="almanac-title" href="${h.url_for('almanac_view', almanac=almanac, qualified=True)}">${almanac.name}</a>
           <span class="almanac-pagecount">${h.plural(len(almanac.pages), 'page', 'pages')}</span>
           <span class="almanac-timestamp">Updated ${almanac.updated_date_string}</span>
-          <a class="addpage" href="${h.url_for('page_create', almanac=almanac)}">Add page</a>
+          <a class="addpage" href="${h.url_for('page_create', almanac=almanac, qualified=True)}">Add page</a>
         </div>
         ]]>
       </description>

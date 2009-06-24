@@ -113,6 +113,10 @@ ${c.almanac.name}
     <input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="Search&hellip;" class="text" name="query" id="query"/>
     <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
   </form>
+  <p>
+    <img src="/img/kml-icon.png" width="16" height="16" />
+    <a href="${h.url_for('pages_kml_search', almanac=c.almanac, query=c.query)}">View in Google Earth (KML)</a>
+  </p>
 </div>
 </%def>
 

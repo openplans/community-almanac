@@ -199,3 +199,8 @@ class PageController(BaseController):
         c.page.on_behalf_of = on_behalf_of
         meta.Session.commit()
         return render('/page/behalf.mako')
+
+    def all_pages_kml(self, query):
+        c.pages = Page.search_all(query).all()
+        response.content_type = 'application/vnd.google-earth.kml+xml kml'
+        return render('/page/kml.mako')

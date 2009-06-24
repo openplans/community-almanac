@@ -322,6 +322,13 @@ class Page(Base):
                     return name
 
     @staticmethod
+    def search_all(query):
+        rank = func.ts_rank(IndexLine.weighted, func.plainto_tsquery(query))
+        maxrank = func.max(rank).label('maxrank')
+        stmt = s.query(IndexLine.page_id, maxrank).group_by(IndexLine.almanac_id, IndexLine.page_id).filter(rank > 0).subquery()
+        return s.query(Page).join(stmt).filter(Page.published==True).order_by(stmt.c.maxrank.desc())
+
+    @staticmethod
     def get_by_slug(almanac, slug):
         query = meta.Session.query(Page)
         query = query.filter(Page.almanac_id == almanac.id)
