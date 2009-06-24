@@ -858,7 +858,7 @@ color: #70818c;
 
 .kml-link {
 display: block;
-padding: 0 0 20px;
+padding: 0 0 0 20px;
 background: url(/img/kml-icon.png) 0 50% no-repeat;
 }
 
