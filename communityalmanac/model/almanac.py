@@ -30,6 +30,7 @@ from sqlalchemy.orm import relation
 from sqlalchemy.orm import exc
 from sqlalchemy.orm import column_property
 from sqlalchemy import and_
+from pylons import config
 
 from uuid import uuid4
 
@@ -39,6 +40,7 @@ from sqlfulltexttypes import WeightedText
 from shapely.geometry.point import Point
 from shapely import wkb
 from binascii import a2b_hex
+import hmac, sha
 import mimetypes
 import PIL.Image
 import pyproj
@@ -715,7 +717,12 @@ class FullUser(User):
             # Appropriate test for old style passwords that authenticates
             self.password = default_password_hash(password)
             meta.Session.commit()
-        return default_password_compare(password, self.password)
+        success, scheme = default_password_compare(password, self.password)
+        if success and scheme == 'LEGACY':
+            # Take the time to upgrade user passwords in the background
+            self.password = default_password_hash(password)
+            meta.Session.commit()
+        return success
 
     def generate_key(self):
         if not self.reset_key:
@@ -796,12 +803,12 @@ def default_password_compare(cleartext_password, stored_password_hash):
 
     if scheme == 'CRYPT':
         try:
-            from bcrypt import bcrypt
+            import bcrypt
         except ImportError:
             # We blow up so that Sysadmins can detect the error quicker and get
             # the problem fixed.
             raise NotImplementedError("Unable to load bcrypt module for Blowfish hashes")
-        return stored_password_hash == bcrypt.hashpw(cleartext_password, stored_password_hash)
+        return stored_password_hash == bcrypt.hashpw(cleartext_password, stored_password_hash), scheme
 
     # The salted SHA hashes work the same.  The only difference is how to find
     # the suitable hash module.
@@ -826,7 +833,7 @@ def default_password_compare(cleartext_password, stored_password_hash):
         salt = hash_bytes[32:]
         hasher = sha256(cleartext_password)
         hasher.update(salt)
-        return stored_password_hash == urlsafe_b64encode(hasher.digest() + salt)
+        return stored_password_hash == urlsafe_b64encode(hasher.digest() + salt), scheme
 
     if scheme == 'SSHA':
         try:
@@ -835,7 +842,7 @@ def default_password_compare(cleartext_password, stored_password_hash):
             try:
                 from sha import new as sha1
             except ImportError:
-                return False
+                return False, scheme
         try:
             hash_bytes = urlsafe_b64decode(stored_password_hash)
         except TypeError:
@@ -847,7 +854,7 @@ def default_password_compare(cleartext_password, stored_password_hash):
         salt = hash_bytes[20:]
         hasher = sha1(cleartext_password)
         hasher.update(salt)
-        return stored_password_hash == urlsafe_b64encode(hasher.digest() + salt)
+        return stored_password_hash == urlsafe_b64encode(hasher.digest() + salt), scheme
 
     if scheme == 'SHA':
         try:
@@ -868,10 +875,17 @@ def default_password_compare(cleartext_password, stored_password_hash):
             computed_hash = urlsafe_b64encode(hasher.digest())
         else:
             computed_hash = hasher.hexdigest()
-        return stored_password_hash == computed_hash
+        return stored_password_hash == computed_hash, scheme
+
+    if scheme == 'LEGACY':
+        def get_secret():
+            return config.get('legacy_hmac_secret', 'PUTYOURSECRETHERE')
+        sha_key = hmac.new(get_secret(), cleartext_password, sha)
+        computed_hash = sha_key.hexdigest()
+        return stored_password_hash == computed_hash, scheme
 
     if scheme == 'CLEAR':
-        return stored_password_hash == cleartext_password
+        return stored_password_hash == cleartext_password, scheme
     # While we support reading of unsalted SHA-1 and cleartext passwords for
     # legacy databases support, we won't generate these unsecure formats.
 
@@ -911,7 +925,7 @@ def default_password_hash(cleartext_password, scheme='BESTAVAILABLE'):
         # Since bcrypt is the strongest cryptographically, we'll default to it
         # if available.
         try:
-            from bcrypt import bcrypt
+            import bcrypt
         except ImportError:
             bcrypt = None
         if bcrypt:
@@ -948,7 +962,7 @@ def default_password_hash(cleartext_password, scheme='BESTAVAILABLE'):
     # cases.
     if scheme == 'CRYPT':
         try:
-            from bcrypt import bcrypt
+            import bcrypt
         except ImportError:
             raise NotImplementedError("Unable to load bcrypt module for Blowfish hashes")
         return "{CRYPT}%s" % bcrypt.hashpw(cleartext_password, bcrypt.gensalt())
