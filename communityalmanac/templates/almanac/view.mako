@@ -24,7 +24,7 @@
 % if c.pages:
 <h3 id="frontispiece-pages">
   <span><strong>Table of Contents</strong>
-    <em>${h.plural(len(c.pages), 'page', 'pages')}</em>
+    <em>${h.plural(c.npages, 'page', 'pages')}</em>
   </span></h3>
   <ul class="almanac-pages">
     % for page in c.pages:
