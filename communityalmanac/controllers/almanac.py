@@ -105,7 +105,6 @@ class AlmanacController(BaseController):
         c.toc_pagination_data = h.pagination_data(pagination)
         c.pages = pagination.items
         c.npages = pagination.item_count
-        cur_page = pagination.page
         return render('/almanac/view.mako')
 
     @dispatch_on(POST='_search')
@@ -118,9 +117,11 @@ class AlmanacController(BaseController):
             page_idx = int(page_idx)
         except ValueError:
             page_idx = 1
-        c.pagination = h.setup_pagination(c.almanac.search(query), page_idx)
-        c.pages = c.pagination.items
-        c.npages = c.pagination.item_count
+        per_page = 10
+        pagination = PaginationPage(c.almanac.search(query), page=page_idx, items_per_page=per_page)
+        c.pagination_data = h.pagination_data(pagination)
+        c.pages = pagination.items
+        c.npages = pagination.item_count
         c.query = query
         return render('/almanac/search.mako')
 

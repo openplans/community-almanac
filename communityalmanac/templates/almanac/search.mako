@@ -44,7 +44,18 @@
     % endfor
   </ul>
 % endif
-<p id="almanac-pagination">Showing ${c.showing_start}-${c.showing_end} of ${c.npages}.</p>
+<p id="page-list-pagination" class="selfclear">
+%if c.pagination_data.get('prev'):
+<% start, end, page_idx = c.pagination_data['prev'] %>
+<span class="prev"><a href="${'%s?page=%s' % (request.path_url, page_idx)}">&#171; ${start}-${end}</a></span>
+%endif
+<% start, end = c.pagination_data['showing'] %>
+<span>Showing ${start}-${end} of ${c.pagination_data['total']}</span>
+%if c.pagination_data.get('next'):
+<% start, end, page_idx = c.pagination_data['next'] %>
+<span class="next"><a href="${'%s?page=%s' % (request.path_url, page_idx)}">${start}-${end} &#187;</a></span>
+%endif
+</p>
 <%def name="title()">
 ${c.almanac.name}
 </%def>
@@ -121,5 +132,4 @@ ${c.almanac.name}
 </%def>
 
 <%def name="pagenav()">
-${parent.pagenav(c.prev_page_url, c.prev_page_text, c.next_page_url, c.next_page_text)}
 </%def>
