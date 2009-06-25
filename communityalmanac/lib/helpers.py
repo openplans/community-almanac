@@ -221,3 +221,35 @@ def setup_pagination(collection, page=1, per_page=10):
     c.showing_end = min(c.showing_end, c.pagination.item_count)
     c.items = c.pagination.items
     return c.pagination
+
+def pagination_data(pagination):
+    """return a dictionary with the pagination data returned in a dict
+
+    will have 3 keys, and the values will be a tuple with the start/end/page_idx
+    dict(prev=(start, end, prev_page_id),
+         next=(start, end, start_page_id),
+         showing=(start, end),
+         total=n,
+         )
+    """
+    result = {}
+    cur_page = pagination.page
+    next_page = pagination.next_page
+    prev_page = pagination.previous_page
+    per_page = pagination.items_per_page
+    if next_page:
+        start = ((next_page-1) * per_page) + 1
+        end = start + per_page - 1
+        end = min(end, pagination.item_count)
+        result['next'] = (start, end, next_page)
+    if prev_page:
+        start = (prev_page-1) * per_page
+        end = (start + per_page - 1) + 1
+        start = max(start, 1)
+        result['prev'] = (start, end, prev_page)
+    showing_start = ((cur_page-1) * per_page) + 1
+    showing_end = cur_page * per_page
+    showing_end = min(showing_end, pagination.item_count)
+    result['showing'] = (showing_start, showing_end)
+    result['total'] = pagination.item_count
+    return result

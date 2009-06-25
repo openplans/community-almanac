@@ -83,15 +83,29 @@ class AlmanacController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         loc = c.almanac.location_4326
         c.lng, c.lat = loc.x, loc.y
+
         page_idx = request.GET.get('page', 1)
         try:
             page_idx = int(page_idx)
         except ValueError:
             page_idx = 1
+
         pages_query = meta.Session.query(Page).filter(Page.almanac_id==c.almanac.id).filter(Page.published == True).order_by(Page.modified.desc())
-        c.pagination = h.setup_pagination(pages_query, page_idx)
-        c.pages = c.pagination.items
-        c.npages = c.pagination.item_count
+        try:
+            c.next_page = pages_query[:1][0]
+        except IndexError:
+            pass
+        else:
+            c.next_page_url = h.url_for('page_view', almanac=c.almanac, page=c.next_page)
+            c.next_page_text = c.next_page.name
+
+        from webhelpers.paginate import Page as PaginationPage
+        per_page = 10
+        pagination = PaginationPage(pages_query, page=page_idx, items_per_page=per_page)
+        c.toc_pagination_data = h.pagination_data(pagination)
+        c.pages = pagination.items
+        c.npages = pagination.item_count
+        cur_page = pagination.page
         return render('/almanac/view.mako')
 
     @dispatch_on(POST='_search')
