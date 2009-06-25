@@ -44,16 +44,16 @@
     % endfor
   </ul>
 % endif
-<p id="almanac-pagination">
+<p id="page-list-pagination" class="selfclear">
 %if c.toc_pagination_data.get('prev'):
 <% start, end, page_idx = c.toc_pagination_data['prev'] %>
-<span><a href="${'%s?page=%s' % (request.path_url, page_idx)}">${start}-${end}</a></span>
+<span class="prev"><a href="${'%s?page=%s' % (request.path_url, page_idx)}">&#171; ${start}-${end}</a></span>
 %endif
 <% start, end = c.toc_pagination_data['showing'] %>
-<span>Showing ${start}-${end} of ${c.toc_pagination_data['total']}.</span>
+<span>Showing ${start}-${end} of ${c.toc_pagination_data['total']}</span>
 %if c.toc_pagination_data.get('next'):
 <% start, end, page_idx = c.toc_pagination_data['next'] %>
-<span><a href="${'%s?page=%s' % (request.path_url, page_idx)}">${start}-${end}</a></span>
+<span class="next"><a href="${'%s?page=%s' % (request.path_url, page_idx)}">${start}-${end} &#187;</a></span>
 %endif
 </p>
 <%def name="title()">

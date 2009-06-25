@@ -29,7 +29,7 @@
 					<h3>Anyone can contribute!</h3>
 					<p>And it's free! Just find your community on the map and start adding to its almanac.</p>
 					<p>If your community has no almanac, simply find your community on the map and add a page. Your new almanac will be created automatically.</p>
-					<h3 class="start-by">Start by finding your community on the map.</h3>
+					<h3 class="start-by pngfix">Start by finding your community on the map.</h3>
 					<p class="prevnext"><a class="next-panel" href="${h.url_for('almanac_create')}">Next &#187;</a></p>
 				</div><!-- /.panel -->
 				<div class="panel inactive">
@@ -37,7 +37,7 @@
 					<p>You do! Add pages and fill them with your content. Read other people's pages and post your replies. Get reacquainted with your town.</p>
 					<h3>Make Local connections.</h3>
 					<p>Community Almanac is a fun way to swap stories with your neighbors. Tell 'em about your favorite sledding hill or swimming hole, the best tree to climb or the coolest place to play stickball. Record memories from your life, and make connections in your community.</p>
-					<h3 class="start-by">Start by finding your community on the map.</h3>
+					<h3 class="start-by pngfix">Start by finding your community on the map.</h3>
 					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-panel" href="#">Next &#187;</a></p>
 				</div><!-- /.panel -->
 				<div class="panel inactive">
@@ -45,7 +45,7 @@
 					<p>Adding text, pictures, audio, video and PDFs to pages is easy! Upload video of your grandfather speaking about his childhood or a recording of your friend singing at a local bar. Paste a poem you wrote while floating down the river in a canoe!</p>
 					<h3>Connect stories with real places.</h3>
 					<p>The mapping tools let you pinpoint locations in your community. Draw a map to show a street corner, bike trail, stretch of shore front, or even the course your canoe floated down that river.</p>
-					<h3 class="start-by">Start by finding your community on the map.</h3>
+					<h3 class="start-by pngfix">Start by finding your community on the map.</h3>
 					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-panel" href="#">Next &#187;</a></p>
 				</div><!-- /.panel -->
 				<div class="panel inactive">
@@ -53,7 +53,7 @@
 					<p>The Orton Family Foundation coined the term "community heart <span class="amp">&#038;</span> soul" to describe the people, places, history, traditions, issues, and values that make your community unique. Community Almanac's non-profit sponsors (<a href="http://www.orton.org/">Orton Family Foundation</a> and <a href="http://openplans.org/">The Open Planning Project</a>) want to help communities articulate, implement and steward their heart & soul.</p>
 					<h3>And it's available totally free!</h3>
 					<p>All you have to do is <a href="${h.url_for('user_register')}">sign up</a> for a free, no-strings-attached account.</p>
-					<h3 class="start-by">Start by finding your community on the map.</h3>
+					<h3 class="start-by pngfix">Start by finding your community on the map.</h3>
 					<p class="prevnext"><a class="prev-panel" href="#">&#171; Previous</a> <a class="next-signup" href="${h.url_for('user_register')}">Sign Up!</a></p>
 				</div><!-- /.panel -->
 			</div><!-- /.panel-wrap -->
@@ -96,7 +96,7 @@
     %endif
     Showing ${c.showing_start}-${c.showing_end} Recently Updated Almanacs
     %if c.next_page_url:
-      <a class="next" href="${c.next_page_url}">&#187; ${c.next_page_text}</a>
+      <a class="next" href="${c.next_page_url}">${c.next_page_text} &#187;</a>
     %endif
   </div>
 </div><!-- /#shelf -->

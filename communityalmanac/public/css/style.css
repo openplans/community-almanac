@@ -286,7 +286,7 @@ padding: 0 235px 0 0;
 .sidebar {
 float: right;
 text-align: left;
-width: 160px;
+width: 260px;
 margin: 0 0 20px 20px;
 }
 
@@ -304,7 +304,7 @@ font-size: 0.8em;
 display: block;
 width: 240px;
 float: left;
-text-align: right;
+text-align: left;
 }
 
 #nav-top span.next,
@@ -324,9 +324,8 @@ background: url(/img/cancel-icon.png) 100% 50% no-repeat;
 
 #footer {
 clear: both;
-width: 980px;
 text-align: left;
-margin: auto;
+margin: auto 7%;
 }
 
 ul#footer-nav {
@@ -557,7 +556,7 @@ padding: 5px 5px;
 input#query {
 background: transparent;
 border: 0;
-width: 118px;
+width: 218px;
 margin: 0;
 padding: 0;
 font-family: georgia, serif;
@@ -626,7 +625,7 @@ left: 4px;
 background: url(/img/media-drag-bg.png);
 overflow: hidden;
 text-indent: -9999em;
-cursor: pointer;
+cursor: move;
 display: none;
 }
 
@@ -850,10 +849,38 @@ margin: 0 10px 10px 0;
 border: 2px solid #d0c9b9;
 }
 
-#almanac-pagination {
+#page-list-pagination {
+background: #d0c9b9;
+text-align: center;
 position: relative;
-bottom: -80px;
-color: #70818c;
+line-height: 1em;
+padding: 0.5em;
+margin: 30px 0;
+}
+
+#page-list-pagination .prev {
+display: block;
+position: absolute;
+top: 0;
+left: 0;
+bottom: 0;
+background: #033459 url(/img/bttn-bg-navy.jpg) repeat;
+}
+
+#page-list-pagination .next {
+display: block;
+position: absolute;
+top: 0;
+right: 0;
+bottom: 0;
+background: #033459 url(/img/bttn-bg-navy.jpg) repeat;
+}
+
+#page-list-pagination .prev a,
+#page-list-pagination .next a {
+display: block;
+padding: 0.5em 1em;
+text-decoration: none;
 }
 
 .kml-link {
@@ -985,7 +1012,7 @@ font-size: 1.6em;
 body.home #intro .panel h3.start-by {
 font-size: 1.6em;
 background: transparent url(/img/paper-icon-64.png) 0 0 no-repeat;
-min-height: 64px;
+padding-bottom: 20px;
 padding-left: 70px;
 color: #b2b32d;
 }
@@ -1235,6 +1262,12 @@ height: 650px;
 overflow: visible;
 }
 
+.sidebar #recent-activity {
+background: url(/img/torn-paper.png) no-repeat;
+height: auto;
+margin: 30px 0;
+}
+
 #recent-activity h2 {
 color: #ff6040;
 font-size: 1.1em;
@@ -1292,7 +1325,6 @@ color: #340f03;
 margin: 0 auto;
 position: relative;
 left: -145px;
-font-size: 1.2em;
 line-height: 1em;
 padding: 0.5em;
 width: 684px;
@@ -1305,7 +1337,7 @@ top: 0;
 left: 0;
 bottom: 0;
 background: #033459 url(/img/bttn-bg-navy.jpg) repeat;
-padding: 0.5em;
+padding: 0.5em 1em;
 text-decoration: none;
 }
 
@@ -1316,7 +1348,7 @@ top: 0;
 right: 0;
 bottom: 0;
 background: #033459 url(/img/bttn-bg-navy.jpg) repeat;
-padding: 0.5em;
+padding: 0.5em 1em;
 text-decoration: none;
 }
 
