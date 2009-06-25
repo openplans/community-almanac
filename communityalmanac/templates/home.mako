@@ -306,3 +306,5 @@ $(document).ready(function(){
 //]]>
   </script>
 </%def>
+
+<%def name="body_class()">home</%def>

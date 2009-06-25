@@ -30,13 +30,7 @@
     <link type="text/css" rel="stylesheet" href="${h.url_for('/css/turn.css')}" />
     ${self.extra_head()}
   </head>
-  <body 
-  %if c.is_homepage:
-  class="home"
-  %elif self.attr.error_class:
-  class="${self.attr.error_class}"
-  %endif
-  >
+  <body class="${self.body_class()}">
     <div id="ill-sky">
       <div id="ill-clouds">
         <div id="ill-mountains">
@@ -92,9 +86,6 @@
     <script type="text/javascript">
   		$(document).ready(function(){
   			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 110,	startingWidth: 24, startingHeight: 24});
-  			$('#turn_object').resize(function(){
-          if('${self.attr.next_page_url}' != '' && $('#turn_object').width() >= 110) {window.location = '${self.attr.next_page_url}'}
-        });
       	$('div#login').hover(
       	  function () {
       	    $(this).animate({top: '0'},{queue:false,duration:500});
@@ -168,15 +159,6 @@
   </div><!-- /#wrap-b-->
 </div><!-- /#wrap-a -->
 </%def>
-<%!
-error_class = ""
-prev_page_url = ""
-prev_page = "Previous"
-prev_page_class = "prev"
-next_page_url = ""
-next_page = "Next"
-next_page_class = "next"
-%>
 <%def name="recent_pages_snippet(pages)">
 <div id="recent-activity" class="pngfix">
 %if pages:
@@ -189,3 +171,5 @@ next_page_class = "next"
 %endif
 </div><!-- /#recent-activity -->
 </%def>
+
+<%def name="body_class()"></%def>

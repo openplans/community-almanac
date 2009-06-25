@@ -8,6 +8,5 @@
     <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
   </form>
 <p>If it turns out that a link is broken, we'd like to know. Please <a href="#" onclick="alert('not implemented');">contact us</a>.</p>
-<%!
-error_class = "fourhundred"
-%>
+
+<%def name="body_class()">fourhundred</%def>

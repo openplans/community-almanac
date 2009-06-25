@@ -10,6 +10,4 @@
 <p>You can reach us here:<br />
 <a href="#" onclick="alert('not implemented');">someemailaddress@communityalmanac.org</a></p>
 
-<%!
-error_class = "fivehundred"
-%>
+<%def name="body_class()">fivehundred</%def>
