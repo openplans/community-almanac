@@ -205,3 +205,7 @@ class PageController(BaseController):
         c.pages = Page.search_all(query).all()
         response.content_type = 'application/vnd.google-earth.kml+xml kml'
         return render('/page/kml.mako')
+
+    def all_pages(self, query):
+        c.pages = Page.search_all(query).all()
+        return render('/page/kml.mako')
