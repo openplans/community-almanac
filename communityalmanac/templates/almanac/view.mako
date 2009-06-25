@@ -118,7 +118,7 @@ ${c.almanac.name}
   </form>
 </div>
 <div class="sidebar">
-  <p><a class="kml-link" href="${h.url_for('pages_kml', almanac=c.almanac)}">View in Google Earth (KML)</a></p>
+  <p class="kml-link"><a href="${h.url_for('pages_kml', almanac=c.almanac)}">View in Google Earth (KML)</a></p>
 </div>
 </%def>
 

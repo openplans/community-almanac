@@ -551,6 +551,7 @@ border: 4px solid #d0c9b9;
 font-size: 1.4em;
 line-height: 1em;
 padding: 5px 5px;
+margin-bottom: 20px;
 }
 
 input#query {
@@ -839,7 +840,8 @@ ul.almanac-pages h4 a:hover {
 text-decoration: underline;
 }
 
-ul.almanac-pages div.almanac-excerpt {
+ul.almanac-pages div.almanac-excerpt,
+ul.almanac-pages div.page-excerpt {
 margin-right: 110px;
 }
 
@@ -883,10 +885,15 @@ padding: 0.5em 1em;
 text-decoration: none;
 }
 
-.kml-link {
+p.kml-link {
 display: block;
-padding: 0 0 0 20px;
+padding: 10px 0;
+margin-bottom: 10px;
 background: url(/img/kml-icon.png) 0 50% no-repeat;
+}
+
+p.kml-link a {
+padding-left: 22px;
 }
 
 /*view page */
@@ -1285,18 +1292,14 @@ ul#pages li {
 margin: 0 0 1em;
 padding: 0;
 list-style-type: none;
+line-height: 1.2;
 }
 
-ul#pages .page-title,
 ul#pages .page-timestamp,
 ul#pages .page-comments,
 ul#pages .page-almanac {
-float: left;
-white-space: pre-wrap;
-white-space: -moz-pre-wrap;
-word-wrap: break-word;
+white-space: nowrap;
 padding: 0.2em 0.3em;
-line-height: 1em;
 }
 
 ul#pages a.page-title {
