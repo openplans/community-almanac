@@ -121,6 +121,20 @@
 <span class="next"><a class="turn" href="${next_page_url}">${next_page_text}</a></span>
 %endif
 </%def>
+<%def name="tocnav(pagination_data)">
+<p id="page-list-pagination" class="selfclear">
+%if pagination_data.get('prev'):
+<% start, end, page_idx = pagination_data['prev'] %>
+<span class="prev"><a href="${'%s?page=%s' % (request.path_url, page_idx)}">&#171; ${start}-${end}</a></span>
+%endif
+<% start, end = pagination_data['showing'] %>
+<span>Showing ${start}-${end} of ${pagination_data['total']}</span>
+%if pagination_data.get('next'):
+<% start, end, page_idx = pagination_data['next'] %>
+<span class="next"><a href="${'%s?page=%s' % (request.path_url, page_idx)}">${start}-${end} &#187;</a></span>
+%endif
+</p>
+</%def>
 <%def name="sidebar()">
 <div class="sidebar">
   % if c.almanac:
