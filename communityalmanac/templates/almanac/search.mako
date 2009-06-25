@@ -22,10 +22,10 @@
 <h2 class="almanac-title pngfix">${c.almanac.name}</h2>
 <div id="map" style="width: 100%; height: 300px; border: 4px solid #d0c9b9;"></div>
 % if c.pages:
-<h3 id="frontispiece-pages">
-  <span><strong>Table of Contents</strong>
-    <em>${h.plural(len(c.pages), 'page', 'pages')}</em>
-  </span></h3>
+<h3>
+  <span>${h.plural(c.npages, 'result', 'results')} for <strong>${c.query}</strong>
+  </span>
+</h3>
   <ul class="almanac-pages">
     % for page in c.pages:
     <li class="selfclear">
