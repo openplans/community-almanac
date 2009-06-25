@@ -125,7 +125,6 @@ class PageController(BaseController):
     def view(self, almanac_slug, page_slug):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
-        #XXX check permissions
         c.media_items = h.render_media_items(c.page.media, editable=False)
         map_features = h.map_features_for_media(c.page.media)
         c.map_features = h.literal(simplejson.dumps(map_features))
