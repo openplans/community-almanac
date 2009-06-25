@@ -377,8 +377,8 @@ class Page(Base):
                 return query[:1][0]
             except (exc.NoResultFound, IndexError):
                 return None
-        return dict(next=_find_navigation_for(Page.modified >= self.modified),
-                    prev=_find_navigation_for(Page.modified <= self.modified, desc),
+        return dict(next=_find_navigation_for(Page.modified <= self.modified, desc),
+                    prev=_find_navigation_for(Page.modified >= self.modified),
                     )
 
     @property
