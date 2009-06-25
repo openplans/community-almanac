@@ -201,24 +201,16 @@ def setup_pagination(collection, page=1, per_page=10):
     c.pagination (pagination object itself)
     """
     c.pagination = PaginationPage(collection, page=page, items_per_page=per_page)
-    cur_page = c.pagination.page
-    next_page = c.pagination.next_page
-    prev_page = c.pagination.previous_page
-    if next_page:
-        start = ((next_page-1) * per_page) + 1
-        end = start + per_page - 1
-        end = min(end, c.pagination.item_count)
+    pd = pagination_data(c.pagination)
+    if pd.get('next') is not None:
+        start, end, page_idx = pd['next']
         c.next_page_text = '%d - %d' % (start, end)
-        c.next_page_url = '%s?page=%s' % (request.path_url, next_page)
-    if prev_page:
-        start = (prev_page-1) * per_page
-        end = (start + per_page - 1) + 1
-        start = max(start, 1)
+        c.next_page_url = '%s?page=%s' % (request.path_url, page_idx)
+    if pd.get('prev'):
+        start, end, page_idx = pd['prev']
         c.prev_page_text = '%d - %d' % (start, end)
-        c.prev_page_url = '%s?page=%s' % (request.path_url, prev_page)
-    c.showing_start = ((cur_page-1) * per_page) + 1
-    c.showing_end = cur_page * per_page
-    c.showing_end = min(c.showing_end, c.pagination.item_count)
+        c.prev_page_url = '%s?page=%s' % (request.path_url, page_idx)
+    c.showing_start, c.showing_end = pd['showing']
     c.items = c.pagination.items
     return c.pagination
 
