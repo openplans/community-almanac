@@ -36,6 +36,7 @@ from shapely.geometry.geo import asShape
 from sqlalchemy.orm import exc
 from sqlalchemy.sql import func
 from sqlalchemy import desc
+from webhelpers.paginate import Page as PaginationPage
 import communityalmanac.lib.helpers as h
 import simplejson
 
@@ -99,7 +100,6 @@ class AlmanacController(BaseController):
             c.next_page_url = h.url_for('page_view', almanac=c.almanac, page=c.next_page)
             c.next_page_text = c.next_page.name
 
-        from webhelpers.paginate import Page as PaginationPage
         per_page = 10
         pagination = PaginationPage(pages_query, page=page_idx, items_per_page=per_page)
         c.toc_pagination_data = h.pagination_data(pagination)
