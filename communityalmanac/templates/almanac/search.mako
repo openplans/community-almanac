@@ -115,6 +115,7 @@ ${c.almanac.name}
   </form>
   <p class="kml-link"><a href="${h.url_for('pages_kml_search', almanac=c.almanac, query=c.query)}">View in Google Earth (KML)</a></p>
 </div>
+  ${self.recent_pages_snippet(c.latest_pages)}
 </%def>
 
 <%def name="pagenav()">

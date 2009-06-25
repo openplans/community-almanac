@@ -123,6 +123,10 @@ class AlmanacController(BaseController):
         c.pages = pagination.items
         c.npages = pagination.item_count
         c.query = query
+
+        # latest pages for sidebar
+        c.latest_pages = Page.latest(limit=10, almanac_id=c.almanac.id)
+
         return render('/almanac/search.mako')
 
     def _search(self, almanac_slug, query=''):
