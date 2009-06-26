@@ -822,13 +822,13 @@ border: 0 none transparent;
 
 ul.almanac-pages li .almanac-meta {
 float: right;
-width: 100px;
+width: 140px;
 }
 
 ul.almanac-pages h4 {
 font-size: 0.9em;
 color: #70818c;
-margin-right: 110px;
+margin-right: 160px;
 }
 
 ul.almanac-pages h4 a {
@@ -842,7 +842,7 @@ text-decoration: underline;
 
 ul.almanac-pages div.almanac-excerpt,
 ul.almanac-pages div.page-excerpt {
-margin-right: 110px;
+margin-right: 160px;
 }
 
 .page-first-image {
@@ -1272,7 +1272,7 @@ overflow: visible;
 .sidebar #recent-activity {
 background: url(/img/torn-paper.png) no-repeat;
 height: auto;
-margin: 30px 0;
+margin: 0 0 30px;
 }
 
 #recent-activity h2 {
@@ -1292,14 +1292,20 @@ ul#pages li {
 margin: 0 0 1em;
 padding: 0;
 list-style-type: none;
-line-height: 1.2;
 }
 
+ul#pages .page-title,
 ul#pages .page-timestamp,
 ul#pages .page-comments,
 ul#pages .page-almanac {
+float: left;
 white-space: nowrap;
 padding: 0.2em 0.3em;
+line-height: 1em;
+}
+
+ul#pages .page-title {
+white-space: normal;
 }
 
 ul#pages a.page-title {
@@ -1400,6 +1406,19 @@ margin: 0 0 1em;
 
 body.fourhundred input#query {
 width: 378px;
+}
+
+
+/*search results */
+h3.search-title {
+color: #70818c;
+font-size: 1.4em;
+}
+
+h3.search-title strong {
+color: #ff6040;
+font-size: 1.5em;
+font-weight: normal;
 }
 
 /* rob's starting point */

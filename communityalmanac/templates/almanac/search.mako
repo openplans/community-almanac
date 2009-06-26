@@ -19,13 +19,11 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/base.mako" />
-<h2 class="almanac-title pngfix">${c.almanac.name}</h2>
+<h3 class="search-title">
+  ${h.plural(c.npages, 'result', 'results')} in ${c.almanac.name} for: <strong>${c.query}</strong>
+</h3>
 <div id="map" style="width: 100%; height: 300px; border: 4px solid #d0c9b9;"></div>
 % if c.pages:
-<h3>
-  <span>${h.plural(c.npages, 'result', 'results')} for <strong>${c.query}</strong>
-  </span>
-</h3>
   <ul class="almanac-pages">
     % for page in c.pages:
     <li class="selfclear">
