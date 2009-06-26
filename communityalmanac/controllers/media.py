@@ -95,48 +95,16 @@ class MediaController(BaseController):
                     )
 
     @jsonify
-    def _do_new_form_text(self, almanac_slug):
+    def _do_new_form_text(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         body = request.POST.get('body', u'')
         if not body:
             abort(400)
 
-        page = c.almanac.new_page(self.ensure_user)
-
-        cleaned = h.clean_html(body)
-
-        c.story = story = Story()
-        story.text = cleaned
-        story.page_id = page.id
-        story.order = len(page.media)
-        meta.Session.add(story)
-        meta.Session.commit()
-
-        c.editable = True
-        return dict(html=render('/media/story/item.mako'))
-
-    @dispatch_on(POST='_do_new_form_existing_text')
-    @jsonify
-    def new_form_existing_text(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = h.get_page_by_slug(c.almanac, page_slug)
-        c.legend = u'Text'
-        new_uuid = str(uuid.uuid4())
-        c.storyinput_id = 'storyinput_%s' % new_uuid
-        c.textarea_class = 'mceSimple_%s' % new_uuid
-        return dict(html=render('/media/story/form.mako'),
-                    storyinput_id=c.storyinput_id,
-                    textarea_class=c.textarea_class,
-                    )
-
-    @jsonify
-    @ActionProtector(is_page_owner())
-    def _do_new_form_existing_text(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
-        body = request.POST.get('body', u'')
-        if not body:
-            abort(400)
+        if page_slug is None:
+            page = c.almanac.new_page(self.ensure_user)
+        else:
+            page = h.get_page_by_slug(c.almanac, page_slug)
 
         cleaned = h.clean_html(body)
 
