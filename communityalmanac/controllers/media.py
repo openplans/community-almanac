@@ -80,11 +80,17 @@ class MediaController(BaseController):
             page = almanac.new_page(self.ensure_user)
         return self._sort(page)
 
+    def _retrieve_page(self, almanac, page_slug):
+        if page_slug is None:
+            return almanac.new_page(self.ensure_user)
+        else:
+            return h.get_page_by_slug(almanac, page_slug)
+
     @dispatch_on(POST='_do_new_form_text')
     @jsonify
-    def new_form_text(self, almanac_slug):
+    def new_form_text(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        page = c.almanac.new_page(self.ensure_user)
+        page = self._retrieve_page(c.almanac, page_slug)
         c.legend = u'Text'
         new_uuid = str(uuid.uuid4())
         c.storyinput_id = 'storyinput_%s' % new_uuid
@@ -97,14 +103,10 @@ class MediaController(BaseController):
     @jsonify
     def _do_new_form_text(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
+        page = self._retrieve_page(c.almanac, page_slug)
         body = request.POST.get('body', u'')
         if not body:
             abort(400)
-
-        if page_slug is None:
-            page = c.almanac.new_page(self.ensure_user)
-        else:
-            page = h.get_page_by_slug(c.almanac, page_slug)
 
         cleaned = h.clean_html(body)
 
@@ -163,9 +165,9 @@ class MediaController(BaseController):
 
     @dispatch_on(POST='_do_new_form_map')
     @jsonify
-    def new_form_map(self, almanac_slug):
+    def new_form_map(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        page = c.almanac.new_page(self.ensure_user)
+        page = self._retrieve_page(c.almanac, page_slug)
         loc = c.almanac.location_4326
         c.map_id = str(uuid.uuid4())
         c.legend = u'Map'
@@ -175,9 +177,9 @@ class MediaController(BaseController):
                     )
 
     @jsonify
-    def _do_new_form_map(self, almanac_slug):
+    def _do_new_form_map(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        page = c.almanac.new_page(self.ensure_user)
+        page = self._retrieve_page(c.almanac, page_slug)
         json = request.POST.get('feature')
         if json is None:
             abort(400)
@@ -200,46 +202,6 @@ class MediaController(BaseController):
         return dict(html=render('/media/map/item.mako'),
                     map_id='pagemedia_%d' % map.id,
                     geometry=geometry,
-                    )
-
-    @dispatch_on(POST='_do_new_form_existing_map')
-    @jsonify
-    def new_form_existing_map(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = h.get_page_by_slug(c.almanac, page_slug)
-        loc = c.almanac.location_4326
-        c.map_id = str(uuid.uuid4())
-        c.legend = u'Map'
-        return dict(html=render('/media/map/form.mako'),
-                    lat=loc.y, lng=loc.x,
-                    map_id=c.map_id,
-                    )
-
-    @jsonify
-    @ActionProtector(is_page_owner())
-    def _do_new_form_existing_map(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
-        json = request.POST.get('feature')
-        if json is None:
-            abort(400)
-        shape = simplejson.loads(json)
-        # Stupid asShape returns a PointAdapter instead of a Point.  We round
-        # trip it through wkb to get the correct type.
-        location = wkb.loads(asShape(shape).to_wkb())
-        location.srid = 4326
-
-        c.map = map = Map()
-        map.location = location
-        map.page_id = page.id
-        map.order = len(page.media)
-        meta.Session.add(map)
-        meta.Session.commit()
-
-        c.editable = True
-        return dict(html=render('/media/map/item.mako'),
-                    map_id='pagemedia_%d' % map.id,
-                    geometry=json,
                     )
 
     @dispatch_on(POST='_do_edit_form_map')
@@ -296,9 +258,9 @@ class MediaController(BaseController):
 
     @dispatch_on(POST='_do_new_form_image')
     @jsonify
-    def new_form_image(self, almanac_slug):
+    def new_form_image(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        page = c.almanac.new_page(self.ensure_user)
+        page = self._retrieve_page(c.almanac, page_slug)
         c.file_id = str(uuid.uuid4())
         c.file_upload_url = request.path_url
         c.legend = u'Image'
@@ -307,7 +269,7 @@ class MediaController(BaseController):
                     file_upload_url=c.file_upload_url,
                     )
 
-    def _do_new_form_image(self, almanac_slug):
+    def _do_new_form_image(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         image_file = request.POST.get('userfile')
         if image_file is None:
@@ -315,7 +277,7 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        page = c.almanac.new_page(self.ensure_user)
+        page = self._retrieve_page(c.almanac, page_slug)
 
         try:
             c.image = image = Image.from_file(image_file.filename, upload=image_file, page_id=page.id)
@@ -355,58 +317,6 @@ class MediaController(BaseController):
         # * Not exactly true, since you can't use @jsonify, but it's a close as
         # we can get.
 
-        response.content_type = 'application/javascript'
-        return simplejson.dumps(dict(html=render('/media/image/item.mako')))
-
-    @dispatch_on(POST='_do_new_form_existing_image')
-    @jsonify
-    def new_form_existing_image(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = h.get_page_by_slug(c.almanac, page_slug)
-        c.file_id = str(uuid.uuid4())
-        c.file_upload_url = request.path_url
-        c.legend = u'Image'
-        return dict(html=render('/media/image/form.mako'),
-                    file_id=c.file_id,
-                    file_upload_url=c.file_upload_url,
-                    )
-
-    @ActionProtector(is_page_owner())
-    def _do_new_form_existing_image(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
-        image_file = request.POST.get('userfile')
-        if image_file is None:
-            c.error = u'No file uploaded'
-            response.content_type = 'application/javascript'
-            return simplejson.dumps(dict(html=render('/media/error.mako')))
-
-        filename = image_file.filename
-        _, ext = os.path.splitext(filename)
-        mimetype, _ = mimetypes.guess_type(filename)
-        if not mimetype.startswith('image/'):
-            c.error = u'Invalid image file'
-            response.content_type = 'application/javascript'
-            return simplejson.dumps(dict(html=render('/media/error.mako')))
-
-        image_file.make_file()
-        image_data = image_file.file.read()
-        new_uuid = str(uuid.uuid4())
-        path = os.path.join(g.images_path, new_uuid) + ext
-        f = open(path, 'w')
-        f.write(image_data)
-        f.close()
-
-        c.image = image = Image()
-        image.path = path
-        image.page_id = page.id
-        image.order = len(page.media)
-        image.create_scales(g.images_path)
-        image.filename = filename
-        meta.Session.add(image)
-        meta.Session.commit()
-
-        c.editable = True
         response.content_type = 'application/javascript'
         return simplejson.dumps(dict(html=render('/media/image/item.mako')))
 
@@ -469,9 +379,9 @@ class MediaController(BaseController):
 
     @dispatch_on(POST='_do_new_form_pdf')
     @jsonify
-    def new_form_pdf(self, almanac_slug):
+    def new_form_pdf(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        page = c.almanac.new_page(self.ensure_user)
+        page = self._retrieve_page(c.almanac, page_slug)
         c.file_id = str(uuid.uuid4())
         c.file_upload_url = request.path_url
         c.legend = u'PDF'
@@ -480,7 +390,7 @@ class MediaController(BaseController):
                     file_upload_url=c.file_upload_url,
                     )
 
-    def _do_new_form_pdf(self, almanac_slug):
+    def _do_new_form_pdf(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         pdf_file = request.POST.get('userfile')
         if pdf_file is None:
@@ -495,57 +405,7 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        page = c.almanac.new_page(self.ensure_user)
-
-        pdf_file.make_file()
-        pdf_data = pdf_file.file.read()
-        new_uuid = str(uuid.uuid4())
-        path = os.path.join(g.pdfs_path, new_uuid) + '.pdf'
-        f = open(path, 'w')
-        f.write(pdf_data)
-        f.close()
-
-        c.pdf = pdf = PDF()
-        pdf.path = path
-        pdf.page_id = page.id
-        pdf.order = len(page.media)
-        pdf.filename = filename
-        meta.Session.add(pdf)
-        meta.Session.commit()
-
-        c.editable = True
-        response.content_type = 'application/javascript'
-        return simplejson.dumps(dict(html=render('/media/pdf/item.mako')))
-
-    @dispatch_on(POST='_do_new_form_existing_pdf')
-    @jsonify
-    def new_form_existing_pdf(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = h.get_page_by_slug(c.almanac, page_slug)
-        c.file_id = str(uuid.uuid4())
-        c.file_upload_url = request.path_url
-        c.legend = u'pdf'
-        return dict(html=render('/media/pdf/form.mako'),
-                    file_id=c.file_id,
-                    file_upload_url=c.file_upload_url,
-                    )
-
-    @ActionProtector(is_page_owner())
-    def _do_new_form_existing_pdf(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
-        pdf_file = request.POST.get('userfile')
-        if pdf_file is None:
-            c.error = u'No file uploaded'
-            response.content_type = 'application/javascript'
-            return simplejson.dumps(dict(html=render('/media/error.mako')))
-
-        filename = pdf_file.filename
-        mimetype, _ = mimetypes.guess_type(filename)
-        if mimetype != 'application/pdf':
-            c.error = u'Invalid pdf file'
-            response.content_type = 'application/javascript'
-            return simplejson.dumps(dict(html=render('/media/error.mako')))
+        page = self._retrieve_page(c.almanac, page_slug)
 
         pdf_file.make_file()
         pdf_data = pdf_file.file.read()
@@ -625,9 +485,9 @@ class MediaController(BaseController):
 
     @dispatch_on(POST='_do_new_form_audio')
     @jsonify
-    def new_form_audio(self, almanac_slug):
+    def new_form_audio(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        page = c.almanac.new_page(self.ensure_user)
+        page = self._retrieve_page(c.almanac, page_slug)
         c.file_id = str(uuid.uuid4())
         c.file_upload_url = request.path_url
         c.legend = u'Audio'
@@ -636,7 +496,7 @@ class MediaController(BaseController):
                     file_upload_url=c.file_upload_url,
                     )
 
-    def _do_new_form_audio(self, almanac_slug):
+    def _do_new_form_audio(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         audio_file = request.POST.get('userfile')
         if audio_file is None:
@@ -651,63 +511,7 @@ class MediaController(BaseController):
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
-        page = c.almanac.new_page(self.ensure_user)
-
-        audio_file.make_file()
-        audio_data = audio_file.file.read()
-        new_uuid = str(uuid.uuid4())
-        fname = '%s.mp3' % new_uuid
-        path = os.path.join(g.audio_path, fname)
-        f = open(path, 'w')
-        f.write(audio_data)
-        f.close()
-
-        c.audio = audio = Audio()
-        audio.path = path
-        audio.page_id = page.id
-        audio.order = len(page.media)
-        audio.filename = filename
-        meta.Session.add(audio)
-        meta.Session.commit()
-
-        c.editable = True
-        c.flowplayer_id = 'pagemedia_%s' % c.audio.id
-        c.audio_url = request.application_url + c.audio.url
-        response.content_type = 'application/javascript'
-        return simplejson.dumps(dict(html=render('/media/audio/item.mako'),
-                                     flowplayer_id=c.flowplayer_id,
-                                     audio_url=c.audio_url,
-                                     ))
-
-    @dispatch_on(POST='_do_new_form_existing_audio')
-    @jsonify
-    def new_form_existing_audio(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = h.get_page_by_slug(c.almanac, page_slug)
-        c.file_id = str(uuid.uuid4())
-        c.file_upload_url = request.path_url
-        c.legend = u'Audio'
-        return dict(html=render('/media/audio/form.mako'),
-                    file_id=c.file_id,
-                    file_upload_url=c.file_upload_url,
-                    )
-
-    @ActionProtector(is_page_owner())
-    def _do_new_form_existing_audio(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
-        audio_file = request.POST.get('userfile')
-        if audio_file is None:
-            c.error = u'No file uploaded'
-            response.content_type = 'application/javascript'
-            return simplejson.dumps(dict(html=render('/media/error.mako')))
-
-        filename = audio_file.filename
-        mimetype, _ = mimetypes.guess_type(filename)
-        if mimetype != 'audio/mpeg':
-            c.error = u'Invalid audio file'
-            response.content_type = 'application/javascript'
-            return simplejson.dumps(dict(html=render('/media/error.mako')))
+        page = self._retrieve_page(c.almanac, page_slug)
 
         audio_file.make_file()
         audio_data = audio_file.file.read()
@@ -807,47 +611,20 @@ class MediaController(BaseController):
 
     @dispatch_on(POST='_do_new_form_video')
     @jsonify
-    def new_form_video(self, almanac_slug):
+    def new_form_video(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
-        page = c.almanac.new_page(self.ensure_user)
+        page = self._retrieve_page(c.almanac, page_slug)
         c.legend = u'Video'
         return dict(html=render('/media/video/form.mako'))
 
     @jsonify
-    def _do_new_form_video(self, almanac_slug):
+    def _do_new_form_video(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         body = request.POST.get('body', u'')
         if not body:
             abort(400)
 
-        page = c.almanac.new_page(self.ensure_user)
-
-        c.video = video = Video()
-        video.text = h.clean_embed_markup(body)
-        video.page_id = page.id
-        video.order = len(page.media)
-        meta.Session.add(video)
-        meta.Session.commit()
-
-        c.editable = True
-        return dict(html=render('/media/video/item.mako'))
-
-    @dispatch_on(POST='_do_new_form_existing_video')
-    @jsonify
-    def new_form_existing_video(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = h.get_page_by_slug(c.almanac, page_slug)
-        c.legend = u'Video'
-        return dict(html=render('/media/video/form.mako'))
-
-    @jsonify
-    @ActionProtector(is_page_owner())
-    def _do_new_form_existing_video(self, almanac_slug, page_slug):
-        c.almanac = h.get_almanac_by_slug(almanac_slug)
-        c.page = page = h.get_page_by_slug(c.almanac, page_slug)
-        body = request.POST.get('body', u'')
-        if not body:
-            abort(400)
+        page = self._retrieve_page(c.almanac, page_slug)
 
         c.video = video = Video()
         video.text = h.clean_embed_markup(body)
