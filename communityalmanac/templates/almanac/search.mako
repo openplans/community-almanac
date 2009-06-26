@@ -112,8 +112,8 @@ ${c.almanac.name}
     <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
   </form>
   <p class="kml-link"><a href="${h.url_for('pages_kml_search', almanac=c.almanac, query=c.query)}">View in Google Earth (KML)</a></p>
-</div>
   ${self.recent_pages_snippet(c.latest_pages)}
+</div>
 </%def>
 
 <%def name="pagenav()">
