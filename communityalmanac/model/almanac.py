@@ -484,37 +484,6 @@ class Audio(Media):
     path = Column(Unicode)
     filename = Column(Unicode)
 
-    @staticmethod
-    def from_file(filename, fileobj=None, newpath=None, upload=None, page=None, **kwargs):
-
-        if not newpath:
-            newpath = g.audio_path
-
-        mimetype, _ = mimetypes.guess_type(filename)
-
-        if mimetype != 'audio/mpeg':
-            raise ValueError(u'Invalid audio file')
-
-        if upload:
-            upload.make_file()
-            fileobj = upload.file
-
-        audio_data = fileobj.read()
-        new_uuid = str(uuid.uuid4())
-        path = os.path.join(newpath, new_uuid) + '.mp3'
-        with open(path, 'w') as f:
-            f.write(audio_data)
-
-        audio = Audio(**kwargs)
-        if page:
-            page.media.append(audio)
-            audio.order = len(page.media)
-        else:
-            audio.order = len(audio.page.media)
-        audio.path = path
-        audio.filename = filename
-        return audio
-
     @property
     def url(self):
         import communityalmanac.lib.helpers as h
@@ -561,7 +530,7 @@ class Image(Media):
         return '/media/view/image/small/%s/%s?%s' % (self.id, self.filename, qs)
 
     @staticmethod
-    def from_file(filename, fileobj=None, newpath=None, upload=None, page=None, **kwargs):
+    def from_file(filename, page, fileobj=None, newpath=None, upload=None, **kwargs):
 
         if not newpath:
             newpath = g.images_path
@@ -572,10 +541,11 @@ class Image(Media):
         if not mimetype.startswith('image/'):
             raise ValueError(u'Invalid image file %s' % filename)
 
-        if upload:
+        if upload is not None:
             upload.make_file()
             fileobj = upload.file
 
+        assert fileobj is not None, 'Programming error: file object not set'
         image_data = fileobj.read()
         new_uuid = str(uuid.uuid4())
         path = os.path.join(newpath, new_uuid) + ext
@@ -583,11 +553,8 @@ class Image(Media):
             f.write(image_data)
 
         image = Image(**kwargs)
-        if page:
-            page.media.append(image)
-            image.order = len(page.media)
-        else:
-            image.order = len(image.page.media)
+        page.media.append(image)
+        image.order = len(page.media)
         image.path = path
         image.create_scales(newpath)
         image.filename = filename

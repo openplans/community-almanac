@@ -280,7 +280,7 @@ class MediaController(BaseController):
         page = self._retrieve_page(c.almanac, page_slug)
 
         try:
-            c.image = image = Image.from_file(image_file.filename, upload=image_file, page_id=page.id)
+            c.image = image = Image.from_file(image_file.filename, page, upload=image_file)
         except ValueError, e:
             c.error = e.message
             response.content_type = 'application/javascript'
