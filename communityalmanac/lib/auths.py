@@ -40,6 +40,7 @@ from communityalmanac.model.meta import Session
 from communityalmanac.model import meta, User, Group, Permission
 import communityalmanac.lib.helpers as h
 from pylons import config
+from pylons import session
 from pylons import tmpl_context as c
 
 from os import path
@@ -61,10 +62,14 @@ class is_media_owner(Predicate):
 
     def evaluate(self, environ, credentials):
 
-        import pdb; pdb.set_trace()
         user = c.user
         if not user:
-            self.unmet()
+            userid = session.setdefault('userid', None)
+            if not userid:
+                self.unmet()
+            user = meta.Session.query(User).get(userid)
+            if not user:
+                self.unmet()
 
         media_id = environ['pylons.routes_dict']['media_id']
         media = h.get_media_by_id(media_id)
@@ -94,7 +99,12 @@ class is_page_owner(Predicate):
 
         user = c.user
         if not user:
-            self.unmet()
+            userid = session.setdefault('userid', None)
+            if not userid:
+                self.unmet()
+            user = meta.Session.query(User).get(userid)
+            if not user:
+                self.unmet()
 
         almanac_slug = environ['pylons.routes_dict']['almanac_slug']
         page_slug = environ['pylons.routes_dict']['page_slug']
