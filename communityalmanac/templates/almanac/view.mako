@@ -57,7 +57,7 @@ ${c.almanac.name}
 </%doc>
 </%def>
 <%def name="extra_body()">
-  <script>
+  <script type="text/javascript">
     $(document).ready(function() {
       map = new OpenLayers.Map('map', {
         projection: new OpenLayers.Projection('EPSG:900913'),
@@ -66,7 +66,7 @@ ${c.almanac.name}
         controls: [
           new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
           new OpenLayers.Control.PanZoom()
-          ],
+          ]
         });
         var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true, type: G_PHYSICAL_MAP});
         map.addLayer(baseLayer);
