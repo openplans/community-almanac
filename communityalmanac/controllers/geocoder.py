@@ -67,9 +67,9 @@ class GeocoderController(BaseController):
         geopoint = Point(lng, lat)
         if bbox:
             c.almanacs = self._nearby_almanacs(bbox)
-            nearby_kml = render('/almanac/kml.mako')
         else:
-            nearby_kml = False
+            c.almanacs = meta.Session.query(Almanac).join(Almanac.pages).distinct().filter(func.st_dwithin(Almanac.location, func.st_transform(func.st_geomfromtext('SRID=%s;POINT(%f %f)' % ('4326', result.longitude, result.latitude)), storage_SRID), 6233)).limit(10).all()
+        nearby_kml = render('/almanac/kml.mako')
         return dict(lat=lat, lng=lng, layer=nearby_kml,
                     geojson=simplejson.dumps(geopoint.__geo_interface__),
                     authoritative_name=authoritative_name,
