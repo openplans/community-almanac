@@ -18,6 +18,222 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+function applyMapDisplaySideEffects(data) {
+  var geometryJson = data.geometry;
+  if (!geometryJson) {
+    return;
+  }
+  var map_id = data.map_id;
+  var formatter = new OpenLayers.Format.GeoJSON({
+    'internalProjection': new OpenLayers.Projection("EPSG:900913"),
+    'externalProjection': new OpenLayers.Projection("EPSG:4326")
+  });
+  var feature = formatter.read(geometryJson)[0];
+  var bounds = feature.geometry.getBounds();
+  var map = new OpenLayers.Map(map_id, {
+    projection: new OpenLayers.Projection('EPSG:900913'),
+    displayProjection: new OpenLayers.Projection('EPSG:4326'),
+    maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400)
+    });
+  var navControl = map.getControlsByClass('OpenLayers.Control.Navigation')[0];
+  navControl.disableZoomWheel();
+  var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
+  map.addLayer(baseLayer);
+  var featureLayer = new OpenLayers.Layer.Vector('features');
+  featureLayer.addFeatures([feature]);
+  map.addLayer(featureLayer);
+  map.zoomToExtent(bounds);
+}
+
+function applyMapEditSideEffects(data) {
+  if (!(data.lng && data.lat) && !data.geometry) {
+    return;
+  }
+  var featureLayer = new OpenLayers.Layer.Vector('feature');
+  var onActivate = function() { featureLayer.destroyFeatures(); };
+  var drawPoint = new OpenLayers.Control.DrawFeature(
+    featureLayer, OpenLayers.Handler.Point,
+    {'displayClass': 'olControlDrawFeaturePoint',
+     'eventListeners': {'activate': onActivate}});
+  var drawPath = new OpenLayers.Control.DrawFeature(
+    featureLayer, OpenLayers.Handler.Path,
+    {'displayClass': 'olControlDrawFeaturePath',
+     'eventListeners': {'activate': onActivate}});
+  var drawPolygon = new OpenLayers.Control.DrawFeature(
+    featureLayer, OpenLayers.Handler.Polygon,
+    {'displayClass': 'olControlDrawFeaturePolygon',
+     'eventListeners': {'activate': onActivate}});
+  var deactivateAllEditingControls = function() {
+    drawPoint.deactivate();
+    drawPath.deactivate();
+    drawPolygon.deactivate();
+  };
+  var featureAdded = function(evt) {
+    deactivateAllEditingControls();
+    var formatter = new OpenLayers.Format.GeoJSON({
+      'internalProjection': new OpenLayers.Projection("EPSG:900913"),
+      'externalProjection': new OpenLayers.Projection("EPSG:4326")
+    });
+    var str = formatter.write(evt.feature.geometry);
+    // the hidden input is expected to be right next to the map div
+    $('#' + data.map_id).next().val(str);
+  };
+  featureLayer.events.on({featureadded: featureAdded});
+  var panelControls = [
+   new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
+   new OpenLayers.Control.PanZoom(),
+   drawPoint,
+   drawPath,
+   drawPolygon
+  ];
+  var toolbar = new OpenLayers.Control.Panel({
+     displayClass: 'olControlEditingToolbar',
+     defaultControl: panelControls[0]
+  });
+  toolbar.addControls(panelControls);
+
+  var map_id = data.map_id;
+  map = new OpenLayers.Map(map_id, {
+    projection: new OpenLayers.Projection('EPSG:900913'),
+    displayProjection: new OpenLayers.Projection('EPSG:4326'),
+    maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400)
+    });
+  var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
+  map.addLayer(baseLayer);
+  map.addControl(toolbar);
+  // if this is an edit on an existing feature, we should displaly that feature too
+  if (data.geometry) {
+    var geometryJson = data.geometry;
+    var formatter = new OpenLayers.Format.GeoJSON({
+      'internalProjection': new OpenLayers.Projection("EPSG:900913"),
+      'externalProjection': new OpenLayers.Projection("EPSG:4326")
+    });
+    var feature = formatter.read(geometryJson)[0];
+    var bounds = feature.geometry.getBounds();
+    featureLayer.addFeatures([feature]);
+    map.addLayer(featureLayer);
+    map.zoomToExtent(bounds);
+  }
+  // otherwise we center on the almanac
+  else {
+    var lng = data.lng;
+    var lat = data.lat;
+    var center = new OpenLayers.LonLat(lng, lat);
+    map.addLayer(featureLayer);
+    center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
+    map.setCenter(center, 12);
+  }
+}
+
+function applyFileUploadEditSideEffects(data) {
+  if (!data.file_id || !data.file_upload_url) {
+    return;
+  }
+  var file_id = data.file_id;
+  var file_upload_url = data.file_upload_url;
+  var fileElt = $('#' + file_id);
+  var mediaItemActions = fileElt.nextAll('.media-item-actions');
+  var saveLink = mediaItemActions.find('.submit-upload-file');
+  var li = fileElt.closest('li');
+  var uploadStatus = fileElt.nextAll('.upload-status');
+  var onComplete = function(file, response) {
+    uploadStatus.text('Upload Complete!');
+    newli = $('<li></li>').append(response.html);
+    li.replaceWith(newli);
+    au.destroy();
+    applyFlowPlayerSideEffects(response);
+  };
+  var au = new AjaxUpload(file_id, {
+    action: file_upload_url,
+    name: 'userfile',
+    responseType: 'json',
+    autoSubmit: false,
+    onChange: function(file, extension) {
+      uploadStatus.text('Ready to upload: ' + file);
+    },
+    onSubmit: function(file, extension) {
+      uploadStatus.text('Uploading');
+    },
+    onComplete: onComplete
+  });
+  saveLink.click(function(e) {
+    e.preventDefault();
+    au.submit();
+  });
+}
+
+function applyFlowPlayerSideEffects(data) {
+  if (!data.flowplayer_id || !data.audio_url) {
+    return;
+  }
+
+  var flowplayerId = data.flowplayer_id;
+  var flowplayerAudioUrl = data.audio_url;
+
+  var flowplayerElt = $('#' + data.flowplayer_id);
+  if (flowplayerElt.length === 0) {
+    return;
+  }
+
+  // flowplayer doesn't work unless element is empty
+  flowplayerElt.empty();
+
+  $f(flowplayerId, '/js/flowplayer/flowplayer-3.1.1.swf', {
+    plugins: {
+      controls: {
+        fullscreen: false,
+        heigh: 30
+      },
+      audio: {
+        url: '/js/flowplayer/flowplayer.audio-3.1.0.swf'
+      }
+    },
+    clip: {
+      autoPlay: false
+    },
+    playlist: [{
+      url: flowplayerAudioUrl,
+      autoPlay: false
+    }]
+  });
+}
+
+function applyRichTextSideEffects(data) {
+  if (!data.storyinput_id || !data.textarea_class) {
+    return;
+  }
+  var storyinput = $('#' + data.storyinput_id);
+  if (storyinput.length === 0) {
+    return;
+  }
+  var _onChangeHandler = function(inst) {
+    var data = inst.getBody().innerHTML;
+    storyinput.val(data);
+  };
+  tinyMCE.init({
+    mode : "specific_textareas",
+    theme : "simple",
+    editor_selector : data.textarea_class,
+    onchange_callback : _onChangeHandler,
+    theme_advanced_buttons3_add : "pastetext,pasteword,selectall",
+    plugins : "paste",
+    paste_auto_cleanup_on_paste : true
+  });
+}
+
+function applyDisplaySideEffects(data) {
+  applyMapDisplaySideEffects(data);
+  applyFlowPlayerSideEffects(data);
+}
+
+function applyEditSideEffects(data) {
+  applyMapEditSideEffects(data);
+  applyFileUploadEditSideEffects(data);
+  applyFlowPlayerSideEffects(data);
+  applyRichTextSideEffects(data);
+}
+
 $(document).ready(function() {
 
   // add the title to the submit button form
@@ -48,7 +264,7 @@ $(document).ready(function() {
   // click on the sidebar publish/save button submits the form
   $('#add-page-bttn a').click(function() {
     var form = $('#submit-button-form');
-    if (form.length != 0) {
+    if (form.length !== 0) {
       form.submit();
       return false;
     }
@@ -61,7 +277,7 @@ $(document).ready(function() {
       $(this).val("");
     }
   }).blur(function() {
-    if ($(this).val() == "") {
+    if ($(this).val() === "") {
       $(this).val("Page Name");
     }
   });
@@ -98,7 +314,7 @@ $(document).ready(function() {
         ui.item.parent().children().each(function(index) {
           if (this == ui.item.get(0)) {
             var content = $(this).find('div.mediacontent').get(0);
-            $.post(window.sortUrl, {id: content.id, index: index})
+            $.post(window.sortUrl, {id: content.id, index: index});
             $(this).effect('bounce', {times: 2});
           }
         });
@@ -260,219 +476,3 @@ $(document).ready(function() {
     pageMeta.load(url);
   });
 });
-
-function applyDisplaySideEffects(data) {
-  applyMapDisplaySideEffects(data);
-  applyFlowPlayerSideEffects(data);
-}
-
-function applyEditSideEffects(data) {
-  applyMapEditSideEffects(data);
-  applyFileUploadEditSideEffects(data);
-  applyFlowPlayerSideEffects(data);
-  applyRichTextSideEffects(data);
-}
-
-function applyMapDisplaySideEffects(data) {
-  var geometryJson = data.geometry;
-  if (!geometryJson) {
-    return;
-  }
-  var map_id = data.map_id;
-  var formatter = new OpenLayers.Format.GeoJSON({
-    'internalProjection': new OpenLayers.Projection("EPSG:900913"),
-    'externalProjection': new OpenLayers.Projection("EPSG:4326")
-  });
-  var feature = formatter.read(geometryJson)[0];
-  var bounds = feature.geometry.getBounds();
-  var map = new OpenLayers.Map(map_id, {
-    projection: new OpenLayers.Projection('EPSG:900913'),
-    displayProjection: new OpenLayers.Projection('EPSG:4326'),
-    maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
-    });
-  var navControl = map.getControlsByClass('OpenLayers.Control.Navigation')[0];
-  navControl.disableZoomWheel();
-  var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
-  map.addLayer(baseLayer);
-  var featureLayer = new OpenLayers.Layer.Vector('features');
-  featureLayer.addFeatures([feature]);
-  map.addLayer(featureLayer);
-  map.zoomToExtent(bounds);
-}
-
-function applyMapEditSideEffects(data) {
-  if (!(data.lng && data.lat) && !data.geometry) {
-    return;
-  }
-  var featureLayer = new OpenLayers.Layer.Vector('feature');
-  var onActivate = function() { featureLayer.destroyFeatures(); };
-  var drawPoint = new OpenLayers.Control.DrawFeature(
-    featureLayer, OpenLayers.Handler.Point,
-    {'displayClass': 'olControlDrawFeaturePoint',
-     'eventListeners': {'activate': onActivate}});
-  var drawPath = new OpenLayers.Control.DrawFeature(
-    featureLayer, OpenLayers.Handler.Path,
-    {'displayClass': 'olControlDrawFeaturePath',
-     'eventListeners': {'activate': onActivate}});
-  var drawPolygon = new OpenLayers.Control.DrawFeature(
-    featureLayer, OpenLayers.Handler.Polygon,
-    {'displayClass': 'olControlDrawFeaturePolygon',
-     'eventListeners': {'activate': onActivate}});
-  var deactivateAllEditingControls = function() {
-    drawPoint.deactivate();
-    drawPath.deactivate();
-    drawPolygon.deactivate();
-  };
-  var featureAdded = function(evt) {
-    deactivateAllEditingControls();
-    var formatter = new OpenLayers.Format.GeoJSON({
-      'internalProjection': new OpenLayers.Projection("EPSG:900913"),
-      'externalProjection': new OpenLayers.Projection("EPSG:4326")
-    });
-    var str = formatter.write(evt.feature.geometry);
-    // the hidden input is expected to be right next to the map div
-    $('#' + data.map_id).next().val(str);
-  };
-  featureLayer.events.on({featureadded: featureAdded});
-  var panelControls = [
-   new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
-   new OpenLayers.Control.PanZoom(),
-   drawPoint,
-   drawPath,
-   drawPolygon
-  ];
-  var toolbar = new OpenLayers.Control.Panel({
-     displayClass: 'olControlEditingToolbar',
-     defaultControl: panelControls[0]
-  });
-  toolbar.addControls(panelControls);
-
-  var map_id = data.map_id;
-  map = new OpenLayers.Map(map_id, {
-    projection: new OpenLayers.Projection('EPSG:900913'),
-    displayProjection: new OpenLayers.Projection('EPSG:4326'),
-    maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
-    });
-  var baseLayer = new OpenLayers.Layer.Google('google', {sphericalMercator: true, type: G_PHYSICAL_MAP});
-  map.addLayer(baseLayer);
-  map.addControl(toolbar);
-  // if this is an edit on an existing feature, we should displaly that feature too
-  if (data.geometry) {
-    var geometryJson = data.geometry;
-    var formatter = new OpenLayers.Format.GeoJSON({
-      'internalProjection': new OpenLayers.Projection("EPSG:900913"),
-      'externalProjection': new OpenLayers.Projection("EPSG:4326")
-    });
-    var feature = formatter.read(geometryJson)[0];
-    var bounds = feature.geometry.getBounds();
-    featureLayer.addFeatures([feature]);
-    map.addLayer(featureLayer);
-    map.zoomToExtent(bounds);
-  }
-  // otherwise we center on the almanac
-  else {
-    var lng = data.lng;
-    var lat = data.lat;
-    var center = new OpenLayers.LonLat(lng, lat);
-    map.addLayer(featureLayer);
-    center.transform(new OpenLayers.Projection('EPSG:4326'), map.getProjectionObject());
-    map.setCenter(center, 12);
-  }
-}
-
-function applyFileUploadEditSideEffects(data) {
-  if (!data.file_id || !data.file_upload_url) {
-    return;
-  }
-  var file_id = data.file_id;
-  var file_upload_url = data.file_upload_url;
-  var fileElt = $('#' + file_id);
-  var mediaItemActions = fileElt.nextAll('.media-item-actions');
-  var saveLink = mediaItemActions.find('.submit-upload-file');
-  var li = fileElt.closest('li');
-  var uploadStatus = fileElt.nextAll('.upload-status');
-  var onComplete = function(file, response) {
-    uploadStatus.text('Upload Complete!');
-    newli = $('<li></li>').append(response.html);
-    li.replaceWith(newli);
-    au.destroy();
-    // XXX this shouldn't be here, but it is until we figure out the json issue
-    applyFlowPlayerSideEffects(response)
-  };
-  var au = new AjaxUpload(file_id, {
-    action: file_upload_url,
-    name: 'userfile',
-    responseType: 'json',
-    autoSubmit: false,
-    onChange: function(file, extension) {
-      uploadStatus.text('Ready to upload: ' + file);
-    },
-    onSubmit: function(file, extension) {
-      uploadStatus.text('Uploading');
-    },
-    onComplete: onComplete
-  });
-  saveLink.click(function(e) {
-    e.preventDefault();
-    au.submit();
-  });
-}
-
-function applyFlowPlayerSideEffects(data) {
-  if (!data.flowplayer_id || !data.audio_url) {
-    return;
-  }
-
-  var flowplayerId = data.flowplayer_id;
-  var flowplayerAudioUrl = data.audio_url;
-
-  var flowplayerElt = $('#' + data.flowplayer_id);
-  if (flowplayerElt.length == 0) {
-    return;
-  }
-
-  // flowplayer doesn't work unless element is empty
-  flowplayerElt.empty();
-
-  $f(flowplayerId, '/js/flowplayer/flowplayer-3.1.1.swf', {
-    plugins: {
-      controls: {
-        fullscreen: false,
-        heigh: 30
-      },
-      audio: {
-        url: '/js/flowplayer/flowplayer.audio-3.1.0.swf'
-      }
-    },
-    clip: {
-      autoPlay: false
-    },
-    playlist: [{
-      url: flowplayerAudioUrl,
-      autoPlay: false
-    }]
-  });
-}
-
-function applyRichTextSideEffects(data) {
-  if (!data.storyinput_id || !data.textarea_class) {
-    return;
-  }
-  var storyinput = $('#' + data.storyinput_id);
-  if (storyinput.length == 0) {
-    return;
-  }
-  var _onChangeHandler = function(inst) {
-    var data = inst.getBody().innerHTML;
-    storyinput.val(data);
-  };
-  tinyMCE.init({
-    mode : "specific_textareas",
-    theme : "simple",
-    editor_selector : data.textarea_class,
-    onchange_callback : _onChangeHandler,
-    theme_advanced_buttons3_add : "pastetext,pasteword,selectall",
-    plugins : "paste",
-    paste_auto_cleanup_on_paste : true
-  });
-}
