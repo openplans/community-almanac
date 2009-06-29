@@ -125,30 +125,30 @@ $(document).ready(function(){
     format: OpenLayers.Format.KML,
     projection: new OpenLayers.Projection('EPSG:4326'),
     styleMap: new OpenLayers.StyleMap({
-      default: new OpenLayers.Style({
+      'default': new OpenLayers.Style({
         externalGraphic: '/js/img/almanac_marker.png',
         graphicWidth: 28,
         graphicHeight: 16,
-        graphicYOffset: 0,
+        graphicYOffset: 0
       }),
       select: new OpenLayers.Style({
         externalGraphic: '/js/img/book-open.png',
         graphicWidth: 28,
         graphicHeight: 16,
-        graphicYOffset: 0,
+        graphicYOffset: 0
       })
     })
   });
   // In order to prevent features popping in and out of the map, we use a fixed set of features if the zoom is too high.
   var globalfeatures = [];
   function cacheFeatures() {
-    if (globalfeatures.length != 0) {
+    if (globalfeatures.length !== 0) {
       return;
     }
     for (var index = 0; index < almanacLayer.features.length; ++index) {
       globalfeatures.push(almanacLayer.features[index]);
     }
-  };
+  }
   almanacLayer.events.on({'loadend': cacheFeatures});
 
   map.addLayer(almanacLayer);
