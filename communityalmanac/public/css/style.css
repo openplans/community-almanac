@@ -670,27 +670,27 @@ text-decoration: none;
 }
 
 ul.page-media-tools li a#text-tool {
-background: url(/img/text-icon.png) 130px 50% no-repeat;
+background: url(/img/text-icon.png) 230px 50% no-repeat;
 }
 
 ul.page-media-tools li a#image-tool {
-background: url(/img/image-icon.png) 130px 50% no-repeat;
+background: url(/img/image-icon.png) 230px 50% no-repeat;
 }
 
 ul.page-media-tools li a#map-tool {
-background: url(/img/map-icon.png) 130px 50% no-repeat;
+background: url(/img/map-icon.png) 230px 50% no-repeat;
 }
 
 ul.page-media-tools li a#audio-tool {
-background: url(/img/audio-icon.png) 130px 50% no-repeat;
+background: url(/img/audio-icon.png) 230px 50% no-repeat;
 }
 
 ul.page-media-tools li a#pdf-tool {
-background: url(/img/pdf-icon.png) 130px 50% no-repeat;
+background: url(/img/pdf-icon.png) 230px 50% no-repeat;
 }
 
 ul.page-media-tools li a#video-tool {
-background: url(/img/film-icon.png) 130px 50% no-repeat;
+background: url(/img/film-icon.png) 230px 50% no-repeat;
 }
 
 form.add-media-item textarea,
