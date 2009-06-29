@@ -61,6 +61,7 @@ class is_media_owner(Predicate):
 
     def evaluate(self, environ, credentials):
 
+        import pdb; pdb.set_trace()
         user = c.user
         if not user:
             self.unmet()

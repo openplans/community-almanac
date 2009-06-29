@@ -207,4 +207,5 @@ class PageController(BaseController):
 
     def all_pages(self, query):
         c.pages = Page.search_all(query).all()
+        # Replace this template...
         return render('/page/kml.mako')

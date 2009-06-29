@@ -273,8 +273,8 @@ class Page(Base):
     __tablename__ = 'pages'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    almanac_id = Column(Integer, ForeignKey('almanacs.id'))
+    user_id = Column(Integer, ForeignKey('users.id', onupdate='CASCADE', ondelete='CASCADE'))
+    almanac_id = Column(Integer, ForeignKey('almanacs.id', onupdate='CASCADE', ondelete='CASCADE'))
     name = Column(Unicode)
     slug = Column(String)
     on_behalf_of = Column(Unicode)
@@ -413,7 +413,7 @@ class Comment(Base):
     __tablename__ = 'comments'
 
     id = Column(Integer, primary_key=True)
-    page_id = Column(Integer, ForeignKey('pages.id'))
+    page_id = Column(Integer, ForeignKey('pages.id', onupdate='CASCADE', ondelete='CASCADE'))
     user_id = Column(Integer, ForeignKey('users.id'))
     creation = Column(DateTime, server_default=func.current_timestamp())
     fullname = Column(Unicode)
@@ -430,17 +430,17 @@ comment_modify_index = DDL("""CREATE TRIGGER comment_modify_index
 class IndexLine(Base):
     __tablename__ = 'index_lines'
     id = Column(Integer, primary_key=True)
-    almanac_id = Column(Integer, ForeignKey('almanacs.id'))
-    page_id = Column(Integer, ForeignKey('pages.id'))
-    media_id = Column(Integer, ForeignKey('media.id'))
-    comment_id = Column(Integer, ForeignKey('comments.id'))
+    almanac_id = Column(Integer, ForeignKey('almanacs.id', onupdate='CASCADE', ondelete='CASCADE'))
+    page_id = Column(Integer, ForeignKey('pages.id', onupdate='CASCADE', ondelete='CASCADE'))
+    media_id = Column(Integer, ForeignKey('media.id', onupdate='CASCADE', ondelete='CASCADE'))
+    comment_id = Column(Integer, ForeignKey('comments.id', onupdate='CASCADE', ondelete='CASCADE'))
     weighted = Column(WeightedText)
 
 class Media(Base):
     __tablename__ = 'media'
 
     id = Column(Integer, primary_key=True)
-    page_id = Column(Integer, ForeignKey('pages.id'), nullable=False)
+    page_id = Column(Integer, ForeignKey('pages.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
     text = Column(Unicode)
     order = Column(Integer)
     discriminator = Column('type', String(50))
@@ -464,7 +464,7 @@ media_modify_index = DDL("""CREATE TRIGGER media_modify_index
 class PDF(Media):
     __tablename__ = 'pdfs'
     __mapper_args__ = dict(polymorphic_identity='pdf')
-    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
     path = Column(Unicode)
     filename = Column(Unicode)
 
@@ -480,7 +480,7 @@ pdf_modify_trigger = DDL("""CREATE TRIGGER pdf_modify_trigger
 class Audio(Media):
     __tablename__ = 'audios'
     __mapper_args__ = dict(polymorphic_identity='audio')
-    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
     path = Column(Unicode)
     filename = Column(Unicode)
 
@@ -496,7 +496,7 @@ audio_modify_trigger = DDL("""CREATE TRIGGER audio_modify_trigger
 class Video(Media):
     __tablename__ = 'videos'
     __mapper_args__ = dict(polymorphic_identity='video')
-    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
 video_modify_trigger = DDL("""CREATE TRIGGER video_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON videos FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Video.__table__)
@@ -505,7 +505,7 @@ video_modify_trigger = DDL("""CREATE TRIGGER video_modify_trigger
 class Image(Media):
     __tablename__ = 'images'
     __mapper_args__ = dict(polymorphic_identity='image')
-    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
     path = Column(Unicode)
     path_large = Column(Unicode)
     path_small = Column(Unicode)
@@ -593,7 +593,7 @@ image_modify_trigger = DDL("""CREATE TRIGGER image_modify_trigger
 class Story(Media):
     __tablename__ = 'stories'
     __mapper_args__ = dict(polymorphic_identity='story')
-    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
 
     def excerpt(self, n=140):
         """short version of the text, useful for displaying in lists"""
@@ -606,7 +606,7 @@ story_modify_trigger = DDL("""CREATE TRIGGER story_modify_trigger
 class Map(Media):
     __tablename__ = 'maps'
     __mapper_args__ = dict(polymorphic_identity='map')
-    id = Column(Integer, ForeignKey('media.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('media.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
     location = Column(POINT(storage_SRID))
 
     @property
@@ -675,7 +675,7 @@ class FullUser(User):
     __tablename__ = 'full_users'
     __mapper_args__ = dict(polymorphic_identity='full_user')
 
-    id =                 Column(Integer, ForeignKey('users.id'), primary_key=True)
+    id =                 Column(Integer, ForeignKey('users.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
     username =           Column(Unicode(50), unique=True, nullable=False)
     email_address =      Column(Unicode(100), unique=True, nullable=True)
     reset_key =          Column(String(50), nullable=True)
@@ -716,7 +716,7 @@ class FullUser(User):
 class AnonymousUser(User):
     __tablename__ = 'anonymous_users'
     __mapper_args__ = dict(polymorphic_identity='anonymous_user')
-    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('users.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
 
     @property
     def username(self):
