@@ -103,7 +103,7 @@ index_line_update_page = DDL("""CREATE OR REPLACE FUNCTION index_line_update_pag
     ELSIF TG_OP = 'UPDATE' THEN
       UPDATE index_lines SET weighted=setweight(to_tsvector(NEW.name), 'A') WHERE page_id = NEW.id AND media_id IS NULL AND comment_id IS NULL;
     ELSE
-      DELETE FROM index_lines WHERE page_id = NEW.id AND media_id IS NULL AND comment_id IS NULL;
+      DELETE FROM index_lines WHERE page_id = OLD.id AND media_id IS NULL AND comment_id IS NULL;
     END IF;
     RETURN NULL;
   END;
@@ -116,7 +116,7 @@ index_line_update_media = DDL("""CREATE OR REPLACE FUNCTION index_line_update_me
     ELSIF TG_OP = 'UPDATE' THEN
       UPDATE index_lines SET weighted=setweight(to_tsvector(NEW.text), 'C') WHERE page_id = NEW.page_id AND media_id = NEW.id AND comment_id IS NULL;
     ELSE
-      DELETE FROM index_lines WHERE page_id = NEW.page_id AND media_id = NEW.id AND comment_id IS NULL;
+      DELETE FROM index_lines WHERE page_id = OLD.page_id AND media_id = OLD.id AND comment_id IS NULL;
     END IF;
     RETURN NULL;
   END;
@@ -129,7 +129,7 @@ index_line_update_comment = DDL("""CREATE OR REPLACE FUNCTION index_line_update_
     ELSIF TG_OP = 'UPDATE' THEN
       UPDATE index_lines SET weighted=setweight(to_tsvector(NEW.text), 'D') WHERE page_id = NEW.page_id AND media_id IS NULL AND comment_id = NEW.id;
     ELSE
-      DELETE FROM index_lines WHERE page_id = NEW.page_id AND media_id IS NULL AND comment_id = NEW.id;
+      DELETE FROM index_lines WHERE page_id = OLD.page_id AND media_id IS NULL AND comment_id = OLD.id;
     END IF;
     RETURN NULL;
   END;
