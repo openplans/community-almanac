@@ -116,6 +116,7 @@ height: 130px;
 background: url(/img/logo-sm.png) no-repeat;
 text-indent: -9999px;
 display: block;
+cursor: pointer;
 }
 
 #welcome {
