@@ -96,7 +96,7 @@ ${c.almanac.name}
         var featureSelected = function(feature) {
           var popup = new AlmaPopup(null, feature.geometry.getBounds().getCenterLonLat(),
                                                           null, feature.attributes.description,
-                                                          {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(0, 0)},
+                                                          {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(-30, 75)},
                                                           true, function() { selectControl.unselect(feature); });
           feature.popup = popup;
           map.addPopup(popup);
