@@ -75,7 +75,7 @@
 	% if c.almanacs:
 	  <ul id="almanacs">
 	    % for i, almanac in enumerate(c.almanacs):
-      <li class="pngfix almanac-${i+1}"><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name} <span class="almanac-pagecount">(${h.plural(len(almanac.pages), 'page', 'pages')})</span></span><span class="almanac-timestamp">${almanac.updated_date_string}</span></a></li>
+      <li class="almanac-${i+1}"><a href="${h.url_for('almanac_view', almanac=almanac)}"><span class="almanac-name">${almanac.name} <span class="almanac-pagecount">(${h.plural(len(almanac.pages), 'page', 'pages')})</span></span><span class="almanac-timestamp">${almanac.updated_date_string}</span></a></li>
 	    % endfor
 	  </ul><!-- /#almanacs -->
 	% endif

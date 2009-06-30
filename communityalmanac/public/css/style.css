@@ -1185,6 +1185,10 @@ background: url(/img/almanac-spine-bg.png) 0 0 no-repeat;
 overflow: hidden;
 }
 
+* html ul#almanacs li {
+background: url(/img/almanac-spine-bg.gif) 0 0 no-repeat;
+}
+
 ul#almanacs li.almanac-1 {
 margin-left: -10px;
 }
@@ -1226,6 +1230,7 @@ display: block;
 height: 80px;
 width: 691px;
 text-decoration: none;
+position: relative;
 }
 
 ul#almanacs li a span.almanac-name { 
