@@ -994,6 +994,7 @@ top: 0;
 left: 0;
 width: 100%;
 height: 15em;
+background: url(/img/page-bg.png) repeat;
 }
 
 body.home #intro .inactive {
