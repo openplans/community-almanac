@@ -1131,34 +1131,34 @@ color: #ccc;
 cursor: auto;
 }
 
-body.home #intro .map .olPopup {
+body .olPopup {
 background: transparent url(/img/map-popup-bg.png) no-repeat !important;
 width:243px !important;
 height: 88px !important;
 padding: 3px 14px 3px 3px !important;
 }
 
-body.home #intro .map .olPopupContent {
+body .olPopupContent {
 padding: 0 0 0 5px !important;
 }
 
-body.home #intro .map .olPopupCloseBox {
+body .olPopupCloseBox {
 background:transparent url(/img/close.gif) no-repeat scroll 0 0;
 }
 
-body.home #intro .map .almanac-timestamp,
-body.home #intro .map .almanac-pagecount  {
+body .almanac-timestamp,
+body .almanac-pagecount  {
 white-space: nowrap;
 color: #70818c;
 font-size: 0.95em;
 }
 
-body.home #intro .map a.almanac-title {
+body a.almanac-title {
 white-space: normal;
 font-size: 1.1em;
 }
 
-body.home #intro .map .almanac-pagecount {
+body .almanac-pagecount {
 color: #b2b32d;
 }
 

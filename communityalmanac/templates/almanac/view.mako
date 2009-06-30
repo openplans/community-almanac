@@ -59,7 +59,7 @@ ${c.almanac.name}
 <%def name="extra_body()">
   <script type="text/javascript">
     $(document).ready(function() {
-      map = new OpenLayers.Map('map', {
+      var map = new OpenLayers.Map('map', {
         projection: new OpenLayers.Projection('EPSG:900913'),
         displayProjection: new OpenLayers.Projection('EPSG:4326'),
         maxExtent: new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400),
@@ -79,15 +79,24 @@ ${c.almanac.name}
             externalGraphic: '/js/img/page.png',
             graphicWidth: 28,
             graphicHeight: 16,
-            graphicYOffset: 0,
+            graphicYOffset: 0
           })
         });
         map.addLayer(pagesLayer);
         map.setCenter(center, 12);
+        
+         // Big dirty hack!!!
+		  var AlmaPopup = OpenLayers.Class(OpenLayers.Popup.FramedCloud, {
+		  	fixedRelativePosition: true, relativePosition: "tl", 
+		  	initialize:function(id, lonlat, contentSize, contentHTML, anchor, closeBox, 
+		                        closeBoxCallback) {
+		        OpenLayers.Popup.Framed.prototype.initialize.apply(this, arguments);
+		    }
+		  });
         var featureSelected = function(feature) {
-          var popup = new OpenLayers.Popup.AnchoredBubble(null, feature.geometry.getBounds().getCenterLonLat(),
-                                                          new OpenLayers.Size(100, 100), feature.attributes.description,
-                                                          {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(-64, -126)},
+          var popup = new AlmaPopup(null, feature.geometry.getBounds().getCenterLonLat(),
+                                                          null, feature.attributes.description,
+                                                          {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(0, 0)},
                                                           true, function() { selectControl.unselect(feature); });
           feature.popup = popup;
           map.addPopup(popup);

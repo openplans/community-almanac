@@ -111,11 +111,11 @@ $(document).ready(function(){
 	$('.panel-wrap').cycle({fx: 'fade', speed: 'fast', timeout: 0, next: '.next-panel', prev: '.prev-panel'
 	});
   var extent = new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400);
-  map = new OpenLayers.Map('map', {
+  var map = new OpenLayers.Map('map', {
     projection: new OpenLayers.Projection('EPSG:900913'),
     displayProjection: new OpenLayers.Projection('EPSG:4326'),
     maxExtent: extent
-    });
+  });
     window.map = map;
   var navControl = map.getControlsByClass('OpenLayers.Control.Navigation')[0];
   navControl.disableZoomWheel();
@@ -186,11 +186,19 @@ $(document).ready(function(){
   };
   map.zoomToExtent(extent);
   map.events.on({'moveend': populateMap});
-  var AlmaPopup = OpenLayers.Class(OpenLayers.Popup.AnchoredBubble, {fixedRelativePosition: true, relativePosition: "tl", positionBlocks: OpenLayers.Popup.FramedCloud.prototype.positionBlocks});
+  
+  // Big dirty hack!!!
+  var AlmaPopup = OpenLayers.Class(OpenLayers.Popup.FramedCloud, {
+  	fixedRelativePosition: true, relativePosition: "tl", 
+  	initialize:function(id, lonlat, contentSize, contentHTML, anchor, closeBox, 
+                        closeBoxCallback) {
+        OpenLayers.Popup.Framed.prototype.initialize.apply(this, arguments);
+    }
+  });
   var featureSelected = function(feature) {
     var popup = new AlmaPopup(null, feature.geometry.getBounds().getCenterLonLat(),
-                                                    new OpenLayers.Size(235, 85), feature.attributes.description,
-                                                    {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(0, 0)},
+                                                    null, feature.attributes.description,
+                                                    {size: new OpenLayers.Size(1, 1), offset: new OpenLayers.Pixel(-30, 107)},
                                                     true, function() { selectControl.unselect(feature); });
     feature.popup = popup;
     map.addPopup(popup);
