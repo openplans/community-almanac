@@ -1288,8 +1288,8 @@ color: #ffe1a6;
 background: url(/img/torn-paper-top.png) no-repeat;
 width: 260px;
 float: right;
-margin: 65px 0;
-height: 650px;
+margin: 65px 0 0 0;
+max-height: 650px;
 overflow: visible;
 }
 
