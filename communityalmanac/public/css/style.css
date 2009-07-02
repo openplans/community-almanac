@@ -1093,6 +1093,10 @@ position: relative;
 background: #d0c9b9; /* webkit broswers are getting input height wrong */
 }
 
+body.home #intro .map form#almanac-create-form {
+border-bottom: 4px solid #d0c9b9;
+}
+
 body.home #intro .map input {
 font-size: 1.4em;
 width: 80%;
@@ -1126,8 +1130,8 @@ body.home #intro .map input#almanac-submit {
 background: url(/img/home-add-page-bg.png) 0 50% repeat;
 width: 100%;
 color: #fff;
-border-width: 0 4px 4px;
-padding: 0.3em 30px;
+border-width: 0;
+padding: 0.3em 34px;
 text-align: left;
 cursor: pointer;
 }
