@@ -67,7 +67,7 @@
 				<div id="map"></div>
 				<input id="almanac-center" type="hidden" name="almanac_center" value="" />
 				<input id="almanac-authoritative" type="hidden" name="name" value="" />
-				<input id="almanac-submit" class="disabled" disabled="disabled" type="button" value="Add a Page" />
+				<input id="almanac-submit" class="disabled" disabled="disabled" type="submit" value="Add a Page" />
 			</form>
 		</div>
 	</div><!-- /#intro -->
