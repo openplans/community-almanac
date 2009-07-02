@@ -327,12 +327,13 @@ background: url(/img/cancel-icon.png) 100% 50% no-repeat;
 clear: both;
 text-align: left;
 margin: auto 7%;
+padding-bottom: 40px;
 }
 
 ul#footer-nav {
 float: left;
 list-style: none;
-margin: 20px 20px 40px 0;
+margin: 20px 20px 0 0;
 font-size: .9em;
 }
 
@@ -767,6 +768,12 @@ background: url(/img/almanac-title-bg.png) 0 50% no-repeat;
 margin-left: -25px;
 }
 
+* html h2.almanac-title {
+padding: 0;
+background-image: none;
+margin-left: 0;
+}
+
 h3#frontispiece-pages {
 background: transparent url(/img/toc-line.gif) repeat-x scroll left center;
 color:#70818C;
@@ -972,7 +979,7 @@ width: 980px;
 
 body.home #intro {
 padding: 25px 12px 0 18px;
-background: url(/img/intro-bg.png) no-repeat;
+background: url(/img/intro-bg.jpg) no-repeat;
 }
 
 body.home #intro .text {
@@ -1144,6 +1151,8 @@ padding: 0 0 0 5px !important;
 
 body .olPopupCloseBox {
 background:transparent url(/img/close.gif) no-repeat scroll 0 0;
+top: 10px !important;
+right: 15px !important;
 }
 
 body .almanac-timestamp,
@@ -1299,6 +1308,10 @@ height: auto;
 margin: 0 0 30px;
 }
 
+* html .sidebar #recent-activity {
+background: url(/img/torn-paper-ie6.png) no-repeat;
+}
+
 #recent-activity h2 {
 color: #ff6040;
 font-size: 1.1em;
@@ -1310,6 +1323,12 @@ color: #70818c;
 padding: 0 15px 15px 25px;
 margin: 0;
 background: url(/img/torn-paper.png) repeat-y;
+position: relative;
+z-index: 500;
+}
+
+* html ul#pages {
+background: url(/img/torn-paper-ie6.png) repeat-y;
 }
 
 ul#pages li {
@@ -1409,8 +1428,16 @@ body.fourhundred #wrap-b {
 background: url(/img/book-torn.png) 50% 0 no-repeat;
 }
 
+* html body.fourhundred #wrap-b {
+background: url(/img/book-torn-ie6.png) 50% 0 no-repeat;
+}
+
 body.fivehundred #wrap-b {
 background: url(/img/book-stained.png) 50% 0 no-repeat;
+}
+
+* html body.fivehundred #wrap-b {
+background: url(/img/book-stained-ie6.png) 50% 0 no-repeat;
 }
 
 body.fourhundred #right-page {

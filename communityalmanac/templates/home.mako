@@ -20,7 +20,7 @@
 --></%doc>
 <%inherit file="/base.mako" />
 <div class="wrap selfclear">
-	<div id="intro" class="selfclear pngfix">
+	<div id="intro" class="selfclear">
 	  <div class="text">
 		  <div class="panel-wrap">
 				<div class="panel">
