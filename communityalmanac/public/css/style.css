@@ -43,6 +43,14 @@ zoom: 1;
 behavior: expression((this.runtimeStyle.behavior="none")&&(this.pngSet?this.pngSet=true:(this.nodeName == "IMG" && this.src.toLowerCase().indexOf('.png')>-1 ? (this.runtimeStyle.backgroundImage = "none", this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.src + "', sizingMethod='image')", this.src = "/img/transparent.gif") : (this.origBg = this.origBg ? this.origBg : this.currentStyle.backgroundImage.toString().replace('url("','').replace('")',''), this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.origBg + "', sizingMethod='" + (this.currentStyle.backgroundRepeat=='no-repeat' ? 'crop' : 'scale') +"')", this.runtimeStyle.backgroundImage = "none")),this.pngSet=true));
 }
 
+.bordered {
+border: 4px solid #d0c9b9;
+}
+
+.bordered input {
+border: 0 none transparent;
+}
+
 a {
 color: #00ace6;
 outline: none !important; /* avoid ugly dotted border for Firefox */
@@ -169,12 +177,18 @@ background: #f9f5ee;
 width: 14em;
 }
 
+#login .bordered {
+float: left;
+margin: 0.2em 0.5em 0.2em 0;
+}
+
 #login input#login-submit {
 float: left;
 background: #ff6040;
 color: #fff;
-margin: 0.2em 0.5em 0.2em 0;
+margin: 0;
 width: auto;
+border: 0 none transparent;
 }
 
 #login .tab {
