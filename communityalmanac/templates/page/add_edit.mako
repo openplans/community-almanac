@@ -26,11 +26,7 @@
 %endif
 <form id="page-title-form"  method="post" action="${request.path_url}">
   ${h.literal(c.behalf)}
-  %if c.is_add:
-    <input id="page-title" type="text" name="name" value="Page Name" />
-  %else:
-    <input id="page-title" type="text" name="name" value="${c.page.name}" />
-  %endif
+  <input id="page-title" type="text" name="name" value="${c.page.name or u'Page Name'}" />
 </form>
 <ul class="page-media-items">
   % if c.media_items:
@@ -75,6 +71,7 @@
     %else:
         sortUrl = "${h.url_for('media_item_sort', almanac=c.almanac, page=c.page)}";
     %endif
+    pageNameEditUrl = "${h.url_for('page_save_name', page_id=c.page.id)}";
   </script>
   <script type="text/javascript" src="/js/upload/ajaxupload.3.2.js"></script>
   <script type="text/javascript" src="/js/flowplayer/flowplayer-3.1.1.min.js"></script>

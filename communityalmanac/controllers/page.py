@@ -209,3 +209,11 @@ class PageController(BaseController):
         c.pages = Page.search_all(query).all()
         # Replace this template...
         return render('/page/kml.mako')
+
+    def save_page_name(self, page_id):
+        page = h.get_page_by_id(page_id)
+        name = request.POST.get('name', None)
+        if name is None:
+            abort(400)
+        page.name = name
+        meta.Session.commit()
