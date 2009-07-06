@@ -245,3 +245,9 @@ def pagination_data(pagination):
     result['showing'] = (showing_start, showing_end)
     result['total'] = pagination.item_count
     return result
+
+def display_comment(comment):
+    html = comment.text
+    html = clean_html(html)
+    html = html.replace('\n', '<br />')
+    return literal(html)
