@@ -507,7 +507,7 @@ class MediaController(BaseController):
         filename = audio_file.filename
         mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'audio/mpeg':
-            c.error = u'Invalid audio file'
+            c.error = u'Invalid audio file. You must upload an mp3 file'
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
@@ -568,7 +568,7 @@ class MediaController(BaseController):
         filename = audio_file.filename
         mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'audio/mpeg':
-            c.error = u'Invalid audio file'
+            c.error = u'Invalid audio file. You must upload an mp3 file'
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
