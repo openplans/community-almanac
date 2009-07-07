@@ -58,7 +58,7 @@
                     <input id="password" name="password" type="password" />
                     <span class="bordered"><input id="login-submit" type="submit" value="Log In"/></span>Not a member yet? <a href="/login#login-new">Sign Up!</a><br /><a href="/forgot">Forgot your password?</a></form><div class="tab"><a href="/login#login-returning">Login</a></div></div>
                 %endif         
-                <h3 id="tagline">The heart <span class="amp">&#038;</span> soul of <nobr>the place you live&hellip;</nobr></h3>
+                <h3 id="tagline"><a href="${h.url_for('home')}">The heart <span class="amp">&#038;</span> soul of <nobr>the place you live&hellip;</nobr></a></h3>
               </div>
             </div>
           </div>
@@ -70,6 +70,7 @@
     </div><!-- /#content-->
     <div id="footer" class="selfclear">
       <ul id="footer-nav">
+        <li><a href="${h.url_for('home')}">Home</a></li>
         <li><a href="#">About</a></li>
         <li><a href="#">Contact</a></li>
         <li><a href="#">Help</a></li>
