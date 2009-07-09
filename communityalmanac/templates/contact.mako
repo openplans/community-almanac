@@ -19,4 +19,20 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 --></%doc>
 <%inherit file="/base.mako" />
-<h1>Contact page</h1>
+<form method="post" action="${request.path_url}">
+  <fieldset>
+    <legend>Contact us</legend>
+    <div class="selfclear">
+      <label for="name">Name</label>
+      <input id="name" type="text" name="name" value="${request.POST.get('name', '')}" />
+    </div>
+    <div class="selfclear">
+      <label for="email">Email</label>
+      <input id="email" type="text" name="email" value="${request.POST.get(email, '')}" />
+    </div>
+    <div class="selfclear">
+      <label id="message" for="message">Message</label>
+      <textarea name="message" rows="8" cols="30">${request.POST.get('message', '')}</textarea>
+    </div>
+    <input class="indented-submit" type="submit" value="Send" />
+</form>
