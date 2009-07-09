@@ -50,9 +50,9 @@ class Globals(object):
             if not host.startswith('www.'):
                 self.host_whitelist.add('www.' + host)
 
-        self.email_sending_enabled = asbool(config['email_sending_enabled'])
+        self.support_sending_enabled = asbool(config['support_sending_enabled'])
         self.support_email = config['support_email']
-        self.smtp_host = config['smtp_host']
+        self.smtp_host = config['smtp_server']
         self.smtp_port = config['smtp_port']
 
     @property

@@ -44,7 +44,7 @@ class ContactController(BaseController):
         headers['Date'] = email.utils.formatdate()
         email_message = '\n'.join('%s: %s' % (k, v) for k, v in headers.items())
         email_message += '\n\n' + message
-        if g.email_sending_enabled:
+        if g.support_sending_enabled:
             mail_session = smtplib.SMTP(g.smtp_host, g.smtp_port)
             mail_session.sendmail(from_email, [g.support_email], email_message)
         else:
