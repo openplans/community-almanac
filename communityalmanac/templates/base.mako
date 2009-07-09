@@ -71,9 +71,8 @@
     <div id="footer" class="selfclear">
       <ul id="footer-nav">
         <li><a href="${h.url_for('home')}">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="#">Help</a></li>
+        <li><a href="${h.url_for('about')}">About</a></li>
+        <li><a href="${h.url_for('contact')}">Contact</a></li>
       </ul>
     </div>
     <script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
