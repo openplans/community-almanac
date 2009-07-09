@@ -121,6 +121,7 @@ def main():
         'beaker.session.secret': 'somesecret',
 
         'smtp_server': args.emailserver,
+        'smtp_port': 25,
         'sqlalchemy.url': args.url,
         'map_key': args.map_key,
         'host_whitelist': 'player.soundcloud.com,soundcloud.com,youtube.com,video.google.com,vimeo.com,blip.tv'.split(','),
@@ -128,6 +129,8 @@ def main():
         'captcha_enabled': 'False',
         'captcha_pubkey': '???',
         'captcha_privkey': '???',
+        'support_sending_enabled': False,
+        'support_email': 'nobody@localhost',
     }
 
     if args.setup:
