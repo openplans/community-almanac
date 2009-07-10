@@ -293,9 +293,10 @@ z-index: 98;
 text-align: left;
 width: 520px;
 float: right;
-margin: 20px 50% 20px -505px;
+margin: 0 50% 20px -505px;
 position: relative;
 left: 405px;
+clear: both;
 }
 
 * html #right-page {
@@ -329,6 +330,7 @@ display: block;
 width: 240px;
 float: left;
 text-align: left;
+margin: 0 0 20px;
 }
 
 #nav-top span.next,
@@ -336,7 +338,9 @@ text-align: left;
 #nav-top span.cancel,
 #nav-bottom span.cancel {
 font-size: 0.8em;
-padding-right: 80px;
+float: right;
+width: 240px;
+margin: 0 80px 20px 0;
 }
 
 #nav-top span.cancel a,
@@ -1212,6 +1216,12 @@ padding: 0.3em 0 0.3em 20px;
 background: url(/img/popup-add-page-icon.png) 0 50% no-repeat;
 }
 
+body.home #intro .map .contact {
+margin: 0.5em 0 0;
+font-size: 0.85em;
+line-height: 1;
+}
+
 ul#almanacs {
 padding: 0;
 margin: 1em 0 0;
@@ -1492,6 +1502,32 @@ margin: 0 0 1em;
 body.fourhundred input#query {
 width: 378px;
 }
+
+
+/* About page */
+#about-page-text h1 {
+	margin-top:20px;
+	color:#00ACE6;
+	}
+#about-page-text h4 {
+	color:#FF6040;
+	}
+#about-page-text h3 {
+	color:#B2B32D;
+	margin:50px 0 0;
+	}
+
+
+/* Contact page */
+#contact-page-intro {
+	margin:20px 0 0;
+	color:#00ACE6;
+	}
+#manual-request h3 {
+	color:#FF6040;
+	font-size:1.4em;
+	line-height:1;
+	}
 
 
 /*search results */

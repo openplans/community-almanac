@@ -69,6 +69,7 @@
 				<input id="almanac-authoritative" type="hidden" name="name" value="" />
 				<input id="almanac-submit" class="disabled" disabled="disabled" type="submit" value="Add a Page" />
 			</form>
+			<p class="contact">Can't find your community on the map? <a href="/contact">Let us know.</a></p>
 		</div>
 	</div><!-- /#intro -->
   ${self.recent_pages_snippet(c.pages)}
