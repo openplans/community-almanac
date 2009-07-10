@@ -28,19 +28,19 @@
   <div class="selfclear">
     <%doc> We use the unintuitive 'login' for username so that we can register and log in at the same time.</%doc>
     <label for="user-login">Username</label>
-    <input type="text" name="login" id="user-login" value="${request.POST.get('login', u'')}" />
+    <input type="text" name="register_login" id="user-login" value="${request.POST.get('login', u'')}" />
   </div>
   <div class="selfclear">
     <label for="Email Address">Email Address</label>
-    <input type="text" name="email_address" id="email_address" value="${request.POST.get('email_address', u'')}" />
+    <input type="text" name="register_email_address" id="email_address" value="${request.POST.get('email_address', u'')}" />
   </div>
   <div class="selfclear">
     <label for="password">Password</label>
-    <input type="password" name="password" id="password" value="${request.POST.get('password', u'')}" />
+    <input type="password" name="register_password" id="password" value="${request.POST.get('password', u'')}" />
   </div>
   <div class="selfclear">
     <label for="password_repeat">Confirm Password</label>
-    <input type="password" name="password_repeat" id="password_repeat" />
+    <input type="password" name="register_password_repeat" id="password_repeat" />
   </div>
   <input type="hidden" name="came_from" value="${request.params.get('came_from', '')}" />
   <input class="indented-submit" type="submit" value="Add" />
@@ -69,7 +69,7 @@
 </form>
 <form action="/do_login" method="POST">
 <label for="openid">OpenID URL</label>
-<input type="openid" name="openid" />
+<input type="text" name="openid" />
 <input type="submit" value="Login with OpenID" />
 </form>
 </div>

@@ -14,16 +14,42 @@ from communityalmanac.lib.base import BaseController, render
 import communityalmanac.lib.helpers as h
 from communityalmanac.model import FullUser
 from communityalmanac.model import meta
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, exc
+from sqlalchemy.sql import func
 import mailer
+from formencode.htmlfill import none_formatter
 
 log = logging.getLogger(__name__)
 
+class UniqueUsername(validators.FancyValidator):
+
+     messages = {
+         'duplicate': 'This username is already taken.'
+         }
+
+     def validate_python(self, value, state):
+         import pdb; pdb.set_trace()
+         count = meta.Session.query(func.count()).filter(FullUser.username==value).all()[0]
+         if count:
+             raise validators.Invalid(self.message("duplicate", state), value, state)
+
+class UniqueEmail(validators.Email):
+
+     messages = {
+         'duplicate': 'A user already exists with this email. Have you forgotten your password?'
+         }
+
+     def validate_python(self, value, state):
+         import pdb; pdb.set_trace()
+         count = meta.Session.query(func.count()).filter(FullUser.email_address==value).all()[0]
+         if count:
+             raise validators.Invalid(self.message("duplicate", state), value, state)
+
 class UserRegistrationSchema(Schema):
-    login = validators.UnicodeString(not_empty=True)
-    email_address = validators.Email(not_empty=True)
-    password = validators.String(not_empty=True, encoding='utf8')
-    password_repeat = validators.String(not_empty=True)
+    register_login = UniqueUsername()
+    register_email_address = UniqueEmail(not_empty=True)
+    register_password = validators.String(not_empty=True, encoding='utf8')
+    register_password_repeat = validators.String(not_empty=True)
     came_from = validators.String(not_empty=False)
     chained_validators = [validators.FieldsMatch('password', 'password_repeat')]
 
@@ -52,18 +78,33 @@ class UserController(BaseController):
     @dispatch_on(POST='_register')
     def register(self):
         if request.environ.get('repoze.who.identity') == None:
-            redirect_to(h.url_for('login'))
+            c.active_section = request.params.get('show','login-new')
+            return render('/user/login.mako')
+        h.flash(u'Unable to register as a user is already logged in.  Please logout first.')
         redirect_to(h.url_for('home'))
 
-    @validate(schema=UserRegistrationSchema(), form='register')
+    @validate(schema=UserRegistrationSchema(), form='register', error_formatters={'default':none_formatter})
     def _register(self):
-        username = self.form_result['login']
-        password = self.form_result['password']
-        email_address = self.form_result['email_address']
+        username = self.form_result['register_login']
+        password = self.form_result['register_password']
+        email_address = self.form_result['register_email_address']
         user = FullUser(username, email_address, password)
 
         meta.Session.save(user)
-        meta.Session.commit()
+        try:
+            meta.Session.commit()
+        except exc.IntegrityError:
+            # User exists already, and we hit a race condition.  We re-validate
+            # the schema so that FormEncode will display a proper error
+            # message.
+            schema = UserRegistrationSchema()
+            try:
+                form_result = schema.to_python(request.params)
+            except validators.Invalid, error:
+                c.form_result = error.value
+                c.form_errors = error.error_dict or {}
+                c.active_section = request.params.get('show','login-new')
+                return render('/user/login.mako')
 
         self._login(username)
 
