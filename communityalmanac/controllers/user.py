@@ -28,7 +28,6 @@ class UniqueUsername(validators.FancyValidator):
          }
 
      def validate_python(self, value, state):
-         import pdb; pdb.set_trace()
          count = meta.Session.query(func.count()).filter(FullUser.username==value).all()[0]
          if count:
              raise validators.Invalid(self.message("duplicate", state), value, state)
@@ -36,14 +35,16 @@ class UniqueUsername(validators.FancyValidator):
 class UniqueEmail(validators.Email):
 
      messages = {
-         'duplicate': 'A user already exists with this email. Have you forgotten your password?'
+         'duplicate': 'A user already exists with this email. Have you <a href="%s">forgotten your password?</a>' % h.url_for('user_requestreset')
          }
 
      def validate_python(self, value, state):
-         import pdb; pdb.set_trace()
          count = meta.Session.query(func.count()).filter(FullUser.email_address==value).all()[0]
          if count:
              raise validators.Invalid(self.message("duplicate", state), value, state)
+
+def pass_html_error_formatter(error):
+    return '<span class="error-message">%s</span><br />\n' % error
 
 class UserRegistrationSchema(Schema):
     register_login = UniqueUsername()
@@ -51,7 +52,7 @@ class UserRegistrationSchema(Schema):
     register_password = validators.String(not_empty=True, encoding='utf8')
     register_password_repeat = validators.String(not_empty=True)
     came_from = validators.String(not_empty=False)
-    chained_validators = [validators.FieldsMatch('password', 'password_repeat')]
+    chained_validators = [validators.FieldsMatch('register_password', 'register_password_repeat')]
 
 class RequestResetSchema(Schema):
     login = compound.Any(validators.UnicodeString(min=5, not_empty=True), validators.Email(not_empty=True))
@@ -83,7 +84,7 @@ class UserController(BaseController):
         h.flash(u'Unable to register as a user is already logged in.  Please logout first.')
         redirect_to(h.url_for('home'))
 
-    @validate(schema=UserRegistrationSchema(), form='register', error_formatters={'default':none_formatter})
+    @validate(schema=UserRegistrationSchema(), form='register', auto_error_formatter=pass_html_error_formatter)
     def _register(self):
         username = self.form_result['register_login']
         password = self.form_result['register_password']
