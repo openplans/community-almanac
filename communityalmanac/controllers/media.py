@@ -490,7 +490,7 @@ class MediaController(BaseController):
         page = self._retrieve_page(c.almanac, page_slug)
         c.file_id = str(uuid.uuid4())
         c.file_upload_url = request.path_url
-        c.legend = u'Audio'
+        c.legend = u'MP3 Audio'
         return dict(html=render('/media/audio/form.mako'),
                     file_id=c.file_id,
                     file_upload_url=c.file_upload_url,
@@ -507,7 +507,7 @@ class MediaController(BaseController):
         filename = audio_file.filename
         mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'audio/mpeg':
-            c.error = u'Invalid audio file'
+            c.error = u'Invalid audio file. You must upload an mp3 file'
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
@@ -548,7 +548,7 @@ class MediaController(BaseController):
         c.flowplayer_id = 'pagemedia_%s' % c.media_item.id
         c.audio_url = request.application_url + c.audio.url
         c.view_url = h.url_for('media_audio_view', media_id=c.media_item.id)
-        c.legend = u'Audio'
+        c.legend = u'MP3 Audio'
         return dict(html=render('/media/audio/form.mako'),
                     file_id=c.file_id,
                     file_upload_url=c.file_upload_url,
@@ -568,7 +568,7 @@ class MediaController(BaseController):
         filename = audio_file.filename
         mimetype, _ = mimetypes.guess_type(filename)
         if mimetype != 'audio/mpeg':
-            c.error = u'Invalid audio file'
+            c.error = u'Invalid audio file. You must upload an mp3 file'
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 

@@ -55,7 +55,7 @@
     %endif
     </span> ${comment.creation.strftime('%H:%M %B %d, %Y')}
   </p>
-  <p>${comment.text}</p>
+  <p>${h.display_comment(comment)}</p>
 </div>
 % endfor
 

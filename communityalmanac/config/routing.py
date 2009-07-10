@@ -65,6 +65,8 @@ def make_map():
     maps.admin_map(map, controller='admin', url='/admin')
 
     map.connect('home', '/', controller='homesweethome', action='home')
+    map.connect('about', '/about', controller='about', action='about')
+    map.connect('contact', '/contact', controller='contact', action='contact')
     map.connect('almanacs_kml', '/api/kml/almanacs.kml', controller='homesweethome', action='almanacs_kml')
     map.connect('pages_kml_search', '/api/kml/pages/*query.kml', controller='page', action='all_pages_kml')
     map.connect('pages_kml', '/api/kml/:almanac_slug/pages.kml', controller='almanac', action='pages_kml', query=None, _filter=almanac_expand)
@@ -86,6 +88,7 @@ def make_map():
     map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)
     map.connect('page_view', '/:almanac_slug/:page_slug', controller='page', action='view', _filter=page_expand)
     map.connect('page_edit', '/:almanac_slug/:page_slug/edit', controller='page', action='edit', _filter=page_expand)
+    map.connect('page_save_name', '/api/page/save/:page_id', controller='page', action='save_page_name', conditions=dict(method=['POST']))
     map.connect('almanac_create', '/+almanac', controller='almanac', action='create')
     map.connect('almanac_view', '/:almanac_slug', controller='almanac', action='view', _filter=almanac_expand)
 

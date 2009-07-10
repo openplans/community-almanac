@@ -279,6 +279,12 @@ $(document).ready(function() {
   }).blur(function() {
     if ($(this).val() === "") {
       $(this).val("Page Name");
+    } else {
+      // save the page name on blur if it's been set
+      if (window.pageNameEditUrl) {
+          var url = window.pageNameEditUrl;
+          $.post(url, {'name': $(this).val()});
+      }
     }
   });
 
