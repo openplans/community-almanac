@@ -357,7 +357,7 @@ class Page(Base):
     @property
     def first_image(self):
         """Return the first image media item for the page. Return None if the image doesn't exist"""
-        for media in self.media:
+        for media in sorted(self.media, key=lambda x:x.order):
             if isinstance(media, Image):
                 return media
 
