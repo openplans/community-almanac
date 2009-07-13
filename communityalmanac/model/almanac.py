@@ -453,6 +453,15 @@ class Media(Base):
     @staticmethod
     def by_id(media_id):
         return meta.Session.query(Media).filter(Media.id == media_id).one()
+
+    def _remove_media_path(self, path, ignore_error=True):
+        """convenience function that can be used for removing file system paths"""
+        try:
+            os.unlink(path)
+        except OSError:
+            if not ignore_error:
+                raise
+
 media_modify_trigger = DDL("""CREATE TRIGGER media_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON media FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_pages();""", on='postgres').execute_at('after-create', Media.__table__)
@@ -584,6 +593,11 @@ class Image(Media):
         scale.thumbnail(size, PIL.Image.ANTIALIAS)
         scale.save(new_path)
         return scale
+
+    def _remove_all_scales(self):
+        self._remove_media_path(self.path)
+        self._remove_media_path(self.path_large)
+        self._remove_media_path(self.path_small)
 
 image_modify_trigger = DDL("""CREATE TRIGGER image_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON images FOR EACH ROW
