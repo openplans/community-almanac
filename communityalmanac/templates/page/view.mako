@@ -25,7 +25,9 @@
 % else:
 <div class="page-meta">By ${c.page.author} | ${c.page.creation_date_string} | <a href="#comments">${h.plural(len(c.page.comments), 'Comment', 'Comments')}</a></div>
 % endif
+% if c.is_page_owner:
 <a href="${h.url_for('page_edit', almanac=c.almanac, page=c.page)}" title="Edit Page">Edit</a>
+% endif
 %if c.media_items:
   <div>
     <ul class="page-items">
