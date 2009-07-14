@@ -1,19 +1,32 @@
-This file is for you to describe the communityalmanac application. Typically
-you would include information such as the information below:
-
 Installation and Setup
 ======================
 
-Install ``communityalmanac`` using easy_install::
+First, install the software:
+----------------------------
 
-    easy_install communityalmanac
+python2.5 /path/to/virtualenv env
+mkdir env/src
+hg clone https://source.openplans.org/hg/communityalmanac env/src/communityalmanac
+/path/to/pip install -r env/src/communityalmanac/almanac-requirements.txt -E env
+cd env
+source bin/activate
 
-Make a config file as follows::
+* Note that you can most likely get away with just running setup.py
+develop on the source, but the almanac-requirements.txt file
+represents the known good set of packages that work with the almanac.
 
-    paster make-config communityalmanac config.ini
+Next, set up the database.
+--------------------------
 
-Tweak the config file as appropriate and then setup the application::
+The community almanac requires a postgres database to be set up with
+spatial extensions. Assuming this is set up already, there is a
+development.ini config file provided for you as a starting point. In
+particular, ensure that the database name and username/password are
+set correctly.
 
-    paster setup-app config.ini
+paster setup-app development.ini
 
-Then you are ready to go.
+Run it.
+-------
+
+paster serve development.ini

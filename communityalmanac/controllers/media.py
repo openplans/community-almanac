@@ -373,7 +373,7 @@ class MediaController(BaseController):
     @ActionProtector(is_media_owner())
     def delete_image(self, media_id):
         image = h.get_media_by_id(media_id)
-        os.unlink(image.path)
+        image._remove_all_scales()
         meta.Session.delete(image)
         meta.Session.commit()
 
@@ -479,7 +479,7 @@ class MediaController(BaseController):
     @ActionProtector(is_media_owner())
     def delete_pdf(self, media_id):
         pdf = h.get_media_by_id(media_id)
-        os.unlink(pdf.path)
+        pdf._remove_media_path(pdf.path)
         meta.Session.delete(pdf)
         meta.Session.commit()
 
@@ -605,7 +605,7 @@ class MediaController(BaseController):
     @ActionProtector(is_media_owner())
     def delete_audio(self, media_id):
         audio = h.get_media_by_id(media_id)
-        os.unlink(audio.path)
+        audio._remove_media_path(audio.path)
         meta.Session.delete(audio)
         meta.Session.commit()
 
