@@ -7,8 +7,7 @@ from pylons.controllers.util import redirect_to
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 import communityalmanac.lib.helpers as h
-import email.utils
-import smtplib
+import mailer
 
 class ContactForm(Schema):
     name = validators.String()
@@ -31,21 +30,17 @@ class ContactController(BaseController):
         redirect_to(h.url_for('home'))
 
     def _send_message(self, name, from_email, message):
-        headers = {}
+        email = mailer.Message()
         if name:
-            from_addr = '%s <%s>' % (name, from_email)
-            headers['Subject'] = '[Almanac Support] A comment from %s' % name
+            email.From = '%s <%s>' % (name, from_email)
+            email.Subject = '[Almanac Support] A comment from %s' % name
         else:
-            from_addr = from_email
-            headers['Subject'] = '[Almanac Support] A comment'
-        headers['To'] = g.support_email
-        headers['From'] = from_addr
-        headers['Content-Type'] = 'text/plain'
-        headers['Date'] = email.utils.formatdate()
-        email_message = '\n'.join('%s: %s' % (k, v) for k, v in headers.items())
-        email_message += '\n\n' + message
+            email.From = from_email
+            email.Subject = '[Almanac Support] A comment'
+        email.To = g.support_email
+        email.Body = message
         if g.support_sending_enabled:
-            mail_session = smtplib.SMTP(g.smtp_host, g.smtp_port)
-            mail_session.sendmail(from_email, [g.support_email], email_message)
+            server = mailer.Mailer(config['smtp_server'])
+            server.send(email)
         else:
-            print email_message
+            print email.as_string()
