@@ -737,10 +737,6 @@ class FullUser(User):
             self.id = id
 
     def authenticate(self, password):
-        if False:
-            # Appropriate test for old style passwords that authenticates
-            self.password = default_password_hash(password)
-            meta.Session.commit()
         success, scheme = default_password_compare(password, self.password)
         if success and scheme == 'LEGACY':
             # Take the time to upgrade user passwords in the background
