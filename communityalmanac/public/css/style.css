@@ -476,6 +476,13 @@ font-size: 1em;
 margin: 1em 0;
 }
 
+.upload-status {
+float: left;
+font-size: 1em;
+margin: 1em 0;
+padding: 10px;
+}
+
 #add-page-bttn a {
 padding: 10px 10px 10px 35px;
 background: url(/img/add-page-icon.png) 10px 50% no-repeat;
