@@ -28,7 +28,7 @@ class UniqueUsername(validators.FancyValidator):
          }
 
      def validate_python(self, value, state):
-         count = meta.Session.query(func.count()).filter(FullUser.username==value).all()[0]
+         count = meta.Session.query(func.count()).filter(FullUser.username==value).all()[0][0]
          if count:
              raise validators.Invalid(self.message("duplicate", state), value, state)
 
@@ -39,7 +39,7 @@ class UniqueEmail(validators.Email):
          }
 
      def validate_python(self, value, state):
-         count = meta.Session.query(func.count()).filter(FullUser.email_address==value).all()[0]
+         count = meta.Session.query(func.count()).filter(FullUser.email_address==value).all()[0][0]
          if count:
              raise validators.Invalid(self.message("duplicate", state), value, state)
 
