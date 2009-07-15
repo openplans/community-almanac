@@ -18,13 +18,10 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
 from repoze.what.plugins.sql import configure_sql_adapters
-from repoze.what.middleware import setup_auth as setup_authorization
 from repoze.what.middleware import AuthorizationMetadata
 
 # All sorts of repoze.who symbols.
 from repoze.who.middleware import PluggableAuthenticationMiddleware
-from repoze.who.interfaces import IIdentifier
-from repoze.who.interfaces import IChallenger
 from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
 from repoze.who.plugins.form import RedirectingFormPlugin
 from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin
