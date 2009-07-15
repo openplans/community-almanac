@@ -44,7 +44,7 @@
                     <a id="flash-closer" href="#" title="Dismiss messages">Close</a>
                     <div id="flash-content">
                       %for flash_message in flash_messages:
-                        <div>${flash_message}</div>
+                        <div>${h.literal(flash_message)}</div>
                       %endfor
                     </div><!-- /#flash-content -->
                   </div><!-- /#flash-messages -->
