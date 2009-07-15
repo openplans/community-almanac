@@ -109,7 +109,10 @@ class UserController(BaseController):
 
         self._login(username)
 
-        redirect(request.params.get('came_from', h.url_for('home')))
+        send_to = request.params.get('came_from')
+        if not send_to:
+            send_to = h.url_for('home')
+        redirect(send_to)
 
     def _login(self, username):
         # This is how we manually log in a user, as per repoze issue 58
