@@ -22,9 +22,9 @@ from repoze.what.middleware import AuthorizationMetadata
 
 # All sorts of repoze.who symbols.
 from repoze.who.middleware import PluggableAuthenticationMiddleware
+from repoze.who.interfaces import IAuthenticator
 from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
 from repoze.who.plugins.form import RedirectingFormPlugin
-from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin
 from repoze.who.plugins.sa import SQLAlchemyUserMDPlugin
 from repoze.who.plugins.openid import OpenIdIdentificationPlugin
 
@@ -33,12 +33,13 @@ from repoze.who.classifiers import default_request_classifier
 from repoze.who.classifiers import default_challenge_decider
 from repoze.what.predicates import Predicate
 from communityalmanac.model import FullUser
-from communityalmanac.model.meta import Session
 from communityalmanac.model import meta, User, Group, Permission
 import communityalmanac.lib.helpers as h
 from pylons import config
 from pylons import session
 from pylons import tmpl_context as c
+from sqlalchemy.orm import exc
+from zope.interface import implements
 
 from os import path
 import sys
@@ -151,11 +152,9 @@ def wsgi_authorization(app, app_conf):
             )
 
     formplugin = RedirectingFormPlugin('/login', '/do_login', '/logout', rememberer_name='auth_tkt')
-    sqlauth = SQLAlchemyAuthenticatorPlugin(FullUser, Session)
-    sqlauth.translations['user_name'] = 'username'
-    sqlauth.translations['validate_password'] = 'authenticate'
+    sqlauth = CAModelAuthenticator()
 
-    sqlmetadata = SQLAlchemyUserMDPlugin(FullUser, Session)
+    sqlmetadata = SQLAlchemyUserMDPlugin(FullUser, meta.Session)
     sqlmetadata.translations['user_name'] = 'username'
     authorization = AuthorizationMetadata(group_adapters,
                                           permission_adapters)
@@ -180,3 +179,44 @@ def wsgi_authorization(app, app_conf):
         log_level=app_conf.get('who.log_level','error')
         )
     return app
+
+class CAModelAuthenticator(object):
+    """
+    :mod:`repoze.who` authenticator for CA's FullUser model.
+
+    The only difference between this and the sqlalchemy authenticator plugin is
+    the ability to set flash messages.
+
+    .. note::
+
+        Since this depends on the beaker session, the middleware has to be
+        reordered to allow beaker's session middleware to be called before
+        repoze.who/what.
+    """
+
+    implements(IAuthenticator)
+
+    # IAuthenticator
+    def authenticate(self, environ, identity):
+        if not ('login' in identity and 'password' in identity):
+            return None
+
+        try:
+            user = meta.Session.query(FullUser).filter(FullUser.username==identity['login']).one()
+        except (exc.NoResultFound, exc.MultipleResultsFound):
+            CAModelAuthenticator.add_flash(environ, "Login failed: Please use the contact page to explain your problem.")
+            return None
+
+        if user.authenticate(identity['password']):
+            return identity['login']
+
+        CAModelAuthenticator.add_flash(environ, "Login failed: Did you <a href=\"slashdot.org\">forget your password?</a>.")
+
+    @staticmethod
+    def add_flash(environ, message):
+        session = environ.get('beaker.session')
+        if not session:
+            return
+        if not isinstance(session.get('flash'), list):
+            session['flash'] = []
+        session['flash'].append(message)
