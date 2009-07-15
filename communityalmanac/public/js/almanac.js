@@ -250,9 +250,9 @@ $(document).ready(function() {
 
   // on pages, have the add a comment link unhide the form
   $("#comment-form").hide();
-  $("#comment-bttn").click(function() {
+  $("#comment-bttn, #comments .comment-link").click(function() {
     $("#comment-form").slideDown("fast");
-    $(this).slideUp("normal");
+    $("#comment-bttn, #comments .comment-link").slideUp("normal");
     return false;
     });
   // and have the comment link submit the form itself

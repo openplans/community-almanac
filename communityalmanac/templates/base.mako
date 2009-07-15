@@ -57,7 +57,7 @@
                     <input id="username" name="login" type="text" />
                     <input id="password" name="password" type="password" />
                     <span class="bordered"><input id="login-submit" type="submit" value="Log In"/></span>Not a member yet? <a href="/login#login-new">Sign Up!</a><br /><a href="/forgot">Forgot your password?</a></form><div class="tab"><a href="/login#login-returning">Login</a></div></div>
-                %endif         
+                %endif
                 <h3 id="tagline"><a href="${h.url_for('home')}">The heart <span class="amp">&#038;</span> soul of <nobr>the place you live&hellip;</nobr></a></h3>
               </div>
             </div>
@@ -84,17 +84,20 @@
     <script type="text/javascript"
             src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${g.map_key}"></script>
     <script type="text/javascript">
-  		$(document).ready(function(){
-  			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 110,	startingWidth: 24, startingHeight: 24});
-      	$('div#login').hover(
-      	  function () {
-      	    $(this).animate({top: '0'},{queue:false,duration:500});
-      	    $('#username').focus();
-      	  }, 
-      	  function () {
-      	    $(this).animate({top: '-11.6em'},{queue:false,duration:500});	
-      	  }
-      	);
+  		$(document).ready(
+    		function(){
+    		  if ( $(".turn").length > 0 ) {
+      			$('#target').fold({directory: '/img', side: 'right', turnImage: 'fold-sw.png', maxHeight: 110,	startingWidth: 24, startingHeight: 24});
+          	$('div#login').hover(
+          	  function () {
+          	    $(this).animate({top: '0'},{queue:false,duration:500});
+          	    $('#username').focus();
+          	  },
+          	  function () {
+          	    $(this).animate({top: '-11.6em'},{queue:false,duration:500});
+          	  }
+            );
+          }
   		});
   	</script>
     ${self.extra_body()}
