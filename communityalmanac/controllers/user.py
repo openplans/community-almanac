@@ -14,7 +14,7 @@ from communityalmanac.lib.base import BaseController, render
 import communityalmanac.lib.helpers as h
 from communityalmanac.model import FullUser
 from communityalmanac.model import meta
-from sqlalchemy import or_, and_, exc
+from sqlalchemy import or_, and_, exc, orm
 from sqlalchemy.sql import func
 import mailer
 from formencode.htmlfill import none_formatter
@@ -129,7 +129,11 @@ class UserController(BaseController):
     @validate(schema=RequestResetSchema(), form='request_reset')
     def _request_reset(self):
         login = self.form_result['login']
-        user = meta.Session.query(FullUser).filter(or_(FullUser.username==login, FullUser.email_address==login)).one()
+        try:
+            user = meta.Session.query(FullUser).filter(or_(FullUser.username==login, FullUser.email_address==login)).one()
+        except (orm.exc.NoResultFound, orm.exc.MultipleResultsFound):
+            h.flash("Unable to find the username or email supplied.")
+            redirect_to(h.url_for('home'))
         user.generate_key()
         meta.Session.commit()
 
@@ -163,7 +167,11 @@ class UserController(BaseController):
             c.form_errors = error.error_dict or {}
             return render('/user/perform_reset.mako')
         password = form_result['password']
-        user = meta.Session.query(FullUser).filter(and_(FullUser.username==username, FullUser.reset_key==key)).one()
+        try:
+            user = meta.Session.query(FullUser).filter(and_(FullUser.username==username, FullUser.reset_key==key)).one()
+        except (orm.exc.NoResultFound, orm.exc.MultipleResultsFound):
+            h.flash("Invalid reset key.")
+            redirect_to(h.url_for('home'))
         user.reset_key = None
         if password:
             user.set_password(password)
