@@ -81,7 +81,7 @@ class UserController(BaseController):
         if request.environ.get('repoze.who.identity') == None:
             c.active_section = request.params.get('show','login-new')
             return render('/user/login.mako')
-        h.flash(u'Unable to register as a user is already logged in.  Please logout first.')
+        h.flash(u'Can\'t regist while logged in.  Please logout first.')
         redirect_to(h.url_for('home'))
 
     @validate(schema=UserRegistrationSchema(), form='register', auto_error_formatter=pass_html_error_formatter)
