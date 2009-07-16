@@ -128,7 +128,7 @@ Edit Page -  ${c.almanac.name}
   </span>
 </%def>
 <%def name="bookmark()">
-<div id="backtoc" class="pngfix">
+<div id="backtoc">
   <a href="${h.url_for('almanac_view', almanac=c.almanac)}"><span>&laquo; ${c.almanac.name}</span></a>
 </div>
 </%def>

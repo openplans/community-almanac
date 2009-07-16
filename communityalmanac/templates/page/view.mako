@@ -77,7 +77,7 @@
       <input type="text" class="textType" id="website" name="website" size="20" value=""/>
     </div>
     <div class="form-row">
-      <label for="body">Comment <span class="required">* </span></label>
+      <label for="text">Comment <span class="required">* </span></label>
       <textarea cols="60" name="text" rows="15"></textarea>
     </div>
     %if g.captcha_enabled and not c.user:
@@ -104,7 +104,7 @@
 ${c.page.name} - ${c.almanac.name}
 </%def>
 <%def name="bookmark()">
-<div id="backtoc" class="pngfix">
+<div id="backtoc">
   <a href="${h.url_for('almanac_view', almanac=c.almanac)}"><span>&laquo; ${c.almanac.name}</span></a>
 </div>
 </%def>

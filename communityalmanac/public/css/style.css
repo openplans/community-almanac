@@ -239,6 +239,10 @@ color: #fff;
 padding: 0.4em;
 }
 
+#flash-content a:hover {
+color: #fff;
+}
+
 h3#tagline {
 margin: 0 0 0 7%;
 padding: 1.5em 0 0 4px;
@@ -427,7 +431,7 @@ color: #70818c;
 
 #comment-form input,
 #comment-form textarea {
-background: url(/img/bttn-bg-white.jpg) top left repeat;
+background: url(/img/bttn-bg-white.jpg) repeat;
 border: 4px solid #d0c9b9;
 width: 312px;
 margin: 0;
@@ -443,7 +447,7 @@ line-height: 1.5;
 #submit-button-form input,
 .upload-bttn,
 #comment-submit {
-background: url(/img/bttn-bg-blue.jpg) top left repeat;
+background-image: url(/img/bttn-bg-blue.jpg);
 font-family: georgia, serif;
 color: #fff;
 border-top: 1px solid #80d4ff;
@@ -508,7 +512,8 @@ color: #fff;
 }
 
 #comment-bttn {
-margin-right: 180px;
+float: left;
+width: 340px
 }
 
 .page-media-items form .media-item-actions {
@@ -546,6 +551,13 @@ background: #fffbf5;
 color: #ff6040;
 }
 
+* html .media-save,
+* html .media-save:hover,
+* html .media-cancel,
+* html .media-cancel:hover { /* IE6 */
+border: 0 none transparent;
+}
+
 #comment-submit {
 margin-left: 180px;
 width: 340px;
@@ -554,13 +566,17 @@ width: 340px;
 #backtoc {
 width: 188px;
 height: 80px;
-background: url(/img/bookmark.png) top left no-repeat;
+background: url(/img/bookmark.png) no-repeat;
 position: absolute;
 top: -121px;
 left: -23px;
 text-align: left;
 padding: 40px 0 0;
 z-index: 10;
+}
+
+* html #backtoc { /* IE6 */
+background: url(/img/bookmark-ie6.png) no-repeat;
 }
 
 #backtoc a {
@@ -582,7 +598,7 @@ text-decoration: underline;
 
 
 #searchform {
-background: url(/img/bttn-bg-khaki.jpg) top left repeat;
+background: url(/img/bttn-bg-khaki.jpg) repeat;
 border: 4px solid #d0c9b9;
 font-size: 1.4em;
 line-height: 1em;
@@ -703,6 +719,10 @@ padding: 6px 22px 6px 6px;
 font-size: 1.25em;
 line-height: 1em;
 text-decoration: none;
+}
+
+* html ul.page-media-tools li a {
+width: 224px;
 }
 
 ul.page-media-tools li a#text-tool {
@@ -1156,7 +1176,7 @@ body.home #intro .map a.find-almanac {
 position: absolute;
 right: 0;
 top: 0;
-background: url(/img/bttn-bg-green.jpg) top left repeat;
+background: url(/img/bttn-bg-green.jpg) repeat;
 border: 4px solid #b2b32d;
 font-size: 1.4em;
 line-height: 1em;
@@ -1359,8 +1379,9 @@ height: auto;
 margin: 0 0 30px;
 }
 
-* html .sidebar #recent-activity {
-background: url(/img/torn-paper-ie6.png) no-repeat;
+* html .sidebar #recent-activity,
+* html .sidebar ul#pages {
+background: url(/img/torn-paper-ie6-light.png) no-repeat;
 }
 
 #recent-activity h2 {
@@ -1571,17 +1592,28 @@ font-size: 1em;
 
 fieldset {
 margin: 1em 0;
-padding: 0 0.5em 0.5em;
+padding: 1.5em 0.5em 0.5em;
 border: 4px solid #d0c9b9;
 background: url(/img/page-contrast-bg.png);
 }
 
 legend {
 padding: 0.2em 0.5em;
-margin: 0 0 0 0.2em;
 border: 2px solid #d0c9b9;
 background: url(/img/page-contrast-bg.png);
 font-size: 0.9em;
+}
+
+* html fieldset { /* IE6 */
+background: transparent;
+}
+
+body:last-child fieldset { /* IE7 */
+background: transparent;
+}
+
+*:first-child+html fieldset { /* IE8 */
+background: transparent;
 }
 
 input.indented-submit {
