@@ -255,7 +255,12 @@ $(document).ready(function() {
   });
 
   // on pages, have the add a comment link unhide the form
-  $("#comment-form").hide();
+  // but only hide it if there are no validation errors
+  if ($("#comment-form .error-message").length == 0) {
+    $("#comment-form").hide();
+  } else {
+    $("#comment-form").show();
+  }
   $("#comment-bttn, #comments .comment-link").click(function() {
     $("#comment-form").slideDown("fast");
     $("#comment-bttn, #comments .comment-link").slideUp("normal");
