@@ -14558,6 +14558,7 @@ OpenLayers.Popup.Framed =
                 null, this.imageSize, this.imageSrc, 
                 "absolute", null, null, null
             );
+            block.image.src = '/img/ie-popup-fix.gif';
 
             block.div.appendChild(block.image);
             this.groupDiv.appendChild(block.div);
