@@ -299,7 +299,7 @@ class MediaController(BaseController):
         # The first is to send the content as 'application/javascript' or
         # 'text/javascript', but then the iframe will return a non-existant
         # <pre> tag surrounding the content.  The client side javascript must
-        # be aware of this and strip the tag.
+        # be aware of this and strip the tag. IE8 has problems with this version.
         #
         # The second is to send the content as text/html, and make sure that we
         # don't send any angle brackets that the browser might interpret as
@@ -308,17 +308,12 @@ class MediaController(BaseController):
         # their hex encodings is sufficient to protect the content.
         # e.g. return json_output.replace('<','\\x3C').replace('>','\\x3E')
         #
-        # I've fixed the external library to support the first option,
-        # hopefully the patch will be accepted.  In the meantime, our embedded
-        # version works properly, and the client-side fix ensures that we only
-        # have to write the code once, rather than every time we use the file
-        # uploader*
+        # Because of IE8 problems, we're using the second version...
         #
         # * Not exactly true, since you can't use @jsonify, but it's a close as
         # we can get.
 
-        response.content_type = 'application/javascript'
-        return simplejson.dumps(dict(html=render('/media/image/item.mako')))
+        return simplejson.dumps(dict(html=render('/media/image/item.mako'))).replace('<','\\x3C').replace('>','\\x3E')
 
     @dispatch_on(POST='_do_edit_form_image')
     @jsonify
