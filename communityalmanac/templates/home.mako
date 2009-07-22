@@ -100,7 +100,7 @@
   <script type="text/javascript">
 //<![CDATA[
 var geocode_url = "${geocode_url}";
-$(document).ready(function(){
+var loadfunction = function(){
 	$('ul#almanacs li').hover(
 	  function () {
 	    $(this).animate({left: '-20px'},{queue:false,duration:500});
@@ -312,7 +312,12 @@ $(document).ready(function(){
       return false;
     });
     $('#almanac-name').focus();
-});
+};
+if ($.browser.msie) {
+  $(window).load(loadfunction);
+else {
+  $(document).ready(loadfunction);
+}
 //]]>
   </script>
 </%def>
