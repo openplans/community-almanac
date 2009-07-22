@@ -19,6 +19,12 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// This gorgeous function originally written by Dan Phiffer (http://phiffer.org/)
+function hrefToID(href) {
+  var start = href.indexOf('#');
+  var length = href.length - start;
+  return href.substr(start + 1, length);
+}
 function applyMapDisplaySideEffects(data) {
   var geometryJson = data.geometry;
   if (!geometryJson) {
