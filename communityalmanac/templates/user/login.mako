@@ -67,11 +67,6 @@
     <input class="indented-submit" type="submit" value="Login!" />
   </fieldset>
 </form>
-<form action="/do_login" method="POST">
-<label for="openid">OpenID URL</label>
-<input type="text" name="openid" />
-<input type="submit" value="Login with OpenID" />
-</form>
 </div>
 <%def name="extra_body()">
 <script type="text/javascript">
