@@ -99,7 +99,7 @@
     };
 if ($.browser.msie) {
   $(window).load(loadfunction);
-else {
+} else {
   $(document).ready(loadfunction);
 }
 </script>
