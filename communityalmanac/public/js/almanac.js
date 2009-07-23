@@ -486,4 +486,15 @@ $(document).ready(function() {
     var url = $(this).attr('href');
     pageMeta.load(url);
   });
+
+  // animate the header illustration on hover of logo
+    $("#logo").hover(
+      function () {
+        $("#ill-clouds").animate({ backgroundPosition: "-50% 0" }, 100000);
+      }, 
+      function () {
+        $("#ill-clouds").stop();
+      }
+    );
+
 });
