@@ -5,9 +5,6 @@
 
 <h2>We're sorry, but something's gone wrong with the almanac.</h2>
 
-<p>We are working on cleaning things up and we really appreciate your patience. If this keeps on happening please send us a message.</p>
-
-<p>You can reach us here:<br />
-<a href="mailto:almanac-support@lists.opengeo.org" onclick="alert('not implemented');">almanac-support@lists.opengeo.org</a></p>
+<p>We are working on cleaning things up and we really appreciate your patience. If this keeps on happening please don't hesitate to ${h.link_to('contact', h.url_for('contact'), title='Contact us')} us.</p>
 
 <%def name="body_class()">fivehundred</%def>
