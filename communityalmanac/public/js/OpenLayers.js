@@ -14297,7 +14297,7 @@ OpenLayers.Popup.Framed =
      * Property: imageSrc
      * {String} location of the image to be used as the popup frame
      */
-    imageSrc: null,
+    imageSrc: OpenLayers.Util.getImagesLocation() + "blank.gif",
 
     /**
      * Property: imageSize
@@ -14558,7 +14558,6 @@ OpenLayers.Popup.Framed =
                 null, this.imageSize, this.imageSrc, 
                 "absolute", null, null, null
             );
-            block.image.src = '/img/ie-popup-fix.gif';
 
             block.div.appendChild(block.image);
             this.groupDiv.appendChild(block.div);
