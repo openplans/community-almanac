@@ -70,3 +70,7 @@ class ErrorController(BaseController):
         """
         request.environ['PATH_INFO'] = '/%s' % path
         return forward(PkgResourcesParser('pylons', 'pylons'))
+
+    def show_500(self):
+        """allows us to trigger a 500 for testing"""
+        assert 0, "Just testing"

@@ -64,6 +64,9 @@ def make_map():
     # CUSTOM ROUTES HERE
     maps.admin_map(map, controller='admin', url='/admin')
 
+    # force trigger an error page
+    map.connect('500', '/500', controller='error', action='show_500')
+
     map.connect('home', '/', controller='homesweethome', action='home')
     map.connect('about', '/about', controller='about', action='about')
     map.connect('contact', '/contact', controller='contact', action='contact')
