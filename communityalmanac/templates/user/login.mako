@@ -67,34 +67,28 @@
     <input class="indented-submit" type="submit" value="Login!" />
   </fieldset>
 </form>
-<form action="/do_login" method="POST">
-<label for="openid">OpenID URL</label>
-<input type="text" name="openid" />
-<input type="submit" value="Login with OpenID" />
-</form>
 </div>
 <%def name="extra_body()">
 <script type="text/javascript">
 /* <![CDATA[ */
-    // This gorgeous function originally written by Dan Phiffer (http://phiffer.org/)
     <%doc>
       [TODO] - do we want to move this into a standalone file? It seems like it could be broadly useful.
     </%doc>
-    function hrefToID(href) {
-      var start = href.indexOf('#');
-      var length = href.length - start;
-      return href.substr(start + 1, length);
-    }
     function sectionhider(except) {
       $(".js-toggle").hide();
       $("#" + except).show();
     }
-      $(document).ready(function(){
-        $(".js-toggler").click(function () {
-          sectionhider(hrefToID(this.href));
-          });
-        sectionhider('${c.active_section}');
-      });
+    $(document).ready(function(){
+      $(".js-toggler").click(function () {
+        sectionhider(hrefToID(this.href));
+        });
+      var linkId = hrefToID(window.location.href);
+      if (!linkId.length) {
+        sectionhider('login-new');
+        return;
+      }
+      sectionhider(linkId);
+    });
 /* ]]> */
 </script>
 </%def>

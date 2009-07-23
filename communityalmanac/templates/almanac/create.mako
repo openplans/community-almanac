@@ -48,7 +48,7 @@
 <% geocode_url = h.url_for('geocode') %>
 <script type="text/javascript">
   var geocode_url = "${geocode_url}";
-  $(document).ready(function() {
+  var loadfunction = function() {
     function _geocode() {
       var location = $('#almanac-name').val();
       $.getJSON(geocode_url, {location: location}, function(data) {
@@ -96,6 +96,11 @@
     var baseLayer = new OpenLayers.Layer.Google('streets', {sphericalMercator: true, type: G_PHYSICAL_MAP});
     map.addLayer(baseLayer);
     map.zoomToMaxExtent();
-    });
+    };
+if ($.browser.msie) {
+  $(window).load(loadfunction);
+} else {
+  $(document).ready(loadfunction);
+}
 </script>
 </%def>

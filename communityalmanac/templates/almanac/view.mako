@@ -58,7 +58,7 @@ ${c.almanac.name}
 </%def>
 <%def name="extra_body()">
   <script type="text/javascript">
-    $(document).ready(function() {
+    var loadfunction = function() {
       var map = new OpenLayers.Map('map', {
         projection: new OpenLayers.Projection('EPSG:900913'),
         displayProjection: new OpenLayers.Projection('EPSG:4326'),
@@ -111,7 +111,12 @@ ${c.almanac.name}
         });
         map.addControl(selectControl);
         selectControl.activate();
-    });
+    };
+if ($.browser.msie) {
+  $(window).load(loadfunction);
+} else {
+  $(document).ready(loadfunction);
+}
   </script>
 </%def>
 <%def name="sidebar()">
