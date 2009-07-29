@@ -74,9 +74,9 @@
         <li><a href="${h.url_for('about')}">About</a></li>
         <li><a href="${h.url_for('contact')}">Contact</a></li>
         <li>
-          <form action="${h.url_for('site_search')}" id="searchform">
-            <input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="${c.query if c.query else 'Search All Almanacs&hellip;'}" class="text" name="query" id="query"/>
-            <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
+          <form action="${h.url_for('site_search')}" id="searchform-global">
+            <input type="text" onfocus="if(this.value=='Search All Almanacs&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search All Almanacs&hellip;';" tabindex="1" size="20" value="${c.query_global if c.query_global else h.literal('Search All Almanacs&hellip;')}" class="text" name="query-global" id="query-global"/>
+            <input type="image" align="absmiddle" src="/img/search-submit-global.gif" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit-global"/>
           </form>
         </li>
       </ul>
