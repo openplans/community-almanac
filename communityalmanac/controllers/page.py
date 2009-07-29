@@ -224,6 +224,7 @@ class PageController(BaseController):
         c.pagination_data = h.pagination_data(pagination)
         c.pages = pagination.items
         c.npages = pagination.item_count
+        c.latest_pages = Page.latest()
         return render('/search_all.mako')
 
     def save_page_name(self, page_id):
