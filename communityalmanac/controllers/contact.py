@@ -2,6 +2,7 @@ from communityalmanac.lib.base import BaseController, render
 from formencode import Schema
 from formencode import validators
 from pylons import g
+from pylons import config
 from pylons import request
 from pylons.controllers.util import redirect_to
 from pylons.decorators import validate
