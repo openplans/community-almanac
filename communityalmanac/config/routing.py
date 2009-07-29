@@ -87,7 +87,7 @@ def make_map():
     map.connect('almanac_center', '/api/center/:almanac_slug', controller='almanac', action='center', _filter=almanac_expand)
     map.connect('geocode', '/api/geocode', controller='geocoder', action='geocode')
     map.connect('almanac_search', '/search/:almanac_slug/*query', controller='almanac', action='search', query='', _filter=almanac_expand)
-    map.connect('site_search', '/search_all/*query', controller='page', action='all_pages', query='')
+    map.connect('site_search', '/search_all', controller='page', action='all_pages')
     map.connect('page_create', '/:almanac_slug/+page', controller='page', action='create', _filter=almanac_expand)
     map.connect('page_view', '/:almanac_slug/:page_slug', controller='page', action='view', _filter=page_expand)
     map.connect('page_edit', '/:almanac_slug/:page_slug/edit', controller='page', action='edit', _filter=page_expand)

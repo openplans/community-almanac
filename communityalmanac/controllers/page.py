@@ -41,6 +41,7 @@ from repoze.what.plugins.pylonshq import ActionProtector
 from communityalmanac.lib.base import BaseController, render
 from shapely.geometry.geo import asShape
 from shapely import wkb
+from webhelpers.paginate import Page as PaginationPage
 import communityalmanac.lib.helpers as h
 import recaptcha.client.captcha
 import simplejson
@@ -207,10 +208,23 @@ class PageController(BaseController):
         response.content_type = 'application/vnd.google-earth.kml+xml kml'
         return render('/page/kml.mako')
 
-    def all_pages(self, query):
-        c.pages = Page.search_all(query).all()
-        # Replace this template...
-        return render('/page/kml.mako')
+    def all_pages(self):
+        c.query = request.GET.get('query', '')
+        if c.query:
+            pages_query = Page.search_all(c.query)
+        else:
+            pages_query = Page.latest(query_only=True)
+        page_idx = request.GET.get('page', 1)
+        try:
+            page_idx = int(page_idx)
+        except ValueError:
+            page_idx = 1
+        per_page = 10
+        pagination = PaginationPage(pages_query, page=page_idx, items_per_page=per_page)
+        c.pagination_data = h.pagination_data(pagination)
+        c.pages = pagination.items
+        c.npages = pagination.item_count
+        return render('/search_all.mako')
 
     def save_page_name(self, page_id):
         page = h.get_page_by_id(page_id)

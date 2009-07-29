@@ -73,6 +73,12 @@
         <li><a href="${h.url_for('home')}">Home</a></li>
         <li><a href="${h.url_for('about')}">About</a></li>
         <li><a href="${h.url_for('contact')}">Contact</a></li>
+        <li>
+          <form action="${h.url_for('site_search')}" id="searchform">
+            <input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="${c.query if c.query else 'Search All Almanacs&hellip;'}" class="text" name="query" id="query"/>
+            <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
+          </form>
+        </li>
       </ul>
     </div>
     <script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
@@ -155,7 +161,7 @@
     <div id="left-page" class="selfclear">
       ${self.sidebar()}
     </div><!-- /#left-page -->
-    <div id="nav-bottom">
+    <div id="nav-bottom" class="selfclear">
       ${self.pagenav()}
     </div>
   </div><!-- /#wrap-b-->

@@ -336,11 +336,12 @@ class Page(Base):
         return query.one()
 
     @staticmethod
-    def latest(limit=8, offset=0, almanac_id=None):
+    def latest(limit=8, offset=0, almanac_id=None, query_only=False):
         if almanac_id:
-            return meta.Session.query(Page).filter(Page.almanac_id==almanac_id).filter(Page.published==True).order_by(Page.modified.desc()).limit(limit).offset(offset).all()
+            query = meta.Session.query(Page).filter(Page.almanac_id==almanac_id).filter(Page.published==True).order_by(Page.modified.desc()).limit(limit).offset(offset)
         else:
-            return meta.Session.query(Page).filter(Page.published==True).order_by(Page.modified.desc()).limit(limit).offset(offset).all()
+            query = meta.Session.query(Page).filter(Page.published==True).order_by(Page.modified.desc()).limit(limit).offset(offset)
+        return query if query_only else query.all()
 
     @property
     def creation_date_string(self):
