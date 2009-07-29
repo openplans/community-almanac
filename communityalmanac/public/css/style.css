@@ -285,7 +285,7 @@ background: url(/img/book-bottom-ie6.png) 50% 100% no-repeat;
 
 #wrap-b {
 background: url(/img/book-tile.png) 50% 0 repeat-y;
-padding: 20px 0 40px 0;
+padding: 20px 0;
 }
 
 * html #wrap-b {
@@ -364,7 +364,7 @@ padding-bottom: 40px;
 ul#footer-nav {
 float: left;
 list-style: none;
-margin: 20px 20px 0 0;
+margin: 30px 20px 0 0;
 font-size: .9em;
 }
 
@@ -605,7 +605,6 @@ line-height: 1em;
 padding: 5px 5px;
 margin-bottom: 20px;
 }
-
 input#query {
 background: transparent;
 border: 0;
@@ -617,8 +616,27 @@ color: #003459;
 font-size: 0.8em;
 line-height: 1em;
 }
-
 input#searchsubmit {
+}
+
+#searchform-global {
+background: url(/img/bttn-bg-pea.jpg) repeat;
+padding: 5px;
+margin: 0;
+position: relative;
+top: -5px;
+}
+input#query-global {
+background: transparent;
+border: 0;
+width: 218px;
+margin: 0;
+padding: 0;
+font-family: georgia, serif;
+color: #340f03;
+line-height: 1em;
+}
+input#searchsubmit-global {
 }
 
 span.amp {
@@ -885,6 +903,14 @@ border: 0 none transparent;
 ul.almanac-pages li .almanac-meta {
 float: right;
 width: 140px;
+}
+ul.almanac-pages li .almanac-meta .almanac-link {
+background: url(/img/almanac-icon.gif) 0 center no-repeat;
+padding-left: 20px
+}
+ul.almanac-pages li .almanac-meta .comments-link {
+background: url(/img/comments-icon.gif) 0 center no-repeat;
+padding-left: 20px
 }
 
 ul.almanac-pages h4 {
@@ -1376,6 +1402,7 @@ overflow: visible;
 .sidebar #recent-activity {
 background: url(/img/torn-paper.png) no-repeat;
 height: auto;
+max-height: none;
 margin: 0 0 30px;
 }
 

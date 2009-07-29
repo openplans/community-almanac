@@ -28,7 +28,7 @@
     % for page in c.pages:
     <li class="selfclear">
       <div class="almanac-meta">${page.creation_date_string}<br />
-        <a href="${h.url_for('page_view', almanac=c.almanac, page=page)}#comments">
+        <a href="${h.url_for('page_view', almanac=c.almanac, page=page)}#comments" class="comments-link">
           ${h.plural(len(page.comments), 'Comment', 'Comments')}
         </a>
       </div>
