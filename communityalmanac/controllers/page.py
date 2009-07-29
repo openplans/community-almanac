@@ -209,7 +209,7 @@ class PageController(BaseController):
         return render('/page/kml.mako')
 
     def all_pages(self):
-        c.query = request.GET.get('query', '')
+        c.query = request.GET.get('query-global', '')
         if c.query:
             pages_query = Page.search_all(c.query)
         else:
