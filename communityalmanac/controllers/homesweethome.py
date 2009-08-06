@@ -48,3 +48,7 @@ class HomesweethomeController(BaseController):
             c.almanacs = meta.Session.query(Almanac).join(Almanac.pages).distinct().filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bbox.to_wkb())), storage_SRID))).limit(10).all()
         response.content_type = 'application/vnd.google-earth.kml+xml kml'
         return render('/almanac/kml.mako')
+
+    def almanacs_kml_link(self):
+        response.content_type = 'application/vnd.google-earth.kml+xml kml'
+        return render('/almanac/kml_link.mako')

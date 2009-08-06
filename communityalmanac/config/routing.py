@@ -71,6 +71,7 @@ def make_map():
     map.connect('about', '/about', controller='about', action='about')
     map.connect('contact', '/contact', controller='contact', action='contact')
     map.connect('almanacs_kml', '/api/kml/almanacs.kml', controller='homesweethome', action='almanacs_kml')
+    map.connect('almanacs_kml_link', '/api/kml/almanacs_link.kml', controller='homesweethome', action='almanacs_kml_link')
     map.connect('pages_kml_search', '/api/kml/pages/*query.kml', controller='page', action='all_pages_kml')
     map.connect('pages_kml', '/api/kml/:almanac_slug/pages.kml', controller='almanac', action='pages_kml', query=None, _filter=almanac_expand)
     map.connect('pages_kml_search', '/api/kml/:almanac_slug/pages/*query.kml', controller='almanac', action='pages_kml', _filter=almanac_expand)
