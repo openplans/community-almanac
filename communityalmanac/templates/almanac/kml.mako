@@ -2,6 +2,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document>
+  <Style id="almanacIcon">
+    <IconStyle>
+      <Icon>
+        <href>${h.url_for('/js/img/almanac_marker.png', qualified=True)}</href>
+      </Icon>
+    </IconStyle>
+  </Style>
   %for almanac in c.almanacs:
     <Placemark>
       <name>${almanac.name}</name>
@@ -15,6 +22,7 @@
         </div>
         ]]>
       </description>
+      <styleUrl>#almanacIcon</styleUrl>
       <Point>
         <coordinates>${almanac.location_4326.x},${almanac.location_4326.y},0</coordinates>
       </Point>
