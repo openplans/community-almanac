@@ -208,10 +208,11 @@ class PageController(BaseController):
         response.content_type = 'application/vnd.google-earth.kml+xml kml'
         return render('/page/kml.mako')
 
-    def all_pages(self):
-        c.query_global = request.GET.get('query-global', '')
-        if c.query_global:
-            pages_query = Page.search_all(c.query_global)
+    @dispatch_on(POST='_all_pages')
+    def all_pages(self, query):
+        c.query_global = query
+        if query:
+            pages_query = Page.search_all(query)
         else:
             pages_query = Page.latest(query_only=True)
         page_idx = request.GET.get('page', 1)
@@ -226,6 +227,9 @@ class PageController(BaseController):
         c.npages = pagination.item_count
         c.latest_pages = Page.latest()
         return render('/search_all.mako')
+
+    def _all_pages(self, query=''):
+        redirect_to(h.url_for('site_search', query=request.params.get('query','')))
 
     def save_page_name(self, page_id):
         page = h.get_page_by_id(page_id)
