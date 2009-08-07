@@ -141,7 +141,7 @@
     ${h.link_to(u'Add a page to this almanac!', h.url_for('page_create', almanac=c.almanac))}
   </h3>
   <form action="${h.url_for('almanac_search', almanac=c.almanac, query='form')}" method="post" id="searchform">
-    <input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="Search&hellip;" class="text" name="query" id="query"/>
+    <input type="text" onfocus="if(this.value=='Search This Almanac&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search This Almanac&hellip;';" tabindex="1" size="20" value="Search This Almanac&hellip;" class="text" name="query" id="query"/>
     <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
   </form>
   % endif
