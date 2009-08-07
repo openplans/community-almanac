@@ -208,6 +208,11 @@ class PageController(BaseController):
         response.content_type = 'application/vnd.google-earth.kml+xml kml'
         return render('/page/kml.mako')
 
+    def all_pages_kml_link(self, query):
+        c.query = query
+        response.content_type = 'application/vnd.google-earth.kml+xml kml'
+        return render('/page/kml_link.mako')
+
     @dispatch_on(POST='_all_pages')
     def all_pages(self, query):
         c.query_global = query

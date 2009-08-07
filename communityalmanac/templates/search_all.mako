@@ -51,6 +51,9 @@ Search results
 </%def>
 <%def name="sidebar()">
 <div class="sidebar">
+  <p class="kml-link"><a href="${h.url_for('all_pages_kml_search_link', query=c.query_global)}">View in Google Earth (KML)</a></p>
+</div>
+<div class="sidebar">
   ${self.recent_pages_snippet(c.latest_pages)}
 </div>
 </%def>
