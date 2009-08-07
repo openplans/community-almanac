@@ -146,3 +146,11 @@ class AlmanacController(BaseController):
             c.pages = c.almanac.pages
         response.content_type = 'application/vnd.google-earth.kml+xml kml'
         return render('/page/kml.mako')
+
+    def pages_kml_link(self, almanac_slug, query):
+        almanac = h.get_almanac_by_slug(almanac_slug)
+        c.query = query
+        c.name = almanac.name
+        c.slug = almanac_slug
+        response.content_type = 'application/vnd.google-earth.kml+xml kml'
+        return render('/page/kml_link.mako')

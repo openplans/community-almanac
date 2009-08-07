@@ -75,6 +75,8 @@ def make_map():
     map.connect('all_pages_kml_search', '/api/kml/pages/*query.kml', controller='page', action='all_pages_kml')
     map.connect('pages_kml', '/api/kml/:almanac_slug/pages.kml', controller='almanac', action='pages_kml', query=None, _filter=almanac_expand)
     map.connect('pages_kml_search', '/api/kml/:almanac_slug/pages/*query.kml', controller='almanac', action='pages_kml', _filter=almanac_expand)
+    map.connect('pages_kml_link', '/api/kml/:almanac_slug/pages_link.kml', controller='almanac', action='pages_kml_link', query=None, _filter=almanac_expand)
+    map.connect('pages_kml_search_link', '/api/kml/:almanac_slug/pages_link/*query.kml', controller='almanac', action='pages_kml_link', _filter=almanac_expand)
     # FIXME not sure if we should keep this url scheme
     map.connect('login', '/login', controller='user', action='login')
     map.connect('user_register', '/signup', controller='user', action='register')

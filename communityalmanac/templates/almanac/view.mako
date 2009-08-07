@@ -132,7 +132,7 @@ if ($.browser.msie) {
   </form>
 </div>
 <div class="sidebar">
-  <p class="kml-link"><a href="${h.url_for('pages_kml', almanac=c.almanac)}">View in Google Earth (KML)</a></p>
+  <p class="kml-link"><a href="${h.url_for('pages_kml_link', almanac=c.almanac)}">View in Google Earth (KML)</a></p>
 </div>
 </%def>
 

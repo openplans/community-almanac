@@ -116,7 +116,7 @@ if ($.browser.msie) {
     <input type="text" onfocus="if(this.value=='Search&hellip;') this.value='';" onblur="if(this.value=='') this.value='Search&hellip;';" tabindex="1" size="20" value="${c.query if c.query else 'Search&hellip;'}" class="text" name="query" id="query"/>
     <input type="image" align="absmiddle" src="/img/search-submit.png" tabindex="2" value="Find" name="searchsubmit" id="searchsubmit"/>
   </form>
-  <p class="kml-link"><a href="${h.url_for('pages_kml_search', almanac=c.almanac, query=c.query)}">View in Google Earth (KML)</a></p>
+  <p class="kml-link"><a href="${h.url_for('pages_kml_search_link', almanac=c.almanac, query=c.query)}">View in Google Earth (KML)</a></p>
 </div>
 <div class="sidebar">
   ${self.recent_pages_snippet(c.latest_pages)}
