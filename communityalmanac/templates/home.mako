@@ -111,6 +111,8 @@ var loadfunction = function(){
 	);
 	$('.panel-wrap').cycle({fx: 'fade', speed: 'fast', timeout: 0, next: '.next-panel', prev: '.prev-panel'
 	});
+  // This is the max Extent in OpenLayers pixels...  I find it kind of annoying
+  // that we have to work in pixels.  There has got to be a better way.
   var extent = new OpenLayers.Bounds(-14323800, 2299000, -7376800, 7191400);
   var map = new OpenLayers.Map('map', {
     projection: new OpenLayers.Projection('EPSG:900913'),
@@ -186,6 +188,8 @@ var loadfunction = function(){
     return false;
   };
   map.zoomToExtent(extent);
+  // All sorts of crazy calculations just to figure out the easiest way to zoom in by one level is this.
+  map.zoomIn();
   map.events.on({'moveend': populateMap});
   
   // Big dirty hack!!!
