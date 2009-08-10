@@ -109,6 +109,16 @@ def main():
         default='ABQIAAAArBPF8riaRhqOCRInVOpLVhS7l0GBSa1x8uTWSQog_urT4TWq5xQAsIXoWoBjWzF7uvuoy8WT3pGQQA',
         help='The google maps api key to use')
 
+    parser.add_option(
+        '--recaptcha-public',
+        default='6Le2wAcAAAAAAMAt001e7rSZgigoGgbFFyFN_jWi',
+        help='The recaptcha public key to use')
+
+    parser.add_option(
+        '--recaptcha-private',
+        default='6Le2wAcAAAAAAGKOoOcrBrNpYlaP3xW4RcWE1YX2',
+        help='The recaptcha private key to use')
+
     args = parser.parse_args()[0]
 
     config = {
@@ -124,11 +134,11 @@ def main():
         'smtp_port': 25,
         'sqlalchemy.url': args.url,
         'map_key': args.map_key,
+        'captcha_pubkey': args.recaptcha_public,
+        'captcha_privkey': args.recaptcha_private,
+        'captcha_enabled': 'True',
         'host_whitelist': 'player.soundcloud.com,soundcloud.com,youtube.com,video.google.com,vimeo.com,blip.tv'.split(','),
         'allow_tags': 'embed,object,param'.split(','),
-        'captcha_enabled': 'False',
-        'captcha_pubkey': '???',
-        'captcha_privkey': '???',
         'support_sending_enabled': False,
         'support_email': 'nobody@localhost',
     }
