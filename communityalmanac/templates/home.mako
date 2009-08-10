@@ -86,7 +86,7 @@
     %if c.prev_page_url:
       <a class="prev" href="${c.prev_page_url}">&#171; ${c.prev_page_text}</a>
     %endif
-    Showing ${c.showing_start}-${c.showing_end} Recently Updated Almanacs
+    Showing ${c.showing_start}-${c.showing_end} of ${c.count} Recently Updated Almanacs
     %if c.next_page_url:
       <a class="next" href="${c.next_page_url}">${c.next_page_text} &#187;</a>
     %endif

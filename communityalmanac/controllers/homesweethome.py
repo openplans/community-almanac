@@ -27,6 +27,7 @@ class HomesweethomeController(BaseController):
         except ValueError:
             page_idx = 1
         almanac_query = meta.Session.query(Almanac).join(Almanac.pages).distinct().order_by(Almanac.modified.desc())
+        c.count = almanac_query.count()
         h.setup_pagination(almanac_query, page_idx)
         c.almanacs = c.pagination.items
         # Almanacs are slightly smaller on the page, we need to show slightly less so that the almanacs are resting on the shelf.
