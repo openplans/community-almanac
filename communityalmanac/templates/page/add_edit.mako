@@ -72,6 +72,13 @@
         sortUrl = "${h.url_for('media_item_sort', almanac=c.almanac, page=c.page)}";
     %endif
     pageNameEditUrl = "${h.url_for('page_save_name', page_id=c.page.id)}";
+    var form = $('#page-title-form');
+    var submit_blocker = function() { return false; };
+    $('#page-title').focus(function() {
+      form.bind('submit', submit_blocker);
+    }).blur(function() {
+      form.unbind('submit', submit_blocker);
+    });
   </script>
   <script type="text/javascript" src="/js/upload/ajaxupload.3.2.js"></script>
   <script type="text/javascript" src="/js/flowplayer/flowplayer-3.1.1.min.js"></script>
