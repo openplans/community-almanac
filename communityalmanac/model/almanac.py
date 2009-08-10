@@ -644,7 +644,7 @@ class Story(Media):
     def excerpt(self, n=140):
         """short version of the text, useful for displaying in lists"""
         text = self.text
-        return text if len(text) < n else text[:n-4] + u' ...'
+        return text if len(text) < n else text[:n-4] + u'&hellip;'
 story_modify_trigger = DDL("""CREATE TRIGGER story_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON stories FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Story.__table__)
