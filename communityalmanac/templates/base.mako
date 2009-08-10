@@ -87,8 +87,10 @@
     <script type="text/javascript" src="/js/turn.js"></script>
     <script type="text/javascript" src="/js/jquery.cycle-2.60.min.js"></script>
     <script type="text/javascript" src="/js/OpenLayers.js"></script>
+    % if not c.no_maps:
     <script type="text/javascript"
             src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${g.map_key}"></script>
+    % endif
     <script type="text/javascript">
       $(document).ready(function(){
         if ( $(".turn").length > 0 ) {

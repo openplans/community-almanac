@@ -128,6 +128,11 @@ class PageController(BaseController):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         c.page = h.get_page_by_slug(c.almanac, page_slug)
         c.media_items = h.render_media_items(c.page.media, editable=False)
+        c.no_maps = True
+        for media in c.page.media:
+            if isinstance(media, Map):
+                c.no_maps = False
+                break
         map_features = h.map_features_for_media(c.page.media)
         c.map_features = h.literal(simplejson.dumps(map_features))
         flow_data = h.flowplayer_data_for_media(c.page.media)
@@ -215,6 +220,7 @@ class PageController(BaseController):
 
     @dispatch_on(POST='_all_pages')
     def all_pages(self, query):
+        c.no_maps = True
         c.query_global = query
         if query:
             pages_query = Page.search_all(query)

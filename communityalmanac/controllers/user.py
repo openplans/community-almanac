@@ -67,6 +67,7 @@ class PerformResetSchema(Schema):
 class UserController(BaseController):
 
     def login(self):
+        c.no_maps = True
         c.active_section = request.params.get('show','login-new')
         if request.environ.get('repoze.who.identity') == None:
             return render('/user/login.mako')
@@ -78,6 +79,7 @@ class UserController(BaseController):
 
     @dispatch_on(POST='_register')
     def register(self):
+        c.no_maps = True
         if request.environ.get('repoze.who.identity') == None:
             c.active_section = request.params.get('show','login-new')
             return render('/user/login.mako')
@@ -124,6 +126,7 @@ class UserController(BaseController):
 
     @dispatch_on(POST='_request_reset')
     def request_reset(self):
+        c.no_maps = True
         return render('/user/request_reset.mako')
 
     @validate(schema=RequestResetSchema(), form='request_reset')
@@ -153,6 +156,7 @@ class UserController(BaseController):
 
     @dispatch_on(POST='_perform_reset')
     def perform_reset(self, username, key):
+        c.no_maps = True
         return render('/user/perform_reset.mako')
 
     def _perform_reset(self, username, key):

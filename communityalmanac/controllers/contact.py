@@ -4,6 +4,7 @@ from formencode import validators
 from pylons import g
 from pylons import config
 from pylons import request
+from pylons import tmpl_context as c
 from pylons.controllers.util import redirect_to
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
@@ -19,6 +20,7 @@ class ContactController(BaseController):
 
     @dispatch_on(POST='_do_contact')
     def contact(self):
+        c.no_maps = True
         return render('/contact.mako')
 
     @validate(schema=ContactForm(), form='contact')
