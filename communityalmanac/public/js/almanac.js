@@ -22,6 +22,9 @@
 // This gorgeous function originally written by Dan Phiffer (http://phiffer.org/)
 function hrefToID(href) {
   var start = href.indexOf('#');
+  if (start < 0) {
+    return '';
+  }
   var length = href.length - start;
   return href.substr(start + 1, length);
 }
