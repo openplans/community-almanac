@@ -35,6 +35,7 @@ from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 
 from repoze.what.predicates import not_anonymous
+from repoze.what.predicates import has_permission
 from repoze.what.plugins.pylonshq.utils import is_met
 from communityalmanac.lib.auths import is_page_owner
 from repoze.what.plugins.pylonshq import ActionProtector
@@ -145,6 +146,7 @@ class PageController(BaseController):
         if g.captcha_enabled and not c.user:
             c.captcha_html = h.literal(recaptcha.client.captcha.displayhtml(g.captcha_pubkey))
         c.is_page_owner = is_met(is_page_owner())
+        c.is_admin = is_met(has_permission('manage'))
         return render('/page/view.mako')
 
     @validate(schema=PageCommentForm(), form='view')

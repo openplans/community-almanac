@@ -28,6 +28,9 @@
 % if c.is_page_owner:
 <a href="${h.url_for('page_edit', almanac=c.almanac, page=c.page)}" title="Edit Page">Edit</a>
 % endif
+% if c.is_admin:
+<a href="${h.url_for('/admin/Page/delete/%d' % c.page.id)}" title="Delete Page" onclick="return confirm('Are you sure you want to delete this page?  There\'s no going back!');">Delete</a>
+% endif
 %if c.media_items:
   <div>
     <ul class="page-items">
