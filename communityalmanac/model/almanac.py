@@ -27,6 +27,7 @@ from sqlalchemy.sql.expression import text
 from sqlalchemy.sql import func
 from sqlalchemy.schema import DDL
 from sqlalchemy.orm import relation
+from sqlalchemy.orm import backref
 from sqlalchemy.orm import exc
 from sqlalchemy.orm import column_property
 from sqlalchemy import and_
@@ -401,7 +402,7 @@ class Page(Base):
         """return the on_behalf_of if it exists, otherwise the user's fullname"""
         return self.on_behalf_of if self.on_behalf_of else self.user.username
 
-Page.almanac = relation("Almanac", backref="pages", primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True))
+Page.almanac = relation("Almanac", backref=backref("pages", passive_deletes=True), primaryjoin=and_(Page.almanac_id==Almanac.id, Page.published==True), passive_deletes=True)
 page_modify_trigger = DDL("""CREATE TRIGGER page_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON pages FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_almanacs();""", on='postgres').execute_at('after-create', Page.__table__)
@@ -422,7 +423,7 @@ class Comment(Base):
     website = Column(Unicode)
     text = Column(Unicode)
 
-    page = relation("Page", backref="comments")
+    page = relation("Page", backref=backref("comments", passive_deletes=True), passive_deletes=True)
 comment_modify_index = DDL("""CREATE TRIGGER comment_modify_index
     AFTER INSERT OR UPDATE OR DELETE ON comments FOR EACH ROW
     EXECUTE PROCEDURE index_line_update_comment();""", on='postgres').execute_at('after-create', Comment.__table__)
@@ -449,7 +450,7 @@ class Media(Base):
 
     __mapper_args__ = dict(polymorphic_on=discriminator)
 
-    page = relation("Page", backref="media")
+    page = relation("Page", backref=backref("media", passive_deletes=True), passive_deletes=True)
 
     @staticmethod
     def by_id(media_id):
@@ -707,7 +708,7 @@ class User(Base):
 
     __mapper_args__ = dict(polymorphic_on=discriminator)
 
-    pages = relation("Page", backref="user")
+    pages = relation("Page", backref=backref("user", passive_deletes=True), passive_deletes=True)
 
     def __init__(self, id=None):
         if id is not None:
@@ -772,7 +773,7 @@ class Group(Base):
     id =   Column(Integer, autoincrement=True, primary_key=True)
     name = Column(Unicode(16), unique=True)
 
-    users = relation('User', secondary=users_groups_table, backref='groups')
+    users = relation('User', secondary=users_groups_table, backref=backref('groups', passive_deletes=True), passive_deletes=True)
 
 class Permission(Base):
     """A relationship that determines what each Group can do"""
@@ -782,7 +783,7 @@ class Permission(Base):
     name = Column(Unicode(16), unique=True)
 
     groups = relation(Group, secondary=groups_permissions_table,
-                      backref='permissions')
+                      backref=backref('permissions', passive_deletes=True), passive_deletes=True)
 
 def default_password_compare(cleartext_password, stored_password_hash):
     # Hashing functions work on bytes, not strings, so while unicode passwords
