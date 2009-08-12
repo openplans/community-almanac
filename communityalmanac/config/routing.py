@@ -68,7 +68,7 @@ def make_map():
     map.connect('500', '/500', controller='error', action='show_500')
 
     map.connect('home', '/', controller='homesweethome', action='home')
-    map.connect('about', '/about', controller='about', action='about')
+    map.connect('about', '/about', controller='static', action='about')
     map.connect('contact', '/contact', controller='contact', action='contact')
     map.connect('almanacs_kml', '/api/kml/almanacs.kml', controller='homesweethome', action='almanacs_kml')
     map.connect('almanacs_kml_link', '/api/kml/almanacs_link.kml', controller='homesweethome', action='almanacs_kml_link')
