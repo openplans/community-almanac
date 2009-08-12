@@ -28,7 +28,7 @@
 					<p>It's where you and your community share stories about the heart <span class="amp">&#038;</span> soul of the place you live. It's a lasting record of the place you love&#8212;the place you call home.</p>
 					<h3>Anyone can contribute!</h3>
 					<p>And it's free! Just find your community on the map and start adding to its almanac&#8212;written stories, photos, videos—anything you'd like to share.</p>
-					<p>If your community has no almanac yet, simply find the your city or town on the map and add a page. Your new almanac will be created automatically.</p>
+					<p>If your community has no almanac yet, simply find your city or town on the map and add a page. Your new almanac will be created automatically.</p>
 					<h3 class="start-by pngfix"><span class="larr">&#8592;</span> Find your community on the map.</h3>
 					<p class="prevnext"><a class="next-panel" href="${h.url_for('almanac_create')}">More info &#187;</a></p>
 				</div><!-- /.panel -->
