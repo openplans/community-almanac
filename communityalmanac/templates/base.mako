@@ -72,6 +72,7 @@
       <ul id="footer-nav">
         <li><a href="${h.url_for('home')}">Home</a></li>
         <li><a href="${h.url_for('about')}">About</a></li>
+        <li><a href="${h.url_for('badges')}">Site Badges</a></li>
         <li><a href="${h.url_for('contact')}">Contact</a></li>
         <li>
           <form action="${h.url_for('site_search', query='form')}" id="searchform-global" method="POST">

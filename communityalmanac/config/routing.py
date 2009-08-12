@@ -70,6 +70,7 @@ def make_map():
     map.connect('home', '/', controller='homesweethome', action='home')
     map.connect('about', '/about', controller='static', action='about')
     map.connect('badges', '/badges', controller='static', action='badges')
+    map.connect('badges_slash', '/badges/', controller='static', action='badges')
     map.connect('contact', '/contact', controller='contact', action='contact')
     map.connect('almanacs_kml', '/api/kml/almanacs.kml', controller='homesweethome', action='almanacs_kml')
     map.connect('almanacs_kml_link', '/api/kml/almanacs_link.kml', controller='homesweethome', action='almanacs_kml_link')
