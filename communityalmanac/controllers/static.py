@@ -7,3 +7,7 @@ class StaticController(BaseController):
         c.no_maps = True
         c.latest_pages = Page.latest()
         return render('/about.mako')
+
+    def badges(self):
+        c.no_maps = True
+        return render('/badges.mako')
