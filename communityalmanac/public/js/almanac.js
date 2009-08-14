@@ -354,6 +354,7 @@ $(document).ready(function() {
       var html = data.html;
       $(html).appendTo(formcontainer).hide().fadeIn('fast');
       link.effect('transfer', {to: 'ul.page-media-items li:last'}, 1000);
+      $.scrollTo('ul.page-media-items li:last', {duration: 1000});
       applyEditSideEffects(data);
     });
   });
