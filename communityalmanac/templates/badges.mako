@@ -21,60 +21,98 @@
 <%inherit file="/base.mako" />
 <div id="badges">
 
-	<h1>Community Almanac Badges</h1>
-	<p>Put these on your site!</p>
+	<h1>Link to Community Almanac!</h1>
+	<p>Add these badges to your website to give your visitors quick access to Community Almanac. Simply copy the code and paste it onto your site.</p>
 
-	<div class="badge">
-		<h2>Micro Badge <span>(88 x 31 pixels)</span></h2>
-		<img src="/badges/88x31-Micro_Bar.png" />
-		<br />
-		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/88x31-Micro_Bar.png" border="0" alt="communityalmanac.org" /></a></textarea>
-	</div>
-
-	<div class="badge">
-		<h2>Vertical Banner <span>(120 x 240 pixels)</span></h2>
-		<img src="/badges/120x240-Vertical_Banner.png" />
-		<br />
-		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/120x240-Vertical_Banner.png" border="0" alt="communityalmanac.org" /></a></textarea>
-	</div>
-
-	<div class="badge">
-		<h2>Rectangle <span>(180 x 150 pixels)</span></h2>
-		<img src="/badges/180x150-Rectangle.png" />
-		<br />
-		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/180x150-Rectangle.png" border="0" alt="communityalmanac.org" /></a></textarea>
-	</div>
-
-	<div class="badge">
-		<h2>Full Banner <span>(468 x 60 pixels)</span></h2>
+	<div class="badge full-banner selfclear">
+		<h2>Full Banner Illustration <span>(468 x 60 pixels)</span></h2>
 		<img src="/badges/468x60-Full_Banner.png" />
 		<br />
 		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/468x60-Full_Banner.png" border="0" alt="communityalmanac.org" /></a></textarea>
 	</div>
 
-	<div class="badge">
-		<h2>Half Banner <span>(234 x 60 pixels)</span></h2>
+	<div class="badge half-banner selfclear">
+		<h2>Half Banner Illustration <span>(234 x 60 pixels)</span></h2>
 		<img src="/badges/234x60-Half-Banner.png" />
 		<br />
 		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/234x60-Half-Banner.png" border="0" alt="communityalmanac.org" /></a></textarea>
 	</div>
-
-	<div class="badge">
-		<h2>Book Spine <span>(500 x 73 pixels)</span></h2>
-		<img src="/badges/500x73-Book_Spine.png" />
-		<br />
-		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/500x73-Book_Spine.png" border="0" alt="communityalmanac.org" /></a></textarea>
-		<small><i>Note: This image is uses Alpha transparency. Unless you apply an Alpha transparency fix it may not render correctly in some browsers (Internet Explorer 6-).</i></small>
-	</div>
-
-	<div class="badge">
-		<h2>Small Book Spine <span>(218 x 60 pixels)</span></h2>
-		<img src="/badges/218x60-Book_Spine.png" />
-		<br />
-		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/218x60-Book_Spine.png" border="0" alt="communityalmanac.org" /></a></textarea>
-	</div>
 	
+	<div class="badge vert-banner selfclear">
+		<h2>Vertical Banner Illustration <span>(120 x 240 pixels)</span></h2>
+		<img src="/badges/120x240-Vertical_Banner.png" />
+		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/120x240-Vertical_Banner.png" border="0" alt="communityalmanac.org" /></a></textarea>
+	</div>
+
+	<div class="badge rectangle selfclear">
+		<h2>Rectangle Illustration <span>(180 x 150 pixels)</span></h2>
+		<img src="/badges/180x150-Rectangle.png" />
+		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/180x150-Rectangle.png" border="0" alt="communityalmanac.org" /></a></textarea>
+	</div>
+
+	<div class="badge micro-badge selfclear">
+		<h2>Micro Badge Illustration <span>(88 x 31 pixels)</span></h2>
+		<img src="/badges/88x31-Micro_Bar.png" />
+		<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/88x31-Micro_Bar.png" border="0" alt="communityalmanac.org" /></a></textarea>
+	</div>
+
+	<div class="badge logo-rectangles selfclear">
+		<h2>Logo Rectangles <span>(180 x 135 pixels)</span></h2>
+		<div class="first">
+			<img src="/badges/180x135-Rectangle-Green.png" />
+			<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/180x135-Rectangle-Green.png" border="0" alt="communityalmanac.org" /></a></textarea>
+		</div>
+		<div>
+			<img src="/badges/180x135-Rectangle-Orange.png" />
+			<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/180x135-Rectangle-Orange.png" border="0" alt="communityalmanac.org" /></a></textarea>
+		</div>
+		<div>
+			<img src="/badges/180x135-Rectangle-Khaki.png" />
+			<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/180x135-Rectangle-Khaki.png" border="0" alt="communityalmanac.org" /></a></textarea>
+		</div>
+	</div>
+
+	<div class="badge micro-bttns selfclear">
+		<h2>Micro Logo Buttons <span>(82 x 37 pixels)</span></h2>
+		<div class="first">
+			<img src="/badges/82x37-Micro_Button-Blue.gif" />
+			<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/82x37-Micro_Button-Blue.gif" border="0" alt="communityalmanac.org" /></a></textarea>
+		</div>
+		<div>
+			<img src="/badges/82x37-Micro_Button-Pea.gif" />
+			<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/82x37-Micro_Button-Pea.gif" border="0" alt="communityalmanac.org" /></a></textarea>
+		</div>
+		<div>
+			<img src="/badges/82x37-Micro_Button-Green.gif" />
+			<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/82x37-Micro_Button-Green.gif" border="0" alt="communityalmanac.org" /></a></textarea>
+		</div>
+		<div>
+			<img src="/badges/82x37-Micro_Button-Khaki.gif" />
+			<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/82x37-Micro_Button-Khaki.gif" border="0" alt="communityalmanac.org" /></a></textarea>
+		</div>
+		<div>
+			<img src="/badges/82x37-Micro_Button-Navy.gif" />
+			<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/82x37-Micro_Button-Navy.gif" border="0" alt="communityalmanac.org" /></a></textarea>
+		</div>
+		<div>
+			<img src="/badges/82x37-Micro_Button-Orange.gif" />
+			<textarea readonly="readonly" onfocus="this.select()"><a href="http://communityalmanac.org/"><img src="http://communityalmanac.org/badges/82x37-Micro_Button-Orange.gif" border="0" alt="communityalmanac.org" /></a></textarea>
+		</div>
+	</div>
+
 </div>
 
 <%def name="sidebar()">
+<div class="sidebar">
+	<h6>Customize Your Badge</h6>
+	<p>Want a badge that links directly to your particular community’s almanac?  Simply change the href value in the standard badge to the URL for your community's almanac.</p>
+
+	<div class="custom-badge">
+		<p><b><i>Example:</i></b> If you'd like a badge that links to Boulder, CO then:</p>
+		<pre>&lt;a href="<span class="highlight">http://communityalmanac.org/</span>"&gt;&lt;img src="http://communityalmanac.org/badges/468x60-Full_Banner.png" border="0" alt="communityalmanac.org" /&gt;&lt;/a&gt;</pre>
+		<p>&hellip;should be changed to:</p>
+		<pre>&lt;a href="<span class="highlight">http://communityalmanac.org/Boulder-CO/</span>"&gt;&lt;img src="http://communityalmanac.org/badges/468x60-Full_Banner.png" border="0" alt="communityalmanac.org" /&gt;&lt;/a&gt;</pre>
+	</div>
+
+</div>
 </%def>

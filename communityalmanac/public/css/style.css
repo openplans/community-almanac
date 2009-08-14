@@ -1597,6 +1597,57 @@ font-size: 1.5em;
 font-weight: normal;
 }
 
+/* Badges page */
+.badge {
+background: transparent url(/img/page-contrast-bg.png) repeat scroll 0 0;
+border: 4px solid #D0C9B9;
+margin: 10px 10px 10px 0;
+padding: 10px 0 0 10px;
+float: left;
+clear: left;
+}
+.badge h2 {
+font-size: 1.2em;
+margin-right: 10px;
+}
+.badge h2 span {
+color: #70818C;
+font-size:0.75em;
+}
+.badge img {
+float: left; 
+margin: 0 10px 10px 0;
+}
+.badge textarea {
+overflow-x: hidden;
+width: 250px;
+height: 70px;
+margin: 0 10px 10px 0;
+padding: 0.5em;
+}
+.micro-bttns div,
+.logo-rectangles div {
+border-top: 1px solid #99B0BF;
+padding: 10px 0 0 0;
+clear: both;
+}
+.micro-bttns div.first,
+.logo-rectangles div.first {
+border-top: 0;
+padding: 0;
+}
+.custom-badge p {
+margin: 0;
+}
+.custom-badge pre {
+font-size: 0.75em;
+white-space: normal;
+margin: 0.5em 0;
+}
+.custom-badge pre span.highlight {
+background: url(/img/bttn-bg-white.jpg) repeat;
+}
+
 /* rob's starting point */
 form div.selfclear label {
 font-weight: bold;
