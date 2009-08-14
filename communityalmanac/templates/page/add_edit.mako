@@ -63,6 +63,7 @@
 </form>
 
 <%def name="extra_body()">
+  <script type="text/javascript" src="/js/tinymce/tiny_mce.js"></script>
   <script type="text/javascript">
     pageMapFeatures = ${c.map_features};
     flowplayerElts = ${c.flow_data};
@@ -79,10 +80,17 @@
     }).blur(function() {
       form.unbind('submit', submit_blocker);
     });
+    tinyMCE.init({
+      mode : "none",
+      theme : "simple",
+      onchange_callback : function(inst) {tinyMCE.triggerSave();},
+      theme_advanced_buttons3_add : "pastetext,pasteword,selectall",
+      plugins : "paste",
+      paste_auto_cleanup_on_paste : true
+    });
   </script>
   <script type="text/javascript" src="/js/upload/ajaxupload.3.2.js"></script>
   <script type="text/javascript" src="/js/flowplayer/flowplayer-3.1.1.min.js"></script>
-  <script type="text/javascript" src="/js/tinymce/tiny_mce.js"></script>
   <script type="text/javascript" src="/js/jquery.scrollTo-1.4.2-min.js"></script>
 </%def>
 

@@ -93,18 +93,20 @@ class MediaController(BaseController):
         page = self._retrieve_page(c.almanac, page_slug)
         c.legend = u'Text'
         new_uuid = str(uuid.uuid4())
-        c.storyinput_id = 'storyinput_%s' % new_uuid
-        c.textarea_class = 'mceSimple_%s' % new_uuid
+        c.textarea_id = 'mceSimple_%s' % new_uuid
         return dict(html=render('/media/story/form.mako'),
                     storyinput_id=c.storyinput_id,
-                    textarea_class=c.textarea_class,
+                    textarea_id=c.textarea_id,
                     )
 
     @jsonify
     def _do_new_form_text(self, almanac_slug, page_slug=None):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         page = self._retrieve_page(c.almanac, page_slug)
-        body = request.POST.get('body', u'')
+        for key in request.POST.keys():
+            if key.startswith('mceSimple'):
+                body = request.POST.get(key, u'')
+                break
         if not body:
             abort(400)
 
@@ -127,11 +129,10 @@ class MediaController(BaseController):
         c.view_url = h.url_for('media_story_view', media_id=c.media_item.id)
         c.legend = u'Text'
         new_uuid = str(uuid.uuid4())
-        c.storyinput_id = 'storyinput_%s' % new_uuid
-        c.textarea_class = 'mceSimple_%s' % new_uuid
+        c.textarea_id = 'mceSimple_%s' % new_uuid
         return dict(html=render('/media/story/form.mako'),
                     storyinput_id=c.storyinput_id,
-                    textarea_class=c.textarea_class,
+                    textarea_id=c.textarea_id,
                     )
 
     @jsonify

@@ -218,26 +218,10 @@ function applyFlowPlayerSideEffects(data) {
 }
 
 function applyRichTextSideEffects(data) {
-  if (!data.storyinput_id || !data.textarea_class) {
+  if (!data.textarea_id) {
     return;
   }
-  var storyinput = $('#' + data.storyinput_id);
-  if (storyinput.length === 0) {
-    return;
-  }
-  var _onChangeHandler = function(inst) {
-    var data = inst.getBody().innerHTML;
-    storyinput.val(data);
-  };
-  tinyMCE.init({
-    mode : "specific_textareas",
-    theme : "simple",
-    editor_selector : data.textarea_class,
-    onchange_callback : _onChangeHandler,
-    theme_advanced_buttons3_add : "pastetext,pasteword,selectall",
-    plugins : "paste",
-    paste_auto_cleanup_on_paste : true
-  });
+  tinyMCE.execCommand('mceAddControl', false, data.textarea_id);
 }
 
 function applyDisplaySideEffects(data) {
@@ -383,6 +367,11 @@ $(document).ready(function() {
     var form = formcontainer.find('form');
     var url = form.attr('action');
     var data = form.serialize();
+    /* Dynamic add/removing of TinyMCE means we need to clean up after ourselfs. */
+    if (form.find('textarea').length) {
+      tinyMCE.triggerSave();
+      tinyMCE.execCommand('mceRemoveControl', false, form.find('textarea').attr('id'));
+    }
 
     $.ajax({
       contentType: 'application/x-www-form-urlencoded',
