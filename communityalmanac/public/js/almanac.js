@@ -28,6 +28,15 @@ function hrefToID(href) {
   var length = href.length - start;
   return href.substr(start + 1, length);
 }
+var nocacheURL = window.nocacheURL = function nocacheURL(url) {
+    var randomid=Math.random();
+    var randomval=Math.random();
+    if (url.indexOf('?') >= 0) {
+      return url + '&' + randomid + '=' + randomval;
+    } else {
+      return url + '?' + randomid + '=' + randomval;
+    }
+}
 function applyMapDisplaySideEffects(data) {
   var geometryJson = data.geometry;
   if (!geometryJson) {
@@ -350,7 +359,7 @@ $(document).ready(function() {
     var url = link.attr('href');
 
     var formcontainer = $('<li></li>').appendTo($('ul.page-media-items'));
-    $.getJSON(url, null, function(data) {
+    $.getJSON(nocacheURL(url), null, function(data) {
       var html = data.html;
       $(html).appendTo(formcontainer).hide().fadeIn('fast');
       link.effect('transfer', {to: 'ul.page-media-items li:last'}, 1000);
@@ -395,7 +404,7 @@ $(document).ready(function() {
     e.preventDefault();
     var url = $(this).attr('href');
     var li = $(this).closest('li');
-    $.getJSON(url, {}, function(data) {
+    $.getJSON(nocacheURL(url), {}, function(data) {
       var newli = $('<li></li>').append($(data.html));
       li.replaceWith(newli);
       newli.find('textarea').focus();
@@ -434,7 +443,7 @@ $(document).ready(function() {
       contentType: 'application/x-www-form-urlencoded',
       data: data,
       success: function(data, textStatus) {
-        $.getJSON(getUrl, {}, function(data) {
+        $.getJSON(nocacheURL(getUrl), {}, function(data) {
           var newli = $('<li></li>').append($(data.html));
           li.replaceWith(newli);
           newli.find('.media-content').effect('highlight');
@@ -452,7 +461,7 @@ $(document).ready(function() {
     e.preventDefault();
     var url = $(this).attr('href');
     var li = $(this).closest('li');
-    $.getJSON(url, {}, function(data) {
+    $.getJSON(nocacheURL(url), {}, function(data) {
       var newli = $('<li></li>').append($(data.html));
       li.replaceWith(newli);
       applyDisplaySideEffects(data);

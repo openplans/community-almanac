@@ -257,7 +257,7 @@ var loadfunction = function(){
   selectControl.activate();
     function _geocode(bbox) {
       var location = bbox ? null : $('#almanac-name').val();
-      $.getJSON(geocode_url, {location: location, bbox: bbox}, function(data) {
+      $.getJSON(nocacheURL(geocode_url), {location: location, bbox: bbox}, function(data) {
         if (data.layer) {
           // Undocumented function for loading the layer contents from a string.
           var options = {};
