@@ -41,6 +41,7 @@ from sqlfulltexttypes import WeightedText
 from shapely.geometry.point import Point
 from shapely import wkb
 from binascii import a2b_hex
+from urlparse import urlsplit, urlunsplit
 import hmac, sha
 import mimetypes
 import PIL.Image
@@ -422,6 +423,16 @@ class Comment(Base):
     email = Column(Unicode)
     website = Column(Unicode)
     text = Column(Unicode)
+
+    @property
+    def websafe_link(self):
+        """\
+        Make sure that any link we spit out doesn't include alternate protocols
+        that might have security risks...
+        """
+        #  At some point, we should use protect self.website directly with this and make it transparent...
+        rest = urlsplit(self.website)[1:]
+        return urlunsplit(('http',) + rest)
 
     page = relation("Page", backref=backref("comments", passive_deletes=True), passive_deletes=True)
 comment_modify_index = DDL("""CREATE TRIGGER comment_modify_index

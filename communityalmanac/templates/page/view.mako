@@ -54,7 +54,7 @@
   <p class="meta">
     <span>
     %if comment.website:
-      <a href="${comment.website}">${comment.fullname} says:</a>
+      <a href="${comment.websafe_link}">${comment.fullname} says:</a>
     %else:
       ${comment.fullname} says:
     %endif
