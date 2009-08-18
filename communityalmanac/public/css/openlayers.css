@@ -222,6 +222,24 @@ div.olControlMousePosition {
   height: 31px;
   margin: 0;
 }
+.olMapViewport .olControlEditingToolbar .olControlTooltipPolyItemInactive {
+  display: none;
+}
+.olMapViewport .olControlEditingToolbar .olControlTooltipPolyItemActive {
+  background: transparent url("img/close-shape.png") 0 0 no-repeat;
+  width: 134px;
+  height: 17px;
+  margin: 2px 58px 0 0;
+}
+.olMapViewport .olControlEditingToolbar .olControlTooltipPathItemInactive {
+  display: none;
+}
+.olMapViewport .olControlEditingToolbar .olControlTooltipPathItemActive {
+  background: transparent url("img/end-line.png") 0 0 no-repeat;
+  width: 134px;
+  height: 17px;
+  margin: 2px 58px 0 0;
+}
 
 .olHandlerBoxZoomBox {
     border: 2px solid red;

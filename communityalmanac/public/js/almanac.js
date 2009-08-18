@@ -68,8 +68,22 @@ function applyMapEditSideEffects(data) {
   if (!(data.lng && data.lat) && !data.geometry) {
     return;
   }
+  var Tooltip = OpenLayers.Class(OpenLayers.Control, {
+    initialize:function(options) {
+      // Support default options...
+      OpenLayers.Control.prototype.initialize.apply(this, [options]);
+    }
+  });
   var featureLayer = new OpenLayers.Layer.Vector('feature');
   var onActivate = function() { featureLayer.destroyFeatures(); };
+  var onPathActivate = function() {
+    featureLayer.destroyFeatures();
+    tooltipPath.activate();
+  }
+  var onPolyActivate = function() {
+    featureLayer.destroyFeatures();
+    tooltipPoly.activate();
+  }
   var drawPoint = new OpenLayers.Control.DrawFeature(
     featureLayer, OpenLayers.Handler.Point,
     {'displayClass': 'olControlDrawFeaturePoint',
@@ -77,15 +91,19 @@ function applyMapEditSideEffects(data) {
   var drawPath = new OpenLayers.Control.DrawFeature(
     featureLayer, OpenLayers.Handler.Path,
     {'displayClass': 'olControlDrawFeaturePath',
-     'eventListeners': {'activate': onActivate}});
+     'eventListeners': {'activate': onPathActivate}});
+  var tooltipPath = new Tooltip({'displayClass': 'olControlTooltipPath'});
+  var tooltipPoly = new Tooltip({'displayClass': 'olControlTooltipPoly'});
   var drawPolygon = new OpenLayers.Control.DrawFeature(
     featureLayer, OpenLayers.Handler.Polygon,
     {'displayClass': 'olControlDrawFeaturePolygon',
-     'eventListeners': {'activate': onActivate}});
+     'eventListeners': {'activate': onPolyActivate}});
   var deactivateAllEditingControls = function() {
     drawPoint.deactivate();
     drawPath.deactivate();
     drawPolygon.deactivate();
+    tooltipPath.deactivate();
+    tooltipPoly.deactivate();
   };
   var featureAdded = function(evt) {
     deactivateAllEditingControls();
@@ -103,7 +121,9 @@ function applyMapEditSideEffects(data) {
    new OpenLayers.Control.PanZoom(),
    drawPoint,
    drawPath,
-   drawPolygon
+   drawPolygon,
+   tooltipPath,
+   tooltipPoly
   ];
   var toolbar = new OpenLayers.Control.Panel({
      displayClass: 'olControlEditingToolbar',
