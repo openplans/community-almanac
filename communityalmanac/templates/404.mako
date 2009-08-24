@@ -10,3 +10,6 @@
 <p>If it turns out that a link is broken, we'd like to know. Please <a href="/contact">contact us</a>.</p>
 
 <%def name="body_class()">fourhundred</%def>
+<%def name="title()">
+Oh no! Where's the page?
+</%def>
