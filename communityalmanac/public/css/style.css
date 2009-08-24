@@ -1720,3 +1720,7 @@ border: 2px solid #D0C9B9;
 #recaptcha_widget_div {
 margin-left: 180px;
 }
+
+.no-class {
+color:#FF6040
+}
