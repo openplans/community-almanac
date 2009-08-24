@@ -82,11 +82,31 @@
     });
     tinyMCE.init({
       mode : "none",
-      theme : "simple",
+      theme : "advanced",
       onchange_callback : function(inst) {tinyMCE.triggerSave();},
-      theme_advanced_buttons3_add : "pastetext,pasteword,selectall",
+      theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,undo,redo,separator,numlist,bullist,separator,converttotext",
+      theme_advanced_buttons2: "",
+      theme_advanced_buttons3: "",
+      theme_advanced_toolbar_location: "bottom",
+      theme_advanced_toolbar_align: "left",
       plugins : "paste",
-      paste_auto_cleanup_on_paste : true
+      paste_auto_cleanup_on_paste : true,
+      paste_remove_styles : true,
+      setup: function(ed) {
+        // Add our button for converting to plain text.
+        ed.addButton('converttotext', {
+          title: 'Convert to Plain Text',
+          image: '/img/style_delete.png',
+          onclick: function() {
+            ed.focus();
+            var lines = ed.selection.getContent({format:'text'}).split(/\n/);
+            //ed.selection.setContent('<p>' + lines.join('</p><p>') + '</p>');
+            ed.selection.setContent(lines.join('<br/>'));
+            console.log(ed.selection.getContent({format:'text'}));
+            //ed.selection.setContent(ed.selection.getContent({format:'text'}));
+          }
+        });
+      }
     });
   </script>
   <script type="text/javascript" src="/js/upload/ajaxupload.3.2.js"></script>
