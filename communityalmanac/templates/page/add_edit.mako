@@ -99,11 +99,14 @@
           image: '/img/style_delete.png',
           onclick: function() {
             ed.focus();
+            if (ed.selection.isCollapsed()) {
+              // Nothing is selected, so we'll modify the entire document.
+              var lines = ed.dom.getRoot().textContent.split(/\n/);
+              ed.dom.getRoot().innerHTML = '<p>' + lines.join('</p><p>') + '</p>';
+              return;
+            }
             var lines = ed.selection.getContent({format:'text'}).split(/\n/);
-            //ed.selection.setContent('<p>' + lines.join('</p><p>') + '</p>');
             ed.selection.setContent(lines.join('<br/>'));
-            console.log(ed.selection.getContent({format:'text'}));
-            //ed.selection.setContent(ed.selection.getContent({format:'text'}));
           }
         });
       }
