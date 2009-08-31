@@ -139,7 +139,10 @@ class MediaController(BaseController):
     @ActionProtector(is_media_owner())
     def _do_edit_form_text(self, media_id):
         c.story = h.get_media_by_id(media_id)
-        body = request.POST.get('body', u'')
+        for key in request.POST.keys():
+            if key.startswith('mceSimple'):
+                body = request.POST.get(key, u'')
+                break
         if not body:
             abort(400)
 
