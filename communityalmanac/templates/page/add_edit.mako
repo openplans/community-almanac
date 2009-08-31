@@ -84,32 +84,14 @@
       mode : "none",
       theme : "advanced",
       onchange_callback : function(inst) {tinyMCE.triggerSave();},
-      theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,undo,redo,separator,numlist,bullist,separator,converttotext",
+      theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,undo,redo,separator,numlist,bullist,separator",
       theme_advanced_buttons2: "",
       theme_advanced_buttons3: "",
       theme_advanced_toolbar_location: "bottom",
       theme_advanced_toolbar_align: "left",
       plugins : "paste",
       paste_auto_cleanup_on_paste : true,
-      paste_remove_styles : true,
-      setup: function(ed) {
-        // Add our button for converting to plain text.
-        ed.addButton('converttotext', {
-          title: 'Convert to Plain Text',
-          image: '/img/style_delete.png',
-          onclick: function() {
-            ed.focus();
-            if (ed.selection.isCollapsed()) {
-              // Nothing is selected, so we'll modify the entire document.
-              var lines = ed.dom.getRoot().textContent.split(/\n/);
-              ed.dom.getRoot().innerHTML = '<p>' + lines.join('</p><p>') + '</p>';
-              return;
-            }
-            var lines = ed.selection.getContent({format:'text'}).split(/\n/);
-            ed.selection.setContent(lines.join('<br/>'));
-          }
-        });
-      }
+      paste_remove_styles : true
     });
   </script>
   <script type="text/javascript" src="/js/upload/ajaxupload.3.2.js"></script>
