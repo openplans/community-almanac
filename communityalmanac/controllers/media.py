@@ -25,6 +25,7 @@ from pylons.controllers.util import abort, redirect_to
 from communityalmanac.lib.base import BaseController, render
 from repoze.what.plugins.pylonshq import ActionProtector
 from communityalmanac.lib.auths import is_media_owner, is_page_owner
+from communityalmanac.lib.helpers import normalize_filename
 from communityalmanac.model import Audio
 from communityalmanac.model import Image
 from communityalmanac.model import Map
@@ -355,7 +356,7 @@ class MediaController(BaseController):
         f.close()
 
         c.image.create_scales(g.images_path)
-        c.image.filename = filename
+        c.image.filename = normalize_filename(filename)
         meta.Session.commit()
 
         c.editable = True
@@ -418,7 +419,7 @@ class MediaController(BaseController):
         pdf.path = path
         pdf.page_id = page.id
         pdf.order = len(page.media)
-        pdf.filename = filename
+        pdf.filename = normalize_filename(filename)
         meta.Session.add(pdf)
         meta.Session.commit()
 
@@ -461,7 +462,7 @@ class MediaController(BaseController):
         f.write(pdf_data)
         f.close()
 
-        c.pdf.filename = filename
+        c.pdf.filename = normalize_filename(filename)
         meta.Session.commit()
 
         c.editable = True
@@ -525,7 +526,7 @@ class MediaController(BaseController):
         audio.path = path
         audio.page_id = page.id
         audio.order = len(page.media)
-        audio.filename = filename
+        audio.filename = normalize_filename(filename)
         meta.Session.add(audio)
         meta.Session.commit()
 
@@ -577,7 +578,7 @@ class MediaController(BaseController):
         f.write(audio_data)
         f.close()
 
-        c.audio.filename = filename
+        c.audio.filename = normalize_filename(filename)
         meta.Session.commit()
 
         c.editable = True

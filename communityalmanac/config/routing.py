@@ -26,6 +26,7 @@ refer to the routes manual at http://routes.groovie.org/docs/
 from pylons import config
 from routes import Mapper
 from formalchemy.ext.pylons import maps
+from communityalmanac.lib.helpers import normalize_filename
 
 def almanac_expand(kw):
     if 'almanac' in kw:
@@ -46,7 +47,7 @@ def media_expand(kw):
     if 'media' in kw:
         media = kw['media']
         kw['media_id'] = media.id
-        kw['filename'] = media.filename
+        kw['filename'] = normalize_filename(media.filename)
         del kw['media']
     return kw
 
