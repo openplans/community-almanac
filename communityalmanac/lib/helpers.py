@@ -251,3 +251,7 @@ def display_comment(comment):
     html = clean_html(html)
     html = html.replace('\n', '<br />')
     return literal(html)
+
+def normalize_filename(filename):
+    """return only the last segment in the path, because windows gives us a full windows drive path when uploading files sometimes, which causes it to misrender in certain browsers"""
+    return filename.split('/')[-1]
