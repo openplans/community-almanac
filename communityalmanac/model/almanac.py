@@ -27,6 +27,7 @@ from sqlalchemy.sql.expression import text
 from sqlalchemy.sql import func
 from sqlalchemy.schema import DDL
 from sqlalchemy.orm import relation
+from sqlalchemy.orm import synonym
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import exc
 from sqlalchemy.orm import column_property
@@ -50,9 +51,6 @@ import meta
 import os
 import time
 import uuid
-
-# We have a regex to match the path seperators of the most popular platforms (*nix, Windows)
-RE_path_separators = re.compile(r'[\\/]')
 
 # This is such a complicated trigger function, I was tempted to install
 # PLPython to use python in the database.  Luckily, it's still pretty readable.
@@ -491,7 +489,14 @@ class PDF(Media):
     __mapper_args__ = dict(polymorphic_identity='pdf')
     id = Column(Integer, ForeignKey('media.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
     path = Column(Unicode)
-    filename = Column(Unicode)
+
+    _filename = Column('filename', Unicode)
+    def _set_filename(self, filename):
+        from communityalmanac.lib.helpers import normalize_filename
+        self._filename = normalize_filename(filename)
+    def _get_filename(self):
+        return self._filename
+    filename = synonym('_filename', descriptor=property(_get_filename, _set_filename))
 
     @property
     def url(self):
@@ -507,7 +512,15 @@ class Audio(Media):
     __mapper_args__ = dict(polymorphic_identity='audio')
     id = Column(Integer, ForeignKey('media.id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
     path = Column(Unicode)
-    filename = Column(Unicode)
+
+    _filename = Column('filename', Unicode)
+    def _set_filename(self, filename):
+        from communityalmanac.lib.helpers import normalize_filename
+        self._filename = normalize_filename(filename)
+    def _get_filename(self):
+        return self._filename
+    filename = synonym('_filename', descriptor=property(_get_filename, _set_filename))
+
 
     @staticmethod
     def from_file(filename, fileobj=None, newpath=None, upload=None, page=None, **kwargs):
@@ -565,7 +578,14 @@ class Image(Media):
     path = Column(Unicode)
     path_large = Column(Unicode)
     path_small = Column(Unicode)
-    filename = Column(Unicode)
+
+    _filename = Column('filename', Unicode)
+    def _set_filename(self, filename):
+        from communityalmanac.lib.helpers import normalize_filename
+        self._filename = normalize_filename(filename)
+    def _get_filename(self):
+        return self._filename
+    filename = synonym('_filename', descriptor=property(_get_filename, _set_filename))
 
     @property
     def url(self):

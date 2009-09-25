@@ -48,6 +48,11 @@ from webhelpers.html.tags import password
 from webhelpers.paginate import Page as PaginationPage
 from webhelpers.text import plural
 import uuid
+import re
+import os
+
+# We have a regex to match the path seperators of the most popular platforms (*nix, Windows)
+RE_path_separators = re.compile(r'[\\/]')
 
 def get_almanac_by_slug(almanac_slug):
     try:
@@ -253,5 +258,14 @@ def display_comment(comment):
     return literal(html)
 
 def normalize_filename(filename):
-    """return only the last segment in the path, because windows gives us a full windows drive path when uploading files sometimes, which causes it to misrender in certain browsers"""
-    return filename.split('/')[-1]
+    """\
+    return only the last segment in the path, because windows gives us a full
+    windows drive path when uploading files sometimes, which causes it to
+    misrender in certain browsers"""
+    # We dont' want drive letters or other path elements showing up here...
+    # Unfortunately, basename only handles path seperators from the
+    # platform it's running on (ie. on unix, it fails to handle windows
+    # paths, so we have to convert the path seperators to match the local
+    # platform.
+    filename = RE_path_separators.sub(os.path.sep, filename)
+    return os.path.basename(filename)
