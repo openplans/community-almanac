@@ -51,6 +51,9 @@ import os
 import time
 import uuid
 
+# We have a regex to match the path seperators of the most popular platforms (*nix, Windows)
+RE_path_separators = re.compile(r'[\\/]')
+
 # This is such a complicated trigger function, I was tempted to install
 # PLPython to use python in the database.  Luckily, it's still pretty readable.
 # You install this trigger on some table, and it updates another table's
@@ -587,6 +590,14 @@ class Image(Media):
 
         if not newpath:
             newpath = g.images_path
+
+        # We dont' want drive letters or other path elements showing up here...
+        # Unfortunately, basename only handles path seperators from the
+        # platform it's running on (ie. on unix, it fails to handle windows
+        # paths, so we have to convert the path seperators to match the local
+        # platform.
+        filename = RE_path_separators.sub(os.path.sep, filename)
+        filename = os.path.basename(filename)
 
         _, ext = os.path.splitext(filename)
         mimetype, _ = mimetypes.guess_type(filename)
