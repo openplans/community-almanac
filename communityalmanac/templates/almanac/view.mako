@@ -44,6 +44,9 @@ ${c.almanac.name}
 </div>
 </%doc>
 </%def>
+<%def name="extra_head()">
+  <link type="application/atom+xml" rel="alternate" href="${h.url_for('pages_atom', almanac=c.almanac)}" />
+</%def>
 <%def name="extra_body()">
   <script type="text/javascript">
     var loadfunction = function() {

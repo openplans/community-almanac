@@ -138,6 +138,18 @@ class AlmanacController(BaseController):
         loc = c.almanac.location
         return dict(lat=loc.x, lng=loc.y)
 
+    def pages_atom(self, almanac_slug, query):
+        c.almanac = h.get_almanac_by_slug(almanac_slug)
+        if query:
+            c.pages = c.almanac.search(query).all()
+        else:
+            c.pages = c.almanac.pages
+        c.query = query
+        c.name = c.almanac.name
+        c.slug = almanac_slug
+        response.content_type = 'application/atom+xml'
+        return render('/page/atom.mako')
+
     def pages_kml(self, almanac_slug, query):
         c.almanac = h.get_almanac_by_slug(almanac_slug)
         if query:
