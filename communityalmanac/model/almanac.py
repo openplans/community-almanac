@@ -616,8 +616,8 @@ class Image(Media):
         # platform it's running on (ie. on unix, it fails to handle windows
         # paths, so we have to convert the path seperators to match the local
         # platform.
-        filename = RE_path_separators.sub(os.path.sep, filename)
-        filename = os.path.basename(filename)
+        from communityalmanac.lib.helpers import normalize_filename
+        filename = normalize_filename(filename)
 
         _, ext = os.path.splitext(filename)
         mimetype, _ = mimetypes.guess_type(filename)
