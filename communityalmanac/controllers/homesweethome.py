@@ -31,7 +31,7 @@ class HomesweethomeController(BaseController):
         h.setup_pagination(almanac_query, page_idx)
         c.almanacs = c.pagination.items
         # Almanacs are slightly smaller on the page, we need to show slightly less so that the almanacs are resting on the shelf.
-        c.pages = Page.latest(limit=(len(c.almanacs)-2))
+        c.pages = Page.latest(limit=(max(len(c.almanacs)-2,0)))
         c.is_homepage = True
         return render('/home.mako')
 
