@@ -109,6 +109,7 @@
       });
     </script>
     ${self.extra_body()}
+    ${self.analytics()}
   </body>
 </html>
 <%def name="title()"></%def>
@@ -184,3 +185,18 @@
 </%def>
 
 <%def name="body_class()"></%def>
+
+<%def name="analytics()">
+<% tracker_id = h.analytics_tracker() %>
+%if tracker_id:
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("${tracker_id}");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+%endif
+</%def>

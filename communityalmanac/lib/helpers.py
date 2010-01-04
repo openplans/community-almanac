@@ -35,6 +35,7 @@ from communityalmanac.model import meta
 import lxml.html.clean
 from pylons.controllers.util import abort
 from pylons.templating import render_mako as render
+from pylons import config
 from pylons import g
 from pylons import request
 from pylons import session
@@ -270,3 +271,11 @@ def normalize_filename(filename):
     # platform.
     filename = RE_path_separators.sub(os.path.sep, filename)
     return os.path.basename(filename)
+
+def analytics_tracker():
+    """
+    retrieve the google analytics tracker from configuration, or None if not
+    available
+    """
+    tracker_id = config.get('analytics_tracker', None)
+    return tracker_id
