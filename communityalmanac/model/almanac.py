@@ -330,6 +330,8 @@ class Page(Base):
         """name the page given the almanac and candidate name"""
 
         normalized = normalize_url_slug(candidate)
+        if not normalized:
+            normalized = u'Page'
         try:
             Page.get_by_slug(almanac, normalized)
         except exc.NoResultFound:
