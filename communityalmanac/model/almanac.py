@@ -18,6 +18,7 @@
 # along with Community Almanac.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import with_statement
+from StringIO import StringIO
 from pylons import g
 from pylons import session
 from sqlalchemy import Table, Column, Integer, ForeignKey, Unicode, Numeric, Boolean, String, DateTime
@@ -49,6 +50,8 @@ import PIL.Image
 import pyproj
 import meta
 import os
+import re
+import string
 import time
 import uuid
 
@@ -138,8 +141,25 @@ index_line_update_comment = DDL("""CREATE OR REPLACE FUNCTION index_line_update_
   END;
 $index_line_update_comment$ LANGUAGE plpgsql;""", on='postgres').execute_at('before-create', Base.metadata)
 
+SQUEEZE_SPACES_PATTERN = re.compile('\s+')
+allowed_chars = set(string.letters + string.digits + '-_ ')
 def normalize_url_slug(candidate):
-    return candidate.replace(', ', '-').replace(' ', '').replace(',', '-')
+    """
+    to prevent issues with certain characters in urls, we follow these rules:
+    remove all non letter/number/dash/underscore characters
+    squeeze all spaces into one space
+    remove all leading and trailing whitespace
+    spaces are converted to dashes
+    """
+    buf = StringIO()
+    for c in candidate:
+        if c in allowed_chars:
+            buf.write(c)
+    result = buf.getvalue()
+    result = SQUEEZE_SPACES_PATTERN.sub(' ', result)
+    result = result.strip()
+    result = result.replace(' ', '-')
+    return result
 
 class Almanac(Base):
     __tablename__ = 'almanacs'
