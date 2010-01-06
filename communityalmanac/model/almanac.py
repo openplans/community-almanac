@@ -237,17 +237,23 @@ class Almanac(Base):
         except exc.MultipleResultsFound:
             # It's time to combine these pages and chew bubblegum... and I'm
             # all out of gum...
-            pages = meta.Session.query(Page).filter(and_(Page.published == False, Page.almanac_id == self.id, Page.user_id == user.id))
+            pages = list(meta.Session.query(Page).filter(and_(Page.published == False, Page.almanac_id == self.id, Page.user_id == user.id)))
             winner = pages[0]
-            name = winner.name
+            if winner.name is None:
+                winner.name = u''
+            if winner.slug is None:
+                winner.slug = Page.name_page(self, u'Page')
             for loser in pages[1:]:
-                if loser.name != name:
-                    winner.name += ', %s' % loser.name
+                if loser.name != winner.name:
+                    if loser.name is not None:
+                        if winner.name:
+                            winner.name += u', %s' % loser.name
+                        else:
+                            winner.name = loser.name
                 winner.media += loser.media
-                meta.Session.commit()
                 meta.Session.delete(loser)
-            else:
-                meta.Session.commit()
+            meta.Session.add(winner)
+            meta.Session.commit()
             return winner
         except exc.NoResultFound:
             pass
