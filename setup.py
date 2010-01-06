@@ -59,7 +59,7 @@ setup(
         "SQLAlchemy>=0.5",
         "psycopg2>=2.0.10",
         "geopy==0.93dev-r84",
-        "shapely>=1.0.12",
+        "shapely>=1.0.14",
         "pyproj>=1.8.5",
         "formalchemy==1.2",
         "repoze.what>=1.0.8",
