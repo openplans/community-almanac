@@ -28,6 +28,7 @@ from pylons.middleware import ErrorHandler, StatusCodeRedirect
 from pylons.wsgiapp import PylonsApp
 from routes.middleware import RoutesMiddleware
 from os import path
+from theslasher import TheSlasher
 
 from communityalmanac.config.environment import load_environment
 from communityalmanac.lib.auths import wsgi_authorization
@@ -88,5 +89,7 @@ def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
         # Serve static files
         static_app = StaticURLParser(config['pylons.paths']['static_files'])
         app = Cascade([static_app, app])
+
+    app = TheSlasher(app)
 
     return app
