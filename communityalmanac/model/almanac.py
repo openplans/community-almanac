@@ -37,6 +37,8 @@ from pylons import config
 
 from uuid import uuid4
 
+from lxml.etree import ParserError
+from lxml.html import fragment_fromstring
 from meta import Base, storage_SRID, Session as s
 from sqlgeotypes import POINT
 from sqlfulltexttypes import WeightedText
@@ -714,8 +716,17 @@ class Story(Media):
 
     def excerpt(self, n=140):
         """short version of the text, useful for displaying in lists"""
-        text = self.text
-        return text if len(text) < n else text[:n-4] + u'&hellip;'
+        # strip out the text from the html first so we don't get dangling markup
+        if not self.text.strip():
+            return u''
+        try:
+            doc = fragment_fromstring(self.text)
+            text = doc.text_content()
+            return text if len(text) < n else text[:n-4] + u'&hellip;'
+        except ParserError, e:
+            # just in case we have some other parsing error, fail more gracefully for the user
+            return u''
+
 story_modify_trigger = DDL("""CREATE TRIGGER story_modify_trigger
     AFTER INSERT OR UPDATE OR DELETE ON stories FOR EACH ROW
     EXECUTE PROCEDURE cascade_modify_time_media();""", on='postgres').execute_at('after-create', Story.__table__)
