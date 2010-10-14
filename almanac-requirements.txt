@@ -37,7 +37,7 @@ repoze.what-pylons==1.0
 repoze.what.plugins.sql==1.0rc1
 repoze.who==1.0.15
 repoze.who-testutil==1.0rc1
-file:///home/pw/builds/almanac/builds/20101014/src/repoze.who.plugins.openid
+#file:///home/pw/builds/almanac/builds/20101014/src/repoze.who.plugins.openid
 repoze.who.plugins.sa==1.0rc2-r3742
 simplejson==2.0.8
 wsgiref==0.1.2
