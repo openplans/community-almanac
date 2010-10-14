@@ -19,12 +19,17 @@ Next, set up the database.
 --------------------------
 
 The community almanac requires a postgres database to be set up with
-spatial extensions. Assuming this is set up already, there is a
-development.ini config file provided for you as a starting point. In
-particular, ensure that the database name and username/password are
-set correctly.
+postgis spatial extensions. (A typical way to do so would be with
+commands like `createuser almanac; createdb -O almanac -T
+template_postgis almanac`).
 
-paster setup-app development.ini
+Assuming the database is set up already, there is a development.ini
+config file provided for you as a starting point. In particular,
+ensure that the database name and username/password are set correctly.
+Then run this command:
+
+$ paster setup-app development.ini
+
 
 Run it.
 -------
