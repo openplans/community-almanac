@@ -28,7 +28,7 @@ geopy==0.93dev-r84
 lxml==2.2.2
 mailer==0.5
 nose==0.10.4
-psycopg2==2.0.11
+psycopg2==2.2.2
 pyproj==1.8.5
 python-openid==2.2.4
 recaptcha-client==1.0.3
@@ -37,7 +37,7 @@ repoze.what-pylons==1.0
 repoze.what.plugins.sql==1.0rc1
 repoze.who==1.0.15
 repoze.who-testutil==1.0rc1
-repoze.who.plugins.openid==0.5
+file:///home/pw/builds/almanac/builds/20101014/src/repoze.who.plugins.openid
 repoze.who.plugins.sa==1.0rc2-r3742
 simplejson==2.0.8
 wsgiref==0.1.2
