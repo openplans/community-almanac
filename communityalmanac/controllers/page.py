@@ -22,15 +22,14 @@ import logging
 from communityalmanac.model import Comment
 from communityalmanac.model import Map
 from communityalmanac.model import Page
-from communityalmanac.model import Story
 from communityalmanac.model import meta
+from communityalmanac.lib.validators import RecaptchaValidator
 from formencode.compound import Any
 from formencode import Schema
 from formencode import validators
-from pylons import request, response, session, tmpl_context as c
+from pylons import request, response, tmpl_context as c
 from pylons import g
 from pylons.controllers.util import abort, redirect_to
-from pylons.decorators import jsonify
 from pylons.decorators import validate
 from pylons.decorators.rest import dispatch_on
 
@@ -40,8 +39,6 @@ from repoze.what.plugins.pylonshq.utils import is_met
 from communityalmanac.lib.auths import is_page_owner
 from repoze.what.plugins.pylonshq import ActionProtector
 from communityalmanac.lib.base import BaseController, render
-from shapely.geometry.geo import asShape
-from shapely import wkb
 from webhelpers.paginate import Page as PaginationPage
 import communityalmanac.lib.helpers as h
 import recaptcha.client.captcha
@@ -57,30 +54,6 @@ class LoggedInValidator(validators.FancyValidator):
     def validate_python(self, value, state):
         if not c.user:
             raise validators.Invalid(self.message('invalid', state), value, state)
-
-class RecaptchaValidator(validators.FancyValidator):
-    messages = {
-        'invalid': u'Please enter both words'
-        }
-
-    def validate_python(self, field_dict, state):
-        if not g.captcha_enabled:
-            return
-
-        def do_invalid():
-            errormsg = self.message('invalid', state)
-            errors = {'recaptcha_marker_field': errormsg}
-            raise validators.Invalid(errormsg, field_dict, state, error_dict=errors)
-
-        try:
-            captcha_challenge = field_dict['recaptcha_challenge_field']
-            captcha_response = field_dict['recaptcha_response_field']
-        except KeyError, e:
-            do_invalid()
-
-        recaptcha_response = recaptcha.client.captcha.submit(captcha_challenge, captcha_response, g.captcha_privkey, '127.0.0.1')
-        if not recaptcha_response.is_valid:
-            do_invalid()
 
 
 class PageCommentForm(Schema):

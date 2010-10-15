@@ -40,6 +40,15 @@
       <input type="password" name="password_repeat" id="password_repeat" />
     </div>
     <input type="hidden" name="came_from" value="${request.params.get('came_from', '')}"/>
+
+    %if g.captcha_enabled:
+    <div class="form-row">
+      <input type="hidden" name="recaptcha_marker_field" />
+      ${c.captcha_html}
+    </div>
+    %endif
+
+
     <input class="indented-submit" type="submit" value="Add" />
   </fieldset>
 </form>

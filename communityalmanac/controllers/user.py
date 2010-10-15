@@ -1,8 +1,9 @@
 from __future__ import with_statement
 import logging
 
-from pylons import request, response, session, tmpl_context as c
+from pylons import request, response, tmpl_context as c
 from pylons import config
+from pylons import g
 from pylons.controllers.util import abort, redirect_to, redirect
 from pylons.decorators.rest import dispatch_on
 from pylons.decorators import validate
@@ -11,13 +12,14 @@ from formencode import validators
 from formencode import compound
 
 from communityalmanac.lib.base import BaseController, render
+from communityalmanac.lib.validators import RecaptchaValidator
 import communityalmanac.lib.helpers as h
 from communityalmanac.model import FullUser
 from communityalmanac.model import meta
 from sqlalchemy import or_, and_, exc, orm
 from sqlalchemy.sql import func
 import mailer
-from formencode.htmlfill import none_formatter
+import recaptcha.client.captcha
 
 log = logging.getLogger(__name__)
 
@@ -52,7 +54,9 @@ class UserRegistrationSchema(Schema):
     register_password = validators.String(not_empty=True, encoding='utf8')
     register_password_repeat = validators.String(not_empty=True)
     came_from = validators.String(not_empty=False)
-    chained_validators = [validators.FieldsMatch('register_password', 'register_password_repeat')]
+    chained_validators = [RecaptchaValidator(),
+                          validators.FieldsMatch('register_password', 'register_password_repeat')]
+    allow_extra_fields = True
 
 class RequestResetSchema(Schema):
     login = compound.Any(validators.UnicodeString(min=5, not_empty=True), validators.Email(not_empty=True))
@@ -69,6 +73,8 @@ class UserController(BaseController):
     def login(self):
         c.no_maps = True
         c.active_section = request.params.get('show','login-new')
+        c.captcha_html = h.literal(recaptcha.client.captcha.displayhtml(
+                  g.captcha_pubkey))
         if request.environ.get('repoze.who.identity') == None:
             return render('/user/login.mako')
         redirect(request.params.get('came_from', h.url_for('home')))
@@ -82,8 +88,10 @@ class UserController(BaseController):
         c.no_maps = True
         if request.environ.get('repoze.who.identity') == None:
             c.active_section = request.params.get('show','login-new')
+            c.captcha_html = h.literal(recaptcha.client.captcha.displayhtml(
+                      g.captcha_pubkey))
             return render('/user/login.mako')
-        h.flash(u'Can\'t regist while logged in.  Please logout first.')
+        h.flash(u'Can\'t register while logged in.  Please logout first.')
         redirect_to(h.url_for('home'))
 
     @validate(schema=UserRegistrationSchema(), form='register', auto_error_formatter=pass_html_error_formatter)
