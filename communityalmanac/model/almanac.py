@@ -46,7 +46,7 @@ from shapely.geometry.point import Point
 from shapely import wkb
 from binascii import a2b_hex
 from urlparse import urlsplit, urlunsplit
-import hmac, sha
+import hmac
 import mimetypes
 import PIL.Image
 import pyproj
