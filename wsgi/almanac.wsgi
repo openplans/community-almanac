@@ -2,6 +2,10 @@
 
 import os, sys, site
 
+# Work around libraries polluting stdout. see
+# https://code.google.com/p/modwsgi/wiki/ApplicationIssues
+sys.stdout = sys.stderr
+
 BASE='/var/www/communityalmanac.org'
 SP = BASE + '/current/lib/python2.6/site-packages'
 EC = BASE + '/python-egg-cache'
