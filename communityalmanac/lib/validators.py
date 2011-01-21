@@ -50,3 +50,45 @@ class RecaptchaValidator(validators.FancyValidator):
         if not recaptcha_response.is_valid:
             do_invalid()
 
+
+class AkismetValidator(validators.FancyValidator):
+    messages = {
+        'spam': u'Your comment appears to be spam.'
+        }
+
+    def validate_python(self, field_dict, state):
+        if not g.akismet_enabled:
+            return
+
+        def do_invalid():
+            errormsg = self.message('spam', state)
+            errors = {'text': errormsg}
+            raise validators.Invalid(errormsg, field_dict, state, error_dict=errors)
+
+        import akismet
+        ak = akismet.Akismet(key=g.akismet_key, blog_url=g.akismet_url)
+
+        try:
+            ak.verify_key()
+        except akismet.APIKeyError, e:
+            log.error("Invalid akismet key, can't filter spam")
+            return
+
+        comment = field_dict['text']
+        import os
+        data = {'comment_author': field_dict.get('fullname'),
+                'comment_author_url': field_dict.get('website'),
+                'comment_author_email': field_dict.get('email'),
+                'user_ip': os.environ.get('REMOTE_ADDR', '127.0.0.1'),
+                'user_agent': os.environ.get('HTTP_USER_AGENT', ''),
+                }
+        try:
+            is_spam = ak.comment_check(comment, data=data, build_data=True)
+        except:
+            is_spam = False
+            raise
+
+
+        if is_spam:
+            do_invalid()
+

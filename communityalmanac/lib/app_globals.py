@@ -42,6 +42,10 @@ class Globals(object):
         self.captcha_pubkey = config['captcha_pubkey']
         self.captcha_privkey = config['captcha_privkey']
 
+        self.akismet_enabled = asbool(config['akismet_enabled'])
+        self.akismet_key = config['akismet_key']
+        self.akismet_url = config['akismet_url']
+
         self.allow_tags = aslist(config['allow_tags'], sep=',')
         host_whitelist = aslist(config['host_whitelist'], sep=',')
         # prefix www subdomain to all hosts as a convenience

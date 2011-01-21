@@ -24,6 +24,7 @@ from communityalmanac.model import Map
 from communityalmanac.model import Page
 from communityalmanac.model import meta
 from communityalmanac.lib.validators import RecaptchaValidator
+from communityalmanac.lib.validators import AkismetValidator
 from formencode.compound import Any
 from formencode import Schema
 from formencode import validators
@@ -61,7 +62,7 @@ class PageCommentForm(Schema):
     email = validators.Email(not_empty=True)
     website = validators.String()
     text = validators.String(not_empty=True)
-    chained_validators = [Any(RecaptchaValidator(), LoggedInValidator())]
+    chained_validators = [Any(RecaptchaValidator(), LoggedInValidator()), AkismetValidator()]
     allow_extra_fields = True
 
 
