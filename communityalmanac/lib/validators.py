@@ -73,6 +73,11 @@ class AkismetValidator(validators.FancyValidator):
         except akismet.APIKeyError, e:
             log.error("Invalid akismet key, can't filter spam")
             return
+        except:
+            import traceback
+            msg = traceback.format_exc()
+            log.error(msg)
+            return
 
         comment = field_dict['text']
         import os
@@ -85,9 +90,10 @@ class AkismetValidator(validators.FancyValidator):
         try:
             is_spam = ak.comment_check(comment, data=data, build_data=True)
         except:
+            import traceback
+            msg = traceback.format_exc()
+            log.error(msg)
             is_spam = False
-            raise
-
 
         if is_spam:
             do_invalid()
