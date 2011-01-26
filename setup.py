@@ -74,6 +74,7 @@ setup(
         "recaptcha-client>=1.0.3",
         "bcrypt>=0.1",
         'theslasher',
+         'akismet>=0.2.0',
     ],
     dependency_links=[
         "https://source.openplans.org/eggs/geopy-0.93dev-r84.tar.gz",
