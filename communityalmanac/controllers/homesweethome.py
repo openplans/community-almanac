@@ -11,6 +11,8 @@ from communityalmanac.model import Almanac
 from communityalmanac.model import Page
 from communityalmanac.model import meta
 from communityalmanac.model.meta import storage_SRID
+from pylons.decorators.cache import beaker_cache
+from sqlalchemy.orm import eagerload
 from sqlalchemy.sql import func
 from shapely import wkb
 from shapely.geometry.geo import asShape
@@ -35,10 +37,29 @@ class HomesweethomeController(BaseController):
         c.is_homepage = True
         return render('/home.mako')
 
+    @beaker_cache(expire=120, query_args=True)
     def almanacs_kml(self):
         json = request.params.get('extent')
-        # We need to make sure we only select almanacs with pages here...
+        # We need to make sure we only select almanacs with pages here,
         query = meta.Session.query(Almanac).join(Almanac.pages).distinct()
+        # ... and eager-load the pages since the ktml template uses them.
+        query = query.options(eagerload(Almanac.pages))
+
+        # Tried also with contains_eager, not sure what the difference is
+        # but I only get a fraction of the expected almanacs:
+        #query = meta.Session.query(Almanac).join(Almanac.pages).distinct()
+        #query = query.options(contains_eager(Almanac.pages))
+
+        # Also tried using a single, second query for the pages.
+        # ... NOPE, requires sqlalchemy > 0.6.0 which blows up on us,
+        # maybe not compatible w/ pylons 0.9.7?
+        #query = meta.Session.query(Almanac).join(Almanac.pages).distinct()
+        #query = query.options(subqueryload(Almanac.pages))
+
+        # Tried also without the explicit join().distinct(), this gives
+        # back all almanac whether they have any pages or not:
+        #query = meta.Session.query(Almanac).options(eagerload(Almanac.pages))
+
         if json is not None:
             shape = simplejson.loads(json)
             # Stupid asShape returns an Adapter instead of a Geometry.  We round
