@@ -37,16 +37,16 @@ class HomesweethomeController(BaseController):
 
     def almanacs_kml(self):
         json = request.params.get('extent')
-        if json is None:
-            # We need to make sure we only select almanacs with pages here...
-            c.almanacs = meta.Session.query(Almanac).join(Almanac.pages).distinct().limit(10).all()
-        else:
+        # We need to make sure we only select almanacs with pages here...
+        query = meta.Session.query(Almanac).join(Almanac.pages).distinct()
+        if json is not None:
             shape = simplejson.loads(json)
             # Stupid asShape returns an Adapter instead of a Geometry.  We round
             # trip it through wkb to get the correct type.
             bbox = wkb.loads(asShape(shape).to_wkb())
+            query = query.filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bbox.to_wkb())), storage_SRID)))
 
-            c.almanacs = meta.Session.query(Almanac).join(Almanac.pages).distinct().filter(func.st_intersects(Almanac.location, func.st_transform('SRID=%s;%s' % ('4326', b2a_hex(bbox.to_wkb())), storage_SRID))).limit(10).all()
+        c.almanacs = query.order_by(Almanac.modified.desc()).limit(200).all()
         response.content_type = 'application/vnd.google-earth.kml+xml kml'
         return render('/almanac/kml.mako')
 
