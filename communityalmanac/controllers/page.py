@@ -54,7 +54,9 @@ class LoggedInValidator(validators.FancyValidator):
 
     def validate_python(self, value, state):
         if not c.user:
+            log.info("validator failed: user not logged in")
             raise validators.Invalid(self.message('invalid', state), value, state)
+        log.info("validated: user is logged in")
 
 
 class PageCommentForm(Schema):

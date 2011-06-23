@@ -46,7 +46,7 @@ class RecaptchaValidator(validators.FancyValidator):
             do_invalid()
 
         recaptcha_response = recaptcha.client.captcha.submit(captcha_challenge, captcha_response, g.captcha_privkey, '127.0.0.1')
-        log.debug('Recaptcha was valid: %r' % recaptcha_response.is_valid)
+        log.info('Recaptcha was valid: %r' % recaptcha_response.is_valid)
         if not recaptcha_response.is_valid:
             do_invalid()
 
@@ -58,9 +58,11 @@ class AkismetValidator(validators.FancyValidator):
 
     def validate_python(self, field_dict, state):
         if not g.akismet_enabled:
+            log.info("akismet disabled")
             return
 
         def do_invalid():
+            log.info("akismet caught possible spam")
             errormsg = self.message('spam', state)
             errors = {'text': errormsg}
             raise validators.Invalid(errormsg, field_dict, state, error_dict=errors)
@@ -97,4 +99,5 @@ class AkismetValidator(validators.FancyValidator):
 
         if is_spam:
             do_invalid()
-
+        else:
+            log.info("akismet says message is OK")
