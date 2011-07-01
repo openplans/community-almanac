@@ -89,6 +89,14 @@ class AkismetValidator(validators.FancyValidator):
                 'user_ip': os.environ.get('REMOTE_ADDR', '127.0.0.1'),
                 'user_agent': os.environ.get('HTTP_USER_AGENT', ''),
                 }
+        # A lot of spam is not ASCII.
+        # But if we feed extended characters to ak.comment_check(),
+        # then it blows up because urllib.urlencode() needs everything
+        # to pass through str().  So, encode first.
+        comment = comment.encode('utf8')
+        for key, val in data.items():
+            data[key] = val.encode('utf8')
+
         try:
             is_spam = ak.comment_check(comment, data=data, build_data=True)
         except:
