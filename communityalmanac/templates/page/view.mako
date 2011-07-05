@@ -51,6 +51,10 @@
 
 % for comment in c.page.comments:
 <div class="comment">
+  % if c.is_admin:
+   <a href="${h.url_for('/admin/Comment/delete/%d' % comment.id)}" title="Delete Comment" onclick="return confirm('Are you sure you want to delete this comment?  There\'s no going back!');">Delete</a>
+  % endif
+
   <p class="meta">
     <span>
     %if comment.website:
