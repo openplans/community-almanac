@@ -285,8 +285,8 @@ class MediaController(BaseController):
 
         try:
             c.image = image = Image.from_file(image_file.filename, page, upload=image_file)
-        except ValueError, e:
-            c.error = e.message
+        except (ValueError, IOError), e:
+            c.error = str(e.message) or str(e)
             response.content_type = 'application/javascript'
             return simplejson.dumps(dict(html=render('/media/error.mako')))
 
