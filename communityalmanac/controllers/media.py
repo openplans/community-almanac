@@ -111,6 +111,23 @@ class MediaController(BaseController):
             abort(400)
 
         cleaned = h.clean_html(body)
+        # Hack in akismet validation, although we don't have a FormEncode
+        # form here.
+        from communityalmanac.lib.validators import AkismetValidator
+        akismet = AkismetValidator()
+        from formencode.validators import Invalid
+        user = self.ensure_user
+        assert hasattr(user, 'username')
+        field_dict = {'fullname': user.username,
+                      'website': u'',
+                      'email': user.email_address or u'',
+                      'text': cleaned}
+        try:
+            akismet.validate_python(field_dict, state={})
+            log.info("akismet says story is OK")
+        except Invalid:
+            # Not sure what else we can do here.
+            abort(400)
 
         c.story = story = Story()
         story.text = cleaned
