@@ -184,7 +184,10 @@ class Almanac(Base):
             self.id = id
 
     def __repr__(self):
-        return '<Almanac(id=%d, name=%s)>' % (self.id, self.name)
+        return unicode(self).encode('utf8')
+
+    def __unicode__(self):
+        return u'<Almanac(id=%d, name=%s)>' % (self.id, self.name)
 
     @staticmethod
     def name_almanac(candidate):
@@ -331,7 +334,10 @@ class Page(Base):
             self.id = id
 
     def __repr__(self):
-        return '<Page(id=%d, name=%s)>' % (self.id, self.name)
+        return unicode(self).encode('utf8')
+
+    def __unicode__(self):
+        return u'<Page(id=%d, name=%s)>' % (self.id, self.name)
 
     @staticmethod
     def name_page(almanac, candidate):
@@ -455,6 +461,12 @@ class Comment(Base):
     website = Column(Unicode)
     text = Column(Unicode)
 
+    def __repr__(self):
+        return unicode(self).encode('utf8')
+
+    def __unicode__(self):
+        return u'<Comment(id=%d, page_id=%d)>' % (self.id, self.page_id)
+
     @property
     def websafe_link(self):
         """\
@@ -493,6 +505,12 @@ class Media(Base):
     __mapper_args__ = dict(polymorphic_on=discriminator)
 
     page = relation("Page", backref=backref("media", passive_deletes=True), passive_deletes=True)
+
+    def __repr__(self):
+        return unicode(self).encode('utf8')
+
+    def __unicode__(self):
+        return u'<%s(id=%d, page_id=%d)>' % (self.__class__.__name__, self.id, self.page_id)
 
     @staticmethod
     def by_id(media_id):
