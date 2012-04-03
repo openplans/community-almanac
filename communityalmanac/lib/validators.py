@@ -19,7 +19,7 @@
 
 import logging
 from formencode import validators
-from pylons import g
+from pylons import g, request
 import recaptcha.client.captcha
 
 
@@ -86,8 +86,8 @@ class AkismetValidator(validators.FancyValidator):
         data = {'comment_author': field_dict.get('fullname'),
                 'comment_author_url': field_dict.get('website'),
                 'comment_author_email': field_dict.get('email'),
-                'user_ip': os.environ.get('REMOTE_ADDR', '127.0.0.1'),
-                'user_agent': os.environ.get('HTTP_USER_AGENT', ''),
+                'user_ip': request.environ.get('REMOTE_ADDR', ''),
+                'user_agent': request.environ.get('HTTP_USER_AGENT', ''),
                 }
         # A lot of spam is not ASCII.
         # But if we feed extended characters to ak.comment_check(),
