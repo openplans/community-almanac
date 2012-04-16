@@ -4,7 +4,10 @@ Installation and Setup
 First, install the software:
 ----------------------------
 
-python2.5 /path/to/virtualenv env
+(You must have Python 2, at least version 2.5.
+Note that python 3 is NOT supported!)
+
+python2 /path/to/virtualenv env
 mkdir env/src
 hg clone https://source.openplans.org/hg/communityalmanac env/src/communityalmanac
 /path/to/pip install -r env/src/communityalmanac/almanac-requirements.txt -E env
