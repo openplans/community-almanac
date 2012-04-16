@@ -814,7 +814,14 @@ class User(Base):
             self.id = id
 
     def __unicode__(self):
-        return u'<User(id=%d, subtype=%s)>' % (self.id, self.discriminator)
+        try:
+            username =  getattr(self, 'username', None)
+        except:
+            # ObjectDeletedError, where does that live?
+            username = None
+        if username:
+            return u'<User(id=%d, subtype=%s, username=%s)>' % (self.id, self.discriminator, username)
+        return u'<User(id=%d, subtype=%s, comment_fullname=%s)>' % (self.id, self.discriminator, self.comment_fullname)
 
 
 class FullUser(User):
@@ -888,6 +895,9 @@ class Permission(Base):
 
     groups = relation(Group, secondary=groups_permissions_table,
                       backref=backref('permissions', passive_deletes=True), passive_deletes=True)
+
+    def __unicode__(self):
+        return u'<Permission(id=%d, name=%s)>' % (self.id, self.name)
 
 def default_password_compare(cleartext_password, stored_password_hash):
     # Hashing functions work on bytes, not strings, so while unicode passwords
