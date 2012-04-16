@@ -33,8 +33,7 @@ repoze.what-pylons==1.0
 repoze.what.plugins.sql==1.0rc1
 repoze.who==1.0.15
 repoze.who-testutil==1.0rc1
-svn+http://repozeopenid.googlecode.com/svn/repoze.whoplugins.openid/trunk@32#egg=repoze.whoplugins.openid==0.5.3
+svn+http://repozeopenid.googlecode.com/svn/repoze.whoplugins.openid/trunk@32#egg=repoze.whoplugins.openid==0.5.3dev-r32
 repoze.who.plugins.sa==1.0rc2-r3742
-simplejson==2.0.8
-wsgiref==0.1.2
+simplejson==2.0.9
 zope.interface==3.5.2
