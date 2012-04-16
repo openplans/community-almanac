@@ -1,27 +1,29 @@
 -e hg+https://source.openplans.org/hg/communityalmanac#egg=communityalmanac
 
 Beaker==1.3.1
-https://source.openplans.org/eggs/FormAlchemy-1.2.tar.gz
-FormEncode==1.2.1
-Mako==0.2.4
-http://dist.repoze.org/PIL-1.1.6.tar.gz
+git+https://github.com/FormAlchemy/formalchemy.git@eb7c0ade278b6ec7ead9919e6b1211a43c46fe0b#egg=FormAlchemy==1.2
+FormEncode==1.2.4
+Mako==0.2.5
+http://dist.repoze.org/PIL-1.1.6.tar.gz#egg=PIL==1.1.6
 Paste==1.7.5.1
 PasteDeploy==1.3.4
 PasteScript==1.7.3
 Pygments==1.0
 Pylons==0.9.7
 Routes==1.10.3
-SQLAlchemy==0.5.2
+SQLAlchemy==0.5.8
 Shapely==1.0.14
-Tempita==0.2
+Tempita==0.3
 WebError==0.10.1
 WebHelpers==0.6.4
 WebOb==0.9.6.1
 WebTest==1.1
-http://www.mindrot.org/files/py-bcrypt/py-bcrypt-0.1.tar.gz
+akismet==0.2.0
+http://www.mindrot.org/files/py-bcrypt/py-bcrypt-0.1.tar.gz#egg=bcrypt==0.1
 decorator==3.0.0
-https://source.openplans.org/eggs/geopy-0.93dev-r84.tar.gz
-lxml==2.2.2
+# This is a tarball of the geopy reverse-geocode branch; STILL not released.
+https://source.openplans.org/eggs/geopy-0.93dev-r84.tar.gz#egg=geopy==0.93dev-r84
+lxml>=2.2.2
 mailer==0.5
 nose==0.10.4
 psycopg2==2.2.2
@@ -30,10 +32,11 @@ python-openid==2.2.4
 recaptcha-client==1.0.3
 repoze.what==1.0.8
 repoze.what-pylons==1.0
-repoze.what.plugins.sql==1.0rc1
+repoze.what.plugins.sql==1.0.1
 repoze.who==1.0.15
-repoze.who-testutil==1.0rc1
-svn+http://repozeopenid.googlecode.com/svn/repoze.whoplugins.openid/trunk@32#egg=repoze.whoplugins.openid==0.5.3dev-r32
-repoze.who.plugins.sa==1.0rc2-r3742
+repoze.who-testutil==1.0.1
+repoze.who.plugins.openid==0.5.3
+repoze.who.plugins.sa==1.0.1
 simplejson==2.0.9
-zope.interface==3.5.2
+zope.interface==3.5.3
+theslasher==0.1
