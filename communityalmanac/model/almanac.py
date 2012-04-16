@@ -813,8 +813,8 @@ class User(Base):
         if id is not None:
             self.id = id
 
-    def __repr__(self):
-        return '<User(id=%d, subtype=%s)>' % (self.id, self.discriminator)
+    def __unicode__(self):
+        return u'<User(id=%d, subtype=%s)>' % (self.id, self.discriminator)
 
 
 class FullUser(User):
@@ -852,8 +852,8 @@ class FullUser(User):
     def set_password(self, password):
         self.password = default_password_hash(password)
 
-    def __repr__(self):
-        return '<FullUser(id=%d, username=%s)>' % (self.id, self.username)
+    def __unocode__(self):
+        return u'<FullUser(id=%d, username=%s)>' % (self.id, self.username)
 
 class AnonymousUser(User):
     __tablename__ = 'anonymous_users'
@@ -873,6 +873,11 @@ class Group(Base):
     name = Column(Unicode(16), unique=True)
 
     users = relation('User', secondary=users_groups_table, backref=backref('groups', passive_deletes=True), passive_deletes=True)
+
+    def __unicode__(self):
+        return u'<Group(id=%d, name=%s)>' % (self.id, self.name)
+
+
 
 class Permission(Base):
     """A relationship that determines what each Group can do"""
