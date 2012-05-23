@@ -20,7 +20,7 @@ WebOb==0.9.6.1
 WebTest==1.1
 akismet==0.2.0
 http://www.mindrot.org/files/py-bcrypt/py-bcrypt-0.1.tar.gz#egg=bcrypt==0.1
-decorator==3.0.0
+decorator==3.3.3
 # This is a tarball of the geopy reverse-geocode branch; STILL not released.
 https://source.openplans.org/eggs/geopy-0.93dev-r84.tar.gz#egg=geopy==0.93dev-r84
 lxml>=2.2.2

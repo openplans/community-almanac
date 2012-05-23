@@ -17,11 +17,11 @@ Note that python 3 is NOT supported!)
  mkdir -p env/src
  cd env
  source bin/activate
- git clone git://github.com/openplans/community-almanac.git src/almanac
- pip install -r src/almanac/almanac-requirements.txt
+ pip install -r https://raw.github.com/openplans/community-almanac/master/almanac-requirements.txt
 
-* Note that you can most likely get away with just running 
-`setup.py develop` on the source, but the almanac-requirements.txt file
+* Note that you can most likely get away with just checking
+out the source and running `python setup.py develop`,
+but the almanac-requirements.txt file
 represents the known good set of packages that work with the almanac.
 
 Next, set up the database.
