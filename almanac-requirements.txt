@@ -1,4 +1,4 @@
--e hg+https://source.openplans.org/hg/communityalmanac#egg=communityalmanac
+-e git+https://github.com/openplans/community-almanac.git#egg=communityalmanac
 
 Beaker==1.3.1
 git+https://github.com/FormAlchemy/formalchemy.git@eb7c0ade278b6ec7ead9919e6b1211a43c46fe0b#egg=FormAlchemy==1.2

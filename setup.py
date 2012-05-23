@@ -53,7 +53,7 @@ setup(
     author='Douglas Mayle, Robert Marianski, Andy Cochran, Chris Patterson',
     author_email='',
     license='GNU Affero General Public License v3',
-    url='http://source.openplans.org/hg/communityalmanac',
+    url='http://github.com/openplans/community-almanac',
     install_requires=[
         "Pylons>=0.9.7",
         "SQLAlchemy>=0.5",
