@@ -176,7 +176,7 @@ def wsgi_authorization(app, app_conf):
         default_request_classifier,
         default_challenge_decider,
         log_stream = log_stream,
-        log_level=app_conf.get('who.log_level','error')
+        log_level=app_conf.get('who.log_level','ERROR')
         )
     return app
 
