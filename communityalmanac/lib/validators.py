@@ -82,7 +82,6 @@ class AkismetValidator(validators.FancyValidator):
             return
 
         comment = field_dict['text']
-        import os
         data = {'comment_author': field_dict.get('fullname'),
                 'comment_author_url': field_dict.get('website'),
                 'comment_author_email': field_dict.get('email'),
