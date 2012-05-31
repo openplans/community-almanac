@@ -25,6 +25,7 @@ from communityalmanac.model import Page
 from communityalmanac.model import meta
 from communityalmanac.lib.validators import RecaptchaValidator
 from communityalmanac.lib.validators import AkismetValidator
+from communityalmanac.lib.validators import HoneypotValidator
 from formencode.compound import Any
 from formencode import Schema
 from formencode import validators
@@ -59,12 +60,14 @@ class LoggedInValidator(validators.FancyValidator):
         log.info("validated: user is logged in")
 
 
+
 class PageCommentForm(Schema):
     fullname = validators.String(not_empty=True)
     email = validators.Email(not_empty=True)
     website = validators.String()
     text = validators.String(not_empty=True)
     chained_validators = [Any(RecaptchaValidator(), LoggedInValidator()), AkismetValidator()]
+    hp123 = HoneypotValidator()
     allow_extra_fields = True
 
 

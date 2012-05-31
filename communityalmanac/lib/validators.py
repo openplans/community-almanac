@@ -108,3 +108,15 @@ class AkismetValidator(validators.FancyValidator):
             do_invalid()
         else:
             log.info("akismet says message is OK")
+
+
+class HoneypotValidator(validators.FancyValidator):
+    messages = {
+        'invalid': "please don't.",
+        }
+
+    def validate_python(self, value, state):
+        if value:
+            log.info("validator failed: honeypot value provided")
+            raise validators.Invalid(self.message('invalid', state), value, state)
+        log.info("validated: no honeypot")

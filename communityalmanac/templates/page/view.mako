@@ -93,6 +93,10 @@
         ${c.captcha_html}
       </div>
     %endif
+    <div class="form-row" style="display: none;">
+      <label for="hp123">Leave this alone</span></label>
+      <input type="text" class="textType" id="hp123" name="hp123" value="" />
+    </div>
     <div class="form-row">
       <h3 id="comment-submit"><a class="comment-link" href="${h.url_for('page_view', almanac=c.almanac, page=c.page)}">Add your Comment</a></h3>
     </div>
