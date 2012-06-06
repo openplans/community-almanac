@@ -37,6 +37,7 @@ class RecaptchaValidator(validators.FancyValidator):
         def do_invalid():
             errormsg = self.message('invalid', state)
             errors = {'recaptcha_marker_field': errormsg}
+            log.info('recaptcha caught possible spam')
             raise validators.Invalid(errormsg, field_dict, state, error_dict=errors)
 
         try:
@@ -46,7 +47,7 @@ class RecaptchaValidator(validators.FancyValidator):
             do_invalid()
 
         recaptcha_response = recaptcha.client.captcha.submit(captcha_challenge, captcha_response, g.captcha_privkey, '127.0.0.1')
-        log.info('Recaptcha was valid: %r' % recaptcha_response.is_valid)
+        log.info('recaptcha OK: %r' % recaptcha_response.is_valid)
         if not recaptcha_response.is_valid:
             do_invalid()
 
@@ -73,7 +74,7 @@ class AkismetValidator(validators.FancyValidator):
         try:
             ak.verify_key()
         except akismet.APIKeyError, e:
-            log.error("Invalid akismet key, can't filter spam")
+            log.error("Invalid akismet API key, disabling")
             return
         except:
             import traceback
@@ -117,6 +118,6 @@ class HoneypotValidator(validators.FancyValidator):
 
     def validate_python(self, value, state):
         if value:
-            log.info("validator failed: honeypot value provided")
+            log.info("honeypot validator caught possible spam")
             raise validators.Invalid(self.message('invalid', state), value, state)
-        log.info("validated: no honeypot")
+        log.info("honeypot got no value: OK")
