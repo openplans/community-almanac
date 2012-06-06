@@ -90,6 +90,10 @@ def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
         static_app = StaticURLParser(config['pylons.paths']['static_files'])
         app = Cascade([static_app, app])
 
+    # Remove trailing slashes from URLs.
+    # Edge case - if you try to hit a *directory* served by StaticURLParser,
+    # it will try to *add* a slash, and you'll get a redirect loop.
+    # But we don't care about those directories anyway.
     app = TheSlasher(app)
 
     return app
